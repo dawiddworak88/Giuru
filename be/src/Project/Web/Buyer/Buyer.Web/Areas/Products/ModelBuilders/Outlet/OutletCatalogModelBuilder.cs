@@ -218,14 +218,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         },
                         new NestedFilterViewModel
                         {
-                            Key = "sizes",
+                            Key = "dimensions",
                             Label = "Wymiary - T",
                             IsNested = true,
                             Items = new List<NestedFilterItemViewModel>
                             {
                                 new NestedFilterItemViewModel
                                 {
-                                    Label = "Wysokość - H",
+                                    Label = "Wysokość",
                                     Key = "height",
                                     Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
                                     {
@@ -235,7 +235,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 },
                                 new NestedFilterItemViewModel
                                 {
-                                    Label = "Szerokość - A",
+                                    Label = "Szerokość",
                                     Key = "width",
                                     Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
                                     {
@@ -245,7 +245,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 },
                                 new NestedFilterItemViewModel
                                 {
-                                    Label = "Głębokość - B",
+                                    Label = "Głębokość",
                                     Key = "depth",
                                     Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
                                     {

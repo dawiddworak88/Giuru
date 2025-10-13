@@ -216,7 +216,46 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                     Label = x,
                                     Value = x
                                 })
+                            },
+                            new NestedFilterViewModel
+                        {
+                            Key = "dimensions",
+                            Label = "Wymiary",
+                            IsNested = true,
+                            Items = new List<NestedFilterItemViewModel>
+                            {
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = "Wysokość",
+                                    Key = "height",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = "Szerokość",
+                                    Key = "width",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = "Głębokość",
+                                    Key = "depth",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
                             }
+                        }
                         }
                     };
 
