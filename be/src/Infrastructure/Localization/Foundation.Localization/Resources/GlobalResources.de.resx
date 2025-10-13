@@ -805,10 +805,19 @@
     <value>Erlaubte Mengengrenze überschritten.</value>
   </data>
   <data name="NoFilesDownloadedError" xml:space="preserve">
-    <value>Couldn't download any file.</value>
+    <value>Es konnte keine Datei heruntergeladen werden.</value>
   </data>
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
-    <value>Some files weren't downloaded.</value>
+    <value>Einige Dateien wurden nicht heruntergeladen.</value>
+  </data>
+  <data name="CopiedText" xml:space="preserve">
+    <value>Kopiert</value>
+  </data>
+  <data name="CopyTextError" xml:space="preserve">
+    <value>Kopieren fehlgeschlagen.</value>
+  </data>
+  <data name="CopyToClipboardText" xml:space="preserve">
+    <value>In die Zwischenablage kopieren</value>
   </data>
   <data name="ShowText" xml:space="preserve">
     <value>Anzeigen</value>

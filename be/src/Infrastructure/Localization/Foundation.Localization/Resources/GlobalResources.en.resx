@@ -805,10 +805,19 @@
     <value>Allowed quantity limit exceeded.</value>
   </data>
   <data name="NoFilesDownloadedError" xml:space="preserve">
-    <value>Es konnte keine Datei heruntergeladen werden.</value>
+    <value>No file could be downloaded.</value>
   </data>
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
-    <value>Einige Dateien wurden nicht heruntergeladen.</value>
+    <value>Some files were not downloaded.</value>
+  </data>
+  <data name="CopiedText" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="CopyTextError" xml:space="preserve">
+    <value>Copying failed.</value>
+  </data>
+  <data name="CopyToClipboardText" xml:space="preserve">
+    <value>Copy to clipboard</value>
   </data>
   <data name="ShowText" xml:space="preserve">
     <value>Show</value>

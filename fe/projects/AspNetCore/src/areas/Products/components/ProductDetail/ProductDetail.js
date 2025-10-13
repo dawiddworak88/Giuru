@@ -16,6 +16,8 @@ import Price from "../../../../shared/components/Price/Price";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 import Availability from "../../../../shared/components/Availability/Availability";
+import CopyButton from "../../../../shared/components/CopyButton/CopyButton";
+import GlobalHelper from "../../../../shared/helpers/globals/GlobalHelper";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,6 +29,8 @@ function ProductDetail(props) {
     const [showMoreImages, setShowMoreImages] = useState(false);
     const [mediaItems, setMediaItems] = useState(props.mediaItems ? props.mediaItems.slice(0, 6) : []);
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
+    const [cleanDescription, setCleanDescription] = useState('');
+    const [plainText, setPlainText] = useState('');
 
     const {
         orderItems,
@@ -68,7 +72,7 @@ function ProductDetail(props) {
             if (productVariant && Array.isArray(productVariant.images) && productVariant.images.length > 0) {
                 return productVariant.images.map(img => img.id);
             }
-            
+
             if (props.images && Array.isArray(props.images) && props.images.length > 0) {
                 return props.images.map(img => img.id);
             }
@@ -156,6 +160,15 @@ function ProductDetail(props) {
         setShowMoreImages(!showMoreImages);
     }
 
+    useEffect(() => {
+        if (props.description) {
+            const sanitized = GlobalHelper.sanitizeHtml(props.description);
+            const clean = marked.parse(sanitized)
+            setCleanDescription(clean);
+            setPlainText(GlobalHelper.extractTextOnly(clean))
+        }
+    }, [props.description])
+
     return (
         <section className="product-detail section">
             <div className="product-detail__container">
@@ -165,8 +178,8 @@ function ProductDetail(props) {
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
                                 {props.mediaItems && props.mediaItems.length > 1 ? (
                                     mediaItems.map((mediaItem, index) => (
-                                        <div className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
-                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
+                                        <div key={index} className="product-detail__desktop-gallery__desktop-product-image" onClick={() => handleImageModal(index)}>
+                                            <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                                                 {mediaItem.mimeType.startsWith("image") ? (
                                                     <ResponsiveImage sources={mediaItem.sources} imageSrc={mediaItem.mediaSrc} imageAlt={mediaItem.mediaAlt} imageTitle={props.title} />
                                                 ) : (
@@ -247,11 +260,38 @@ function ProductDetail(props) {
                         </div>
                     </div>
                     <div className="product-detail__description-column">
-                        <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
+                        <p className="product-detail__sku">
+                            {props.skuLabel} {props.sku}
+                            <CopyButton
+                                copiedText={props.copiedText}
+                                copyTextError={props.copyTextError}
+                                copyToClipboardText={props.copyToClipboardText}
+                                text={props.sku}
+                                label={props.skuLabel}
+                            />
+                        </p>
                         {props.ean &&
-                            <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
+                            <p className="product-detail__ean">
+                                {props.eanLabel} {props.ean}
+                                <CopyButton
+                                    copiedText={props.copiedText}
+                                    copyTextError={props.copyTextError}
+                                    copyToClipboardText={props.copyToClipboardText}
+                                    text={props.ean}
+                                    label={props.eanLabel}
+                                />
+                            </p>
                         }
-                        <h1 className="title is-4 mt-1">{props.title}</h1>
+                        <h1 className="title is-4 mt-1">
+                            {props.title} 
+                            <CopyButton
+                                copiedText={props.copiedText}
+                                copyTextError={props.copyTextError}
+                                copyToClipboardText={props.copyToClipboardText}
+                                text={props.title}
+                                label={props.title}
+                            />
+                        </h1>
                         <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
                         {props.outletTitle && !props.price &&
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
@@ -262,7 +302,7 @@ function ProductDetail(props) {
                             />
                         }
                         <div className="product-detail__availability mt-3">
-                            {props.inStock && 
+                            {props.inStock &&
                                 <Availability
                                     label={props.inStockLabel}
                                     availableQuantity={props.availableQuantity}
@@ -297,10 +337,19 @@ function ProductDetail(props) {
                                 )}
                             </div>
                         }
-                        {props.description &&
+                        {props.description && 
                             <div className="product-detail__product-description">
-                                <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
-                                <div dangerouslySetInnerHTML={{ __html: marked.parse(props.description) }}></div>
+                                <h3 className="product-detail__feature-title">
+                                    {props.descriptionLabel}
+                                    <CopyButton
+                                       copiedText={props.copiedText}
+                                        copyTextError={props.copyTextError}
+                                        copyToClipboardText={props.copyToClipboardText}
+                                        text={plainText}
+                                        label={props.descriptionLabel}
+                                    />
+                                </h3>
+                                <div dangerouslySetInnerHTML={{ __html: cleanDescription }}></div>
                             </div>
                         }
                         {props.features && props.features.length > 0 &&
@@ -320,7 +369,7 @@ function ProductDetail(props) {
                                                                 <dt>{item.key}</dt>
                                                                 <dd>{item.value}</dd>
                                                             </Fragment>
-                                                    ))}
+                                                        ))}
                                                 </dl>
                                             </div>
                                         </div>
@@ -413,7 +462,10 @@ ProductDetail.propTypes = {
     readLessText: PropTypes.string.isRequired,
     readMoreText: PropTypes.string.isRequired,
     maxAllowedOrderQuantity: PropTypes.number,
-    maxAllowedOrderQuantityErrorMessage: PropTypes.string
+    maxAllowedOrderQuantityErrorMessage: PropTypes.string,
+    copiedText: PropTypes.string.isRequired,
+    copyToClipboardText: PropTypes.string.isRequired,
+    copyTextError: PropTypes.string.isRequired
 };
 
 export default ProductDetail;

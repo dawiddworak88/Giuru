@@ -39,4 +39,27 @@ export default class GlobalHelper {
       return createTheme(themeDefinition);
     }
   }
+
+  static sanitizeHtml = (htmlString) => {
+    const div = document.createElement("div");
+
+    div.innerHTML = htmlString;
+
+    const dangerousElements = [
+      'script', 'style', 'iframe', 'object', 'embed', 'form', 
+      'input', 'textarea', 'select', 'button', 'meta', 'link',
+      'base', 'applet', 'svg', 'math', 'audio', 'video', 'source',
+      'track', 'frame', 'frameset', 'noframes', 'noscript'
+    ];
+
+    div.querySelectorAll(dangerousElements).forEach(el => el.remove());
+
+    return div.innerHTML;
+  };
+
+  static extractTextOnly = (htmlString) => {
+    const div = document.createElement("div");
+    div.innerHTML = htmlString;
+    return div.textContent || div.innerText || "";
+  };
 }
