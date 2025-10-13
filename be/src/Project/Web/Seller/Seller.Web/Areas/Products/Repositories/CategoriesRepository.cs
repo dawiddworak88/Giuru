@@ -63,7 +63,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 return response.Data.Id.Value;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -83,9 +83,9 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            if (response.IsSuccessStatusCode is false)
             {
-                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
 
@@ -117,7 +117,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 };
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -159,7 +159,7 @@ namespace Seller.Web.Areas.Categories.Repositories
 
                     var nextPagesResponse = await _apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
 
-                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    if (nextPagesResponse.IsSuccessStatusCode is false)
                     {
                         throw new CustomException(response.Message, (int)response.StatusCode);
                     }
@@ -173,7 +173,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 return categories;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -198,7 +198,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 return response.Data;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -245,7 +245,7 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             var response = await _apiClientService.PostAsync<ApiRequest<ProductCardApiRequestModel>, ProductCardApiRequestModel, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }

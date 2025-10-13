@@ -50,6 +50,8 @@ const MediaItemForm = (props) => {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
+                    } else {
+                        toast.error(jsonResponse?.message || props.generalErrorMessage)
                     }
                 });
             }).catch(() => {

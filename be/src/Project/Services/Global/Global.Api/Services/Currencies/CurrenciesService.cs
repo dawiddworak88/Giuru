@@ -12,11 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Foundation.Extensions.ExtensionMethods;
-using Global.Api.v1.RequestModels;
-using System.Text.Json;
 
 namespace Global.Api.Services.Currencies
 {
@@ -60,7 +57,7 @@ namespace Global.Api.Services.Currencies
 
             if (currency is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("CurrencyNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_globalLocalizer.GetString("CurrencyNotFound"));
             }
 
             currency.IsActive = false;
@@ -114,7 +111,7 @@ namespace Global.Api.Services.Currencies
 
             if (currency is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("CurrencyNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_globalLocalizer.GetString("CurrencyNotFound"));
             }
 
             return new CurrencyServiceModel
@@ -134,7 +131,7 @@ namespace Global.Api.Services.Currencies
 
             if (currency is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("CurrencyNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_globalLocalizer.GetString("CurrencyNotFound"));
             }
 
             var currencyTranslation = await _context.CurrenciesTranslations.FirstOrDefaultAsync(x => x.CurrencyId == model.Id && x.IsActive);

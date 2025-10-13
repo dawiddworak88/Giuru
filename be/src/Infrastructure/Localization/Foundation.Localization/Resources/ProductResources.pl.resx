@@ -199,7 +199,7 @@
     <value>Kategoria nadrzędna</value>
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
-    <value>Kategoria nadrzędnia nie została znaleziona</value>
+    <value>Kategoria nadrzędnia nie została znaleziona.</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Produkt</value>
@@ -280,7 +280,7 @@
     <value>SKU:</value>
   </data>
   <data name="SkuRequiredErrorMessage" xml:space="preserve">
-    <value>Wprowadź SKU</value>
+    <value>Wprowadź SKU.</value>
   </data>
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Usuń podkategorie należące do tej kategorii.</value>
@@ -299,5 +299,14 @@
   </data>
   <data name="ProductSkuConflict" xml:space="preserve">
     <value>Produkt o takim SKU już istnieje.</value>
+  </data>
+  <data name="BrandNotFound" xml:space="preserve">
+    <value>Marka nie została znaleziona.</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Produkt nie została znaleziony.</value>
+  </data>
+  <data name="ProductAttributeItemConflict" xml:space="preserve">
+    <value>Taka wartość atrybutu już istnieje.</value>
   </data>
 </root>

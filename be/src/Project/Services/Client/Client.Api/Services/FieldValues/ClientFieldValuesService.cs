@@ -12,7 +12,6 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Client.Api.Services.FieldValues
@@ -36,7 +35,7 @@ namespace Client.Api.Services.FieldValues
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
             var fieldsValues = _context.ClientFieldValues

@@ -124,7 +124,7 @@
     <value>Aktualny stan magazynowy</value>
   </data>
   <data name="CannotFindProductById" xml:space="preserve">
-    <value>Nie odnaleziono produktu o id </value>
+    <value>Nie odnaleziono produktu o id.</value>
   </data>
   <data name="ChangeExpectedDeliveryLabel" xml:space="preserve">
     <value>Nowy termin dostawy</value>
@@ -141,14 +141,11 @@
   <data name="Inventory" xml:space="preserve">
     <value>Stany magazynowe</value>
   </data>
-  <data name="InventoryDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto.</value>
-  </data>
   <data name="InventoryNotFound" xml:space="preserve">
-    <value>Nie znaleziono produktu w stanach magazynowych</value>
+    <value>Nie znaleziono produktu w stanach magazynowych.</value>
   </data>
   <data name="InventorySavedSuccessfully" xml:space="preserve">
-    <value>Stan magazynowy został zapisany pomyślnie</value>
+    <value>Stan magazynowy został zapisany pomyślnie.</value>
   </data>
   <data name="LocationLabel" xml:space="preserve">
     <value>Lokalizacja</value>
@@ -181,7 +178,7 @@
     <value>Nowy stan magazynowy</value>
   </data>
   <data name="NullAvailability" xml:space="preserve">
-    <value>Produkt przekroczy stan magazynowy mniejszy od zera</value>
+    <value>Produkt przekroczy stan magazynowy mniejszy od zera.</value>
   </data>
   <data name="OrderNameLabel" xml:space="preserve">
     <value>Numer zamówienia</value>
@@ -202,7 +199,7 @@
     <value>Wprowadź produkt</value>
   </data>
   <data name="QuantityFormatErrorMessage" xml:space="preserve">
-    <value>Wpisz ilość większą niż 0</value>
+    <value>Wpisz ilość większą niż 0.</value>
   </data>
   <data name="QuantityLabel" xml:space="preserve">
     <value>Ilość</value>
@@ -228,22 +225,28 @@
   <data name="Warehouse" xml:space="preserve">
     <value>Magazyn</value>
   </data>
-  <data name="WarehouseDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto magazyn</value>
-  </data>
-  <data name="WarehouseDeleteInventoryConflict" xml:space="preserve">
-    <value>Podczas usuwania nastąpił konflikt. Magazyn jest używany w stanach magazynowych.</value>
-  </data>
   <data name="WarehouseNotFound" xml:space="preserve">
-    <value>Nie znaleziono magazynu</value>
+    <value>Nie znaleziono magazynu.</value>
   </data>
   <data name="WarehouseRequiredErrorMessage" xml:space="preserve">
-    <value>Wprowadź nazwe magazynu</value>
+    <value>Wprowadź nazwę magazynu.</value>
   </data>
   <data name="Warehouses" xml:space="preserve">
     <value>Magazyny</value>
   </data>
   <data name="WarehouseSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie utworzono nowy magazyn</value>
+    <value>Pomyślnie utworzono nowy magazyn.</value>
+  </data>
+  <data name="OutletNotFound" xml:space="preserve">
+    <value>Nie znaleziono produktu na wyprzedaży.</value>
+  </data>
+  <data name="InventoryDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto.</value>
+  </data>
+  <data name="WarehouseDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto magazyn.</value>
+  </data>
+  <data name="WarehouseDeleteInventoryConflict" xml:space="preserve">
+    <value>Podczas usuwania nastąpił konflikt. Magazyn jest używany w stanach magazynowych.</value>
   </data>
 </root>

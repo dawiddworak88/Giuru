@@ -38,11 +38,17 @@ namespace Inventory.Api.Services.InventoryItems
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
         {
             var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+
+            if (inventory is null)
+            {
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
+            }
+
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == inventory.ProductId && x.IsActive);
 
-            if (product is null || inventory is null)
+            if (product is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
             product.Name = serviceModel.ProductName;
@@ -172,7 +178,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (inventoryProduct is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
             return new InventoryServiceModel
@@ -405,7 +411,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (inventory is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
             inventory.IsActive = false;

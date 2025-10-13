@@ -36,17 +36,17 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientAddressNotFound"));
             }
 
             if (await _context.Clients.AnyAsync(x => x.DefaultDeliveryAddressId == model.Id && x.IsActive))
             {
-                throw new CustomException(_clientLocalizer.GetString("DeliveryAddressDeleteDefaultConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_clientLocalizer.GetString("DeliveryAddressDeleteDefaultConflict"));
             }
 
             if (await _context.Clients.AnyAsync(x => x.DefaultBillingAddressId == model.Id && x.IsActive))
             {
-                throw new CustomException(_clientLocalizer.GetString("BillingAddressDeleteDefaultConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_clientLocalizer.GetString("BillingAddressDeleteDefaultConflict"));
             }
 
             clientAddress.IsActive = false;
@@ -126,7 +126,7 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientAddressNotFound"));
             }
 
             return new ClientAddressServiceModel
@@ -154,7 +154,7 @@ namespace Client.Api.Services.Addresses
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
             var clientAddress = new Address
@@ -194,7 +194,7 @@ namespace Client.Api.Services.Addresses
 
             if (clientAddress is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientAddressNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientAddressNotFound"));
             }
 
             clientAddress.ClientId = model.ClientId.Value;

@@ -59,7 +59,7 @@ function CategoryForm(props) {
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        toast.error(categoryBase.generalErrorMessage);
+                        toast.error(jsonResponse?.message || categoryBase.generalErrorMessage);
                     }
                 });
             }).catch(() => {

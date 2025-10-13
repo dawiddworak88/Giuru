@@ -1,45 +1,60 @@
 ﻿using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 
 namespace Foundation.Extensions.Filters
 {
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {
         private readonly IWebHostEnvironment _env;
+        private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
 
-        public HttpGlobalExceptionFilter(IWebHostEnvironment env)
+        public HttpGlobalExceptionFilter(
+            IWebHostEnvironment env,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             _env = env;
+            _globalLocalizer = globalLocalizer;
         }
 
         public void OnException(ExceptionContext context)
         {
-            if (context.Exception is CustomException ex)
+            var (statusCode, message) = context.Exception switch
             {
-                context.HttpContext.Response.StatusCode = ex.StatusCode;
+                NotFoundException ex => (StatusCodes.Status404NotFound, ex.Message),
+                ConflictException ex => (StatusCodes.Status409Conflict, ex.Message),
+                UnprocessableEntityException ex => (StatusCodes.Status422UnprocessableEntity, ex.Message),
+                BadRequestException ex => (StatusCodes.Status400BadRequest, ex.Message),
+                UnauthorizedException ex => (StatusCodes.Status401Unauthorized, ex.Message),
+                CustomException ex => (ex.StatusCode, ex.Message),
+                _ => (StatusCodes.Status500InternalServerError, _globalLocalizer.GetString("AnErrorOccurred"))
+            };
 
-                var response = new ErrorResponse
-                {
-                    Message = ex.Message
-                };
+            context.HttpContext.Response.StatusCode = statusCode;
 
-                if (_env.IsDevelopment())
-                {
-                    response.DeveloperMessage = ex;
-                }
+            var response = new ErrorResponse
+            {
+                Message = message
+            };
 
-                if (ex.StatusCode != FilterConstants.NoContentStatusCode ||
-                    ex.StatusCode != FilterConstants.UnauthorizedStatusCode)
-                {
-                    context.Result = new ObjectResult(response);
-                }
-
-                context.ExceptionHandled = true;
+            if (_env.IsDevelopment())
+            {
+                response.DeveloperMessage = context.Exception;
             }
+
+            if (statusCode != FilterConstants.NoContentStatusCode &&
+                statusCode != FilterConstants.UnauthorizedStatusCode)
+            {
+                context.Result = new ObjectResult(response);
+            }
+
+            context.ExceptionHandled = true;
         }
 
         private class ErrorResponse

@@ -36,7 +36,7 @@ namespace Client.Api.Services.Managers
 
             if (existingManager is not null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerExist"), (int)HttpStatusCode.BadRequest);
+                throw new ConflictException(this.clientLocalizer.GetString("ManagerExist"));
             }
 
             var manager = new ClientAccountManager
@@ -59,12 +59,12 @@ namespace Client.Api.Services.Managers
 
             if (manager is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(this.clientLocalizer.GetString("ManagerNotFound"));
             }
 
             if (await this.context.ClientsAccountManagers.AnyAsync(x => x.ClientManagerId == model.Id && x.IsActive))
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerDeleteConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(this.clientLocalizer.GetString("ManagerDeleteConflict"));
             }
 
             manager.IsActive = false;
@@ -78,7 +78,7 @@ namespace Client.Api.Services.Managers
 
             if (manager is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(this.clientLocalizer.GetString("ManagerNotFound"));
             }
 
             return new ClientAccountManagerServiceModel
@@ -156,7 +156,7 @@ namespace Client.Api.Services.Managers
 
             if (manager is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(this.clientLocalizer.GetString("ManagerNotFound"));
             }
 
             manager.FirstName = model.FirstName;

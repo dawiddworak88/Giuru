@@ -52,9 +52,9 @@ namespace Seller.Web.Areas.Media.Repositories.Media
 
             var response = await this.apiService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            if (response.IsSuccessStatusCode is false)
             {
-                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
 

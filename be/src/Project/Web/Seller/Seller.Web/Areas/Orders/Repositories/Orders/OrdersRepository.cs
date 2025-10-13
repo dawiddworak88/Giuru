@@ -223,7 +223,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
                 return response.Data.OrderStatusId;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -250,7 +250,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
 
             var response = await this.apiOrderService.PostAsync<ApiRequest<UpdateOrderItemStatusRequestModel>, UpdateOrderItemStatusRequestModel, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }

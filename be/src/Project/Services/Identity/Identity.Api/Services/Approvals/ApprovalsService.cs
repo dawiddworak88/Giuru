@@ -57,7 +57,7 @@ namespace Identity.Api.Services.Approvals
 
             if (approval is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("ApprovalNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_globalLocalizer.GetString("ApprovalNotFound"));
             }
 
             approval.IsActive = false;
@@ -108,7 +108,7 @@ namespace Identity.Api.Services.Approvals
 
             if (approval is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("ApprovalNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_globalLocalizer.GetString("ApprovalNotFound"));
             }
 
             return new ApprovalServiceModel
@@ -126,7 +126,7 @@ namespace Identity.Api.Services.Approvals
 
             if (approval is null)
             {
-                throw new CustomException(_globalLocalizer.GetString("ApprovalNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_globalLocalizer.GetString("ApprovalNotFound"));
             }
 
             var approvalTranslation = await _context.ApprovalTranslations.FirstOrDefaultAsync(x => x.ApprovalId == approval.Id && x.IsActive && x.Language == model.Language);
