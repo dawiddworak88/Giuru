@@ -196,7 +196,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         },
                     FilterInputs = new List<FilterViewModel>()
                     {
-                        new FilterViewModel
+                        new SingleFilterViewModel
                         {
                             Key = "category",
                             Label = this.globalLocalizer.GetString("Category"),
@@ -206,7 +206,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 Value = x
                             })
                         },
-                        new FilterViewModel
+                        new SingleFilterViewModel
                         {
                             Key = "color",
                             Label = this.globalLocalizer.GetString("Color"),
@@ -215,6 +215,45 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 Label = x,
                                 Value = x
                             })
+                        },
+                        new NestedFilterViewModel
+                        {
+                            Key = "sizes",
+                            Label = "Wymiary - T",
+                            IsNested = true,
+                            Items = new List<NestedFilterItemViewModel>
+                            {
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = "Wysokość - H",
+                                    Key = "height",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = "Szerokość - A",
+                                    Key = "width",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = "Głębokość - B",
+                                    Key = "depth",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                            }
                         }
                     }
                 };
