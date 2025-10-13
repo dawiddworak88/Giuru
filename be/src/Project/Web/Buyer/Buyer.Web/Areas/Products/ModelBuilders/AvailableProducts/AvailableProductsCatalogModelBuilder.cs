@@ -218,44 +218,44 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 })
                             },
                             new NestedFilterViewModel
-                        {
-                            Key = "dimensions",
-                            Label = "Wymiary",
-                            IsNested = true,
-                            Items = new List<NestedFilterItemViewModel>
                             {
-                                new NestedFilterItemViewModel
+                                Key = "dimensions",
+                                Label = this.globalLocalizer.GetString("Dimensions"),
+                                IsNested = true,
+                                Items = new List<NestedFilterItemViewModel>
                                 {
-                                    Label = "Wysokość",
-                                    Key = "height",
-                                    Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
+                                    new NestedFilterItemViewModel
                                     {
-                                        Label = x,
-                                        Value = x
-                                    })
-                                },
-                                new NestedFilterItemViewModel
-                                {
-                                    Label = "Szerokość",
-                                    Key = "width",
-                                    Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
+                                        Label = this.globalLocalizer.GetString("Height"),
+                                        Key = "height",
+                                        Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
+                                        {
+                                            Label = x,
+                                            Value = x
+                                        })
+                                    },
+                                    new NestedFilterItemViewModel
                                     {
-                                        Label = x,
-                                        Value = x
-                                    })
-                                },
-                                new NestedFilterItemViewModel
-                                {
-                                    Label = "Głębokość",
-                                    Key = "depth",
-                                    Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
+                                        Label = this.globalLocalizer.GetString("Width"),
+                                        Key = "width",
+                                        Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
+                                        {
+                                            Label = x,
+                                            Value = x
+                                        })
+                                    },
+                                    new NestedFilterItemViewModel
                                     {
-                                        Label = x,
-                                        Value = x
-                                    })
-                                },
+                                        Label = this.globalLocalizer.GetString("Depth"),
+                                        Key = "depth",
+                                        Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
+                                        {
+                                            Label = x,
+                                            Value = x
+                                        })
+                                    },
+                                }
                             }
-                        }
                         }
                     };
 

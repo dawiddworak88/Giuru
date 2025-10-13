@@ -219,13 +219,13 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         new NestedFilterViewModel
                         {
                             Key = "dimensions",
-                            Label = "Wymiary - T",
+                            Label = this.globalLocalizer.GetString("Dimensions"),
                             IsNested = true,
                             Items = new List<NestedFilterItemViewModel>
                             {
                                 new NestedFilterItemViewModel
                                 {
-                                    Label = "Wysokość",
+                                    Label = this.globalLocalizer.GetString("Height"),
                                     Key = "height",
                                     Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
                                     {
@@ -235,7 +235,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 },
                                 new NestedFilterItemViewModel
                                 {
-                                    Label = "Szerokość",
+                                    Label = this.globalLocalizer.GetString("Width"),
                                     Key = "width",
                                     Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
                                     {
@@ -245,7 +245,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 },
                                 new NestedFilterItemViewModel
                                 {
-                                    Label = "Głębokość",
+                                    Label = this.globalLocalizer.GetString("Depth"),
                                     Key = "depth",
                                     Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
                                     {
