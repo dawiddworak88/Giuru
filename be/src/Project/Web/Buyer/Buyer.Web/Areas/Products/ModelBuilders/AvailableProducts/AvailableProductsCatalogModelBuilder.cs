@@ -197,7 +197,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         },
                         FilterInputs = new List<FilterViewModel>
                         {
-                            new FilterViewModel
+                            new SingleFilterViewModel
                             {
                                 Key = "category",
                                 Label = this.globalLocalizer.GetString("Category"),
@@ -207,7 +207,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                     Value = x
                                 })
                             },
-                            new FilterViewModel
+                            new SingleFilterViewModel
                             {
                                 Key = "color",
                                 Label = this.globalLocalizer.GetString("Color"),
