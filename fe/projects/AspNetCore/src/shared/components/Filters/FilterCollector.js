@@ -105,6 +105,7 @@ function FilterCollector(props) {
                                             filterGroups={item.items}
                                             selectedFilters={props.filters}
                                             onChange={updateFilters}
+                                            asDropdown={true}
                                         />
                                     ) : (
                                         <Select
@@ -308,7 +309,16 @@ function FilterCollector(props) {
                     </div>
                     <div className="sidebar__filters">
                         {props.filterInputs && props.filterInputs.length > 0 && props.filterInputs.map((item, index) => (
-                            <Accordion key={index} className="sidebar__filters__filter">
+                            item.isNested ? (
+                                <NestedFilterAccordionDropdown 
+                                    key={index}
+                                    label={item.label}
+                                    filterGroups={item.items}
+                                    selectedFilters={props.filters}
+                                    onChange={updateFilters}
+                                />
+                            ) : (
+                                <Accordion key={index} className="sidebar__filters__filter">
                                 <AccordionSummary
                                     expandIcon={<ArrowIcon />}
                                 >
@@ -326,7 +336,7 @@ function FilterCollector(props) {
                                     </AccordionDetails>
                                 ))}
                             </Accordion>
-                        ))}
+                        )))}
                     </div>
                     <div className="sidebar__fotter is-flex is-justify-content-space-between">
                         <Button
