@@ -234,6 +234,11 @@ function FilterCollector(props) {
                             IconComponent={(props) => <ArrowIcon {...props}/>}
                             value={props.sorting}
                             onChange={(e) => props.setSorting(e.target.value)}
+                            sx={{
+                                "&& .MuiSelect-select": {
+                                    minHeight: "unset"
+                                }
+                            }}
                             MenuProps={{
                                 autoFocus: false,
                                 PaperProps: {
@@ -243,7 +248,7 @@ function FilterCollector(props) {
                                     }
                                 }
                             }}
-                            renderValue={() => {
+                            renderValue={(value) => {
                                 return (
                                     <Typography
                                         sx={{
@@ -252,7 +257,7 @@ function FilterCollector(props) {
                                             color: "#064254"
                                         }}
                                     >
-                                        {props.sorting}
+                                        {props.sortItems.find(item => item.key === value)?.label}
                                     </Typography>
                                 )
                             }}
