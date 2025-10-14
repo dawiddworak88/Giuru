@@ -175,16 +175,26 @@ namespace Buyer.Web.Areas.Products.Services.Products
         {
             var widthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleWidthAttributeKeys);
             var depthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleDepthAttributeKeys);
+            var lengthValue = GetFirstAvailableAttributeValue(attributes, this.options.Value.PossibleLengthAttributeKeys);
 
-            if (string.IsNullOrWhiteSpace(widthValue) ||
-                string.IsNullOrWhiteSpace(depthValue))
+            if (string.IsNullOrWhiteSpace(widthValue))
             {
                 return default;
             }
 
-            var size = $"{widthValue}x{depthValue}".Trim();
+            if (string.IsNullOrWhiteSpace(depthValue) is false)
+            {
+                var size = $"{widthValue}x{depthValue}".Trim();
+                return size;
+            }
 
-            return size;
+            if (string.IsNullOrWhiteSpace(lengthValue) is false)
+            {
+                var size = $"{widthValue}x{lengthValue}".Trim();
+                return size;
+            }
+
+            return default;
         }
     }
 }

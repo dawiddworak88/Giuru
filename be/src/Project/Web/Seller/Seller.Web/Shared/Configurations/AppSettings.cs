@@ -28,6 +28,7 @@ namespace Seller.Web.Shared.Configurations
         public string PossibleSleepAreaDepthAttributeKeys { get; set; }
         public string PossibleDepthAttributeKeys { get; set; }
         public string PossibleWidthAttributeKeys { get; set; }
+        public string PossibleLengthAttributeKeys { get; set; }
         public string PossiblePaletteSizeAttributeKeys { get; set; }
         public string PossiblePointsOfLightAttributeKeys { get; set; }
         public string PossibleLampshadeTypeAttributeKeys { get; set; }
