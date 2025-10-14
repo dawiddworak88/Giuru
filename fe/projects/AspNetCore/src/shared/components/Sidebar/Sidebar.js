@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 import { Context } from "../../../shared/stores/Store";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
-import moment from "moment";
 import Price from "../Price/Price";
 import Availability from "../Availability/Availability";
 
