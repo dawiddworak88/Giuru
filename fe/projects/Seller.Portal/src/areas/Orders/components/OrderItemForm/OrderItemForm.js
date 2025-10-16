@@ -48,7 +48,7 @@ const OrderItemForm = (props) => {
                         setOrderItemStatusChanges(jsonResponse.statusChanges);
                     }
                     else {
-                        toast.error(jsonResponse.message);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
             }).catch(() => {

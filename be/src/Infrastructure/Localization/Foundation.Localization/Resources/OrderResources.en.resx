@@ -130,7 +130,7 @@
     <value>Add to cart</value>
   </data>
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
-    <value>The basket has been cleared successfully</value>
+    <value>The basket has been cleared successfully.</value>
   </data>
   <data name="CancellationOrderError" xml:space="preserve">
     <value>Only newly created orders can be cancelled.</value>
@@ -238,13 +238,13 @@
     <value>Expected date of product on stock:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
-    <value>Order status has not been found</value>
+    <value>Order status has not been found.</value>
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Order status has been updated successfully.</value>
   </data>
   <data name="OrganisationNotFound:" xml:space="preserve">
-    <value>Customer organization does not exist</value>
+    <value>Customer organization does not exist.</value>
   </data>
   <data name="OutletQuantityLabel" xml:space="preserve">
     <value>Outlet quantity:</value>
@@ -280,7 +280,7 @@
     <value>Are you sure you want to cancel the order.</value>
   </data>
   <data name="CancelationConfirmationDialog" xml:space="preserve">
-    <value>Confirm the cancellation of the order</value>
+    <value>Confirm the cancellation of the order.</value>
   </data>
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Cancel the order item</value>
@@ -334,7 +334,7 @@
     <value>The order item has been cancelled</value>
   </data>
   <data name="coi_preheader" xml:space="preserve">
-    <value>One of the customers cancelled an item in the order</value>
+    <value>One of the customers cancelled an item in the order.</value>
   </data>
   <data name="coi_cancelOrderItemLabel" xml:space="preserve">
     <value>Cancelled product</value>
@@ -358,6 +358,9 @@
     <value>Product from Outlet</value>
   </data>
   <data name="ProductsNotFound" xml:space="preserve">
-    <value>Products not found</value>
+    <value>Products not found.</value>
+  </data>
+  <data name="OrderItemNotFound" xml:space="preserve">
+    <value>Order item not found.</value>
   </data>
 </root>

@@ -61,17 +61,17 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("CategoryNotFound"));
             }
 
             if (await _context.DownloadCenterCategories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_downloadCenterLocalizer.GetString("SubcategoriesDeleteCategoryConflict"));
             }
 
             if (await _context.DownloadCenterCategoryFiles.AnyAsync(x => x.CategoryId == model.Id && x.IsActive))
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryFileConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_downloadCenterLocalizer.GetString("CategoryFileConflict"));
             }
 
             category.IsActive = false;
@@ -90,7 +90,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("CategoryNotFound"));
             }
 
             return new CategoryServiceModel
@@ -154,7 +154,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("CategoryNotFound"));
             }
 
             var categoryTranslation = await _context.DownloadCenterCategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);

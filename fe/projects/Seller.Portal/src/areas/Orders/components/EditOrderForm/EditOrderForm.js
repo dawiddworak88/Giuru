@@ -38,13 +38,12 @@ function EditOrderForm(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
                         setOrderStatusId(jsonResponse.orderStatusId);
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
             }).catch(() => {

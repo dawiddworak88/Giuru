@@ -32,7 +32,7 @@ namespace Identity.Api.Services.Roles
 
             if (user is null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(this.accountLocalizer.GetString("UserNotFound"));
             }
 
             var userRoles = await this.userManager.GetRolesAsync(user);

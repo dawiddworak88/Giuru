@@ -77,9 +77,9 @@ namespace Seller.Web.Areas.Inventory.Repositories
 
             var response = await _apiService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
             
-            if (response.IsSuccessStatusCode is false && response?.Data is not null)
+            if (response.IsSuccessStatusCode is false)
             {
-                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
 

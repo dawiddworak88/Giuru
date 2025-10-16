@@ -48,6 +48,7 @@ namespace Seller.Web.Areas.News.Repositories.Categories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
+            
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 return new PagedResults<IEnumerable<Category>>(response.Data.Total, response.Data.PageSize)
@@ -56,7 +57,7 @@ namespace Seller.Web.Areas.News.Repositories.Categories
                 };
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -81,6 +82,7 @@ namespace Seller.Web.Areas.News.Repositories.Categories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
+            
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var categories = new List<Category>();
@@ -109,7 +111,7 @@ namespace Seller.Web.Areas.News.Repositories.Categories
                 return categories;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -135,12 +137,13 @@ namespace Seller.Web.Areas.News.Repositories.Categories
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<CategoryRequestModel>, CategoryRequestModel, BaseResponseModel>(apiRequest);
+            
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
                 return response.Data.Id.Value;
             }
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
@@ -159,9 +162,10 @@ namespace Seller.Web.Areas.News.Repositories.Categories
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            
+            if (response.IsSuccessStatusCode is false)
             {
-                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
 
@@ -176,7 +180,8 @@ namespace Seller.Web.Areas.News.Repositories.Categories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Category>(apiRequest);
-            if (!response.IsSuccessStatusCode)
+            
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }

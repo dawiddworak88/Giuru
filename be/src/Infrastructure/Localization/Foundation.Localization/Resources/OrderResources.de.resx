@@ -130,7 +130,7 @@
     <value>In den Warenkorb legen</value>
   </data>
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
-    <value>Der Warenkorb wurde erfolgreich geleert</value>
+    <value>Der Warenkorb wurde erfolgreich geleert.</value>
   </data>
   <data name="CancellationOrderError" xml:space="preserve">
     <value>Nur neu erstellte Bestellungen können storniert werden.</value>
@@ -238,13 +238,13 @@
     <value>Voraussichtliches Lagerdatum der Ware:</value>
   </data>
   <data name="OrderStatusNotFound" xml:space="preserve">
-    <value>Bestellstatus nicht gefunden</value>
+    <value>Bestellstatus nicht gefunden.</value>
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Bestellstatus wurde erfolgreich aktualisiert.</value>
   </data>
   <data name="OrganisationNotFound:" xml:space="preserve">
-    <value>Kundenorganisation existiert nicht</value>
+    <value>Kundenorganisation existiert nicht.</value>
   </data>
   <data name="OutletQuantityLabel" xml:space="preserve">
     <value>Menge ab Verkaufsstelle:</value>
@@ -334,7 +334,7 @@
     <value>Die Bestellposition wurde storniert</value>
   </data>
   <data name="coi_preheader" xml:space="preserve">
-    <value>Einer der Kunden hat einen Artikel in der Bestellung storniert</value>
+    <value>Einer der Kunden hat einen Artikel in der Bestellung storniert.</value>
   </data>
   <data name="coi_cancelOrderItemLabel" xml:space="preserve">
     <value>Storniertes Produkt</value>
@@ -358,6 +358,9 @@
     <value>Produkt aus dem Outlet</value>
   </data>
   <data name="ProductsNotFound" xml:space="preserve">
-    <value>Produkte nicht gefunden</value>
+    <value>Produkte nicht gefunden.</value>
+  </data>
+  <data name="OrderItemNotFound" xml:space="preserve">
+    <value>Bestellposition wurde nicht gefunden.</value>
   </data>
 </root>

@@ -134,7 +134,21 @@ namespace Ordering.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedDate")
+                        .HasDatabaseName("IX_Orders_IsActive1_CreatedDate")
+                        .HasFilter("[IsActive] = 1");
+
+                    b.HasIndex("CreatedDate", "Id")
+                        .HasDatabaseName("IX_Orders_IsActive1_CreatedDate_Id")
+                        .HasFilter("[IsActive] = 1");
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedDate", "Id"), new[] { "ClientName", "OrderStatusId", "OrderStateId" });
+
                     b.HasIndex("IsActive", "ClientName");
+
+                    b.HasIndex("IsActive", "CreatedDate", "Id")
+                        .HasDatabaseName("IX_Orders_IsActive_CreatedDate_Id_Filtered")
+                        .HasFilter("[IsActive] = 1");
 
                     b.HasIndex("IsActive", "SellerId", "CreatedDate");
 
@@ -288,6 +302,11 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("IX_OrderItems_OrderId_Cover");
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("OrderId"), new[] { "CreatedDate", "Currency", "ExternalReference", "IsActive", "LastModifiedDate", "LastOrderItemStatusChangeId", "MoreInfo", "OutletQuantity", "PictureUrl", "Price", "ProductId", "ProductName", "ProductSku", "Quantity", "RowVersion", "StockQuantity", "UnitPrice" });
 
                     b.HasIndex("OrderId", "IsActive");
 

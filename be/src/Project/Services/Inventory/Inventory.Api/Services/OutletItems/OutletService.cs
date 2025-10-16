@@ -44,11 +44,17 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletServiceModel> UpdateAsync(UpdateOutletServiceModel model)
         {
             var outlet = await _context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+
+            if (outlet is null)
+            {
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
+            }
+
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == outlet.ProductId && x.IsActive);
 
-            if (product is null || outlet is null)
+            if (product is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
 
             product.Name = model.ProductName;
@@ -287,7 +293,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (outletItem is null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
 
             return new OutletServiceModel
@@ -523,7 +529,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (outlet == null)
             {
-                throw new CustomException(_inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
 
             outlet.IsActive = false;

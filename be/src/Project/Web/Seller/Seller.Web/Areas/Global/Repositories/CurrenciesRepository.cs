@@ -44,9 +44,9 @@ namespace Seller.Web.Areas.Global.Repositories
 
             var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequset);
 
-            if (!response.IsSuccessStatusCode && response?.Data is not null)
+            if (response.IsSuccessStatusCode is false)
             {
-                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
 
@@ -186,7 +186,7 @@ namespace Seller.Web.Areas.Global.Repositories
 
             var response = await _apiClientService.PostAsync<ApiRequest<CurrencyRequestModel>, CurrencyRequestModel, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }

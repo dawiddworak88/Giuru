@@ -57,9 +57,9 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         {
             var downloadCenterFile = _context.DownloadCenterCategoryFiles.Where(x => x.MediaId == model.Id && x.IsActive);
 
-            if (downloadCenterFile is null)
+            if (downloadCenterFile is null || downloadCenterFile.Any() is false)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             foreach(var downloadCenterCategoryFile in downloadCenterFile.OrEmptyIfNull())
@@ -117,7 +117,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterFile is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             var downloadCenterFileItem = new DownloadCenterItemFileServiceModel
@@ -190,7 +190,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterCategory is null)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             var subcategories = _context.DownloadCenterCategories.Where(x => x.ParentCategoryId == downloadCenterCategory.Id && x.IsActive && x.IsVisible).ToList();
@@ -245,9 +245,9 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         {
             var downloadCenterCategoryFiles = _context.DownloadCenterCategoryFiles.Where(x => x.MediaId == model.Id && x.IsActive);
 
-            if (downloadCenterCategoryFiles is null)
+            if (downloadCenterCategoryFiles is null || downloadCenterCategoryFiles.Any() is false)
             {
-                throw new CustomException(_downloadCenterLocalizer.GetString("DownloadCenterFilesNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"));
             }
 
             foreach(var downloadCenterCategoryFile in downloadCenterCategoryFiles.OrEmptyIfNull())

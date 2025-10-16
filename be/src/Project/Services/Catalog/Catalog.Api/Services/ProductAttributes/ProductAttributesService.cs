@@ -134,7 +134,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductItemAttribute != null)
             {
-                throw new CustomException(_productLocalizer.GetString("ProductAttributeItemConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_productLocalizer.GetString("ProductAttributeItemConflict"));
             }
 
             var productAttributeItem = new ProductAttributeItem
@@ -177,12 +177,12 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttribute == null)
             {
-                throw new CustomException(_productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_productLocalizer.GetString("ProductAttributeNotFound"));
             }
 
             if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
             {
-                throw new CustomException(_productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_productLocalizer.GetString("ProductAttributeNotEmpty"));
             }
 
             AssertCategorySchemaReference(existingProductAttribute, model.Language);
@@ -203,7 +203,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (existingProductAttributeItem == null)
             {
-                throw new CustomException(_productLocalizer.GetString("ProductAttributeItemNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_productLocalizer.GetString("ProductAttributeItemNotFound"));
             }
 
             AssertCategorySchemaReference(existingProductAttributeItem, model.Language);
@@ -523,7 +523,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
                 var message = $"{_productLocalizer.GetString(localizationKey)} {string.Join(", ", categoryNames)}";
 
-                throw new CustomException(message, (int)HttpStatusCode.Conflict);
+                throw new ConflictException(message);
             }
         }
 

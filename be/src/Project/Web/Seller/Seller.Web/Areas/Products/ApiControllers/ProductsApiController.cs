@@ -213,7 +213,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                     {
                         PrimarySku = x.PrimaryProductSku,
                         FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                         SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                         PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                         Size = _productsService.GetSize(x.ProductAttributes),
@@ -233,6 +233,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         await Task.WhenAll(priceProducts),
                         new PriceClient
                         {
+                            Id = client?.Id,
                             Name = client?.Name,
                             CurrencyCode = currency?.CurrencyCode,
                             ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
@@ -335,7 +336,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         {
                             PrimarySku = product.PrimaryProductSku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
                             PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                             Size = _productsService.GetSize(product.ProductAttributes),
@@ -352,6 +353,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         },
                         new PriceClient
                         {
+                            Id = client?.Id,
                             Name = client?.Name,
                             CurrencyCode = currency?.CurrencyCode,
                             ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
