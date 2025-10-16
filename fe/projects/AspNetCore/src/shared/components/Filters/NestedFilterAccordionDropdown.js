@@ -100,22 +100,22 @@ const NestedFilterAccordionDropdown = ({
             {asDropdown ? (
                 <div>
                     <Button
-                    variant="contained"
-                    disableElevation
-                    onClick={event => handleButtonClick(event)}
-                    sx={{
-                        height: "2.5rem",
-                        borderRadius: "0.25rem",
-                        paddingX: "1rem",
-                        paddingY: "0.25rem",
-                        backgroundColor: "#F7F7F7",
-                        color: "#171717",
-                        fontWeight: 700,
-                        fontSize: "0.75rem"
-                    }}
-                >
-                    {label}
-                </Button>
+                        variant="contained"
+                        disableElevation
+                        onClick={event => handleButtonClick(event)}
+                        sx={{
+                            height: "2.5rem",
+                            borderRadius: "0.25rem",
+                            paddingX: "1rem",
+                            paddingY: "0.25rem",
+                            backgroundColor: "#F7F7F7",
+                            color: "#171717",
+                            fontWeight: 700,
+                            fontSize: "0.75rem"
+                        }}
+                    >
+                        {label}
+                    </Button>
                 <Popover
                     open={isPopoverOpen}
                     onClose={handlePopoverClose}
@@ -161,9 +161,23 @@ const NestedFilterAccordionDropdown = ({
                 // key={index}
                 disableGutters
                 square
+                sx={{
+                    borderTop: "1px solid #D5D7D8",
+                    "&&:before": {
+                                                display: "none"
+                                            }
+                }}
             >
                 <AccordionSummary
                     expandIcon={<ArrowIcon />}
+                    sx={{
+                        paddingY: "1rem",
+                        fontWeight: 700,
+                        fontSize: "0.875rem",
+                        color: "#171717",
+                        lineHeight: "1.5rem",
+                        letterSpacing: "0.14px"
+                    }}
                 >
                     {label}
                 </AccordionSummary>

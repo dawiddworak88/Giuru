@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { 
     Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, 
-    Chip, Drawer, ListItemText, MenuItem, Select, Typography, 
+    Chip, Divider, Drawer, ListItemText, MenuItem, Select, Stack, Typography, 
     useMediaQuery, useTheme
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
@@ -279,91 +279,192 @@ function FilterCollector(props) {
                     </Box>
                 }
             </Box>
-            <div className="active-filters">
-                {props.filters.map((item, index) => (
-                    <Chip
-                        className="active-filters__item pr-3 mr-3 mb-3"
-                        key={index}
-                        label={item.label}
-                        onDelete={() => handleOnDeleteFilter(index)}
-                        deleteIcon={<RemoveIcon />} />
-                ))}
-                {props.filters.length > 1 && 
-                    <Button
-                        className="active-filters__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
-                        onClick={handleOnClickClearFilters}
-                    >{props.clearAllFilters}</Button>
-                }
-            </div>
-            <Drawer
-                anchor="right"
-                open={sidebarOpen}
-                onClose={() => setSidebarOpen(false)}
-            >
-                <div className="sidebar is-flex is-flex-direction-column">
-                    <div className="is-flex is-justify-content-space-between">
-                        <Typography fontWeight={700} fontSize={20}>
-                            {props.filtersLabel}
-                        </Typography>
+            {props.filters && props.filters.length > 0 && (
+                <Box 
+                    sx={{
+                        display: 'flex',
+                        gap: '0.75rem',
+                        marginBottom: "2.5rem"
+                    }}
+                >
+                    {props.filters.map((selectedFilter, index) => (
+                        <Chip
+                            key={index}
+                            label={selectedFilter.label}
+                            onDelete={() => handleOnDeleteFilter(selectedFilter)}
+                            deleteIcon={<RemoveIcon />} 
+                            sx={{
+                                paddingY: "0.25rem",
+                                paddingX: "1rem",
+                                display: "flex",
+                                gap: "0.25rem",
+                                width: "fit-content",
+                                borderRadius: "0.25rem",
+                                backgroundColor: "#064254",
+                                border: "1px solid #064254",
+                                color: "#FFFFFF",
+                                fontSize: "0.75rem",
+                                fontWeight: 700
+                            }}
+                        />
+                    ))}
+                    {props.filters.length > 1 && 
                         <Button
-                            className="sidebar__header__button"
-                            onClick={() => setSidebarOpen(false)}
-                        >
-                            <Close />
-                        </Button>
-                    </div>
-                    <div className="sidebar__filters">
-                        {props.filterInputs && props.filterInputs.length > 0 && props.filterInputs.map((item, index) => (
-                            item.isNested ? (
-                                <NestedFilterAccordionDropdown 
-                                    key={index}
-                                    label={item.label}
-                                    filterGroups={item.items}
-                                    selectedFilters={props.filters}
-                                    onChange={updateFilters}
-                                />
-                            ) : (
-                                <Accordion key={index} className="sidebar__filters__filter">
-                                <AccordionSummary
-                                    expandIcon={<ArrowIcon />}
-                                >
-                                    {item.label}
-                                </AccordionSummary>
-                                {item.items.map((variant, index) => (
-                                    <AccordionDetails key={index} className="sidebar__filters__filter__item is-flex is-align-items-center">
-                                        <Checkbox
-                                            className="sidebar__filters__filter__item__checkbox"
-                                            checked={isFilterSelected(item.key, variant.value)}
-                                            icon={<CheckboxIcon />}
-                                            checkedIcon={<CheckboxCheckedIcon />}
-                                            onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
-                                        <Typography>{variant.label}</Typography>
-                                    </AccordionDetails>
-                                ))}
-                            </Accordion>
-                        )))}
-                    </div>
-                    <div className="sidebar__fotter is-flex is-justify-content-space-between">
-                        <Button
-                            className="sidebar__fotter__button button-clear py-3"
                             onClick={handleOnClickClearFilters}
-                            disabled={!props.filters.length > 0}
+                            sx={{
+                                paddingY: "0.25rem",
+                                paddingX: "1rem",
+                                borderRadius: "0.25rem",
+                                backgroundColor: "#F8F9FC",
+                                border: "1px solid #D5D7D8",
+                                color: "#171717",
+                                fontSize: "0.75rem",
+                                fontWeight: 700
+                            }}
                         >
-                            <Typography fontWeight={700}>
-                                {props.clearAllFilters}
-                            </Typography>
+                            {props.clearAllFilters}
                         </Button>
-                        <Button
-                            className="sidebar__fotter__button py-3"
-                            onClick={() => setSidebarOpen(false)}
+                    }
+                </Box>   
+            )}
+            {props.filterInputs && props.filterInputs.length > 0 && (
+                <Drawer
+                    anchor="right"
+                    open={sidebarOpen}
+                    onClose={() => setSidebarOpen(false)}
+                >
+                    <Box 
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            minWidth: "28.875rem",
+                            minHeight: "100vh"
+                        }}
+                    >
+                        <Box 
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                padding: "0 1.875rem 0 1.5rem",
+                                minHeight: "5rem"
+                            }}
                         >
-                            <Typography fontWeight={700}>
-                                {props.seeResult}
+                            <Typography 
+                                sx={{
+                                    fontSize: "1.25rem",
+                                    fontWeight: 700,
+                                    color: "#171717"
+                                }}    
+                            >
+                                {props.filtersLabel}
                             </Typography>
-                        </Button>
-                    </div>
-                </div>
-            </Drawer>
+                            <Button
+                                disableRipple
+                                disableTouchRipple
+                                disableElevation
+                                onClick={() => setSidebarOpen(false)}
+                                sx={{
+                                    color: "#171717"
+                                }}
+                            >
+                                <Close />
+                            </Button>
+                        </Box>
+                        <Box 
+                            sx={{
+                                paddingX: "1.5rem"
+                            }}
+                        >
+                            {/* <Divider 
+                                sx={{
+                                    height: "1px",
+                                    backgroundColor: "#D5D7D8"
+                                }} 
+                            /> */}
+                            {props.filterInputs.map((item, index) => (
+                                item.isNested ? (
+                                    <NestedFilterAccordionDropdown 
+                                        key={index}
+                                        label={item.label}
+                                        filterGroups={item.items}
+                                        selectedFilters={props.filters}
+                                        onChange={updateFilters}
+                                    />
+                                ) : (
+                                    <Accordion 
+                                        key={index}
+                                        elevation={0}
+                                        disableGutters
+                                        square
+                                        sx={{
+                                            borderTop: "1px solid #D5D7D8",
+                                            // borderBottom: "1px solid #D5D7D8",
+                                            "&&:before": {
+                                                display: "none"
+                                            }
+                                        }}
+                                    >
+                                        <AccordionSummary
+                                            expandIcon={<ArrowIcon />}
+                                            sx={{
+                                                paddingY: "1rem",
+                                                fontWeight: 700,
+                                                fontSize: "0.875rem",
+                                                color: "#171717",
+                                                lineHeight: "1.5rem",
+                                                letterSpacing: "0.14px"
+                                            }}
+                                        >
+                                            {item.label}
+                                        </AccordionSummary>
+                                        <AccordionDetails key={index} className="sidebar__filters__filter__item is-flex is-align-items-center">
+                                            <Stack>
+                                                {item.items.map((variant, index) => (
+                                                    <Stack direction="row">
+                                                        <Checkbox
+                                                        className="sidebar__filters__filter__item__checkbox"
+                                                        checked={isFilterSelected(item.key, variant.value)}
+                                                        icon={<CheckboxIcon />}
+                                                        checkedIcon={<CheckboxCheckedIcon />}
+                                                        onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
+                                                        <Typography>{variant.label}</Typography>
+                                                    </Stack>
+                                                ))}    
+                                            </Stack>        
+                                        </AccordionDetails>
+                                </Accordion>
+                            )))}
+                        </Box>
+                        <Box 
+                            sx={{
+                                padding: "1.5rem",
+                                marginTop: "auto",
+                                display: "flex",
+                                gap: "0.5rem"
+                            }}
+                        >
+                            <Button
+                                className="sidebar__fotter__button button-clear py-3"
+                                onClick={handleOnClickClearFilters}
+                                disabled={!props.filters.length > 0}
+                            >
+                                <Typography fontWeight={700}>
+                                    {props.clearAllFilters}
+                                </Typography>
+                            </Button>
+                            <Button
+                                className="sidebar__fotter__button py-3"
+                                onClick={() => setSidebarOpen(false)}
+                            >
+                                <Typography fontWeight={700}>
+                                    {props.seeResult}
+                                </Typography>
+                            </Button>
+                        </Box>
+                    </Box>
+                </Drawer>
+            )}
         </div>
     )
 }
