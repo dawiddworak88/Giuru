@@ -46,6 +46,7 @@ using Foundation.Extensions.Services.Cache;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.ModelBuilders.Toasts;
 using Buyer.Web.Shared.Repositories.Inventory;
+using System;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -103,6 +104,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddHttpClient("GrulaApi")
                 .AddTypedClient(httpClient =>
                 {
+                    httpClient.Timeout = TimeSpan.FromSeconds(10);
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
 
                     return new GrulaApiClient(configuration["GrulaUrl"], httpClient);

@@ -33,7 +33,7 @@ namespace Identity.Api.Services.Organisations
 
             if (existingOrganisation != null)
             {
-                throw new CustomException(this.globalLocalizer.GetString("OrganisationExistsAlready"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(this.globalLocalizer.GetString("OrganisationExistsAlready"));
             }
 
             var organisation = new Organisation

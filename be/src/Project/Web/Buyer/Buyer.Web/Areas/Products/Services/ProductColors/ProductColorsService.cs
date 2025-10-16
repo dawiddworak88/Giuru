@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Services.ProductColors
@@ -34,7 +35,8 @@ namespace Buyer.Web.Areas.Products.Services.ProductColors
                 return color;
             }
 
-            var result = await _cache.HashGetAsync(ProductColorConstants.ColorCacheKey, color.Trim().ToLower());
+            var normalizedKey = NormalizeColorKey(color);
+            var result = await _cache.HashGetAsync(ProductColorConstants.ColorCacheKey, normalizedKey);
 
             if (result.HasValue)
             {
@@ -90,12 +92,26 @@ namespace Buyer.Web.Areas.Products.Services.ProductColors
                     continue;
                 }
 
-                hashEntries.Add(new HashEntry(color.Polish.ToLower(), color.English));
-                hashEntries.Add(new HashEntry(color.German.ToLower(), color.English));
-                hashEntries.Add(new HashEntry(color.English.ToLower(), color.English));
+                hashEntries.Add(new HashEntry(NormalizeColorKey(color.Polish), color.English));
+                hashEntries.Add(new HashEntry(NormalizeColorKey(color.German), color.English));
+                hashEntries.Add(new HashEntry(NormalizeColorKey(color.English), color.English));
             }
 
             await _cache.HashSetAsync(ProductColorConstants.ColorCacheKey, hashEntries.ToArray());
+        }
+
+        private static string NormalizeColorKey(string color)
+        {
+            if (string.IsNullOrWhiteSpace(color))
+            {
+                return color;
+            }
+
+            return color
+                .Normalize(NormalizationForm.FormC)
+                .Replace('\u00A0', ' ')
+                .Trim()
+                .ToLowerInvariant();
         }
 
         private class ColorTranslation

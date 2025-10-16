@@ -41,7 +41,6 @@ function ProductAttributeForm(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
                         toast.success(jsonResponse.message);
 
@@ -51,7 +50,7 @@ function ProductAttributeForm(props) {
                         }
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
             }).catch(() => {

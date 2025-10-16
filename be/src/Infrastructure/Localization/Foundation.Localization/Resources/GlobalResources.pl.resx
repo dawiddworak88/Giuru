@@ -142,7 +142,7 @@
     <value>Klient</value>
   </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
-    <value>Klient o podanym hoście został już wcześniej dodany</value>
+    <value>Klient o podanym hoście został już wcześniej dodany.</value>
   </data>
   <data name="ClientName" xml:space="preserve">
     <value>Nazwa klienta</value>
@@ -233,6 +233,9 @@
   </data>
   <data name="InStock" xml:space="preserve">
     <value>W magazynie:</value>
+  </data>
+  <data name="Karten" xml:space="preserve">
+    <value>Karty</value>
   </data>
   <data name="LanguageRequiredErrorMessage" xml:space="preserve">
     <value>Wybierz preferowany język komunikacji z klientem</value>
@@ -454,7 +457,7 @@
     <value>maks:</value>
   </data>
   <data name="QuantityErrorMessage" xml:space="preserve">
-    <value>Brak wybranej ilości zamawianego produktu</value>
+    <value>Brak wybranej ilości zamawianego produktu.</value>
   </data>
   <data name="NewsCategories" xml:space="preserve">
     <value>Kategorie newsów</value>
@@ -712,7 +715,7 @@
     <value>Przenieś</value>
   </data>
   <data name="FileSizeLimit" xml:space="preserve">
-    <value>Przesłany plik przekracza maksymalny rozmiar</value>
+    <value>Przesłany plik przekracza maksymalny rozmiar.</value>
   </data>
   <data name="ClientAddresses" xml:space="preserve">
     <value>Adresy</value>
@@ -730,7 +733,7 @@
     <value>Wartość</value>
   </data>
   <data name="CurrencyNotFound" xml:space="preserve">
-    <value>Nie znaleziono waluty</value>
+    <value>Nie znaleziono waluty.</value>
   </data>
   <data name="Currencies" xml:space="preserve">
     <value>Waluty</value>
@@ -751,10 +754,10 @@
     <value>Symbol</value>
   </data>
   <data name="CurrencyDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto walutę</value>
+    <value>Pomyślnie usunięto walutę.</value>
   </data>
   <data name="CurrencySavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano walutę</value>
+    <value>Pomyślnie zapisano walutę.</value>
   </data>
   <data name="Currency" xml:space="preserve">
     <value>Waluta</value>
@@ -769,7 +772,7 @@
     <value>Adres bilingowy</value>
   </data>
   <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
-    <value>Adres dostawy taki sam jak adres bilingowy</value>
+    <value>Adres dostawy taki sam jak adres bilingowy.</value>
   </data>
   <data name="AdressesInformation" xml:space="preserve">
     <value>Informacje adresowe</value>
@@ -787,19 +790,10 @@
     <value>Zobacz więcej</value>
   </data>
   <data name="ApprovalNotFound" xml:space="preserve">
-    <value>Nie znaleziono zgody</value>
+    <value>Nie znaleziono zgody.</value>
   </data>
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zgody</value>
-  </data>
-  <data name="Cards" xml:space="preserve">
-    <value>Karty</value>
-  </data>
-  <data name="Download" xml:space="preserve">
-    <value>Pobierz</value>
-  </data>
-  <data name="Location" xml:space="preserve">
-    <value>Lokalizacja</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Cena</value>
@@ -816,10 +810,28 @@
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
     <value>Niektóre pliki nie zostały pobrane.</value>
   </data>
+  <data name="CopiedText" xml:space="preserve">
+    <value>Skopiowano</value>
+  </data>
+  <data name="CopyTextError" xml:space="preserve">
+    <value>Kopiowanie nie powiodło się.</value>
+  </data>
+  <data name="CopyToClipboardText" xml:space="preserve">
+    <value>Kopiuj do schowka</value>
+  </data>
   <data name="ShowText" xml:space="preserve">
     <value>Pokaż</value>
   </data>
   <data name="MinOrderQuantity" xml:space="preserve">
     <value>Minimalna ilość zamówienia to 1</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Karty</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Pobierz</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Lokalizacja</value>
   </data>
 </root>

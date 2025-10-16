@@ -133,7 +133,7 @@
     <value>Entfernen Sie die News, die der Kategorie zugeordnet sind.</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
-    <value>Kategorie nicht gefunden</value>
+    <value>Kategorie nicht gefunden.</value>
   </data>
   <data name="CategoryRequiredErrorMessage" xml:space="preserve">
     <value>Kategorie wählen</value>
@@ -175,7 +175,7 @@
     <value>News</value>
   </data>
   <data name="NewsDeletedSuccessfully" xml:space="preserve">
-    <value>News erfolgreich gelöscht</value>
+    <value>News erfolgreich gelöscht.</value>
   </data>
   <data name="NewsItem" xml:space="preserve">
     <value>News bearbeiten</value>
@@ -187,7 +187,7 @@
     <value>News hinzufügen</value>
   </data>
   <data name="NewsNotFound" xml:space="preserve">
-    <value>News nicht gefunden</value>
+    <value>News nicht gefunden.</value>
   </data>
   <data name="NewsSavedSuccessfully" xml:space="preserve">
     <value>News wurde erfolgreich erstellt.</value>

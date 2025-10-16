@@ -31,7 +31,7 @@ export default class ProductPricesHelper {
 
         if (response.ok && jsonResponse) {
             const price = jsonResponse.currentPrice;
-            const currency = jsonResponse.currency;
+            const currency = jsonResponse.currencyCode;
 
             return { price, currency };
         }

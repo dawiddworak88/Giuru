@@ -168,7 +168,7 @@ function Catalog(props) {
                         setOpenDeleteDialog(() => false);
                         setEntityToDelete(() => null);
                     } else {
-                        toast.error(jsonResponse.message);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
             }).catch(() => {

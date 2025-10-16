@@ -239,7 +239,7 @@ namespace Media.Api.Services.Media
 
             if (mediaItem is null)
             {
-                throw new CustomException(_mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_mediaResources.GetString("MediaNotFound"));
             }
 
             var mediaItemVersions = _context.MediaItemVersions.Where(x => x.MediaItemId == mediaItem.Id).OrderByDescending(x => x.CreatedDate).ToList();
@@ -319,7 +319,7 @@ namespace Media.Api.Services.Media
 
             if (mediaItem is null)
             {
-                throw new CustomException(_mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_mediaResources.GetString("MediaNotFound"));
             }
 
             mediaItem.IsActive = false;

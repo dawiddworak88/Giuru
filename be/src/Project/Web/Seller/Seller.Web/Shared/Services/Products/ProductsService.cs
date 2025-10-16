@@ -37,16 +37,26 @@ namespace Seller.Web.Shared.Services.Products
         {
             var widthValue = GetFirstAvailableAttributeValue(attributes, _options.Value.PossibleWidthAttributeKeys);
             var depthValue = GetFirstAvailableAttributeValue(attributes, _options.Value.PossibleDepthAttributeKeys);
+            var lengthValue = GetFirstAvailableAttributeValue(attributes, _options.Value.PossibleLengthAttributeKeys);
 
-            if (string.IsNullOrWhiteSpace(widthValue) ||
-                string.IsNullOrWhiteSpace(depthValue))
+            if (string.IsNullOrWhiteSpace(widthValue))
             {
                 return default;
             }
 
-            var size = $"{widthValue}x{depthValue}".Trim();
+            if (string.IsNullOrWhiteSpace(depthValue) is false)
+            {
+                var size = $"{widthValue}x{depthValue}".Trim();
+                return size;
+            }
 
-            return size;
+            if (string.IsNullOrWhiteSpace(lengthValue) is false)
+            {
+                var size = $"{widthValue}x{lengthValue}".Trim();
+                return size;
+            }
+
+            return default;
         }
 
         public string GetSleepAreaSize(IEnumerable<ReadProductAttribute> attributes)

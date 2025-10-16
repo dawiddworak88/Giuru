@@ -108,11 +108,13 @@ function ClientForm(props) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
+                    } else {
+                        toast.error(jsonResponse.message ? jsonResponse.message : props.generalErrorMessage);
                     }
                 });
-            }).catch((error) => {
+            }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(error.message ?? props.generalErrorMessage);
+                toast.error(props.generalErrorMessage);
             });
     }
 
@@ -143,7 +145,7 @@ function ClientForm(props) {
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
             }).catch(() => {

@@ -387,6 +387,7 @@ services:
       - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - PossibleWidthAttributeKeys=width
       - PossibleDepthAttributeKeys=depth
+      - PossibleLengthAttributeKeys=length
       - PossiblePointsOfLightAttributeKeys=pointsOfLight,PointsOfLight
       - PossibleLampshadeTypeAttributeKeys=lampshadeType,LampshadeType
       - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize
@@ -444,6 +445,7 @@ services:
       - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - PossibleWidthAttributeKeys=width
       - PossibleDepthAttributeKeys=depth
+      - PossibleLengthAttributeKeys=length
       - PossiblePointsOfLightAttributeKeys=pointsOfLight,PointsOfLight
       - PossibleLampshadeTypeAttributeKeys=lampshadeType,LampshadeType
       - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize

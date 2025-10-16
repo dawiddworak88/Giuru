@@ -36,11 +36,11 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldDefinition is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("FieldDefinitionNotFound"));
             }
             else if (fieldDefinition.FieldType != FieldTypesConstants.SelectFieldType)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldDefinitionSelectTypeConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_clientLocalizer.GetString("FieldDefinitionSelectTypeConflict"));
             }
 
             var fieldOptionSetId = fieldDefinition.OptionSetId;
@@ -82,7 +82,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("FieldOptionNotFound"));
             }
 
             fieldOption.IsActive = false;
@@ -152,7 +152,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("FieldOptionNotFound"));
             }
 
             var fieldDefinition = await _context.FieldDefinitions.FirstOrDefaultAsync(x => x.OptionSetId == fieldOption.OptionSetId);
@@ -177,7 +177,7 @@ namespace Client.Api.Services.FieldOptions
 
             if (fieldOption is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("FieldOptionNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_clientLocalizer.GetString("FieldOptionNotFound"));
             }
 
             var fieldOptionTranslation = fieldOption.OptionsTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);

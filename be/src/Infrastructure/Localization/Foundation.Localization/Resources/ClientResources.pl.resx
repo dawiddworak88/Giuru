@@ -127,7 +127,7 @@
     <value>Powróć do ról</value>
   </data>
   <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto wniosek klienta</value>
+    <value>Pomyślnie usunięto wniosek klienta.</value>
   </data>
   <data name="BackToClientsApplications" xml:space="preserve">
     <value>Powróć do aplikacji klientów</value>
@@ -136,13 +136,13 @@
     <value>Klient</value>
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
-    <value>Użytkownik o podanym adresie e-mail został już utworzony</value>
+    <value>Użytkownik o podanym adresie e-mail został już utworzony.</value>
   </data>
   <data name="ClientApplicationNotFound" xml:space="preserve">
-    <value>Nie znaleziono wniosku klienta</value>
+    <value>Nie znaleziono wniosku klienta.</value>
   </data>
   <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
-    <value>Wniosek klienta został pomyślnie zapisany</value>
+    <value>Wniosek klienta został pomyślnie zapisany.</value>
   </data>
   <data name="ClientApplyConfirmation" xml:space="preserve">
     <value>Dziękujemy za rejestrację na naszej platformie B2B. Twój wniosek został przesłany i czeka na weryfikację naszego zespołu. O aktywacji konta powiadomimy Cię drogą mailową</value>
@@ -154,16 +154,16 @@
     <value>Nowa prośba współpracy</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
-    <value>Klient został usunięty</value>
+    <value>Klient został usunięty.</value>
   </data>
   <data name="ClientExists" xml:space="preserve">
-    <value>Klient o takim adresie e-mail już istnieje</value>
+    <value>Klient o takim adresie e-mail już istnieje.</value>
   </data>
   <data name="ClientManagers" xml:space="preserve">
     <value>Account menedżerowie klientów</value>
   </data>
   <data name="ClientNotFound" xml:space="preserve">
-    <value>Klient nie został znaleziony</value>
+    <value>Klient nie został znaleziony.</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Klienci</value>
@@ -172,7 +172,7 @@
     <value>Wnioski klientów</value>
   </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
-    <value>Klient został pomyślnie zapisany</value>
+    <value>Klient został pomyślnie zapisany.</value>
   </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Grupy klientów</value>
@@ -196,31 +196,31 @@
     <value>Edytuj grupę</value>
   </data>
   <data name="GroupDeleteClientConflict" xml:space="preserve">
-    <value>Usuń przypisanie klientów do tej grupy</value>
+    <value>Usuń przypisanie klientów do tej grupy.</value>
   </data>
   <data name="GroupDeletedSuccessfully" xml:space="preserve">
-    <value>Grupa została usunięta</value>
+    <value>Grupa została usunięta.</value>
   </data>
   <data name="GroupNotFound" xml:space="preserve">
-    <value>Grupa nie została znaleziona</value>
+    <value>Grupa nie została znaleziona.</value>
   </data>
   <data name="GroupSavedSuccessfully" xml:space="preserve">
-    <value>Grupa została pomyślnie zapisana</value>
+    <value>Grupa została pomyślnie zapisana.</value>
   </data>
   <data name="ManagerDeleteConflict" xml:space="preserve">
-    <value>Usuń przypisanie klientów do tego account menedzera</value>
+    <value>Usuń przypisanie klientów do tego account menedzera.</value>
   </data>
   <data name="ManagerDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto menedżera</value>
+    <value>Pomyślnie usunięto menedżera.</value>
   </data>
   <data name="ManagerExist" xml:space="preserve">
-    <value>Account menedżer już istnieje</value>
+    <value>Account menedżer już istnieje.</value>
   </data>
   <data name="ManagerNotFound" xml:space="preserve">
-    <value>Account menedżer nie został znaleziony</value>
+    <value>Account menedżer nie został znaleziony.</value>
   </data>
   <data name="ManagerSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano menedżera</value>
+    <value>Pomyślnie zapisano menedżera.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Powróć do klientów</value>
@@ -256,22 +256,22 @@
     <value>Zresetuj hasło</value>
   </data>
   <data name="RoleDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto role</value>
+    <value>Pomyślnie usunięto role.</value>
   </data>
   <data name="RoleIsExisting" xml:space="preserve">
-    <value>Rola już istnieje</value>
+    <value>Rola już istnieje.</value>
   </data>
   <data name="RoleNotFound" xml:space="preserve">
-    <value>Nie znaleziono roli</value>
+    <value>Nie znaleziono roli.</value>
   </data>
   <data name="RoleSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano role</value>
+    <value>Pomyślnie zapisano role.</value>
   </data>
   <data name="CountryDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto kraj</value>
+    <value>Pomyślnie usunięto kraj.</value>
   </data>
   <data name="CountrySavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano kraj</value>
+    <value>Pomyślnie zapisano kraj.</value>
   </data>
   <data name="EditCountry" xml:space="preserve">
     <value>Edytuj kraj</value>
@@ -286,10 +286,10 @@
     <value>Wybrany adres jest przypisany jako domyslny.</value>
   </data>
   <data name="ClientAddressNotFound" xml:space="preserve">
-    <value>Nie znaleziono adresu klienta</value>
+    <value>Nie znaleziono adresu klienta.</value>
   </data>
   <data name="ClientDeleteAddressConflict" xml:space="preserve">
-    <value>Usuń przypisane adresy do tego klienta</value>
+    <value>Usuń przypisane adresy do tego klienta.</value>
   </data>
   <data name="BackToAddresses" xml:space="preserve">
     <value>Powróć do adresów</value>
@@ -298,19 +298,19 @@
     <value>Adres dostawy</value>
   </data>
   <data name="DeliveryAddressDeleteDefaultConflict" xml:space="preserve">
-    <value>Adres dostawy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny</value>
+    <value>Adres dostawy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny.</value>
   </data>
   <data name="ClientAddressDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto adres klienta</value>
+    <value>Pomyślnie usunięto adres klienta.</value>
   </data>
   <data name="ClientAddressSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano adres klienta</value>
+    <value>Pomyślnie zapisano adres klienta.</value>
   </data>
   <data name="BillingAddress" xml:space="preserve">
     <value>Adres bilingowy</value>
   </data>
   <data name="BillingAddressDeleteDefaultConflict" xml:space="preserve">
-    <value>Adres bilingowy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny</value>
+    <value>Adres bilingowy nie może zostać usunięty, ponieważ jest on przypisany jako domyślny.</value>
   </data>
   <data name="NewClientAddress" xml:space="preserve">
     <value>Dodaj adres</value>
@@ -319,13 +319,13 @@
     <value>Wyrażono zgodę</value>
   </data>
   <data name="FieldDefinitionNotFound" xml:space="preserve">
-    <value>Nie znaleziono definicji pola</value>
+    <value>Nie znaleziono definicji pola.</value>
   </data>
   <data name="FieldDefinitionSelectTypeConflict" xml:space="preserve">
-    <value>Nie można przypisać opcji do definicji pola ze względu na wybrany typ</value>
+    <value>Nie można przypisać opcji do definicji pola ze względu na wybrany typ.</value>
   </data>
   <data name="FieldOptionNotFound" xml:space="preserve">
-    <value>Nie znaleziono opcji</value>
+    <value>Nie znaleziono opcji.</value>
   </data>
   <data name="BackToField" xml:space="preserve">
     <value>Powróć do definicji pola</value>
@@ -349,19 +349,25 @@
     <value>Dodaj opcje pola</value>
   </data>
   <data name="FieldDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto dynamiczne pole</value>
+    <value>Pomyślnie usunięto dynamiczne pole.</value>
   </data>
   <data name="FieldOptionDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie usunięto opcje</value>
+    <value>Pomyślnie usunięto opcje.</value>
   </data>
   <data name="FieldOptionSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano opcje</value>
+    <value>Pomyślnie zapisano opcje.</value>
   </data>
   <data name="FieldSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano dynamiczne pole</value>
+    <value>Pomyślnie zapisano dynamiczne pole.</value>
   </data>
   <data name="PreferedCurrencyLabel" xml:space="preserve">
     <value>Preferowana waluta</value>
+  </data>
+  <data name="ApprovalNotFound" xml:space="preserve">
+    <value>Nie znaleziono zgody.</value>
+  </data>
+  <data name="ClientApprovals" xml:space="preserve">
+    <value>Zgody</value>
   </data>
   <data name="EditClientApproval" xml:space="preserve">
     <value>Edytuj Zgodę</value>
@@ -373,9 +379,9 @@
     <value>Nowa zgoda</value>
   </data>
   <data name="ClientApprovalSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano zgodę</value>
+    <value>Pomyślnie zapisano zgodę.</value>
   </data>
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
-    <value>Pomyślanie usunięto zgodę</value>
+    <value>Pomyślnie usunięto zgodę.</value>
   </data>
 </root>

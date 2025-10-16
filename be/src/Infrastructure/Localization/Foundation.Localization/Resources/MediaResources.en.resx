@@ -127,16 +127,16 @@
     <value>Media</value>
   </data>
   <data name="MediaDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted media</value>
+    <value>Successfully deleted media.</value>
   </data>
   <data name="MediaItemsLabel" xml:space="preserve">
     <value>Upload media files</value>
   </data>
   <data name="MediaNotFound" xml:space="preserve">
-    <value>Media not found</value>
+    <value>Media not found.</value>
   </data>
   <data name="MediaUpdatedSuccessfully" xml:space="preserve">
-    <value>Succesfully updated media</value>
+    <value>Succesfully updated media.</value>
   </data>
   <data name="MetaDataLabel" xml:space="preserve">
     <value>Metadata</value>

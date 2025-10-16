@@ -33,6 +33,7 @@ using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Configuration;
 using Foundation.Extensions.Services.Cache;
 using Seller.Web.Shared.Repositories.Inventory;
+using System;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -69,6 +70,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddHttpClient("GrulaApi")
                 .AddTypedClient(httpClient =>
                 {
+                    httpClient.Timeout = TimeSpan.FromSeconds(10);
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
 
                     return new GrulaApiClient(configuration["GrulaUrl"], httpClient);

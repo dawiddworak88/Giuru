@@ -17,5 +17,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
         Task<PagedResults<IEnumerable<ProductFile>>> GetProductFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
         //Task<Paged<IEnumerable<Product>> GetProductsWithFiltersAsync(string token, string language, string searchTerm,)
+        Task<IEnumerable<Product>> GetProductsBySkusAsync(string token, string language, IEnumerable<string> skus);
     }
 }

@@ -57,7 +57,7 @@ namespace Identity.Api.Services.TeamMembers
 
             if (organisation is null)
             {
-                throw new CustomException(_teamMembersLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_teamMembersLocalizer.GetString("OrganisationNotFound"));
             }
 
             var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Email == model.Email);
@@ -126,7 +126,7 @@ namespace Identity.Api.Services.TeamMembers
 
             if (user is null)
             {
-                throw new CustomException(_teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_teamMembersLocalizer.GetString("TeamMemberNotFound"));
             }
 
             _context.Accounts.Remove(user);
@@ -170,7 +170,7 @@ namespace Identity.Api.Services.TeamMembers
 
             if (existingTeamMember is null)
             {
-                throw new CustomException(_teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_teamMembersLocalizer.GetString("TeamMemberNotFound"));
             }
 
             var teamMember = new TeamMemberServiceModel
@@ -191,7 +191,7 @@ namespace Identity.Api.Services.TeamMembers
 
             if (user is null)
             {
-                throw new CustomException(_teamMembersLocalizer.GetString("TeamMemberNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_teamMembersLocalizer.GetString("TeamMemberNotFound"));
             }
 
             var existingUserWithEmail = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);

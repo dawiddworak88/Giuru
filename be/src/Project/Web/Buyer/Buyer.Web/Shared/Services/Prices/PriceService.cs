@@ -13,6 +13,8 @@ namespace Buyer.Web.Shared.Services.Prices
 {
     public class PriceService : IPriceService
     {
+        private const int MaxBatchSize = 100;
+        
         private readonly GrulaApiClient _grulaApiClient;
         private readonly IOptions<AppSettings> _options;
         private readonly ILogger<PriceService> _logger;
@@ -96,43 +98,54 @@ namespace Buyer.Web.Shared.Services.Prices
                 return result;
             }
 
-            var priceRequests = validIndexed.Select(x => new PriceRequest
+            var pairs = validIndexed.Select(x => new
             {
-                PriceDrivers = CreatePriceDrivers(x.Product, client),
-                CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
-                PricingDate = pricingDate
+                x.Index,
+                Request = new PriceRequest
+                {
+                    PriceDrivers = CreatePriceDrivers(x.Product, client),
+                    CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
+                    PricingDate = pricingDate
+                }
             }).ToList();
 
-            var priceQuery = new GetPricesByPriceDriversQuery
-            {
-                EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
-                PriceRequests = priceRequests,
-            };
+            var batches = pairs.Chunk(MaxBatchSize);
+            int batchIdx = 0;
 
-            try
+            foreach (var batch in batches)
             {
-                var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
-
-                for (int i = 0; i < validIndexed.Count; i++)
+                var priceQuery = new GetPricesByPriceDriversQuery
                 {
-                    var grulaPrice = grulaPrices.ElementAtOrDefault(i);
-                    if (grulaPrice?.Amount is not null)
+                    EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
+                    PriceRequests = batch.Select(b => b.Request).ToList(),
+                };
+
+                try
+                {
+                    var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(priceQuery);
+
+                    for (int i = 0; i < batch.Length && i < grulaPrices.Count; i++)
                     {
-                        result[validIndexed[i].Index] = new Price
+                        var grulaPrice = grulaPrices.ElementAtOrDefault(i);
+                        if (grulaPrice?.Amount is not null)
                         {
-                            CurrentPrice = (decimal)grulaPrice.Amount.Amount,
-                            CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
-                        };
+                            result[batch[i].Index] = new Price
+                            {
+                                CurrentPrice = (decimal)grulaPrice.Amount.Amount,
+                                CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
+                            };
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error while fetching prices from the Grula API for batch {BatchIndex} of size {BatchSize}.", batchIdx, batch.Length);
+                }
 
-                return result;
+                batchIdx++;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while fetching prices from the Grula API.");
-                return Enumerable.Empty<Price>();
-            }
+
+            return result;
         }
 
         private bool CanSeePrice(Guid? priceClientId)

@@ -55,12 +55,12 @@ namespace Client.Api.Services.Groups
 
             if (group is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("GroupNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(this.clientLocalizer.GetString("GroupNotFound"));
             }
 
             if (await this.context.ClientsGroups.AnyAsync(x => x.GroupId == model.Id && x.IsActive))
             {
-                throw new CustomException(this.clientLocalizer.GetString("GroupDeleteClientConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(this.clientLocalizer.GetString("GroupDeleteClientConflict"));
             }
 
             group.IsActive = false;
@@ -208,7 +208,7 @@ namespace Client.Api.Services.Groups
             
             if (group == null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("GroupNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(this.clientLocalizer.GetString("GroupNotFound"));
             }
 
             var groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.ClientGroupId == model.Id && x.Language == model.Language && x.IsActive);

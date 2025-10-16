@@ -128,6 +128,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SeeLessText = _globalLocalizer.GetString("SeeLessText"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                CopiedText = _globalLocalizer.GetString("CopiedText"),
+                CopyTextError = _globalLocalizer.GetString("CopyTextError"),
+                CopyToClipboardText = _globalLocalizer.GetString("CopyToClipboardText"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
@@ -167,7 +170,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         {
                             PrimarySku = product.PrimaryProductSku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
                             PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                             Size = _productsService.GetSize(product.ProductAttributes),
