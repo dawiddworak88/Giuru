@@ -106,6 +106,7 @@ namespace Catalog.BackgroundTasks.Services.Products
             var products = await _productSearchRepository.GetAsync(
                 _localizationSettings.CurrentValue.DefaultCulture, 
                 null, 
+                false,
                 availableQuantities.OrEmptyIfNull().Select(x => x.ProductSku), 
                 null);
 

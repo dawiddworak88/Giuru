@@ -13,6 +13,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
     {
         private readonly IBulkProductIndexingRepository _bulkProductIndexingRepository;
         private readonly IElasticClient _elasticClient;
+        private readonly ILogger<ProductIndexingRepository> _logger;
 
         public ProductIndexingRepository(
             ILogger<ProductIndexingRepository> logger,
@@ -21,6 +22,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         {
             _bulkProductIndexingRepository = bulkProductIndexingRepository;
             _elasticClient = elasticClient;
+            _logger = logger;
         }
 
         public async Task DeleteAsync(Guid sellerId)

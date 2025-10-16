@@ -567,7 +567,7 @@ namespace Catalog.Api.Services.Products
                 Data = searchResults.Data
             };
 
-            var mappedPage = await MapToPageResultsAsync(pageResullt, model.Language, model.OrganisationId);
+            var mappedPage = await MapToPageResultsAsync(pageResullt, model.Language, model.OrganisationId, model);
 
             return new PagedResultsWithFilters<IEnumerable<ProductServiceModel>>(searchResults.Total, searchResults.PageSize)
             {
