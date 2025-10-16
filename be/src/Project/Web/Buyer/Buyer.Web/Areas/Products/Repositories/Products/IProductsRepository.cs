@@ -1,5 +1,7 @@
 ﻿using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Search.Models;
+using Foundation.Search.Paginations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +18,15 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         Task<ProductStock> GetProductOutletAsync(Guid? productId);
         Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
         Task<PagedResults<IEnumerable<ProductFile>>> GetProductFilesAsync(string token, string language, Guid? id, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
-        //Task<Paged<IEnumerable<Product>> GetProductsWithFiltersAsync(string token, string language, string searchTerm,)
         Task<IEnumerable<Product>> GetProductsBySkusAsync(string token, string language, IEnumerable<string> skus);
+        Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(
+            string token, 
+            string language, 
+            string searchTerm, 
+            IEnumerable<Guid> ids,
+            QueryFilters filters, 
+            int pageIndex, 
+            int itemsPerPage, 
+            string orderBy);
     }
 }

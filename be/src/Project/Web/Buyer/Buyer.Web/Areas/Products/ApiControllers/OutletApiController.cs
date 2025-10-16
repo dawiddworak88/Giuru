@@ -10,6 +10,8 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Search.Binders;
+using Foundation.Search.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -43,7 +45,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(
+            [ModelBinder(BinderType = typeof(SearchQueryFiltersBinder))] QueryFilters filters,
+            int pageIndex, 
+            int itemsPerPage, 
+            string orderBy)
         {
             var language = CultureInfo.CurrentUICulture.Name;
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
@@ -53,7 +59,14 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, language, null, false, pageIndex, itemsPerPage, token, orderBy);
+                    token,
+                    language,
+                    outletItems.Data.Select(x => x.ProductId),
+                    filters,
+                    null,
+                    pageIndex,
+                    itemsPerPage,
+                    orderBy);
 
                 if (products is not null)
                 {

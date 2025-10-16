@@ -834,4 +834,19 @@
   <data name="Location" xml:space="preserve">
     <value>Lokalizacja</value>
   </data>
+  <data name="Color" xml:space="preserve">
+    <value>Kolor</value>
+  </data>
+  <data name="Depth" xml:space="preserve">
+    <value>Głębokość</value>
+  </data>
+  <data name="Dimensions" xml:space="preserve">
+    <value>Wymiary</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Wysokość</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Szerokość</value>
+  </data>
 </root>

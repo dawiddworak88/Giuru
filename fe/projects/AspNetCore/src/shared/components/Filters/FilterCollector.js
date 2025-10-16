@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Chip, Drawer, ListItemText, MenuItem, Select, Typography } from "@mui/material";
-import Arrow from "../../Icons/Arrow";
-import { CheckBox, CheckBoxChecked } from "../../Icons/CheckBox";
-import Remove from "../../Icons/Remove";
-import Filters from "../../Icons/Filters";
+import { 
+    Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, 
+    Chip, Divider, Drawer, ListItemText, MenuItem, Select, Stack, Typography, 
+    useMediaQuery, useTheme
+} from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { 
+    ArrowIcon, CheckboxCheckedIcon, CheckboxIcon,
+    FiltersIcon, RemoveIcon 
+} from "../../icons";
+import NestedFilterAccordionDropdown from "./NestedFilterAccordionDropdown";
 
 function FilterCollector(props) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -42,169 +47,424 @@ function FilterCollector(props) {
         props.setFilters([])
     }
 
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isNotMobile = !isMobile;
+
     return (
         <div>
-            <div className="filters-collector is-flex is-align-items-center">
-                {props.total !== 0 &&
-                    <div className="filters-collector__total pr-5">
-                        <p>{props.total} {props.resultsLabel}</p>
-                    </div>
-                }
-                {props.filterInputs && props.filterInputs.length > 0 &&
-                    <div className="filters-collector__filters">
-                        {props.filterInputs.map((item, index) => (
-                            <Select
-                                key={index}
-                                multiple displayEmpty
-                                value={props.filters}
-                                onChange={handleOnSelectFiltersChange}
-                                MenuProps={{
-                                    PaperProps: {
-                                        sx: {
-                                            padding: '1.5rem 1.25rem 0 1.25rem'
-                                        },
-                                    }
-                                }}
-                                renderValue={() => {
-                                    return (
-                                    <Typography fontWeight={700}>
-                                        {item.label}
-                                    </Typography>
-                                    );
-                                }}
-                                IconComponent={(props) => <Arrow {...props}/>}
-                                className="filters-collector__filters__select mr-3 py-0 px-2"
-                            >
-                                {item.items.map((variant, index) => (
-                                    <MenuItem
-                                        className="filters-collector__filters__select__item pt-0 pr-4 pb-5 pl-0"
-                                        value={{key: item.key, value: variant.value, label: variant.label }}
-                                        key={index}
-                                    >
-                                        <Checkbox
-                                            className="filters-collector__filters__select__item__checkbox"
-                                            checked={isFilterSelected(item.key, variant.value)}
-                                            icon={<CheckBox />}
-                                            checkedIcon={<CheckBoxChecked />} />
-                                        <ListItemText primary={variant.label} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        ))}
-                        <Button
-                            className="filters-collector__filters__button px-4 py-1"
-                            onClick={() => setSidebarOpen(true)}
-                            endIcon={<Filters />}
+            <Box 
+                component="div"
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '100%',
+                    mb: '1.5rem'
+                }}
+            >
+                {props.total !== 0 && (
+                    <Box
+                        component="div"
+                        sx={{
+                            marginRight: "1.5rem"
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                fontSize: "0.875rem",
+                                fontWeight: 400,
+                                lineHeight: "1.5rem",
+                                color: "#7C8693"
+                            }}
                         >
-                            <Typography fontWeight={700}>
-                                {props.allFilters}
-                            </Typography>
-                        </Button>
-                    </div>
+                            {props.total} {props.resultsLabel}
+                        </Typography>
+                    </Box>
+                )}
+                {isNotMobile &&
+                    <Box
+                        component="div"
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "1.5rem"
+                        }}
+                    >
+                        {props.filterInputs && props.filterInputs.length > 0 && (
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    gap: "0.75rem",
+                                    marginRight: "0.75rem"
+                                }}
+                            >
+                                {props.filterInputs.map((item, index) => (
+                                    item.isNested ? (
+                                        <NestedFilterAccordionDropdown 
+                                            label={item.label}
+                                            filterGroups={item.items}
+                                            selectedFilters={props.filters}
+                                            onChange={updateFilters}
+                                            asDropdown={true}
+                                        />
+                                    ) : (
+                                        <Select
+                                            key={index}
+                                            multiple
+                                            displayEmpty
+                                            value={props.filters}
+                                            sx={{
+                                                height: "2.5rem",
+                                                borderRadius: "0.25rem",
+                                                backgroundColor: "#F7F7F7",
+                                                paddingX: "1rem",
+                                                paddingY: "0.25rem",
+                                                "&& .MuiSelect-select": {
+                                                    minHeight: "unset"
+                                                }
+                                            }}
+                                            MenuProps={{
+                                                autoFocus: false,
+                                                PaperProps: {
+                                                    sx: {
+                                                        borderRadius: "0.5rem",
+                                                        paddingX: "2.5rem",
+                                                        paddingY: "2rem"
+                                                    }
+                                                }
+                                            }}
+                                            onChange={handleOnSelectFiltersChange}
+                                            IconComponent={(props) => <ArrowIcon {...props}/>}
+                                            renderValue={() => {
+                                                return (
+                                                    <Typography 
+                                                        sx={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            fontWeight: 700,
+                                                            fontSize: "0.75rem",
+                                                            color: "#171717"
+                                                        }}
+                                                    >
+                                                        {item.label}
+                                                    </Typography>
+                                                );
+                                            }}
+                                        >
+                                            {item.items.map((variant, index) => (
+                                                <MenuItem
+                                                    key={index}
+                                                    value={{
+                                                        key: item.key, 
+                                                        value: variant.value, 
+                                                        label: variant.label 
+                                                    }}
+                                                    sx={{
+                                                        height: "1.5rem",
+                                                        padding: 0,
+                                                        "&:not(:first-child)": {
+                                                            marginTop: "1.5rem"
+                                                        }
+                                                    }}
+                                                >
+                                                    <Checkbox
+                                                        checked={isFilterSelected(item.key, variant.value)}
+                                                        icon={<CheckboxIcon />}
+                                                        checkedIcon={<CheckboxCheckedIcon />} 
+                                                        sx={{
+                                                            padding: 0,
+                                                            height: "1.5rem"
+                                                        }}
+                                                    />
+                                                    <ListItemText primary={variant.label} sx={{
+                                                        fontSize: "0.875rem",
+                                                        fontWeight: 400,
+                                                        color: "#171717"
+                                                    }}/>
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    )
+                                ))}
+                            </Box>
+                        )}
+                    </Box>
                 }
+                <Button
+                    onClick={() => setSidebarOpen(true)}
+                    endIcon={<FiltersIcon />}
+                    sx={{
+                        height: "2.5rem",
+                        paddingX: "1rem",
+                        paddingY: "0.25rem",
+                        borderRadius: "0.25rem",
+                        backgroundColor: "#F7F7F7"
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            fontWeight: 700,
+                            fontSize: "0.75rem",
+                            color: "#171717"
+                        }}
+                    >
+                        {props.allFilters}
+                    </Typography>
+                </Button>
                 {props.sortItems && props.sortItems.length > 0 &&
-                    <div className="is-flex filters-collector__sort">
-                        <div className="filters-collector__sort__text has-text-weight-bold mr-3">{props.sortLabel}</div>
+                    <Box 
+                        sx={{
+                            display: "flex",
+                            minWidth: "fit-content",
+                            alignItems: "center",
+                            marginLeft: "auto",
+                            gap: "1.75rem"
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                fontSize: "0.75rem",
+                                fontWeight: 700,
+                                color: "#171717"
+                            }}
+                        >
+                            {props.sortLabel}
+                        </Typography>
                         <Select
-                            className="filters-collector__sort__select"
-                            IconComponent={(props) => <Arrow {...props}/>}
+                            IconComponent={(props) => <ArrowIcon {...props}/>}
                             value={props.sorting}
                             onChange={(e) => props.setSorting(e.target.value)}
+                            sx={{
+                                "&& .MuiSelect-select": {
+                                    minHeight: "unset"
+                                }
+                            }}
+                            MenuProps={{
+                                autoFocus: false,
+                                PaperProps: {
+                                    sx: {
+                                        paddingX: "1.5rem",
+                                        paddingY: "1rem"
+                                    }
+                                }
+                            }}
+                            renderValue={(value) => {
+                                return (
+                                    <Typography
+                                        sx={{
+                                            fontSize: "0.75rem",
+                                            fontWeight: 700,
+                                            color: "#064254"
+                                        }}
+                                    >
+                                        {props.sortItems.find(item => item.key === value)?.label}
+                                    </Typography>
+                                )
+                            }}
                         >
                             {props.sortItems.map((item, index) => (
                                 <MenuItem
-                                    className="py-2 px-5"
                                     key={index}
                                     value={item.key}
+                                    sx={{
+                                        "&:not(:first-child)": {
+                                            marginTop: "1rem"
+                                        }
+                                    }}
                                 >
                                     {item.label}    
                                 </MenuItem>
                             ))}
                         </Select>
-                    </div>
+                    </Box>
                 }
-            </div>
-            {props.total !== 0 &&
-                <div className="filters-collector__total-mobile">
-                    <p>{props.total} {props.resultsLabel}</p>
-                </div>
-            }
-            <div className="active-filters">
-                {props.filters.map((item, index) => (
-                    <Chip
-                        className="active-filters__item pr-3 mr-3 mb-3"
-                        key={index}
-                        label={item.label}
-                        onDelete={() => handleOnDeleteFilter(index)}
-                        deleteIcon={<Remove />} />
-                ))}
-                {props.filters.length > 1 && 
-                    <Button
-                        className="active-filters__button button-clear px-3 py-1 mb-3 has-text-weight-bold"
-                        onClick={handleOnClickClearFilters}
-                    >{props.clearAllFilters}</Button>
-                }
-            </div>
-            <Drawer
-                anchor="right"
-                open={sidebarOpen}
-                onClose={() => setSidebarOpen(false)}
-            >
-                <div className="sidebar is-flex is-flex-direction-column">
-                    <div className="is-flex is-justify-content-space-between">
-                        <Typography fontWeight={700} fontSize={20}>
-                            {props.filtersLabel}
-                        </Typography>
+            </Box>
+            {props.filters && props.filters.length > 0 && (
+                <Box 
+                    sx={{
+                        display: 'flex',
+                        gap: '0.75rem',
+                        marginBottom: "2.5rem"
+                    }}
+                >
+                    {props.filters.map((selectedFilter, index) => (
+                        <Chip
+                            key={index}
+                            label={selectedFilter.label}
+                            onDelete={() => handleOnDeleteFilter(selectedFilter)}
+                            deleteIcon={<RemoveIcon />} 
+                            sx={{
+                                paddingY: "0.25rem",
+                                paddingX: "1rem",
+                                display: "flex",
+                                gap: "0.25rem",
+                                width: "fit-content",
+                                borderRadius: "0.25rem",
+                                backgroundColor: "#064254",
+                                border: "1px solid #064254",
+                                color: "#FFFFFF",
+                                fontSize: "0.75rem",
+                                fontWeight: 700
+                            }}
+                        />
+                    ))}
+                    {props.filters.length > 1 && 
                         <Button
-                            className="sidebar__header__button"
-                            onClick={() => setSidebarOpen(false)}
-                        >
-                            <Close />
-                        </Button>
-                    </div>
-                    <div className="sidebar__filters">
-                        {props.filterInputs && props.filterInputs.length > 0 && props.filterInputs.map((item, index) => (
-                            <Accordion key={index} className="sidebar__filters__filter">
-                                <AccordionSummary
-                                    expandIcon={<Arrow />}
-                                >
-                                    {item.label}
-                                </AccordionSummary>
-                                {item.items.map((variant, index) => (
-                                    <AccordionDetails key={index} className="sidebar__filters__filter__item is-flex is-align-items-center">
-                                        <Checkbox
-                                            className="sidebar__filters__filter__item__checkbox"
-                                            checked={isFilterSelected(item.key, variant.value)}
-                                            icon={<CheckBox />}
-                                            checkedIcon={<CheckBoxChecked />}
-                                            onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
-                                        <Typography>{variant.label}</Typography>
-                                    </AccordionDetails>
-                                ))}
-                            </Accordion>
-                        ))}
-                    </div>
-                    <div className="sidebar__fotter is-flex is-justify-content-space-between">
-                        <Button
-                            className="sidebar__fotter__button button-clear py-3"
                             onClick={handleOnClickClearFilters}
-                            disabled={!props.filters.length > 0}
+                            sx={{
+                                paddingY: "0.25rem",
+                                paddingX: "1rem",
+                                borderRadius: "0.25rem",
+                                backgroundColor: "#F8F9FC",
+                                border: "1px solid #D5D7D8",
+                                color: "#171717",
+                                fontSize: "0.75rem",
+                                fontWeight: 700
+                            }}
                         >
-                            <Typography fontWeight={700}>
-                                {props.clearAllFilters}
-                            </Typography>
+                            {props.clearAllFilters}
                         </Button>
-                        <Button
-                            className="sidebar__fotter__button py-3"
-                            onClick={() => setSidebarOpen(false)}
+                    }
+                </Box>   
+            )}
+            {props.filterInputs && props.filterInputs.length > 0 && (
+                <Drawer
+                    anchor="right"
+                    open={sidebarOpen}
+                    onClose={() => setSidebarOpen(false)}
+                >
+                    <Box 
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            minWidth: "28.875rem",
+                            minHeight: "100vh"
+                        }}
+                    >
+                        <Box 
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                padding: "0 1.875rem 0 1.5rem",
+                                minHeight: "5rem"
+                            }}
                         >
-                            <Typography fontWeight={700}>
-                                {props.seeResult}
+                            <Typography 
+                                sx={{
+                                    fontSize: "1.25rem",
+                                    fontWeight: 700,
+                                    color: "#171717"
+                                }}    
+                            >
+                                {props.filtersLabel}
                             </Typography>
-                        </Button>
-                    </div>
-                </div>
-            </Drawer>
+                            <Button
+                                disableRipple
+                                disableTouchRipple
+                                disableElevation
+                                onClick={() => setSidebarOpen(false)}
+                                sx={{
+                                    color: "#171717"
+                                }}
+                            >
+                                <Close />
+                            </Button>
+                        </Box>
+                        <Box 
+                            sx={{
+                                paddingX: "1.5rem"
+                            }}
+                        >
+                            {/* <Divider 
+                                sx={{
+                                    height: "1px",
+                                    backgroundColor: "#D5D7D8"
+                                }} 
+                            /> */}
+                            {props.filterInputs.map((item, index) => (
+                                item.isNested ? (
+                                    <NestedFilterAccordionDropdown 
+                                        key={index}
+                                        label={item.label}
+                                        filterGroups={item.items}
+                                        selectedFilters={props.filters}
+                                        onChange={updateFilters}
+                                    />
+                                ) : (
+                                    <Accordion 
+                                        key={index}
+                                        elevation={0}
+                                        disableGutters
+                                        square
+                                        sx={{
+                                            borderTop: "1px solid #D5D7D8",
+                                            // borderBottom: "1px solid #D5D7D8",
+                                            "&&:before": {
+                                                display: "none"
+                                            }
+                                        }}
+                                    >
+                                        <AccordionSummary
+                                            expandIcon={<ArrowIcon />}
+                                            sx={{
+                                                paddingY: "1rem",
+                                                fontWeight: 700,
+                                                fontSize: "0.875rem",
+                                                color: "#171717",
+                                                lineHeight: "1.5rem",
+                                                letterSpacing: "0.14px"
+                                            }}
+                                        >
+                                            {item.label}
+                                        </AccordionSummary>
+                                        <AccordionDetails key={index} className="sidebar__filters__filter__item is-flex is-align-items-center">
+                                            <Stack>
+                                                {item.items.map((variant, index) => (
+                                                    <Stack direction="row">
+                                                        <Checkbox
+                                                        className="sidebar__filters__filter__item__checkbox"
+                                                        checked={isFilterSelected(item.key, variant.value)}
+                                                        icon={<CheckboxIcon />}
+                                                        checkedIcon={<CheckboxCheckedIcon />}
+                                                        onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
+                                                        <Typography>{variant.label}</Typography>
+                                                    </Stack>
+                                                ))}    
+                                            </Stack>        
+                                        </AccordionDetails>
+                                </Accordion>
+                            )))}
+                        </Box>
+                        <Box 
+                            sx={{
+                                padding: "1.5rem",
+                                marginTop: "auto",
+                                display: "flex",
+                                gap: "0.5rem"
+                            }}
+                        >
+                            <Button
+                                className="sidebar__fotter__button button-clear py-3"
+                                onClick={handleOnClickClearFilters}
+                                disabled={!props.filters.length > 0}
+                            >
+                                <Typography fontWeight={700}>
+                                    {props.clearAllFilters}
+                                </Typography>
+                            </Button>
+                            <Button
+                                className="sidebar__fotter__button py-3"
+                                onClick={() => setSidebarOpen(false)}
+                            >
+                                <Typography fontWeight={700}>
+                                    {props.seeResult}
+                                </Typography>
+                            </Button>
+                        </Box>
+                    </Box>
+                </Drawer>
+            )}
         </div>
     )
 }

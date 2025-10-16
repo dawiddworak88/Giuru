@@ -83,6 +83,7 @@ var catalog = {
       {
         label: "Price",
         key: "price",
+        isNested: false,
         items: [
           {
             label: "0-999 EUR",
@@ -109,6 +110,7 @@ var catalog = {
       {
         label: "Fabric",
         key: "fabric",
+        isNested: false,
         items: [
           {
             label: "Aspen 20",
@@ -130,6 +132,79 @@ var catalog = {
             label: "Amore 45",
             value: 5
           },
+        ]
+      },
+      {
+        label: "Sizes",
+        key: "sizes",
+        isNested: true,
+        items: [
+          {
+            label: "Height",
+            key: "height",
+            items: [
+              {
+                label: "0-99",
+                value: 1
+              },
+              {
+                label: "100-149",
+                value: 2
+              },
+              {
+                label: "150-199",
+                value: 3
+              },
+              {
+                label: "200+",
+                value: 4
+              }
+            ]
+          },
+          {
+            label: "Width",
+            key: "width",
+            items: [
+              {
+                label: "0-99",
+                value: 1
+              },
+              {
+                label: "100-149",
+                value: 2
+              },
+              {
+                label: "150-199",
+                value: 3
+              },
+              {
+                label: "200+",
+                value: 4
+              }
+            ]
+          },
+          {
+            label: "Depth",
+            key: "depth",
+            items: [
+              {
+                label: "0-99",
+                value: 1
+              },
+              {
+                label: "100-149",
+                value: 2
+              },
+              {
+                label: "150-199",
+                value: 3
+              },
+              {
+                label: "200+",
+                value: 4
+              }
+            ]
+          }
         ]
       }
     ]

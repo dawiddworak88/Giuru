@@ -79,6 +79,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.IsDefaultOutletOrder = true;
+            viewModel.Filters = componentModel.Filters;
 
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
@@ -89,7 +90,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token, SortingConstants.Default);
+                    componentModel.Token,
+                    componentModel.Language,
+                    outletItems.Data.Select(x => x.ProductId),
+                    componentModel.Filters,
+                    null,
+                    PaginationConstants.DefaultPageIndex,
+                    OutletConstants.Catalog.DefaultItemsPerPage,
+                    SortingConstants.Default);
 
                 if (products is not null)
                 {
@@ -185,7 +193,69 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
                             new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
                             new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                        },
+                    FilterInputs = new List<FilterViewModel>()
+                    {
+                        new SingleFilterViewModel
+                        {
+                            Key = "category",
+                            Label = this.globalLocalizer.GetString("Category"),
+                            Items = products.Filters.FirstOrDefault(x => x.Name == "category").Values.Select(x => new FilterItemViewModel
+                            {
+                                Label = x,
+                                Value = x
+                            })
+                        },
+                        new SingleFilterViewModel
+                        {
+                            Key = "color",
+                            Label = this.globalLocalizer.GetString("Color"),
+                            Items = products.Filters.FirstOrDefault(x => x.Name == "color").Values.Select(x => new FilterItemViewModel
+                            {
+                                Label = x,
+                                Value = x
+                            })
+                        },
+                        new NestedFilterViewModel
+                        {
+                            Key = "dimensions",
+                            Label = this.globalLocalizer.GetString("Dimensions"),
+                            IsNested = true,
+                            Items = new List<NestedFilterItemViewModel>
+                            {
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Height"),
+                                    Key = "height",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Width"),
+                                    Key = "width",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Depth"),
+                                    Key = "depth",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                            }
                         }
+                    }
                 };
 
                 viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, OutletConstants.Catalog.DefaultItemsPerPage)

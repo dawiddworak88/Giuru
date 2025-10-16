@@ -345,12 +345,13 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             int? pageIndex, 
             int? itemsPerPage,
             string orderBy,
-            QueryFilters filters)
+            QueryFilters filters,
+            bool? isSeller)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, langauge)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (organisationId.HasValue)
+            if (organisationId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
@@ -456,12 +457,13 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             IEnumerable<Guid> ids, 
             Guid? organisationId, 
             string orderBy, 
-            QueryFilters filters)
+            QueryFilters filters,
+            bool? isSeller)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, langauge)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            if (organisationId.HasValue)
+            if (organisationId.HasValue && isSeller is true)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
             }
@@ -481,6 +483,8 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             var response = await _elasticClient.SearchAsync<ProductSearchModel>(q => q
                 .TrackTotalHits()
+                .From(ProductSearchConstants.Pagination.BeginningPage)
+                .Size(ProductSearchConstants.Pagination.ProductsMaxSize)
                 .Query(q => query)
                 .PostFilter(fq => 
                     fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) ||

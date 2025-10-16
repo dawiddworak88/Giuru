@@ -3,11 +3,14 @@ using Catalog.Api.ServicesModels.Products;
 using Catalog.Api.v1.Products.RequestModels;
 using Catalog.Api.v1.Products.ResponseModels;
 using Catalog.Api.v1.Products.ResultModels;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.Search.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -34,7 +37,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <summary>
         /// Gets list of products.
         /// </summary>
-        /// <param name="sellerId">The brand id.</param>
+        /// <param name="ids">The optional list of product ids.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
@@ -46,11 +49,12 @@ namespace Catalog.Api.v1.Products.Controllers
         public async Task<IActionResult> Search(
             [FromBody] FiltersRequestModel filters,
             string ids,
-            Guid? sellerId,
             int? pageIndex,
             int? itemsPerPage,
             string orderBy)
         {
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var productIds = ids.ToEnumerableGuidIds();
 
             if (productIds.OrEmptyIfNull().Any())
@@ -71,7 +75,8 @@ namespace Catalog.Api.v1.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = sellerId,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
                     Language = CultureInfo.CurrentCulture.Name
                 };
 
@@ -105,7 +110,8 @@ namespace Catalog.Api.v1.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = sellerId,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
                     Language = CultureInfo.CurrentCulture.Name
                 };
 

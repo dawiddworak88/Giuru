@@ -34,12 +34,18 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             int? pageIndex,
             int? itemsPerPage,
             string orderBy,
-            QueryFilters filters);
+            QueryFilters filters,
+            bool? isSeller);
         Task<PagedResultsWithFilters<IEnumerable<ProductSearchModel>>> GetPagedResultsWithFilters(
             string langauge,
             IEnumerable<Guid> ids,
             Guid? organisationId,
             string orderBy,
-            QueryFilters filters);
+            QueryFilters filters,
+            bool? isSeller);
+        Task<ProductSearchModel> GetByIdAsync(Guid id, string language, Guid? organisationId);
+        Task<ProductSearchModel> GetBySkuAsync(string sku, string language, Guid? organisationId);
+        Task<int?> CountAllAsync();
+        IEnumerable<string> GetProductSuggestions(string searchTerm, int size, string language, Guid? organisationId);
     }
 }

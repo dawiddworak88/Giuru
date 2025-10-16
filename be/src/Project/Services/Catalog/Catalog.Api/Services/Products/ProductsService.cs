@@ -560,7 +560,7 @@ namespace Catalog.Api.Services.Products
 
         public async Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFilters(SearchProductsServiceModel model)
         {
-            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.OrganisationId, model.PageIndex, model.ItemsPerPage, model.OrderBy, model.Filters);
+            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.OrganisationId, model.PageIndex, model.ItemsPerPage, model.OrderBy, model.Filters, model.IsSeller);
 
             var pageResullt = new PagedResults<IEnumerable<ProductSearchModel>>(searchResults.Total, searchResults.PageSize)
             {
@@ -578,7 +578,7 @@ namespace Catalog.Api.Services.Products
 
         public async Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFiltersByIds(SearchProductsByIdsServiceModel model)
         {
-            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.Ids, model.OrganisationId, model.OrderBy, model.Filters);
+            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.Ids, model.OrganisationId, model.OrderBy, model.Filters, model.IsSeller);
 
             var pageResullt = new PagedResults<IEnumerable<ProductSearchModel>>(searchResults.Total, searchResults.PageSize)
             {

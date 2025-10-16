@@ -16,6 +16,8 @@ using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Areas.Products.Services.ProductColors;
+using Foundation.Search.Paginations;
+using Foundation.Search.Models;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -195,6 +197,81 @@ namespace Buyer.Web.Areas.Products.Services.Products
             }
 
             return default;
+        }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(string token, string language, IEnumerable<Guid> ids, QueryFilters filters, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var pagedProducts = await this.productsRepository.GetProductsWithFiltersAsync(token, language, searchTerm, ids, filters, pageIndex, itemsPerPage, orderBy);
+
+            if (pagedProducts?.Data != null)
+            {
+                var catalogItemList = new List<CatalogItemViewModel>();
+
+                foreach (var product in pagedProducts.Data.OrEmptyIfNull())
+                {
+                    var catalogItem = new CatalogItemViewModel
+                    {
+                        Id = product.Id,
+                        PrimaryProductSku = product.PrimaryProductSku,
+                        Sku = product.Sku,
+                        Title = product.Name,
+                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
+                        BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
+                        BrandName = product.BrandName,
+                        Images = product.Images,
+                        InStock = false,
+                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
+                        SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
+                        FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
+                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys),
+                        PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys),
+                        Size = GetSize(product.ProductAttributes),
+                        PointsOfLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePointsOfLightAttributeKeys),
+                        LampshadeType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeTypeAttributeKeys),
+                        LampshadeSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeSizeAttributeKeys),
+                        LinearLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                        Mirror = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        Shape = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShapeAttributeKeys),
+                        PrimaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePrimaryColorAttributeKeys)),
+                        SecondaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleSecondaryColorAttributeKeys)),
+                        ShelfType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShelfTypeAttributeKeys)
+                    };
+
+                    if (product.Images != null)
+                    {
+                        var imageGuid = product.Images.FirstOrDefault();
+
+                        catalogItem.ImageAlt = product.Name;
+                        catalogItem.ImageUrl = this.mediaService.GetMediaUrl(imageGuid, ProductConstants.ProductsCatalogItemImageWidth);
+                        catalogItem.Sources = new List<SourceViewModel>
+                        {
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) },
+
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) }
+                        };
+                    }
+
+                    catalogItemList.Add(catalogItem);
+                }
+
+                return new PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, pagedProducts.PageSize)
+                {
+                    Data = catalogItemList,
+                    Filters = pagedProducts.Filters
+                };
+            }
+
+            return new PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, PaginationConstants.DefaultPageIndex)
+            {
+                Data = Enumerable.Empty<CatalogItemViewModel>(),
+                Filters = new List<Filter>()
+            };
         }
     }
 }
