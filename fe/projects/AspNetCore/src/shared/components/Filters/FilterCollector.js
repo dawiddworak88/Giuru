@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { 
     Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, 
-    Chip, Divider, Drawer, ListItemText, MenuItem, Select, Stack, Typography, 
+    Chip, Drawer, ListItemText, MenuItem, Select, Stack, Typography, 
     useMediaQuery, useTheme
 } from "@mui/material";
 import { Close } from "@mui/icons-material";

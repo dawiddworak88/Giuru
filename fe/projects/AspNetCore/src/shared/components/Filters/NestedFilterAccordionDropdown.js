@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { ArrowIcon, CheckboxCheckedIcon, CheckboxIcon } from "../../icons";
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Divider, FormControlLabel, Paper, Popover, Stack } from "@mui/material";
+import { 
+    Accordion, AccordionDetails, AccordionSummary, Box, 
+    Button, Checkbox, FormControlLabel, Paper, Popover, 
+    Stack 
+} from "@mui/material";
 
 const NestedFilterAccordionDropdown = ({
     label,
