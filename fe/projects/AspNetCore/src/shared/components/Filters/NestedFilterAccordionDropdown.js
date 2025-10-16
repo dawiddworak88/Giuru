@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowIcon, CheckboxCheckedIcon, CheckboxIcon } from "../../icons";
+import { ArrowIcon, CheckboxCheckedIcon, CheckboxIcon } from "../../icons2";
 import { 
     Accordion, AccordionDetails, AccordionSummary, Box, 
     Button, Checkbox, FormControlLabel, Paper, Popover, 
