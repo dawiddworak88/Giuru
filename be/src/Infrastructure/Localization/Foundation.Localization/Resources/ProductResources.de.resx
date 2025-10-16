@@ -300,6 +300,30 @@
   <data name="ProductSkuConflict" xml:space="preserve">
     <value>Ein Produkt mit dieser SKU existiert bereits.</value>
   </data>
+  <data name="AllFilters" xml:space="preserve">
+    <value>Alle Filter</value>
+  </data>
+  <data name="SortLabel" xml:space="preserve">
+      <value>Sortieren nach:</value>
+  </data>
+  <data name="ClearAllFilters" xml:space="preserve">
+      <value>Alle löschen</value>
+  </data>
+  <data name="SeeResult" xml:space="preserve">
+      <value>Ergebnisse anzeigen</value>
+  </data>
+  <data name="FiltersLabel" xml:space="preserve">
+      <value>Filter</value>
+  </data>
+  <data name="SortDefault" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="SortNewest" xml:space="preserve">
+      <value>Neueste</value>
+  </data>
+  <data name="SortName" xml:space="preserve">
+      <value>Name</value>
+  </data>
   <data name="BrandNotFound" xml:space="preserve">
     <value>Marke wurde nicht gefunden.</value>
   </data>

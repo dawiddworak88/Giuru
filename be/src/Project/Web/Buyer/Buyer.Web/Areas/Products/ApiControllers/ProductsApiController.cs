@@ -15,6 +15,7 @@ using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
@@ -83,7 +84,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -94,7 +95,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 false,
                 pageIndex,
                 itemsPerPage,
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                orderBy);
 
             return StatusCode((int)HttpStatusCode.OK, products);
         }
@@ -137,7 +139,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     PaginationConstants.DefaultPageIndex, 
                     PaginationConstants.DefaultPageSize, 
                     token, 
-                    $"{nameof(Product.Name)} ASC");
+                    SortingConstants.Default);
 
                 var availableProducts = await _inventoryRepository.GetAvailbleProductsInventoryByIds(
                     token, 

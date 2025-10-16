@@ -33,6 +33,7 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
+using Foundation.GenericRepository.Definitions;
 using Buyer.Web.Shared.ViewModels.Toasts;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
@@ -279,7 +280,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (product.ProductVariants is not null)
                 {
-                    var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
+                    var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, SortingConstants.Default);
 
                     if (productVariants != null)
                     {

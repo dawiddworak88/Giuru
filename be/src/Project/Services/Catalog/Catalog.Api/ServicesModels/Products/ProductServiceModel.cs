@@ -25,6 +25,8 @@ namespace Catalog.Api.ServicesModels.Products
         public IEnumerable<Guid> Files { get; set; }
         public string Sku { get; set; }
         public int? FulfillmentTime { get; set; }
+        public double? StockAvailableQuantity { get; set; }
+        public double? OutletAvailableQuantity { get; set; }
         public IEnumerable<ProductAttributeServiceModel> ProductAttributes { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

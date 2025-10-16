@@ -43,7 +43,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage, string orderBy)
         {
             var language = CultureInfo.CurrentUICulture.Name;
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
@@ -53,7 +53,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, language, null, false, pageIndex, itemsPerPage, token);
+                    outletItems.Data.Select(x => x.ProductId), null, null, language, null, false, pageIndex, itemsPerPage, token, orderBy);
 
                 if (products is not null)
                 {
@@ -130,7 +130,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         product.ExpectedDelivery = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                     }
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, itemsPerPage) { Data = products.Data.OrderByDescending(x => x.AvailableQuantity) });
+                    return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, itemsPerPage) 
+                    { 
+                        Data = products.Data
+                    });
                 }
             }
 

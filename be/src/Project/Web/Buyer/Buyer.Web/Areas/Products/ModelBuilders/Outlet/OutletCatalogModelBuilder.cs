@@ -25,6 +25,8 @@ using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Shared.ViewModels.Filters;
+using Foundation.GenericRepository.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -39,6 +41,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IInventoryRepository inventoryRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly IStringLocalizer<ProductResources> _productLocalizer;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -50,7 +53,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             LinkGenerator linkGenerator,
             IInventoryRepository inventoryRepository,
             IOptions<AppSettings> options,
-            IPriceService priceService)
+            IPriceService priceService,
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -61,6 +65,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.inventoryRepository = inventoryRepository;
             _options = options;
             _priceService = priceService;
+            _productLocalizer = productLocalizer;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -84,7 +89,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
+                    outletItems.Data.Select(x => x.ProductId), null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token, SortingConstants.Default);
 
                 if (products is not null)
                 {
@@ -168,9 +173,24 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                     }
                 }
 
+                viewModel.FilterCollector = new FiltersCollectorViewModel
+                {
+                    AllFilters = _productLocalizer.GetString("AllFilters"),
+                    SortLabel = _productLocalizer.GetString("SortLabel"),
+                    ClearAllFilters = _productLocalizer.GetString("ClearAllFilters"),
+                    SeeResult = _productLocalizer.GetString("SeeResult"),
+                    FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
+                    SortItems = new List<SortItemViewModel>
+                        {
+                            new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
+                            new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
+                            new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                        }
+                };
+
                 viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, OutletConstants.Catalog.DefaultItemsPerPage)
                 {
-                    Data = products.Data.OrderBy(x => x.Title)
+                    Data = products.Data
                 };
             }
 

@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Nest;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
@@ -28,6 +31,52 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         public async Task IndexAsync(Guid productId)
         {
             await _bulkProductIndexingRepository.IndexBatchAsync([productId]);
+        }
+
+        public async Task BulkUpdateStockAvailableQuantity(IEnumerable<(string docId, double availableQuantity)> updates)
+        {
+            var bulkDescriptor = new BulkDescriptor();
+
+            foreach (var (docId, availableQuantity) in updates)
+            {
+                bulkDescriptor.Update<ProductSearchModel, object>(u => u
+                    .Id(docId)
+                    .Doc(new { StockAvailableQuantity = availableQuantity })
+                );
+            }
+
+            var response = await _elasticClient.BulkAsync(bulkDescriptor);
+
+            if (response.Errors)
+            {
+                foreach (var item in response.ItemsWithErrors)
+                {
+                    _logger.LogError($"Failed to update document Id: {item.Id}: {item.Error?.Reason}");
+                }
+            }
+        }
+
+        public async Task BulkUpdateOutletAvailableQuantity(IEnumerable<(string docId, double availableQuantity)> updates)
+        {
+            var bulkDescriptor = new BulkDescriptor();
+
+            foreach (var (docId, availableQuantity) in updates)
+            {
+                bulkDescriptor.Update<ProductSearchModel, object>(u => u
+                    .Id(docId)
+                    .Doc(new { OutletAvailableQuantity = availableQuantity })
+                );
+            }
+
+            var response = await _elasticClient.BulkAsync(bulkDescriptor);
+
+            if (response.Errors)
+            {
+                foreach (var item in response.ItemsWithErrors)
+                {
+                    _logger.LogError($"Failed to update document Id: {item.Id}: {item.Error?.Reason}");
+                }
+            }
         }
     }
 }

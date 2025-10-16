@@ -101,6 +101,8 @@ builder.Services.RegisterCatalogBackgroundTasksDependencies();
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 
+builder.Services.ConfigureSettings(builder.Configuration);
+
 var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
@@ -118,6 +120,8 @@ var eventBus = app.Services.GetService<IEventBus>();
 eventBus.Subscribe<RebuildCatalogSearchIndexIntegrationEvent, IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>>();
 eventBus.Subscribe<RebuildCategorySchemasIntegrationEvent, IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>>();
 eventBus.Subscribe<RebuildCategoryProductsIntegrationEvent, IIntegrationEventHandler<RebuildCategoryProductsIntegrationEvent>>();
+eventBus.Subscribe<InventoryProductsAvailableQuantityUpdateIntegrationEvent, IIntegrationEventHandler<InventoryProductsAvailableQuantityUpdateIntegrationEvent>>();
+eventBus.Subscribe<OutletProductsAvailableQuantityUpdateIntegrationEvent, IIntegrationEventHandler<OutletProductsAvailableQuantityUpdateIntegrationEvent>>();
 
 app.MapControllers();
 

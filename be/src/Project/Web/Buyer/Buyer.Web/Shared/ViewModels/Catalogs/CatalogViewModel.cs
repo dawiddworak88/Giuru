@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.Baskets;
+using Buyer.Web.Shared.ViewModels.Filters;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Toasts;
@@ -35,6 +36,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
+        public FiltersCollectorViewModel FilterCollector { get; set; }
         public string GetProductPriceUrl { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }

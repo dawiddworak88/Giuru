@@ -469,6 +469,8 @@ namespace Catalog.Api.v1.Products.Controllers
                 Videos = product.Videos,
                 Ean = product.Ean,
                 FulfillmentTime = product.FulfillmentTime,
+                StockAvailableQuantity = product.StockAvailableQuantity,
+                OutletAvailableQuantity = product.OutletAvailableQuantity,
                 ProductAttributes = product.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttributeValuesResponseModel
                 {
                     Key = x.Key,

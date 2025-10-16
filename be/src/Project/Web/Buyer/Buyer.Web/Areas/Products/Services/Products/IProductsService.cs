@@ -9,7 +9,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 {
     public interface IProductsService
     {
-        Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token);
+        Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string token, string orderBy);
         Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
         Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes);
         string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes);

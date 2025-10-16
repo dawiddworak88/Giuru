@@ -1,7 +1,6 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Nest;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Foundation.Search.Extensions
