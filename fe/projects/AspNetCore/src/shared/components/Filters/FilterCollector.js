@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { 
     Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, 
-    Chip, Drawer, ListItemText, MenuItem, Select, Stack, Typography, 
+    Chip, Drawer, IconButton, ListItemText, MenuItem, Select, Stack, Typography, 
     useMediaQuery, useTheme
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
@@ -359,7 +359,7 @@ function FilterCollector(props) {
                             >
                                 {props.filtersLabel}
                             </Typography>
-                            <Button
+                            <IconButton
                                 disableRipple
                                 disableTouchRipple
                                 disableElevation
@@ -369,19 +369,13 @@ function FilterCollector(props) {
                                 }}
                             >
                                 <Close />
-                            </Button>
+                            </IconButton>
                         </Box>
                         <Box 
                             sx={{
                                 paddingX: "1.5rem"
                             }}
                         >
-                            {/* <Divider 
-                                sx={{
-                                    height: "1px",
-                                    backgroundColor: "#D5D7D8"
-                                }} 
-                            /> */}
                             {props.filterInputs.map((item, index) => (
                                 item.isNested ? (
                                     <NestedFilterAccordionDropdown 
