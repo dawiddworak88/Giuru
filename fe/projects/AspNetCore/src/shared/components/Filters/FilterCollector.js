@@ -413,7 +413,9 @@ function FilterCollector(props) {
                                             {item.label}
                                         </AccordionSummary>
                                         <AccordionDetails key={index} className="sidebar__filters__filter__item is-flex is-align-items-center">
-                                            <Stack>
+                                            <Stack
+                                                spacing="1.5rem"
+                                            >
                                                 {item.items.map((variant, index) => (
                                                     <Stack direction="row">
                                                         <Checkbox

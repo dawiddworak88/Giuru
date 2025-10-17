@@ -59,7 +59,9 @@ const NestedFilterAccordionDropdown = ({
                         })
                     }}
                 >
-                    <Stack>
+                    <Stack
+                        spacing="1.5rem"
+                    >
                         {filterGroup.items.map((item, itemIndex) => (
                             <FormControlLabel 
                                 key={itemIndex}
@@ -106,7 +108,15 @@ const NestedFilterAccordionDropdown = ({
                     <Button
                         variant="contained"
                         disableElevation
+                        disableRipple
                         onClick={event => handleButtonClick(event)}
+                        endIcon={
+                            <ArrowIcon
+                                style={{
+                                    transform: isPopoverOpen ? "rotate(180deg)" : "rotate(0deg)"
+                                }}
+                            />
+                        }
                         sx={{
                             height: "2.5rem",
                             borderRadius: "0.25rem",
@@ -115,86 +125,90 @@ const NestedFilterAccordionDropdown = ({
                             backgroundColor: "#F7F7F7",
                             color: "#171717",
                             fontWeight: 700,
-                            fontSize: "0.75rem"
+                            fontSize: "0.75rem",
+                            gap: "1rem",
+                            "&&:hover": {
+                                backgroundColor: "#F7F7F7"
+                            }
                         }}
                     >
                         {label}
                     </Button>
-                <Popover
-                    open={isPopoverOpen}
-                    onClose={handlePopoverClose}
-                    anchorEl={popoverAnchorElement}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center'
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center'
-                    }}
-                    slotProps={{
-                        paper: {
-                            sx: { 
-                                marginTop: "1rem",
-                                borderRadius: "0.5rem",
-                                paddingX: "2.5rem",
-                                paddingY: "2rem"
+                    <Popover
+                        open={isPopoverOpen}
+                        onClose={handlePopoverClose}
+                        anchorEl={popoverAnchorElement}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center'
+                        }}
+                        slotProps={{
+                            paper: {
+                                sx: { 
+                                    marginTop: "1rem",
+                                    borderRadius: "0.5rem",
+                                    paddingX: "2.5rem",
+                                    paddingY: "2rem"
+                                }
                             }
-                        }
-                    }}
-                >
-                    <Paper
-                        elevation={0}
-                        sx={{
-                            minWidth: "20rem",
-                            padding: 0
                         }}
                     >
+                        <Paper
+                            elevation={0}
+                            sx={{
+                                minWidth: "20rem",
+                                padding: 0
+                            }}
+                        >
+                            {filterGroups.map((group, index) => (
+                                <Filter
+                                    filterGroup={group}
+                                    index={index}
+                                />
+                            ))}
+                        </Paper>
+                    </Popover>
+                </div>
+            ) : (
+                <Accordion
+                    elevation={0}
+                    // key={index}
+                    disableGutters
+                    square
+                    sx={{
+                        borderTop: "1px solid #D5D7D8",
+                        "&&:before": {
+                                                    display: "none"
+                                                }
+                    }}
+                >
+                    <AccordionSummary
+                        expandIcon={<ArrowIcon />}
+                        sx={{
+                            paddingY: "1rem",
+                            fontWeight: 700,
+                            fontSize: "0.875rem",
+                            color: "#171717",
+                            lineHeight: "1.5rem",
+                            letterSpacing: "0.14px"
+                        }}
+                    >
+                        {label}
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {filterGroups.map((group, index) => (
                             <Filter
                                 filterGroup={group}
                                 index={index}
+                                expandAsDefault={true}
                             />
                         ))}
-                    </Paper>
-                </Popover>
-                </div>
-        ) : (
-            <Accordion
-                elevation={0}
-                // key={index}
-                disableGutters
-                square
-                sx={{
-                    borderTop: "1px solid #D5D7D8",
-                    "&&:before": {
-                                                display: "none"
-                                            }
-                }}
-            >
-                <AccordionSummary
-                    expandIcon={<ArrowIcon />}
-                    sx={{
-                        paddingY: "1rem",
-                        fontWeight: 700,
-                        fontSize: "0.875rem",
-                        color: "#171717",
-                        lineHeight: "1.5rem",
-                        letterSpacing: "0.14px"
-                    }}
-                >
-                    {label}
-                </AccordionSummary>
-                <AccordionDetails>
-                    {filterGroups.map((group, index) => (
-                        <Filter
-                            filterGroup={group}
-                            index={index}
-                            expandAsDefault={true}
-                        />
-                    ))}
-                </AccordionDetails>
-            </Accordion>
+                    </AccordionDetails>
+                </Accordion>
             )
         }
         </Box>
