@@ -136,12 +136,12 @@ namespace Inventory.Api.Services.Warehouses
             var warehouse = await _context.Warehouses.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
             if (warehouse is null)
             {
-                throw new CustomException(_warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_warehouseLocalizer.GetString("WarehouseNotFound"));
             }
 
             if (await _context.Inventory.AnyAsync(x => x.WarehouseId == warehouse.Id && x.IsActive))
             {
-                throw new CustomException(_warehouseLocalizer.GetString("WarehouseDeleteInventoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_warehouseLocalizer.GetString("WarehouseDeleteInventoryConflict"));
             }
 
             warehouse.IsActive = false;
@@ -154,7 +154,7 @@ namespace Inventory.Api.Services.Warehouses
             var warehouse = await _context.Warehouses.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
             if (warehouse is null)
             {
-                throw new CustomException(_warehouseLocalizer.GetString("WarehouseNotFound"), (int)HttpStatusCode.NoContent);
+                throw new NotFoundException(_warehouseLocalizer.GetString("WarehouseNotFound"));
             }
 
             warehouse.Name = serviceModel.Name;

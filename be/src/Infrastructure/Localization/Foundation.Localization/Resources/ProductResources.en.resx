@@ -199,7 +199,7 @@
     <value>Parent category</value>
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
-    <value>Parent category hasn't been found</value>
+    <value>Parent category hasn't been found.</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Product</value>
@@ -294,10 +294,19 @@
   <data name="ProductAttributeInUseByCategories" xml:space="preserve">
     <value>Please remove this attribute from the product cards of the following categories first: </value>
   </data>
-  <data name="ProductAttributeInUseByCategories" xml:space="preserve">
+  <data name="ProductAttributeItemInUseByCategories" xml:space="preserve">
     <value>Please remove this attribute value from the product cards of the following categories first: </value>
   </data>
   <data name="ProductSkuConflict" xml:space="preserve">
     <value>A product with this SKU already exists.</value>
+  </data>
+  <data name="BrandNotFound" xml:space="preserve">
+    <value>Brand not found.</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Product not found.</value>
+  </data>
+  <data name="ProductAttributeItemConflict" xml:space="preserve">
+    <value>Such an attribute value already exists.</value>
   </data>
 </root>

@@ -56,18 +56,18 @@ const TeamMemberForm = (props) => {
         };
 
         fetch(props.saveUrl, requestOptions)
-            .then((res) => {
+            .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 
-                AuthenticationHelper.HandleResponse(res);
+                AuthenticationHelper.HandleResponse(response);
                 
-                return res.json().then(jsonRes => {
-                    if (res.ok) {
-                        toast.success(jsonRes.message);
-                        setFieldValue({ name: "id", value: jsonRes.id });
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                        setFieldValue({ name: "id", value: jsonResponse.id });
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
             });

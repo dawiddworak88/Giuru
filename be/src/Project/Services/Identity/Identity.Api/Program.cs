@@ -20,7 +20,6 @@ using Identity.Api.Areas.Accounts.DependencyInjection;
 using Identity.Api.Areas.Home.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Foundation.Security.DependencyInjection;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Foundation.Mailing.DependencyInjection;
@@ -34,6 +33,8 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Foundation.Extensions.Filters;
+using Foundation.Extensions.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,7 +101,11 @@ builder.Services.AddLocalization();
 
 builder.Services.AddCultureRouteConstraint();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters().AddCsvSerializerFormatters();
 
 builder.Services.RegisterLocalizationDependencies();
 

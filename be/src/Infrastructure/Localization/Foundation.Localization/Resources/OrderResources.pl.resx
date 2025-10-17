@@ -130,7 +130,7 @@
     <value>Dodaj do koszyka</value>
   </data>
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
-    <value>Koszyk został pomyślnie wyczyszczony</value>
+    <value>Koszyk został pomyślnie wyczyszczony.</value>
   </data>
   <data name="CancellationOrderError" xml:space="preserve">
     <value>Tylko nowo utworzone zamówienia można anulować.</value>
@@ -244,7 +244,7 @@
     <value>Status zamówienia został pomyślnie zaktualizowany.</value>
   </data>
   <data name="OrganisationNotFound:" xml:space="preserve">
-    <value>Organizacja klienta nie istnieje</value>
+    <value>Organizacja klienta nie istnieje.</value>
   </data>
   <data name="OutletQuantityLabel" xml:space="preserve">
     <value>Ilość z wyprzedaży:</value>
@@ -280,7 +280,7 @@
     <value>Czy na pewno chcesz anulować zamówienie.</value>
   </data>
   <data name="CancelationConfirmationDialog" xml:space="preserve">
-    <value>Potwierdź anulacje zamówienia</value>
+    <value>Potwierdź anulacje zamówienia.</value>
   </data>
   <data name="CancelOrderItem" xml:space="preserve">
     <value>Anuluj pozycję zamówienia</value>
@@ -330,20 +330,20 @@
   <data name="co_cancelOrderItemsLabel" xml:space="preserve">
     <value>Anulowane pozycje zamówienia</value>
   </data>
+  <data name="coi_subject" xml:space="preserve">
+    <value>Anulowano pozycję zamówienia</value>
+  </data>
+  <data name="coi_preheader" xml:space="preserve">
+    <value>Jeden z klientów anulował pozycję w zamówieniu.</value>
+  </data>
+  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
+    <value>Anulowany produkt</value>
+  </data>
   <data name="sh_clientNameLabel" xml:space="preserve">
     <value>Nazwa klienta</value>
   </data>
   <data name="sh_orderLinkLabel" xml:space="preserve">
     <value>Link do zamówienia</value>
-  </data>
-  <data name="coi_subject" xml:space="preserve">
-    <value>Anulowano pozycję zamówienia</value>
-  </data>
-  <data name="coi_preheader" xml:space="preserve">
-    <value>Jeden z klientów anulował pozycję w zamówieniu</value>
-  </data>
-  <data name="coi_cancelOrderItemLabel" xml:space="preserve">
-    <value>Anulowany produkt</value>
   </data>
   <data name="StockQuantityError" xml:space="preserve">
     <value>Nie można złożyć zamówienia ponieważ przekroczono dostępną ilość ze stanów magazynowych dla produktu:</value>
@@ -359,5 +359,8 @@
   </data>
   <data name="ProductsNotFound" xml:space="preserve">
     <value>Nie znaleziono produktów.</value>
+  </data>
+  <data name="OrderItemNotFound" xml:space="preserve">
+    <value>Nie znaleziono produktu.</value>
   </data>
 </root>

@@ -133,7 +133,7 @@
     <value>Remove the news assigned to the category.</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
-    <value>Category not found</value>
+    <value>Category not found.</value>
   </data>
   <data name="CategoryRequiredErrorMessage" xml:space="preserve">
     <value>Select category</value>
@@ -187,7 +187,7 @@
     <value>Add news</value>
   </data>
   <data name="NewsNotFound" xml:space="preserve">
-    <value>News not found</value>
+    <value>News not found.</value>
   </data>
   <data name="NewsSavedSuccessfully" xml:space="preserve">
     <value>News has been successfully created.</value>

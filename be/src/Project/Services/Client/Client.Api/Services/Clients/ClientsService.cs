@@ -1,5 +1,4 @@
 ﻿using Client.Api.Infrastructure;
-using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;
@@ -106,7 +105,7 @@ namespace Client.Api.Services.Clients
             
             if (existingClient is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
             var client = new ClientServiceModel
@@ -149,12 +148,12 @@ namespace Client.Api.Services.Clients
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
             if (await _context.Addresses.AnyAsync(x => x.ClientId == model.Id && x.IsActive))
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientDeleteAddressConflict"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_clientLocalizer.GetString("ClientDeleteAddressConflict"));
             }
 
             client.IsActive = false;
@@ -170,7 +169,7 @@ namespace Client.Api.Services.Clients
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
             client.Name = serviceModel.Name;
@@ -232,7 +231,7 @@ namespace Client.Api.Services.Clients
 
             if (exsitingClient is not null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.Conflict);
+                throw new ConflictException(_clientLocalizer.GetString("ClientExists"));
             }
 
             var client = new Infrastructure.Clients.Entities.Client
@@ -356,7 +355,7 @@ namespace Client.Api.Services.Clients
 
             if (client is null)
             {
-                throw new CustomException(_clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
             return client.FirstOrDefaultAsync();

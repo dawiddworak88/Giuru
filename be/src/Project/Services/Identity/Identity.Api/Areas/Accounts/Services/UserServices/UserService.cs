@@ -49,22 +49,22 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
             {
                 if (user.EmailConfirmed is false)
                 {
-                    throw new CustomException(_accountLocalizer.GetString("ConfirmEmail"), (int)HttpStatusCode.BadRequest);
+                    throw new ConflictException(_accountLocalizer.GetString("ConfirmEmail"));
                 }
 
                 if (user.IsDisabled is true)
                 {
-                    throw new CustomException(_accountLocalizer.GetString("AccountIsInactive"), (int)HttpStatusCode.BadRequest);
+                    throw new ConflictException(_accountLocalizer.GetString("AccountIsInactive"));
                 }
 
                 if (clientId == _options.Value.SellerClientId.ToString() && !await _organisationService.IsSellerAsync(user.OrganisationId))
                 {
-                    throw new CustomException(_accountLocalizer.GetString("AccessDenied"), (int)HttpStatusCode.Unauthorized);
+                    throw new UnauthorizedException(_accountLocalizer.GetString("AccessDenied"));
                 }
 
                 if (await _userManager.CheckPasswordAsync(user, password) is false)
                 {
-                    throw new CustomException(_accountLocalizer.GetString("IncorrectEmailOrPassword"), (int)(HttpStatusCode.OK));
+                    throw new BadRequestException(_accountLocalizer.GetString("IncorrectEmailOrPassword"));
                 }
 
                 var properties = new AuthenticationProperties

@@ -142,7 +142,7 @@
     <value>Client</value>
   </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
-    <value>Client has been already added</value>
+    <value>Client has been already added.</value>
   </data>
   <data name="ClientName" xml:space="preserve">
     <value>Client name</value>
@@ -233,6 +233,9 @@
   </data>
   <data name="InStock" xml:space="preserve">
     <value>In stock: </value>
+  </data>
+  <data name="Karten" xml:space="preserve">
+    <value>Cards</value>
   </data>
   <data name="LanguageRequiredErrorMessage" xml:space="preserve">
     <value>Select language preferred for communication with the client</value>
@@ -454,7 +457,7 @@
     <value>max:</value>
   </data>
   <data name="QuantityErrorMessage" xml:space="preserve">
-    <value>No selected quantity of the ordered product</value>
+    <value>No selected quantity of the ordered product.</value>
   </data>
   <data name="NewsCategories" xml:space="preserve">
     <value>News categories</value>
@@ -637,7 +640,7 @@
     <value>Download selected</value>
   </data>
   <data name="NoCategories" xml:space="preserve">
-    <value>No categories</value>
+    <value>No categories.</value>
   </data>
   <data name="SelectFile" xml:space="preserve">
     <value>Select file</value>
@@ -712,7 +715,7 @@
     <value>Drag</value>
   </data>
   <data name="FileSizeLimit" xml:space="preserve">
-    <value>The uploaded file exceeds the maximum size</value>
+    <value>The uploaded file exceeds the maximum size.</value>
   </data>
   <data name="ClientAddresses" xml:space="preserve">
     <value>Addresses</value>
@@ -730,7 +733,7 @@
     <value>Value</value>
   </data>
   <data name="CurrencyNotFound" xml:space="preserve">
-    <value>Currency not found</value>
+    <value>Currency not found.</value>
   </data>
   <data name="Currencies" xml:space="preserve">
     <value>Currencies</value>
@@ -769,7 +772,7 @@
     <value>Billing address</value>
   </data>
   <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
-    <value>Delivery address same as billing address</value>
+    <value>Delivery address same as billing address.</value>
   </data>
   <data name="AdressesInformation" xml:space="preserve">
     <value>Address information</value>
@@ -787,13 +790,10 @@
     <value>See more</value>
   </data>
   <data name="ApprovalNotFound" xml:space="preserve">
-    <value>Approval not found</value>
+    <value>Approval not found.</value>
   </data>
   <data name="ClientApprovals" xml:space="preserve">
     <value>Approvals</value>
-  </data>
-  <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
@@ -805,15 +805,33 @@
     <value>Allowed quantity limit exceeded.</value>
   </data>
   <data name="NoFilesDownloadedError" xml:space="preserve">
-    <value>Es konnte keine Datei heruntergeladen werden.</value>
+    <value>No file could be downloaded.</value>
   </data>
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
-    <value>Einige Dateien wurden nicht heruntergeladen.</value>
+    <value>Some files were not downloaded.</value>
+  </data>
+  <data name="CopiedText" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="CopyTextError" xml:space="preserve">
+    <value>Copying failed.</value>
+  </data>
+  <data name="CopyToClipboardText" xml:space="preserve">
+    <value>Copy to clipboard</value>
   </data>
   <data name="ShowText" xml:space="preserve">
     <value>Show</value>
   </data>
   <data name="MinOrderQuantity" xml:space="preserve">
-    <value>Minimum order quantity is 1</value>
+    <value>Minimum order quantity is 1.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
   </data>
 </root>

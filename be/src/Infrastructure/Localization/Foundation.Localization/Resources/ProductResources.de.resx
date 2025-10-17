@@ -199,7 +199,7 @@
     <value>Eltern-Kategorie</value>
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
-    <value>Eltern Kategorie nicht gefunden </value>
+    <value>Eltern Kategorie nicht gefunden.</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Produkt</value>
@@ -299,5 +299,14 @@
   </data>
   <data name="ProductSkuConflict" xml:space="preserve">
     <value>Ein Produkt mit dieser SKU existiert bereits.</value>
+  </data>
+  <data name="BrandNotFound" xml:space="preserve">
+    <value>Marke wurde nicht gefunden.</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Produkt wurde nicht gefunden.</value>
+  </data>
+  <data name="ProductAttributeItemConflict" xml:space="preserve">
+    <value>Ein solcher Attributwert existiert bereits.</value>
   </data>
 </root>

@@ -142,7 +142,7 @@
     <value>Kunde</value>
   </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
-    <value>Der Kunde wurde schon erstellt</value>
+    <value>Der Kunde wurde schon erstellt.</value>
   </data>
   <data name="ClientName" xml:space="preserve">
     <value>Kundenname</value>
@@ -235,7 +235,7 @@
     <value>Auf Lager: </value>
   </data>
   <data name="Karten" xml:space="preserve">
-    <value>Karty</value>
+    <value>Karten</value>
   </data>
   <data name="LanguageRequiredErrorMessage" xml:space="preserve">
     <value>Wählen Sie die Sprache aus, die für die Kommunikation mit dem Kunde bevorzugt wird</value>
@@ -457,7 +457,7 @@
     <value>max:</value>
   </data>
   <data name="QuantityErrorMessage" xml:space="preserve">
-    <value>Keine ausgewählte Menge des bestellten Produkts</value>
+    <value>Keine ausgewählte Menge des bestellten Produkts.</value>
   </data>
   <data name="NewsCategories" xml:space="preserve">
     <value>News Kategorien</value>
@@ -640,7 +640,7 @@
     <value>Herunterladen ausgewählt</value>
   </data>
   <data name="NoCategories" xml:space="preserve">
-    <value>Keine Kategorien</value>
+    <value>Keine Kategorien.</value>
   </data>
   <data name="SelectFile" xml:space="preserve">
     <value>Datei aussuchen</value>
@@ -715,7 +715,7 @@
     <value>Versetzen</value>
   </data>
   <data name="FileSizeLimit" xml:space="preserve">
-    <value>Die hochgeladene Datei überschreitet die maximale Größe</value>
+    <value>Die hochgeladene Datei überschreitet die maximale Größe.</value>
   </data>
   <data name="ClientAddresses" xml:space="preserve">
     <value>Adressen</value>
@@ -733,7 +733,7 @@
     <value>Wert</value>
   </data>
   <data name="CurrencyNotFound" xml:space="preserve">
-    <value>Währung nicht gefunden</value>
+    <value>Währung nicht gefunden.</value>
   </data>
   <data name="Currencies" xml:space="preserve">
     <value>Währungen</value>
@@ -772,7 +772,7 @@
     <value>Rechnungsadressen</value>
   </data>
   <data name="DeliveryAddressEqualBillingAddressText" xml:space="preserve">
-    <value>Lieferadresse gleich wie Rechnungsadresse</value>
+    <value>Lieferadresse gleich wie Rechnungsadresse.</value>
   </data>
   <data name="AdressesInformation" xml:space="preserve">
     <value>Adressinformationen</value>
@@ -790,7 +790,7 @@
     <value>Mehr anzeigen</value>
   </data>
   <data name="ApprovalNotFound" xml:space="preserve">
-    <value>Zustimmung nicht gefunden</value>
+    <value>Zustimmung nicht gefunden.</value>
   </data>
   <data name="ClientApprovals" xml:space="preserve">
     <value>Zustimmungen</value>
@@ -802,18 +802,33 @@
     <value>Stückpreis</value>
   </data>
   <data name="MaxAllowedOrderQuantity" xml:space="preserve">
-    <value>Erlaubte Mengengrenze überschritten</value>
+    <value>Erlaubte Mengengrenze überschritten.</value>
   </data>
   <data name="NoFilesDownloadedError" xml:space="preserve">
-    <value>Couldn't download any file.</value>
+    <value>Es konnte keine Datei heruntergeladen werden.</value>
   </data>
   <data name="SomeFilesNotDownloadedError" xml:space="preserve">
-    <value>Some files weren't downloaded.</value>
+    <value>Einige Dateien wurden nicht heruntergeladen.</value>
+  </data>
+  <data name="CopiedText" xml:space="preserve">
+    <value>Kopiert</value>
+  </data>
+  <data name="CopyTextError" xml:space="preserve">
+    <value>Kopieren fehlgeschlagen.</value>
+  </data>
+  <data name="CopyToClipboardText" xml:space="preserve">
+    <value>In die Zwischenablage kopieren</value>
   </data>
   <data name="ShowText" xml:space="preserve">
     <value>Anzeigen</value>
-  </data>  
+  </data>
   <data name="MinOrderQuantity" xml:space="preserve">
-    <value>Mindestbestellmenge ist 1</value>
+    <value>Mindestbestellmenge ist 1.</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Herunterladen</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Standort</value>
   </data>
 </root>
