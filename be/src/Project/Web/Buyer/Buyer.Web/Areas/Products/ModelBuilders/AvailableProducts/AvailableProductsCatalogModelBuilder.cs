@@ -148,7 +148,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         product.AvailableQuantity = availableStockQuantity;
                         product.CanOrder = true;
                         product.InStock = true;
-                        product.ExpectedDelivery = inventories.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                     }
 
                     if (prices.Any())

@@ -408,7 +408,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 EndpointAddress = $"{_settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSearchApiEndpoint}"
             };
 
-            var response = await _apiClientService.PostWithQueryAsync<ApiRequest<QueryFilters>, QueryFilters, ProductsRequestModel, PagedResultsWithFilters<IEnumerable<ProductResponseModel>>>(apiRequest, requestQuery);
+            var response = await _apiClientService.PostWithQueryAsync<ApiRequest<QueryFilters>, QueryFilters, ProductsFiltersRequestModel, PagedResultsWithFilters<IEnumerable<ProductResponseModel>>>(apiRequest, requestQuery);
 
             if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {

@@ -121,7 +121,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
                             SecondaryColor = x.SecondaryColor,
-                            ShelfType = x.ShelfType
+                            ShelfType = x.ShelfType,
+                            IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient
                         {
@@ -151,7 +152,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         product.AvailableOutletQuantity = availableOutletQuantity;
                         product.CanOrder = true;
                         product.InOutlet = true;
-                        product.ExpectedDelivery = outletItems.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                     }
 
                     if (prices.Any())
