@@ -344,6 +344,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             Guid? organisationId, 
             int? pageIndex, 
             int? itemsPerPage,
+            string source,
             string orderBy,
             QueryFilters filters,
             bool? isSeller)
@@ -358,6 +359,18 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             else
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
+            }
+
+            if (!string.IsNullOrWhiteSpace(source))
+            {
+                if (source == "stock")
+                {
+                    query = query && Query<ProductSearchModel>.Range(r => r.Field(f => f.StockAvailableQuantity).GreaterThan(0));
+                }
+                else if (source == "outlet")
+                {
+                    query = query && Query<ProductSearchModel>.Range(r => r.Field(f => f.OutletAvailableQuantity).GreaterThan(0));
+                }
             }
 
             if (pageIndex.HasValue is false || itemsPerPage.HasValue is false)

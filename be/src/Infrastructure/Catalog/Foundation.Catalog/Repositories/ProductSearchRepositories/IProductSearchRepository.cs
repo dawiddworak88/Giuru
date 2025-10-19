@@ -33,6 +33,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             Guid? organisationId,
             int? pageIndex,
             int? itemsPerPage,
+            string source,
             string orderBy,
             QueryFilters filters,
             bool? isSeller);

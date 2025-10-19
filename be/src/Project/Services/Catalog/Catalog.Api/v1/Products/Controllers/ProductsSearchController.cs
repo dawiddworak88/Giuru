@@ -41,6 +41,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
+        /// <param name="source">The optional product source.</param>
         /// <param name="filters">The search filters.</param>
         /// <returns>The list of products.</returns>
         [HttpPost, MapToApiVersion("1.0")]
@@ -51,6 +52,7 @@ namespace Catalog.Api.v1.Products.Controllers
             string ids,
             int? pageIndex,
             int? itemsPerPage,
+            string source,
             string orderBy)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
@@ -109,6 +111,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
+                    Source = source.Trim(),
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,

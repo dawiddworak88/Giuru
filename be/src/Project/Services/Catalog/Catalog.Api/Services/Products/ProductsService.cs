@@ -560,7 +560,7 @@ namespace Catalog.Api.Services.Products
 
         public async Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFilters(SearchProductsServiceModel model)
         {
-            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.OrganisationId, model.PageIndex, model.ItemsPerPage, model.OrderBy, model.Filters, model.IsSeller);
+            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.OrganisationId, model.PageIndex, model.ItemsPerPage, model.Source, model.OrderBy, model.Filters, model.IsSeller);
 
             var pageResullt = new PagedResults<IEnumerable<ProductSearchModel>>(searchResults.Total, searchResults.PageSize)
             {
