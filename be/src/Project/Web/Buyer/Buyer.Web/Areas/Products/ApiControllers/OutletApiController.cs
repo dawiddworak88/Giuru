@@ -60,7 +60,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 null,
                 pageIndex,
                 itemsPerPage,
-                "stock",
+                "outlet",
                 orderBy,
                 filters);
 
