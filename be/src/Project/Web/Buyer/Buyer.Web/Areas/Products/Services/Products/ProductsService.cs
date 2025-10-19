@@ -199,9 +199,17 @@ namespace Buyer.Web.Areas.Products.Services.Products
             return default;
         }
 
-        public async Task<PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(string token, string language, IEnumerable<Guid> ids, QueryFilters filters, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(
+            string token, 
+            string language, 
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage, 
+            string source, 
+            string orderBy, 
+            QueryFilters filters)
         {
-            var pagedProducts = await this.productsRepository.GetProductsWithFiltersAsync(token, language, searchTerm, ids, filters, pageIndex, itemsPerPage, orderBy);
+            var pagedProducts = await this.productsRepository.GetProductsWithFiltersAsync(token, language, null, searchTerm, pageIndex, itemsPerPage, source, orderBy, filters);
 
             if (pagedProducts?.Data != null)
             {

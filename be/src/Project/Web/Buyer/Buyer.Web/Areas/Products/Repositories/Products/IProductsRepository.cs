@@ -21,12 +21,13 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         Task<IEnumerable<Product>> GetProductsBySkusAsync(string token, string language, IEnumerable<string> skus);
         Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(
             string token, 
-            string language, 
-            string searchTerm, 
+            string language,
             IEnumerable<Guid> ids,
-            QueryFilters filters, 
+            string searchTerm, 
             int pageIndex, 
-            int itemsPerPage, 
-            string orderBy);
+            int itemsPerPage,
+            string source,
+            string orderBy,
+            QueryFilters filters);
     }
 }

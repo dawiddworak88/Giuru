@@ -15,12 +15,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
         Task<PagedResultsWithFilters<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(
             string token, 
             string language, 
-            IEnumerable<Guid> ids,
-            QueryFilters filters,
             string searchTerm, 
             int pageIndex, 
-            int itemsPerPage, 
-            string orderBy);
+            int itemsPerPage,
+            string source,
+            string orderBy,
+            QueryFilters filters);
         Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
         Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes);
         string GetSleepAreaSize(IEnumerable<ProductAttribute> attributes);

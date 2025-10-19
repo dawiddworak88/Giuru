@@ -379,14 +379,24 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return default;
         }
 
-        public async Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(string token, string language, string searchTerm, IEnumerable<Guid> ids, QueryFilters filters, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResultsWithFilters<IEnumerable<Product>>> GetProductsWithFiltersAsync(
+            string token, 
+            string language,
+            IEnumerable<Guid> ids,
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage, 
+            string source, 
+            string orderBy,
+            QueryFilters filters)
         {
-            var requestQuery = new ProductsRequestModel
+            var requestQuery = new ProductsFiltersRequestModel
             {
                 Ids = ids.ToEndpointParameterString(),
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
+                Source = source,
                 OrderBy = orderBy
             };
 
