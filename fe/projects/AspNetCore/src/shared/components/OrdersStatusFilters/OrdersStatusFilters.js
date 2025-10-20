@@ -14,7 +14,8 @@ const OrdersStatusFilters = ({
                 sx={{
                     display: "flex",
                     gap: "0.5rem",
-                    marginBottom: "2rem"
+                    marginBottom: "2rem",
+                    flexWrap: "wrap"
                 }}
             >
                 <Button
@@ -73,7 +74,7 @@ const OrdersStatusFilters = ({
 
 OrdersStatusFilters.propTypes = {
     ordersStatuses: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired
     })).isRequired,
     selectedStatusId: PropTypes.oneOfType([PropTypes.string, PropTypes.null]),

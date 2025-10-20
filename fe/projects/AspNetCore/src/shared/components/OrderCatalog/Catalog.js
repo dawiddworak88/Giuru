@@ -46,27 +46,33 @@ function Catalog(props) {
 
         setPage(() => newPage);
 
-        const searchParameters = {
+        let searchParameters = {
             searchTerm,
             pageIndex: newPage + 1,
-            itemsPerPage: props.defaultItemsPerPage,
-            orderStatusId: selectedStatusId
+            itemsPerPage: props.defaultItemsPerPage
         };
 
-        fetch(searchParameters);
+        if (selectedStatusId) {
+            searchParameters.orderStatusId = selectedStatusId;
+        }
+
+        fetchData(searchParameters);
     };
 
     const search = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const searchParameters = {
+        let searchParameters = {
             searchTerm,
             pageIndex: 1,
-            itemsPerPage: props.defaultItemsPerPage,
-            orderStatusId: selectedStatusId
+            itemsPerPage: props.defaultItemsPerPage
         };
 
-        fetch(searchParameters, () => setPage(0));
+        if (selectedStatusId) {
+            searchParameters.orderStatusId = selectedStatusId;
+        }
+
+        fetchData(searchParameters, () => setPage(0));
     };
 
     const handleDeleteClick = (item) => {
@@ -135,10 +141,10 @@ function Catalog(props) {
             orderStatusId: statusId
         }
 
-        fetch(searchParameters, () => setPage(0));
+        fetchData(searchParameters, () => setPage(0));
     }
 
-    const fetch = (searchParameters, onSuccess) => {
+    const fetchData = (searchParameters, onSuccess) => {
         const requestOptions = {
             method: "GET",
             headers: { 
