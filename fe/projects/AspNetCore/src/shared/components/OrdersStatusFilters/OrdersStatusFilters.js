@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 const OrdersStatusFilters = ({
     ordersStatuses = [],
     selectedStatusId,
-    onStatusChange
+    onStatusChange,
+    defaultLabel
 }) => {
     return (
         ordersStatuses.length > 0 && (
@@ -40,7 +41,7 @@ const OrdersStatusFilters = ({
                         }
                     }}
                 >
-                    All
+                    {defaultLabel}
                 </Button>
                 {ordersStatuses.map((orderStatus, index) => (
                     <Button
@@ -78,7 +79,8 @@ OrdersStatusFilters.propTypes = {
         name: PropTypes.string.isRequired
     })).isRequired,
     selectedStatusId: PropTypes.oneOfType([PropTypes.string, PropTypes.null]),
-    onStatusChange: PropTypes.func.isRequired
+    onStatusChange: PropTypes.func.isRequired,
+    defaultLabel: PropTypes.string.isRequired
 }
 
 export default OrdersStatusFilters;

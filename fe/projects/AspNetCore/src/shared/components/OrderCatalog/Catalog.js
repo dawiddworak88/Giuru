@@ -209,6 +209,7 @@ function Catalog(props) {
                         ordersStatuses={props.ordersStatuses}
                         selectedStatusId={selectedStatusId}
                         onStatusChange={handleStatusChange}
+                        defaultLabel={props.allLabel}
                     />
                 }
                 {(items && items.length > 0 && props.table) ?

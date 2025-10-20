@@ -27,6 +27,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string DuplicateUrl { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string OrderBy { get; set; }
+        public string AllLabel { get; set; }
         public int DefaultItemsPerPage { get; set; }
         public CatalogTableViewModel Table { get; set; }
         public PagedResults<IEnumerable<T>> PagedItems { get; set; }

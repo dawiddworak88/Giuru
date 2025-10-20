@@ -831,4 +831,7 @@
   <data name="Location" xml:space="preserve">
     <value>Standort</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>Alle</value>
+  </data>
 </root>

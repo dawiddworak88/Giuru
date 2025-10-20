@@ -51,6 +51,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.AllLabel = _globalLocalizer.GetString("All");
             viewModel.OrderBy = $"{nameof(Order.CreatedDate)} desc";
 
             viewModel.Table = new CatalogTableViewModel
