@@ -99,12 +99,20 @@ namespace Ordering.Api.v1.Controllers
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
         /// <param name="createdDateGreaterThan">The optional iso date and time to get orders where created date is greater than.</param>
+        /// <param name="orderStatusId">The optional order status Id to filter orders by specific status.</param>
         /// <returns>The list of orders.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string ids, string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy, DateTime? createdDateGreaterThan)
+        public async Task<IActionResult> Get(
+            string ids, 
+            string searchTerm, 
+            int? pageIndex, 
+            int? itemsPerPage, 
+            string orderBy, 
+            DateTime? createdDateGreaterThan,
+            Guid? orderStatusId)
         {
             var ordersIds = ids.ToEnumerableGuidIds();
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
@@ -210,6 +218,7 @@ namespace Ordering.Api.v1.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     CreatedDateGreaterThan = createdDateGreaterThan,
+                    OrderStatusId = orderStatusId,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     IsSeller = User.IsInRole("Seller")
