@@ -19,6 +19,7 @@ import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import { TextSnippet } from "@mui/icons-material";
+import OrdersStatusFilters from "../OrdersStatusFilters/OrdersStatusFilters";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -28,10 +29,9 @@ function Catalog(props) {
     const [total, setTotal] = React.useState(props.pagedItems ? props.pagedItems.total : 0);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [entityToDelete, setEntityToDelete] = React.useState(null);
-    const [selectedItem, setSelectedItem] = React.useState(null);
+    const [selectedStatusId, setSelectedStatusId] = React.useState(null);
 
     const handleSearchTermKeyPress = (event) => {
-
         if (event.key === KeyConstants.enter()) {
             search();
         }
@@ -42,87 +42,31 @@ function Catalog(props) {
     };
 
     const handleChangePage = (event, newPage) => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         setPage(() => newPage);
 
         const searchParameters = {
-
             searchTerm,
             pageIndex: newPage + 1,
-            itemsPerPage: props.defaultItemsPerPage
+            itemsPerPage: props.defaultItemsPerPage,
+            orderStatusId: selectedStatusId
         };
 
-        const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
-        };
-
-        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
-
-        return fetch(url, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setItems(() => []);
-                        setItems(() => jsonResponse.data);
-                        setTotal(() => jsonResponse.total);
-                    } else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        fetch(searchParameters);
     };
 
     const search = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const searchParameters = {
-
             searchTerm,
             pageIndex: 1,
-            itemsPerPage: props.defaultItemsPerPage
+            itemsPerPage: props.defaultItemsPerPage,
+            orderStatusId: selectedStatusId
         };
 
-        const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
-        };
-
-        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
-
-        return fetch(url, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-
-                        setPage(() => 0);
-
-                        setItems(() => []);
-                        setItems(() => jsonResponse.data);
-                        setTotal(() => jsonResponse.total);
-                    } else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        fetch(searchParameters, () => setPage(0));
     };
 
     const handleDeleteClick = (item) => {
@@ -179,6 +123,57 @@ function Catalog(props) {
         ClipboardHelper.copyToClipboard(text);
     }
 
+    const handleStatusChange = (statusId) => {
+        setSelectedStatusId(statusId);
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        let searchParameters = {
+            searchTerm,
+            pageIndex: 1,
+            itemsPerPage: props.defaultItemsPerPage,
+            orderStatusId: statusId
+        }
+
+        fetch(searchParameters, () => setPage(0));
+    }
+
+    const fetch = (searchParameters, onSuccess) => {
+        const requestOptions = {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "X-Requested-With": "XMLHttpRequest" 
+            }
+        };
+
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+                        setItems(() => jsonResponse.data);
+                        setTotal(() => jsonResponse.total);
+
+                        if (typeof onSuccess === "function") {
+                            onSuccess();
+                        }
+                    } else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
     return (
         <section className="section section-small-padding catalog">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -202,6 +197,13 @@ function Catalog(props) {
                             {props.searchLabel}
                         </Button>
                     </div>
+                }
+                {props.ordersStatuses && 
+                    <OrdersStatusFilters 
+                        ordersStatuses={props.ordersStatuses}
+                        selectedStatusId={selectedStatusId}
+                        onStatusChange={handleStatusChange}
+                    />
                 }
                 {(items && items.length > 0 && props.table) ?
                     (<div className="table-container">

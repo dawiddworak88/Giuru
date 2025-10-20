@@ -1,4 +1,5 @@
 ﻿using Foundation.GenericRepository.Paginations;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.ViewModels.Catalogs
@@ -29,5 +30,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public int DefaultItemsPerPage { get; set; }
         public CatalogTableViewModel Table { get; set; }
         public PagedResults<IEnumerable<T>> PagedItems { get; set; }
+        public IEnumerable<ListItemViewModel> OrdersStatuses { get; set; }
     }
 }

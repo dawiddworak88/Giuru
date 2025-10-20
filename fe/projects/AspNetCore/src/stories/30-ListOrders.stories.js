@@ -21,6 +21,24 @@ const catalog = {
     editUrl: "#",
     deleteUrl: "#",
     noResultsLabel: "There are no results",
+    ordersStatuses: [
+        {
+            id: 1,
+            name: "New"
+        },
+        {
+            id: 2,
+            name: "In Progress"
+        },
+        {
+            id: 3,
+            name: "Completed"
+        },
+        {
+            id: 4,
+            name: "Canceled"
+        }
+    ],
     table: {
       actions: [
           {
