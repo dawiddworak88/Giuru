@@ -76,7 +76,7 @@ OrdersStatusFilters.propTypes = {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired
     })).isRequired,
-    selectedStatusId: PropTypes.number,
+    selectedStatusId: PropTypes.oneOfType([PropTypes.string, PropTypes.null]),
     onStatusChange: PropTypes.func.isRequired
 }
 
