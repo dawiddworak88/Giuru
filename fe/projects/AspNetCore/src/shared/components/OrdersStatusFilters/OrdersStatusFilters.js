@@ -1,5 +1,6 @@
 import React from "react"
 import { Box, Button } from "@mui/material"
+import PropTypes from "prop-types";
 
 const OrdersStatusFilters = ({
     ordersStatuses = [],
@@ -68,6 +69,15 @@ const OrdersStatusFilters = ({
             </Box>
         )
     )
+}
+
+OrdersStatusFilters.propTypes = {
+    ordersStatuses: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+    })).isRequired,
+    selectedStatusId: PropTypes.number,
+    onStatusChange: PropTypes.func.isRequired
 }
 
 export default OrdersStatusFilters;
