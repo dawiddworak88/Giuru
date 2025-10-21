@@ -25,7 +25,7 @@ const OrdersStatusFilters = ({
                         arrows: false,
                         pagination: false,
                         gap: "0.5rem",
-                        height: "3.6875rem"
+                        height: "2.5625rem"
                     }}
                 >
                     <SplideSlide>
@@ -42,6 +42,7 @@ const OrdersStatusFilters = ({
                                 fontSize: "0.875rem",
                                 fontWeight: 400,
                                 color: "blackBase",
+                                height: "2.5rem",
                                 ...(selectedStatusId === null || !selectedStatusId) && {
                                     backgroundColor: "mint.500",
                                     borderColor: "mint.500",
@@ -72,6 +73,7 @@ const OrdersStatusFilters = ({
                                     fontSize: "0.875rem",
                                     fontWeight: 400,
                                     color: "blackBase",
+                                    height: "2.5rem",
                                     ...(selectedStatusId === orderStatus.id) && {
                                         backgroundColor: "mint.500",
                                         borderColor: "mint.500",
