@@ -132,6 +132,8 @@ function Catalog(props) {
     const handleStatusChange = (statusId) => {
         setSelectedStatusId(statusId);
 
+        if (statusId === selectedStatusId) return;
+
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let searchParameters = {

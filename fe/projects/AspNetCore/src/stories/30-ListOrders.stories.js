@@ -21,6 +21,7 @@ const catalog = {
     editUrl: "#",
     deleteUrl: "#",
     noResultsLabel: "There are no results",
+    allLabel: "All",
     ordersStatuses: [
         {
             id: 1,

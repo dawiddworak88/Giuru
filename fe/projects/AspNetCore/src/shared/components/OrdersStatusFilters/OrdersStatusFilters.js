@@ -1,6 +1,9 @@
 import React from "react"
 import { Box, Button } from "@mui/material"
 import PropTypes from "prop-types";
+import { 
+    Splide, SplideSlide 
+} from "@splidejs/react-splide";
 
 const OrdersStatusFilters = ({
     ordersStatuses = [],
@@ -13,61 +16,76 @@ const OrdersStatusFilters = ({
             <Box
                 component="div"
                 sx={{
-                    display: "flex",
-                    gap: "0.5rem",
                     marginBottom: "2rem",
-                    flexWrap: "wrap"
                 }}
             >
-                <Button
-                    disableRipple
-                    onClick={() => onStatusChange(null)}
-                    sx={{
-                        backgroundColor: "#FFF",
-                        borderRadius: "0.25rem",
-                        border: "1px solid #D5D7D8",
-                        padding: "1rem",
-                        fontSize: "0.875rem",
-                        fontWeight: 400,
-                        color: "#171717",
-                        ...(selectedStatusId === null || !selectedStatusId) && {
-                            backgroundColor: "#064254",
-                            borderColor: "#064254",
-                            color: "#FFF"
-                        },
-                        "&&:hover": {
-                            color: "#064254",
-                            borderColor: "#386876"
-                        }
+                <Splide
+                    options={{
+                        autoWidth: true,
+                        arrows: false,
+                        pagination: false,
+                        gap: "0.5rem",
+                        height: "3.6875rem"
                     }}
                 >
-                    {defaultLabel}
-                </Button>
-                {ordersStatuses.map((orderStatus, index) => (
-                    <Button
-                        key={index}
-                        disableRipple
-                        onClick={() => onStatusChange(orderStatus.id)}
-                        sx={{
-                            backgroundColor: "#FFF",
-                            borderRadius: "0.25rem",
-                            border: "1px solid #D5D7D8",
-                            padding: "1rem",
-                            fontSize: "0.875rem",
-                            fontWeight: 400,
-                            color: "#171717",
-                            ...(selectedStatusId === orderStatus.id) && {
-                                backgroundColor: "#064254",
-                                borderColor: "#064254",
-                                color: "#FFF"
-                            },
-                            "&&:hover": {
-                                color: "#064254",
-                                borderColor: "#064254"
-                            }
-                        }}
-                    >{orderStatus.name}</Button>
-                ))}
+                    <SplideSlide>
+                        <Button
+                            disableRipple
+                            onClick={() => onStatusChange(null)}
+                            sx={{
+                                backgroundColor: "whiteBase",
+                                borderRadius: "0.25rem",
+                                border: 1,
+                                borderStyle: "solid",
+                                borderColor: "gray.300",
+                                padding: "1rem",
+                                fontSize: "0.875rem",
+                                fontWeight: 400,
+                                color: "blackBase",
+                                ...(selectedStatusId === null || !selectedStatusId) && {
+                                    backgroundColor: "mint.500",
+                                    borderColor: "mint.500",
+                                    color: "whiteBase"
+                                },
+                                "&&:hover": {
+                                    color: "mint.500",
+                                    borderColor: "mint.300"
+                                }
+                            }}
+                        >
+                            {defaultLabel}
+                        </Button>
+                    </SplideSlide>
+                    {ordersStatuses.map((orderStatus, index) => (
+                        <SplideSlide key={index}>
+                            <Button
+                                key={index}
+                                disableRipple
+                                onClick={() => onStatusChange(orderStatus.id)}
+                                sx={{
+                                    backgroundColor: "whiteBase",
+                                    borderRadius: "0.25rem",
+                                    border: 1,
+                                    borderStyle: "solid",
+                                    borderColor: "gray.300",
+                                    padding: "1rem",
+                                    fontSize: "0.875rem",
+                                    fontWeight: 400,
+                                    color: "blackBase",
+                                    ...(selectedStatusId === orderStatus.id) && {
+                                        backgroundColor: "mint.500",
+                                        borderColor: "mint.500",
+                                        color: "whiteBase"
+                                    },
+                                    "&&:hover": {
+                                        color: "mint.500",
+                                        borderColor: "mint.300"
+                                    }
+                                }}
+                            >{orderStatus.name}</Button>
+                        </SplideSlide>
+                    ))}
+                </Splide>
             </Box>
         )
     )
@@ -78,7 +96,7 @@ OrdersStatusFilters.propTypes = {
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired
     })).isRequired,
-    selectedStatusId: PropTypes.oneOfType([PropTypes.string, PropTypes.null]),
+    selectedStatusId: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
     onStatusChange: PropTypes.func.isRequired,
     defaultLabel: PropTypes.string.isRequired
 }

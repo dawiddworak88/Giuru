@@ -834,7 +834,7 @@
   <data name="Location" xml:space="preserve">
     <value>Location</value>
   </data>
-  <data name="All" xml:space="preserve">
+  <data name="AllForFilters" xml:space="preserve">
     <value>All</value>
   </data>
 </root>
