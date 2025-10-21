@@ -574,6 +574,11 @@ namespace Ordering.Api.Services
                 || x.Id.ToString().ToLower() == searchTermLower);
             }
 
+            if (model.OrderStatusId.HasValue)
+            {
+                orders = orders.Where(x => x.OrderStatusId == model.OrderStatusId.Value);
+            }
+
             orders = orders.ApplySort(model.OrderBy);
 
             int pageSize = model.ItemsPerPage ?? Constants.MaxItemsPerPageLimit;

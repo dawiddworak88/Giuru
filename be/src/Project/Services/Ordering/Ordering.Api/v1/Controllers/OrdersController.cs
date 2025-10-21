@@ -127,6 +127,7 @@ namespace Ordering.Api.v1.Controllers
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,
                     CreatedDateGreaterThan = createdDateGreaterThan,
+                    OrderStatusId = orderStatusId,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name,
