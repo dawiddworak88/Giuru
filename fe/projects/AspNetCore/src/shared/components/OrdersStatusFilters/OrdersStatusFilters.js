@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button } from "@mui/material"
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material"
 import PropTypes from "prop-types";
 import { 
     Splide, SplideSlide 
@@ -11,6 +11,9 @@ const OrdersStatusFilters = ({
     onStatusChange,
     defaultLabel
 }) => {
+    const theme = useTheme();
+    const isTabletOrMobile = useMediaQuery(theme.breakpoints.down("md"));
+
     return (
         ordersStatuses.length > 0 && (
             <Box
@@ -25,7 +28,8 @@ const OrdersStatusFilters = ({
                         arrows: false,
                         pagination: false,
                         gap: "0.5rem",
-                        height: "2.5625rem"
+                        height: "2.5625rem",
+                        drag: isTabletOrMobile
                     }}
                 >
                     <SplideSlide>

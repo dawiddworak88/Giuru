@@ -49,12 +49,9 @@ function Catalog(props) {
         let searchParameters = {
             searchTerm,
             pageIndex: newPage + 1,
-            itemsPerPage: props.defaultItemsPerPage
+            itemsPerPage: props.defaultItemsPerPage,
+            orderStatusId: selectedStatusId
         };
-
-        if (selectedStatusId) {
-            searchParameters.orderStatusId = selectedStatusId;
-        }
 
         fetchData(searchParameters);
     };
@@ -65,12 +62,9 @@ function Catalog(props) {
         let searchParameters = {
             searchTerm,
             pageIndex: 1,
-            itemsPerPage: props.defaultItemsPerPage
+            itemsPerPage: props.defaultItemsPerPage,
+            orderStatusId: selectedStatusId
         };
-
-        if (selectedStatusId) {
-            searchParameters.orderStatusId = selectedStatusId;
-        }
 
         fetchData(searchParameters, () => setPage(0));
     };
