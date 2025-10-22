@@ -243,14 +243,22 @@ namespace Buyer.Web.Areas.Orders.Repositories
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Order>>> GetOrdersAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<Order>>> GetOrdersAsync(
+            string token, 
+            string language, 
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage, 
+            string orderBy,
+            Guid? orderStatusId)
         {
-            var ordersRequestModel = new PagedRequestModelBase
+            var ordersRequestModel = new GetOrdersRequestModel
             {
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy
+                OrderBy = orderBy,
+                OrderStatusId = orderStatusId
             };
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>

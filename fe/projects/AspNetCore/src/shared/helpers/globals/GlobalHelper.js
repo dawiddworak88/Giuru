@@ -5,14 +5,6 @@ export default class GlobalHelper {
 
   static initMuiTheme(locale) {
 
-    const disableRipple = {
-      defaultProps: {
-        disableRipple: true,
-        disableFocusRipple: true,
-        disableTouchRipple: true
-      }
-    }
-
     var themeDefinition = {
       typography: {
         body1: {
@@ -28,21 +20,17 @@ export default class GlobalHelper {
         },
         secondary: {
           main: "#1B5A6E"
-        }
-      },
-      components: {
-        MuiMenu: {
-          styleOverrides: {
-            paper: {
-              marginTop: 16,
-              borderRadius: 8
-            }
-          }
         },
-        MuiButton: { ...disableRipple },
-        MuiCheckbox: { ...disableRipple },
-        MuiMenuItem: { ...disableRipple }
-      },
+        mint: {
+          300: "#386876",
+          500: "#064254"
+        },
+        gray: {
+          300: "#D5D7D8"
+        },
+        whiteBase: "#FFFFFF",
+        blackBase: "#171717"
+      }
     };
 
     if (locale) {
