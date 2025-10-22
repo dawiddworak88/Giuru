@@ -20,7 +20,16 @@ export default class GlobalHelper {
         },
         secondary: {
           main: "#1B5A6E"
-        }
+        },
+        mint: {
+          300: "#386876",
+          500: "#064254"
+        },
+        gray: {
+          300: "#D5D7D8"
+        },
+        whiteBase: "#FFFFFF",
+        blackBase: "#171717"
       }
     };
 
