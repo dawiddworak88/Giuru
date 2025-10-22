@@ -284,7 +284,8 @@ const FilterCollector = (props) => {
                     sx={{
                         display: 'flex',
                         gap: '0.75rem',
-                        marginBottom: "2.5rem"
+                        marginBottom: "2.5rem",
+                        flexWrap: 'wrap'
                     }}
                 >
                     {props.filters.map((selectedFilter, index) => (
