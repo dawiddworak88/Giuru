@@ -12,7 +12,7 @@ import {
 } from "../../icons";
 import NestedFilterAccordionDropdown from "./NestedFilterAccordionDropdown";
 
-function FilterCollector(props) {
+const FilterCollector = (props) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const handleOnSelectFiltersChange = (event) => {
@@ -291,7 +291,7 @@ function FilterCollector(props) {
                         <Chip
                             key={index}
                             label={selectedFilter.label}
-                            onDelete={() => handleOnDeleteFilter(selectedFilter)}
+                            onDelete={() => handleOnDeleteFilter(index)}
                             deleteIcon={<RemoveIcon />} 
                             sx={{
                                 paddingY: "0.25rem",
