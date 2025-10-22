@@ -333,13 +333,17 @@ const FilterCollector = (props) => {
                     anchor="right"
                     open={sidebarOpen}
                     onClose={() => setSidebarOpen(false)}
+                    sx={{
+                        
+                        minHeight: "100vh",
+                    }}
                 >
                     <Box 
                         sx={{
                             display: "flex",
                             flexDirection: "column",
-                            minWidth: "28.875rem",
-                            minHeight: "100vh"
+                            height: "100%",
+                            minWidth: "28.875rem"
                         }}
                     >
                         <Box 
@@ -348,7 +352,8 @@ const FilterCollector = (props) => {
                                 justifyContent: "space-between",
                                 alignItems: "center",
                                 padding: "0 1.875rem 0 1.5rem",
-                                minHeight: "5rem"
+                                minHeight: "5rem",
+                                flexShrink: 0
                             }}
                         >
                             <Typography 
@@ -374,7 +379,9 @@ const FilterCollector = (props) => {
                         </Box>
                         <Box 
                             sx={{
-                                paddingX: "1.5rem"
+                                paddingX: "1.5rem",
+                                flex: 1,
+                                overflowY: "auto"
                             }}
                         >
                             {props.filterInputs.map((item, index) => (
@@ -436,9 +443,10 @@ const FilterCollector = (props) => {
                         <Box 
                             sx={{
                                 padding: "1.5rem",
-                                marginTop: "auto",
+                                // marginTop: "auto",
                                 display: "flex",
-                                gap: "0.5rem"
+                                gap: "0.5rem",
+                                flexShrink: 0
                             }}
                         >
                             <Button

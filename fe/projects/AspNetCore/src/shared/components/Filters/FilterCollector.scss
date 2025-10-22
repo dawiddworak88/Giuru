@@ -114,71 +114,71 @@
     }
 }
 
-.button-clear {
-    border-radius: 0.25rem !important;
-        border: 1px solid $grey-300 !important;
-        background: $black-100 !important;
-        color: $black-base !important;
+// .button-clear {
+//     border-radius: 0.25rem !important;
+//         border: 1px solid $grey-300 !important;
+//         background: $black-100 !important;
+//         color: $black-base !important;
 
-        &:disabled {
-            background-color: $grey-200 !important;
-            color: $grey-300 !important;
-        }
-}
+//         &:disabled {
+//             background-color: $grey-200 !important;
+//             color: $grey-300 !important;
+//         }
+// }
 
-.MuiSelect-select {
-    padding: 0.5rem 1.5rem 0.5rem 0 !important;
-}
+// .MuiSelect-select {
+//     padding: 0.5rem 1.5rem 0.5rem 0 !important;
+// }
 
-.MuiMenuItem-root {
-    &:hover {
-        background-color: $white !important;
-    }
-}
+// .MuiMenuItem-root {
+//     &:hover {
+//         background-color: $white !important;
+//     }
+// }
 
-.Mui-selected {
-    color: $primary !important;
-    background-color: $white !important;
+// .Mui-selected {
+//     color: $primary !important;
+//     background-color: $white !important;
 
-    &:hover {
-        background-color: $white !important;
-    }
-}
+//     &:hover {
+//         background-color: $white !important;
+//     }
+// }
 
-.MuiOutlinedInput-notchedOutline {
-    border: 0 !important;
-    border-style: none !important;
-}
+// .MuiOutlinedInput-notchedOutline {
+//     border: 0 !important;
+//     border-style: none !important;
+// }
 
-.MuiChip-label {
-    padding-right: 1rem !important;
-    font-family: Nunito Sans;
-    font-weight: 700;
-}
+// .MuiChip-label {
+//     padding-right: 1rem !important;
+//     font-family: Nunito Sans;
+//     font-weight: 700;
+// }
 
-@media only screen and (max-width: $desktop) {
-    .filters-collector {
+// @media only screen and (max-width: $desktop) {
+//     .filters-collector {
 
-        &__filters__select {
-            display: none !important;
-        }
-    }
-}
+//         &__filters__select {
+//             display: none !important;
+//         }
+//     }
+// }
 
-@media only screen and (max-width: $tablet) {
-    .filters-collector {
-        padding-bottom: 0.75rem;
+// @media only screen and (max-width: $tablet) {
+//     .filters-collector {
+//         padding-bottom: 0.75rem;
 
-        &__total {
-            display: none;
-        }
+//         &__total {
+//             display: none;
+//         }
 
-        &__total-mobile {
-            display: block;
-        }
-    }
+//         &__total-mobile {
+//             display: block;
+//         }
+//     }
 
-    .sidebar {
-        min-width: 100vw;
-    }
-}
+//     .sidebar {
+//         min-width: 100vw;
+//     }
+// }
