@@ -7,6 +7,7 @@ export default class GlobalHelper {
 
     var themeDefinition = {
       typography: {
+        fontFamily: "Nunito Sans",
         body1: {
           fontFamily: "Nunito Sans"
         },

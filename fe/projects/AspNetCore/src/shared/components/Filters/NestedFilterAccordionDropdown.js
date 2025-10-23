@@ -126,9 +126,13 @@ const NestedFilterAccordionDropdown = ({
                             color: "#171717",
                             fontWeight: 700,
                             fontSize: "0.75rem",
-                            gap: "1rem",
+                            gap: "0.625rem",
+                            "&& .MuiButton-endIcon": {
+                                margin: 0
+                            },
                             "&&:hover": {
-                                backgroundColor: "#F7F7F7"
+                                backgroundColor: "mint.500",
+                                color: "whiteBase"
                             }
                         }}
                     >

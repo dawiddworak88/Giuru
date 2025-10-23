@@ -121,7 +121,7 @@ const FilterCollector = (props) => {
                                                 paddingY: "0.25rem",
                                                 boxShadow: "none",
                                                 color: "blackBase",
-                                                
+                                                fontWeight: 700,
                                                 "&& .MuiSelect-select": {
                                                     display: "flex",
                                                     alignItems: "center",
@@ -179,6 +179,7 @@ const FilterCollector = (props) => {
                                         >
                                             {item.items.map((variant, index) => (
                                                 <MenuItem
+                                                    disableRipple
                                                     key={index}
                                                     value={{
                                                         key: item.key, 
@@ -188,6 +189,9 @@ const FilterCollector = (props) => {
                                                     sx={{
                                                         height: "1.5rem",
                                                         padding: 0,
+                                                        "&&:hover": {
+                                                            backgroundColor: "whiteBase"
+                                                        },
                                                         "&:not(:first-child)": {
                                                             marginTop: "1.5rem"
                                                         }
@@ -199,14 +203,20 @@ const FilterCollector = (props) => {
                                                         checkedIcon={<CheckboxCheckedIcon />} 
                                                         sx={{
                                                             padding: 0,
-                                                            height: "1.5rem"
+                                                            height: "1.5rem",
+                                                            "&&:hover": {
+                                                               backgroundColor: "whiteBase"
+                                                            }
                                                         }}
                                                     />
-                                                    <ListItemText primary={variant.label} sx={{
-                                                        fontSize: "0.875rem",
-                                                        fontWeight: 400,
-                                                        color: "#171717"
-                                                    }}/>
+                                                    <ListItemText 
+                                                        primary={variant.label} 
+                                                        sx={{
+                                                            fontSize: "0.875rem",
+                                                            fontWeight: 400,
+                                                            color: "blackBase"
+                                                        }}
+                                                    />
                                                 </MenuItem>
                                             ))}
                                         </Select>
@@ -217,6 +227,7 @@ const FilterCollector = (props) => {
                     </Box>
                 }
                 <Button
+                    disableRipple
                     onClick={() => setSidebarOpen(true)}
                     endIcon={<FiltersIcon />}
                     sx={{
@@ -224,18 +235,19 @@ const FilterCollector = (props) => {
                         paddingX: "1rem",
                         paddingY: "0.25rem",
                         borderRadius: "0.25rem",
-                        backgroundColor: "#F7F7F7"
+                        backgroundColor: "#F7F7F7",
+                        display: "flex",
+                        gap: "0.625rem",
+                        fontWeight: 700,
+                        color: "blackBase",
+                        fontSize: "0.75rem",
+                        "&&:hover": {
+                            backgroundColor: "mint.500",
+                            color: "whiteBase"
+                        }
                     }}
                 >
-                    <Typography
-                        sx={{
-                            fontWeight: 700,
-                            fontSize: "0.75rem",
-                            color: "#171717"
-                        }}
-                    >
-                        {props.allFilters}
-                    </Typography>
+                    {props.allFilters}
                 </Button>
                 {props.sortItems && props.sortItems.length > 0 &&
                     <Box 
@@ -244,7 +256,7 @@ const FilterCollector = (props) => {
                             minWidth: "fit-content",
                             alignItems: "center",
                             marginLeft: "auto",
-                            gap: "1.75rem"
+                            gap: "1.25rem"
                         }}
                     >
                         <Typography
@@ -261,14 +273,27 @@ const FilterCollector = (props) => {
                             value={props.sorting}
                             onChange={(e) => props.setSorting(e.target.value)}
                             sx={{
+                                paddingX: "9px",
+                                paddingY: "0.25rem",
                                 "&& .MuiSelect-select": {
-                                    minHeight: "unset"
-                                }
+                                    minHeight: "unset",
+                                    padding: 0,
+                                    paddingRight: "calc(0.8125rem + 0.625rem)",
+                                    gap: "10px"
+                                },
+                                "&& .MuiOutlinedInput-notchedOutline": {
+                                    border: "unset"
+                                },
+                                "&& .MuiSelect-icon": {
+                                    right: "9px",  
+                                    color: "blackBase"
+                                },
                             }}
                             MenuProps={{
                                 autoFocus: false,
                                 PaperProps: {
                                     sx: {
+                                        marginTop: "1rem",
                                         paddingX: "1.5rem",
                                         paddingY: "1rem"
                                     }
@@ -280,7 +305,7 @@ const FilterCollector = (props) => {
                                         sx={{
                                             fontSize: "0.75rem",
                                             fontWeight: 700,
-                                            color: "#064254"
+                                            color: "mint.500"
                                         }}
                                     >
                                         {props.sortItems.find(item => item.key === value)?.label}
@@ -290,9 +315,13 @@ const FilterCollector = (props) => {
                         >
                             {props.sortItems.map((item, index) => (
                                 <MenuItem
+                                    disableRipple
                                     key={index}
                                     value={item.key}
                                     sx={{
+                                        "&&:hover": {
+                                            backgroundColor: "whiteBase"
+                                        },
                                         "&:not(:first-child)": {
                                             marginTop: "1rem"
                                         }
