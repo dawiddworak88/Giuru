@@ -350,14 +350,23 @@ const FilterCollector = (props) => {
                                 paddingY: "0.25rem",
                                 paddingX: "1rem",
                                 display: "flex",
-                                gap: "0.25rem",
+                                gap: "0.5rem",
                                 width: "fit-content",
                                 borderRadius: "0.25rem",
                                 backgroundColor: "#064254",
                                 border: "1px solid #064254",
-                                color: "#FFFFFF",
+                                color: "whiteBase",
                                 fontSize: "0.75rem",
-                                fontWeight: 700
+                                fontWeight: 700,
+                                "& .MuiChip-label": {
+                                    padding: 0
+                                },
+                                "& .MuiChip-deleteIcon": {
+                                    margin: 0
+                                },
+                                "&:hover": {
+                                    backgroundColor: "mint.400"
+                                }
                             }}
                         />
                     ))}
@@ -368,11 +377,18 @@ const FilterCollector = (props) => {
                                 paddingY: "0.25rem",
                                 paddingX: "1rem",
                                 borderRadius: "0.25rem",
-                                backgroundColor: "#F8F9FC",
-                                border: "1px solid #D5D7D8",
-                                color: "#171717",
+                                backgroundColor: "black.100",
+                                border: 1,
+                                borderStyle: "solid",
+                                borderColor: "gray.300",
+                                color: "blackBase",
                                 fontSize: "0.75rem",
-                                fontWeight: 700
+                                fontWeight: 700,
+                                "&:hover": {
+                                    backgroundColor: "mint.500",
+                                    borderColor: "mint.500",
+                                    color: "whiteBase"
+                                }
                             }}
                         >
                             {props.clearAllFilters}

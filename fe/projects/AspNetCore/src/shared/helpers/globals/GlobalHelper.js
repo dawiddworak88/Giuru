@@ -33,6 +33,7 @@ export default class GlobalHelper {
           300: "#D5D7D8"
         },
         black: {
+          100: "#F8F9FC",
           300: "#7C8693"
         },
         whiteBase: "#FFFFFF",
