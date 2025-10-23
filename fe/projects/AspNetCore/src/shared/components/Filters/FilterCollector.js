@@ -155,7 +155,8 @@ const FilterCollector = (props) => {
                                                         marginTop: "1rem",
                                                         borderRadius: "0.5rem",
                                                         paddingX: "2.5rem",
-                                                        paddingY: "2rem"
+                                                        paddingY: "2rem",
+                                                        width: "20rem"
                                                     }
                                                 }
                                             }}
@@ -189,6 +190,9 @@ const FilterCollector = (props) => {
                                                     sx={{
                                                         height: "1.5rem",
                                                         padding: 0,
+                                                        fontSize: "0.875rem",
+                                                        fontWeight: 400,
+                                                        color: "blackBase",
                                                         "&&:hover": {
                                                             backgroundColor: "whiteBase"
                                                         },
@@ -209,14 +213,7 @@ const FilterCollector = (props) => {
                                                             }
                                                         }}
                                                     />
-                                                    <ListItemText 
-                                                        primary={variant.label} 
-                                                        sx={{
-                                                            fontSize: "0.875rem",
-                                                            fontWeight: 400,
-                                                            color: "blackBase"
-                                                        }}
-                                                    />
+                                                    {variant.label}
                                                 </MenuItem>
                                             ))}
                                         </Select>
@@ -389,7 +386,6 @@ const FilterCollector = (props) => {
                     open={sidebarOpen}
                     onClose={() => setSidebarOpen(false)}
                     sx={{
-                        
                         minHeight: "100vh",
                     }}
                 >
@@ -482,11 +478,11 @@ const FilterCollector = (props) => {
                                                 {item.items.map((variant, index) => (
                                                     <Stack direction="row">
                                                         <Checkbox
-                                                        className="sidebar__filters__filter__item__checkbox"
-                                                        checked={isFilterSelected(item.key, variant.value)}
-                                                        icon={<CheckboxIcon />}
-                                                        checkedIcon={<CheckboxCheckedIcon />}
-                                                        onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
+                                                            className="sidebar__filters__filter__item__checkbox"
+                                                            checked={isFilterSelected(item.key, variant.value)}
+                                                            icon={<CheckboxIcon />}
+                                                            checkedIcon={<CheckboxCheckedIcon />}
+                                                            onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
                                                         <Typography>{variant.label}</Typography>
                                                     </Stack>
                                                 ))}    
