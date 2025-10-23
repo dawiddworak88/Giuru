@@ -202,6 +202,7 @@ const FilterCollector = (props) => {
                                                     }}
                                                 >
                                                     <Checkbox
+                                                        disableRipple
                                                         checked={isFilterSelected(item.key, variant.value)}
                                                         icon={<CheckboxIcon />}
                                                         checkedIcon={<CheckboxCheckedIcon />} 
@@ -353,8 +354,10 @@ const FilterCollector = (props) => {
                                 gap: "0.5rem",
                                 width: "fit-content",
                                 borderRadius: "0.25rem",
-                                backgroundColor: "#064254",
-                                border: "1px solid #064254",
+                                backgroundColor: "mint.500",
+                                border: 1,
+                                borderStyle: "solid",
+                                borderColor: "mint.500",
                                 color: "whiteBase",
                                 fontSize: "0.75rem",
                                 fontWeight: 700,
@@ -494,6 +497,7 @@ const FilterCollector = (props) => {
                                                 {item.items.map((variant, index) => (
                                                     <Stack direction="row">
                                                         <Checkbox
+                                                            disableRipple
                                                             className="sidebar__filters__filter__item__checkbox"
                                                             checked={isFilterSelected(item.key, variant.value)}
                                                             icon={<CheckboxIcon />}
