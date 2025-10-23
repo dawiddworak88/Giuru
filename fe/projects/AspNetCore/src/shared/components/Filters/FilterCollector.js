@@ -288,8 +288,8 @@ const FilterCollector = (props) => {
                                 },
                             }}
                             MenuProps={{
-                                autoFocus: false,
                                 PaperProps: {
+                                    autoFocus: false,
                                     sx: {
                                         marginTop: "1rem",
                                         paddingX: "1.5rem",
