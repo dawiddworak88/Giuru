@@ -48,7 +48,7 @@ const FilterCollector = (props) => {
     }
 
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const isNotMobile = !isMobile;
 
     return (
@@ -116,17 +116,43 @@ const FilterCollector = (props) => {
                                             sx={{
                                                 height: "2.5rem",
                                                 borderRadius: "0.25rem",
-                                                backgroundColor: "#F7F7F7",
+                                                backgroundColor: "gray.100",
                                                 paddingX: "1rem",
                                                 paddingY: "0.25rem",
+                                                boxShadow: "none",
+                                                color: "blackBase",
+                                                
                                                 "&& .MuiSelect-select": {
-                                                    minHeight: "unset"
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    minHeight: "unset",
+                                                    border: "unset",
+                                                    padding: 0,
+                                                    paddingRight: "calc(0.8125rem + 0.625rem)",
+                                                    gap: "10px"
+                                                },
+                                                "&& .MuiOutlinedInput-notchedOutline": {
+                                                    border: "unset"
+                                                },
+                                                "&& .MuiSelect-icon": {
+                                                    right: "1rem",  
+                                                    color: "currentColor",
+                                                },
+                                                "&&:hover": {
+                                                    backgroundColor: "mint.500",
+                                                    "&& .MuiSelect-select": {
+                                                        color: "whiteBase"
+                                                    },
+                                                    "&& .MuiSelect-icon": {
+                                                        color: "whiteBase"
+                                                    }
                                                 }
                                             }}
                                             MenuProps={{
                                                 autoFocus: false,
                                                 PaperProps: {
                                                     sx: {
+                                                        marginTop: "1rem",
                                                         borderRadius: "0.5rem",
                                                         paddingX: "2.5rem",
                                                         paddingY: "2rem"
@@ -143,7 +169,7 @@ const FilterCollector = (props) => {
                                                             alignItems: "center",
                                                             fontWeight: 700,
                                                             fontSize: "0.75rem",
-                                                            color: "#171717"
+                                                            color: "inherit"
                                                         }}
                                                     >
                                                         {item.label}
@@ -443,28 +469,53 @@ const FilterCollector = (props) => {
                         <Box 
                             sx={{
                                 padding: "1.5rem",
-                                // marginTop: "auto",
                                 display: "flex",
                                 gap: "0.5rem",
                                 flexShrink: 0
                             }}
                         >
                             <Button
-                                className="sidebar__fotter__button button-clear py-3"
                                 onClick={handleOnClickClearFilters}
                                 disabled={!props.filters.length > 0}
+                                sx={{
+                                    borderRadius: "0.25rem",
+                                    border: 1,
+                                    borderColor: "gray.300",
+                                    color: "blackBase",
+                                    width: "100%",
+                                    paddingY: "0.5rem",
+                                    paddingX: "1.5rem",
+                                    maxHeight: "3.125rem",
+                                    fontWeight: 700,
+                                    fontSize: "0.875rem",
+                                    lineHeight: "1.5rem",
+                                    "&&:disabled": {
+                                        color: "black.300",
+                                        backgroundColor: "gray.200"
+                                    }
+                                }}
                             >
-                                <Typography fontWeight={700}>
-                                    {props.clearAllFilters}
-                                </Typography>
+                                {props.clearAllFilters}
                             </Button>
                             <Button
-                                className="sidebar__fotter__button py-3"
                                 onClick={() => setSidebarOpen(false)}
+                                sx={{
+                                    width: "100%",
+                                    backgroundColor: "mint.500",
+                                    borderRadius: "0.25rem",
+                                    paddingY: "0.5rem",
+                                    paddingX: "1.5rem",
+                                    maxHeight: "3.125rem",
+                                    fontWeight: 700,
+                                    fontSize: "0.875rem",
+                                    lineHeight: "1.5rem",
+                                    color: "whiteBase",
+                                    "&&:hover": {
+                                        backgroundColor: "mint.400"
+                                    }
+                                }}
                             >
-                                <Typography fontWeight={700}>
-                                    {props.seeResult}
-                                </Typography>
+                                {props.seeResult}
                             </Button>
                         </Box>
                     </Box>

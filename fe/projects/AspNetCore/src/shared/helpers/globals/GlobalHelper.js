@@ -23,10 +23,16 @@ export default class GlobalHelper {
         },
         mint: {
           300: "#386876",
+          400: "#1F5565",
           500: "#064254"
         },
         gray: {
+          100: "#F7F7F7",
+          200: "#EBECED",
           300: "#D5D7D8"
+        },
+        black: {
+          300: "#7C8693"
         },
         whiteBase: "#FFFFFF",
         blackBase: "#171717"
