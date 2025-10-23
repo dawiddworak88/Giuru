@@ -293,7 +293,12 @@ const FilterCollector = (props) => {
                                     sx: {
                                         marginTop: "1rem",
                                         paddingX: "1.5rem",
-                                        paddingY: "1rem"
+                                        paddingY: "1rem",
+                                        borderRadius: "0.25rem",
+                                        "& .MuiMenuItem-root.Mui-selected, & .MuiMenuItem-root.Mui-selected:hover": {
+                                            backgroundColor: "whiteBase",
+                                            color: "mint.500"
+                                        },
                                     }
                                 }
                             }}
@@ -317,6 +322,9 @@ const FilterCollector = (props) => {
                                     key={index}
                                     value={item.key}
                                     sx={{
+                                        fontSize: "0.875rem",
+                                        fontWeight: 400,
+                                        color: "blackBase",
                                         "&&:hover": {
                                             backgroundColor: "whiteBase"
                                         },
