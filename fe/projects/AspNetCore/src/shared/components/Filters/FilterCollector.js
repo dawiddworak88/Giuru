@@ -261,7 +261,7 @@ const FilterCollector = (props) => {
                             sx={{
                                 fontSize: "0.75rem",
                                 fontWeight: 700,
-                                color: "#171717"
+                                color: "blackBase"
                             }}
                         >
                             {props.sortLabel}
@@ -438,7 +438,7 @@ const FilterCollector = (props) => {
                                 sx={{
                                     fontSize: "1.25rem",
                                     fontWeight: 700,
-                                    color: "#171717"
+                                    color: "blackBase"
                                 }}    
                             >
                                 {props.filtersLabel}
@@ -449,7 +449,7 @@ const FilterCollector = (props) => {
                                 disableElevation
                                 onClick={() => setSidebarOpen(false)}
                                 sx={{
-                                    color: "#171717"
+                                    color: "blackBase"
                                 }}
                             >
                                 <Close />
@@ -479,7 +479,6 @@ const FilterCollector = (props) => {
                                         square
                                         sx={{
                                             borderTop: "1px solid #D5D7D8",
-                                            // borderBottom: "1px solid #D5D7D8",
                                             "&&:before": {
                                                 display: "none"
                                             }
@@ -491,27 +490,42 @@ const FilterCollector = (props) => {
                                                 paddingY: "1rem",
                                                 fontWeight: 700,
                                                 fontSize: "0.875rem",
-                                                color: "#171717",
+                                                color: "blackBase",
                                                 lineHeight: "1.5rem",
                                                 letterSpacing: "0.14px"
                                             }}
                                         >
                                             {item.label}
                                         </AccordionSummary>
-                                        <AccordionDetails key={index} className="sidebar__filters__filter__item is-flex is-align-items-center">
-                                            <Stack
-                                                spacing="1.5rem"
-                                            >
+                                        <AccordionDetails 
+                                            sx={{
+                                                paddingX: 0,
+                                                marginBottom: "1.5rem"
+                                            }}
+                                        >
+                                            <Stack spacing="1.5rem">
                                                 {item.items.map((variant, index) => (
-                                                    <Stack direction="row">
+                                                    <Stack 
+                                                        key={index}
+                                                        direction="row"
+                                                        sx={{
+                                                            fontSize: "0.875rem",
+                                                            fontWeight: 400,
+                                                            color: "blackBase",
+                                                            alignItems: "center"
+                                                        }}
+                                                    >
                                                         <Checkbox
                                                             disableRipple
-                                                            className="sidebar__filters__filter__item__checkbox"
                                                             checked={isFilterSelected(item.key, variant.value)}
                                                             icon={<CheckboxIcon />}
                                                             checkedIcon={<CheckboxCheckedIcon />}
-                                                            onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label) } />
-                                                        <Typography>{variant.label}</Typography>
+                                                            onClick={() => handleOnSidebarFilterSet(item.key, variant.value, variant.label)}
+                                                            sx={{
+                                                                height: "1.5rem"
+                                                            }} 
+                                                        />
+                                                        {variant.label}
                                                     </Stack>
                                                 ))}    
                                             </Stack>        
