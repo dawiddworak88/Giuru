@@ -138,7 +138,7 @@ const FilterCollector = (props) => {
                                                     right: "1rem",  
                                                     color: "currentColor",
                                                 },
-                                                "&&:hover": {
+                                                "&&:hover, &&:has(.MuiSelect-select[aria-expanded='true'])": {
                                                     backgroundColor: "mint.500",
                                                     "&& .MuiSelect-select": {
                                                         color: "whiteBase"
