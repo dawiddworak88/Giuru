@@ -224,29 +224,31 @@ const FilterCollector = (props) => {
                         )}
                     </Box>
                 }
-                <Button
-                    disableRipple
-                    onClick={() => setSidebarOpen(true)}
-                    endIcon={<FiltersIcon />}
-                    sx={{
-                        height: "2.5rem",
-                        paddingX: "1rem",
-                        paddingY: "0.25rem",
-                        borderRadius: "0.25rem",
-                        backgroundColor: "#F7F7F7",
-                        display: "flex",
-                        gap: "0.625rem",
-                        fontWeight: 700,
-                        color: "blackBase",
-                        fontSize: "0.75rem",
-                        "&&:hover": {
-                            backgroundColor: "mint.500",
-                            color: "whiteBase"
-                        }
-                    }}
-                >
-                    {props.allFilters}
-                </Button>
+                {props.filterInputs && props.filterInputs.length > 0 &&
+                    <Button
+                        disableRipple
+                        onClick={() => setSidebarOpen(true)}
+                        endIcon={<FiltersIcon />}
+                        sx={{
+                            height: "2.5rem",
+                            paddingX: "1rem",
+                            paddingY: "0.25rem",
+                            borderRadius: "0.25rem",
+                            backgroundColor: "gray.100",
+                            display: "flex",
+                            gap: "0.625rem",
+                            fontWeight: 700,
+                            color: "blackBase",
+                            fontSize: "0.75rem",
+                            "&&:hover": {
+                                backgroundColor: "mint.500",
+                                color: "whiteBase"
+                            }
+                        }}
+                    >
+                        {props.allFilters}
+                    </Button>
+                }
                 {props.sortItems && props.sortItems.length > 0 &&
                     <Box 
                         sx={{
