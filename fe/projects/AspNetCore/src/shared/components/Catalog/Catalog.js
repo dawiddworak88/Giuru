@@ -47,13 +47,17 @@ function Catalog(props) {
     const handleChangePage = (event, newPage) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        console.log("New page:", newPage);
+        console.log("Page: ", page);
+        
+
         setPage(() => newPage);
 
         const params = buildSearchParams({
             selectedFilters: filters,
             categoryId: props.categoryId,
             searchTerm: props.searchTerm,
-            pageIndex: page + 1,
+            pageIndex: newPage + 1,
             itemsPerPage,
             orderBy: sorting
         })

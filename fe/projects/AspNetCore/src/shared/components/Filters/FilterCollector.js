@@ -297,7 +297,7 @@ const FilterCollector = (props) => {
                                         paddingX: "1.5rem",
                                         paddingY: "1rem",
                                         borderRadius: "0.25rem",
-                                        "& .MuiMenuItem-root.Mui-selected, & .MuiMenuItem-root.Mui-selected:hover": {
+                                        "&.MuiMenuItem-root.Mui-selected, &.MuiMenuItem-root.Mui-selected:hover": {
                                             backgroundColor: "whiteBase",
                                             color: "mint.500"
                                         },
