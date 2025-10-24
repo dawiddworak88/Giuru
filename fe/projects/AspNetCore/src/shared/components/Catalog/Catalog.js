@@ -121,11 +121,13 @@ function Catalog(props) {
     const handleFilters = (value) => {
         setFilters(value);
 
+        setPage(0);
+
         const params = buildSearchParams({
             selectedFilters: value,
             categoryId: props.categoryId,
             searchTerm: props.searchTerm,
-            pageIndex: page + 1,
+            pageIndex: 1,
             itemsPerPage,
             orderBy: sorting
         })
