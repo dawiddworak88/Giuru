@@ -78,7 +78,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.ShowAddToCartButton = true;
-            viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
+            viewModel.ItemsPerPage = Constants.DefaultItemsPerPage;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.FilterCollector = new FiltersCollectorViewModel
@@ -104,8 +104,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 componentModel.Language,
                 componentModel.SearchTerm,
                 true,
-                PaginationConstants.DefaultPageIndex,
-                ProductConstants.ProductsCatalogPaginationPageSize,
+                Constants.DefaultPageIndex,
+                Constants.DefaultItemsPerPage,
                 componentModel.Token,
                 SortingConstants.Default);
 

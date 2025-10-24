@@ -3,7 +3,6 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
@@ -26,6 +25,7 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Shared.ViewModels.Filters;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Paginations;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -73,17 +73,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.ShowAddToCartButton = true;
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
-            viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
+            viewModel.ItemsPerPage = Constants.DefaultItemsPerPage;
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
-            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
+            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, Constants.DefaultItemsPerPage);
             viewModel.Filters = componentModel.Filters;
 
             var products = await this.productsService.GetProductsAsync(
                 componentModel.Token,
                 componentModel.Language,
                 null,
-                PaginationConstants.DefaultPageIndex,
-                AvailableProductsConstants.Pagination.ItemsPerPage,
+                Constants.DefaultPageIndex,
+                Constants.DefaultItemsPerPage,
                 "stock",
                 SortingConstants.Default,
                 componentModel.Filters);
@@ -242,7 +242,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                     }
                 };
 
-                viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
+                viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, products.PageSize)
                 {
                     Data = products.Data
                 };
