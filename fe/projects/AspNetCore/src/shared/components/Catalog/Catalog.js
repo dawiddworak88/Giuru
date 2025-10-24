@@ -5,7 +5,6 @@ import LazyLoad from "react-lazyload";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import LazyLoadConstants from "../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../shared/stores/Store";
-import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import { TablePagination, Button } from "@mui/material";
 import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@mui/icons-material";
@@ -47,11 +46,7 @@ function Catalog(props) {
     const handleChangePage = (event, newPage) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        console.log("New page:", newPage);
-        console.log("Page: ", page);
-        
-
-        setPage(() => newPage);
+        setPage(newPage);
 
         const params = buildSearchParams({
             selectedFilters: filters,
@@ -143,11 +138,13 @@ function Catalog(props) {
     const handleSetSorting = (value) => {
         setSorting(value)
 
+        setPage(0);
+
         const params = buildSearchParams({
             selectedFilters: filters,
             categoryId: props.categoryId,
             searchTerm: props.searchTerm,
-            pageIndex: page + 1,
+            pageIndex: 1,
             itemsPerPage,
             orderBy: value
         })
