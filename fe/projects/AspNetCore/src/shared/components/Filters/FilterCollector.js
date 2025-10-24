@@ -156,7 +156,9 @@ const FilterCollector = (props) => {
                                                         borderRadius: "0.5rem",
                                                         paddingX: "2.5rem",
                                                         paddingY: "2rem",
-                                                        width: "20rem"
+                                                        width: "20rem",
+                                                        maxHeight: "16rem",
+                                                        overflowY: "auto"
                                                     }
                                                 }
                                             }}
