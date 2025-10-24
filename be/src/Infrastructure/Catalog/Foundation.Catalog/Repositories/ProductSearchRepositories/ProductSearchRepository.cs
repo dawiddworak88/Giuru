@@ -385,7 +385,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 .Size(itemsPerPage)
                 .Query(q => query)
                 .PostFilter(fq =>
-                    fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) ||
+                    fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) &&
                     fq.Nested(n => n
                         .Path("productAttributes")
                         .Query(nq => nq.Bool(b => b
@@ -500,7 +500,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 .Size(ProductSearchConstants.Pagination.ProductsMaxSize)
                 .Query(q => query)
                 .PostFilter(fq => 
-                    fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) ||
+                    fq.Terms(t => t.Field("categoryName.keyword").Terms(filters.Category)) &&
                     fq.Nested(n => n
                         .Path("productAttributes")
                         .Query(nq => nq.Bool(b => b
