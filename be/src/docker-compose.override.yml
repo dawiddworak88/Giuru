@@ -388,7 +388,7 @@ services:
       - PossibleWidthAttributeKeys=width
       - PossibleDepthAttributeKeys=depth
       - PossibleLengthAttributeKeys=length
-      - PossiblePointsOfLightAttributeKeys=pointsOfLight,PointsOfLight
+      - PossiblePointsOfLightAttributeKeys=theNumberOfLightPoints,TheNumberOfLightPoints
       - PossibleLampshadeTypeAttributeKeys=lampshadeType,LampshadeType
       - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize
       - PossibleLinearLightAttributeKeys=linearLight,LinearLight
@@ -446,7 +446,7 @@ services:
       - PossibleWidthAttributeKeys=width
       - PossibleDepthAttributeKeys=depth
       - PossibleLengthAttributeKeys=length
-      - PossiblePointsOfLightAttributeKeys=pointsOfLight,PointsOfLight
+      - PossiblePointsOfLightAttributeKeys=theNumberOfLightPoints,TheNumberOfLightPoints
       - PossibleLampshadeTypeAttributeKeys=lampshadeType,LampshadeType
       - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize
       - PossibleLinearLightAttributeKeys=linearLight,LinearLight
