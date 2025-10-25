@@ -257,6 +257,11 @@ namespace Ordering.Api.Services
                 orders = orders.Where(x => x.CreatedDate >= model.CreatedDateGreaterThan);
             }
 
+            if (model.OrderStatusId.HasValue)
+            {
+                orders = orders.Where(x => x.OrderStatusId == model.OrderStatusId.Value);
+            }
+
             orders = orders.ApplySort(model.OrderBy);
 
             int pageSize = model.ItemsPerPage ?? Constants.MaxItemsPerPageLimit;
@@ -567,6 +572,11 @@ namespace Ordering.Api.Services
                 orders = orders.Where(x => x.ClientName.ToLower().StartsWith(searchTermLower)
                 || x.OrderItems.Any(y => y.ExternalReference.ToLower().StartsWith(searchTermLower))
                 || x.Id.ToString().ToLower() == searchTermLower);
+            }
+
+            if (model.OrderStatusId.HasValue)
+            {
+                orders = orders.Where(x => x.OrderStatusId == model.OrderStatusId.Value);
             }
 
             orders = orders.ApplySort(model.OrderBy);

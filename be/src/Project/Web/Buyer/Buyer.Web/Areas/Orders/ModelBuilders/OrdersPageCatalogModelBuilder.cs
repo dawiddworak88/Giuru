@@ -7,10 +7,12 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
@@ -49,6 +51,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             viewModel.NewUrl = _linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Status", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.AllLabel = _globalLocalizer.GetString("AllForFilters");
             viewModel.OrderBy = $"{nameof(Order.CreatedDate)} desc";
 
             viewModel.Table = new CatalogTableViewModel
@@ -92,7 +95,22 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await _ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, componentModel.SearchTerm, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
+            var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
+
+            viewModel.OrdersStatuses = orderStatuses.OrEmptyIfNull().Select(os => new ListItemViewModel
+            {
+                Id = os.Id,
+                Name = os.Name
+            });
+
+            viewModel.PagedItems = await _ordersRepository.GetOrdersAsync(
+                componentModel.Token, 
+                componentModel.Language, 
+                componentModel.SearchTerm, 
+                Constants.DefaultPageIndex, 
+                Constants.DefaultItemsPerPage, 
+                $"{nameof(Order.CreatedDate)} desc", 
+                null);
 
             return viewModel;
         }
