@@ -157,7 +157,7 @@ const FilterCollector = (props) => {
                                                         paddingX: "2.5rem",
                                                         paddingY: "2rem",
                                                         width: "20rem",
-                                                        maxHeight: "16rem",
+                                                        maxHeight: "17.25rem",
                                                         overflowY: "auto"
                                                     }
                                                 }

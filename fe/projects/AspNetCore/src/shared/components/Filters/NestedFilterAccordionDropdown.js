@@ -38,6 +38,14 @@ const NestedFilterAccordionDropdown = ({
                 disableGutters
                 square
                 defaultExpanded={expandAsDefault}
+                sx={{
+                    ...(!expandAsDefault && {
+                        borderTop: "1px solid #D5D7D8",
+                        "&&:before": {
+                            display: "none"
+                        }
+                    })
+                }}
             >
                 <AccordionSummary
                     expandIcon={expandAsDefault ? null : <ArrowIcon />}
@@ -186,8 +194,8 @@ const NestedFilterAccordionDropdown = ({
                     sx={{
                         borderTop: "1px solid #D5D7D8",
                         "&&:before": {
-                                                    display: "none"
-                                                }
+                            display: "none"
+                        }
                     }}
                 >
                     <AccordionSummary
