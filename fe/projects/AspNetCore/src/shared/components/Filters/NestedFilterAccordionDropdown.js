@@ -26,6 +26,10 @@ const NestedFilterAccordionDropdown = ({
         setIsPopoverOpen(false);
     };
 
+    const isFilterSelected = (key, value) => {
+        return selectedFilters.find(x => x.key === key && x.value === value) ? true : false
+    }
+
     const Filter = ({
         filterGroup,
         index,
@@ -77,6 +81,7 @@ const NestedFilterAccordionDropdown = ({
                                 key={itemIndex}
                                 control={
                                     <Checkbox
+                                        checked={isFilterSelected(filterGroup.key, item.value)}
                                         icon={<CheckboxIcon />}
                                         checkedIcon={<CheckboxCheckedIcon />}
                                         onChange={() => onChange(filterGroup.key, item.value, `${filterGroup.label} ${item.label}`)}
