@@ -40,7 +40,9 @@ const NestedFilterAccordionDropdown = ({
                 defaultExpanded={expandAsDefault}
                 sx={{
                     ...(!expandAsDefault && {
-                        borderTop: "1px solid #D5D7D8",
+                        border: 1,
+                        borderStyle: "solid",
+                        borderColor: "gray.300",
                         "&&:before": {
                             display: "none"
                         }
@@ -52,7 +54,7 @@ const NestedFilterAccordionDropdown = ({
                     sx={{
                         fontWeight: 700,
                         fontSize: "0.875rem",
-                        color: "#171717",
+                        color: "blackBase",
                         ...(expandAsDefault && {
                             paddingX: 0
                         })
@@ -130,8 +132,8 @@ const NestedFilterAccordionDropdown = ({
                             borderRadius: "0.25rem",
                             paddingX: "1rem",
                             paddingY: "0.25rem",
-                            backgroundColor: "#F7F7F7",
-                            color: "#171717",
+                            backgroundColor: "gray.100",
+                            color: "blackBase",
                             fontWeight: 700,
                             fontSize: "0.75rem",
                             gap: "0.625rem",
@@ -188,11 +190,12 @@ const NestedFilterAccordionDropdown = ({
             ) : (
                 <Accordion
                     elevation={0}
-                    // key={index}
                     disableGutters
                     square
                     sx={{
-                        borderTop: "1px solid #D5D7D8",
+                        border: 1,
+                        borderStyle: "solid",
+                        borderColor: "gray.300",
                         "&&:before": {
                             display: "none"
                         }
@@ -204,7 +207,7 @@ const NestedFilterAccordionDropdown = ({
                             paddingY: "1rem",
                             fontWeight: 700,
                             fontSize: "0.875rem",
-                            color: "#171717",
+                            color: "blackBase",
                             lineHeight: "1.5rem",
                             letterSpacing: "0.14px"
                         }}

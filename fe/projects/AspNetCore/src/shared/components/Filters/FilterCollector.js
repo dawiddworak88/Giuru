@@ -74,7 +74,7 @@ const FilterCollector = (props) => {
                                 fontSize: "0.875rem",
                                 fontWeight: 400,
                                 lineHeight: "1.5rem",
-                                color: "#7C8693"
+                                color: "black.300"
                             }}
                         >
                             {props.total} {props.resultsLabel}
@@ -482,7 +482,9 @@ const FilterCollector = (props) => {
                                         disableGutters
                                         square
                                         sx={{
-                                            borderTop: "1px solid #D5D7D8",
+                                            border: 1,
+                                            borderStyle: "solid",
+                                            borderColor: "gray.300",
                                             "&&:before": {
                                                 display: "none"
                                             }
