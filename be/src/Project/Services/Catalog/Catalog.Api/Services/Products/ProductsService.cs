@@ -20,6 +20,7 @@ using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Catalog.Repositories.ProductIndexingRepositories;
+using Foundation.Search.Paginations;
 
 namespace Catalog.Api.Services.Products
 {
@@ -555,6 +556,42 @@ namespace Catalog.Api.Services.Products
             }
 
             return productFiles.PagedIndex(new Pagination(productFiles.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+        }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFilters(SearchProductsServiceModel model)
+        {
+            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.OrganisationId, model.PageIndex, model.ItemsPerPage, model.Source, model.OrderBy, model.Filters, model.IsSeller);
+
+            var pageResullt = new PagedResults<IEnumerable<ProductSearchModel>>(searchResults.Total, searchResults.PageSize)
+            {
+                Data = searchResults.Data
+            };
+
+            var mappedPage = await MapToPageResultsAsync(pageResullt, model.Language, model.OrganisationId, model.IsSeller);
+
+            return new PagedResultsWithFilters<IEnumerable<ProductServiceModel>>(searchResults.Total, searchResults.PageSize)
+            {
+                Data = mappedPage.Data,
+                Filters = searchResults.Filters
+            };
+        }
+
+        public async Task<PagedResultsWithFilters<IEnumerable<ProductServiceModel>>> GetPagedResultsWithFiltersByIds(SearchProductsByIdsServiceModel model)
+        {
+            var searchResults = await _productSearchRepository.GetPagedResultsWithFilters(model.Language, model.Ids, model.OrganisationId, model.OrderBy, model.Filters, model.IsSeller);
+
+            var pageResullt = new PagedResults<IEnumerable<ProductSearchModel>>(searchResults.Total, searchResults.PageSize)
+            {
+                Data = searchResults.Data
+            };
+
+            var mappedPage = await MapToPageResultsAsync(pageResullt, model.Language, model.OrganisationId, model.IsSeller);
+
+            return new PagedResultsWithFilters<IEnumerable<ProductServiceModel>>(searchResults.Total, searchResults.PageSize)
+            {
+                Data = mappedPage.Data,
+                Filters = searchResults.Filters
+            };
         }
     }
 }

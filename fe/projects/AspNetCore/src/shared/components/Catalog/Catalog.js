@@ -5,7 +5,6 @@ import LazyLoad from "react-lazyload";
 import ResponsiveImage from "../../../shared/components/Picture/ResponsiveImage";
 import LazyLoadConstants from "../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../shared/stores/Store";
-import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
 import { TablePagination, Button } from "@mui/material";
 import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@mui/icons-material";
@@ -29,6 +28,10 @@ function Catalog(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [sorting, setSorting] = useState(props.filterCollector && props.filterCollector.sortItems.length > 0 ? SortingConstants.defaultKey() : "");
+    const [filters, setFilters] = useState(props.filters 
+        ? Object.entries(props.filters)
+            .flatMap(([key, arr]) => (arr || []).map(v => ({ key, value: v, label: v }))) 
+        : []);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -43,24 +46,18 @@ function Catalog(props) {
     const handleChangePage = (event, newPage) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        setPage(() => newPage);
+        setPage(newPage);
 
-        let searchParameters = {
+        const params = buildSearchParams({
+            selectedFilters: filters,
             categoryId: props.categoryId,
-            brandId: props.brandId,
+            searchTerm: props.searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage,
             orderBy: sorting
-        };
-
-        if (props.searchTerm != null) {
-            searchParameters = {
-                ...searchParameters,
-                searchTerm: props.searchTerm
-            }
-        }
-
-        fetchData(searchParameters);
+        })
+        
+        fetchData(params);
     };
 
     const handleModal = (item) => {
@@ -121,34 +118,49 @@ function Catalog(props) {
         })
     };
 
-    const handleSetSorting = (value) => {
-        setSorting(value)
-        
-        let searchParameters = {
+    const handleFilters = (value) => {
+        setFilters(value);
+
+        setPage(0);
+
+        const params = buildSearchParams({
+            selectedFilters: value,
             categoryId: props.categoryId,
-            brandId: props.brandId,
-            pageIndex: page + 1,
+            searchTerm: props.searchTerm,
+            pageIndex: 1,
             itemsPerPage,
-            orderBy: value
-        };
+            orderBy: sorting
+        })
+        
+        applyUrlFromParams(value, props.searchTerm);
 
-        if (props.searchTerm != null) {
-            searchParameters = {
-                ...searchParameters,
-                searchTerm: props.searchTerm
-            }
-        }
-
-        fetchData(searchParameters);
+        fetchData(params);
     }
 
-    const fetchData = (searchParameters) => {
+    const handleSetSorting = (value) => {
+        setSorting(value)
+
+        setPage(0);
+
+        const params = buildSearchParams({
+            selectedFilters: filters,
+            categoryId: props.categoryId,
+            searchTerm: props.searchTerm,
+            pageIndex: 1,
+            itemsPerPage,
+            orderBy: value
+        })
+        
+        fetchData(params);
+    }
+
+    const fetchData = (params) => {
         const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
-        const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+        const url = `${props.productsApiUrl}?${params.toString()}`;
 
         return fetch(url, requestOptions)
             .then(function (response) {
@@ -158,10 +170,7 @@ function Catalog(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
-
-                        setItems(() => []);
                         setItems(() => jsonResponse.data);
                         setTotal(() => jsonResponse.total);
                     }
@@ -175,6 +184,65 @@ function Catalog(props) {
             });
     }
 
+    const buildSearchParams = ({
+        searchTerm,
+        selectedFilters = [],
+        categoryId,
+        pageIndex,
+        itemsPerPage,
+        orderBy
+    }) => {
+        const params = new URLSearchParams();
+
+        if (searchTerm?.trim()) params.set("searchTerm", searchTerm.trim());
+        if (categoryId != null) params.set("categoryId", categoryId);
+        if (pageIndex != null) params.set("pageIndex", pageIndex);
+        if (itemsPerPage != null) params.set("itemsPerPage", itemsPerPage);
+        if (orderBy != null) params.set("orderBy", orderBy);
+
+        appendFilterParams(params, selectedFilters);
+
+        return params;
+    }
+
+    const appendFilterParams = (params, selectedFilters) => {
+        if (!Array.isArray(selectedFilters) || selectedFilters.length === 0) return;
+
+        const grouped = selectedFilters.reduce((acc, f) => {
+            if (!f?.key || !f?.value) return acc;
+            (acc[f.key] ||= []).push(f.value);
+            return acc;
+        }, {});
+
+        Object.entries(grouped).forEach(([key, values]) => {
+            values.forEach(v => params.append(`search[${key}]`, v));
+        });
+    };
+
+    const buildFilterUrlParams = (selectedFilters, searchTerm) => {
+        const params = new URLSearchParams();
+
+        if (searchTerm?.trim()) {
+            params.set("searchTerm", searchTerm.trim());
+        }
+
+        appendFilterParams(params, selectedFilters);
+
+        return params;
+    };
+
+    const applyUrlFromParams = (filters, searchTerm, push = true) => {
+        const basePath = window.location.pathname;
+        const params = buildFilterUrlParams(filters, searchTerm);
+        const query = params.toString();
+        const newUrl = query ? `${basePath}?${query}` : basePath;
+
+        const fn = push ? window.history.pushState : window.history.replaceState;
+        fn.call(window.history, null, "", newUrl);
+
+        return newUrl;
+    };
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -184,9 +252,10 @@ function Catalog(props) {
                         {...props.filterCollector}
                         total={total}
                         resultsLabel={props.resultsLabel}
-                        filters={[]}
+                        filters={filters}
                         sorting={sorting}
                         setSorting={handleSetSorting}
+                        setFilters={handleFilters}
                     />
                 </div>
                 {items && items.length > 0 ? (

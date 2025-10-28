@@ -5,6 +5,8 @@ using Buyer.Web.Shared.Definitions.Middlewares;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Search.Binders;
+using Foundation.Search.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,7 +25,9 @@ namespace Buyer.Web.Areas.Products.Controllers
             this.searchProductsPageModelBuilder = searchProductsPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(string searchTerm)
+        public async Task<IActionResult> Index(
+            string searchTerm,
+            [ModelBinder(BinderType = typeof(SearchQueryFiltersBinder))] QueryFilters filters)
         {
             var componentModel = new SearchProductsComponentModel
             {
@@ -39,7 +43,8 @@ namespace Buyer.Web.Areas.Products.Controllers
                 ExtraPacking = this.User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                 PaletteLoading = this.User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                 Country = this.User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                Filters = filters ?? new QueryFilters()
             };
 
             var viewModel = await this.searchProductsPageModelBuilder.BuildModelAsync(componentModel);

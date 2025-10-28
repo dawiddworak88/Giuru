@@ -10,12 +10,9 @@ using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Filters;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
-using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Buyer.Web.Shared.Services.Prices;
-using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -81,7 +78,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.Sidebar = await _sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.Modal = await _modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.ShowAddToCartButton = true;
-            viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
+            viewModel.ItemsPerPage = Constants.DefaultItemsPerPage;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.FilterCollector = new FiltersCollectorViewModel
@@ -98,6 +95,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
                     }
             };
+            viewModel.Filters = componentModel.Filters;
 
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -106,8 +104,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 componentModel.Language,
                 componentModel.SearchTerm,
                 true,
-                PaginationConstants.DefaultPageIndex,
-                ProductConstants.ProductsCatalogPaginationPageSize,
+                Constants.DefaultPageIndex,
+                Constants.DefaultItemsPerPage,
                 componentModel.Token,
                 SortingConstants.Default);
 

@@ -831,4 +831,22 @@
   <data name="Location" xml:space="preserve">
     <value>Standort</value>
   </data>
+  <data name="Color" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="Depth" xml:space="preserve">
+    <value>Tiefe</value>
+  </data>
+  <data name="Dimensions" xml:space="preserve">
+    <value>Maße</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Höhe</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Breite</value>
+  </data>
+  <data name="AllForFilters" xml:space="preserve">
+    <value>Alle</value>
+  </data>
 </root>

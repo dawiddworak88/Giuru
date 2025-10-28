@@ -4,7 +4,7 @@ namespace Foundation.GenericRepository.Paginations
 {
     public class PagedResults<T>
     { 
-        private PagedResults()
+        protected PagedResults()
         { }
 
         public PagedResults(long total, int pageSize)

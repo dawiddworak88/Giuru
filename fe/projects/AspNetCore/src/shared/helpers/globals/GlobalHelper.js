@@ -5,16 +5,9 @@ export default class GlobalHelper {
 
   static initMuiTheme(locale) {
 
-    const disableRipple = {
-      defaultProps: {
-        disableRipple: true,
-        disableFocusRipple: true,
-        disableTouchRipple: true
-      }
-    }
-
     var themeDefinition = {
       typography: {
+        fontFamily: "Nunito Sans",
         body1: {
           fontFamily: "Nunito Sans"
         },
@@ -28,21 +21,24 @@ export default class GlobalHelper {
         },
         secondary: {
           main: "#1B5A6E"
-        }
-      },
-      components: {
-        MuiMenu: {
-          styleOverrides: {
-            paper: {
-              marginTop: 16,
-              borderRadius: 8
-            }
-          }
         },
-        MuiButton: { ...disableRipple },
-        MuiCheckbox: { ...disableRipple },
-        MuiMenuItem: { ...disableRipple }
-      },
+        mint: {
+          300: "#386876",
+          400: "#1F5565",
+          500: "#064254"
+        },
+        gray: {
+          100: "#F7F7F7",
+          200: "#EBECED",
+          300: "#D5D7D8"
+        },
+        black: {
+          100: "#F8F9FC",
+          300: "#7C8693"
+        },
+        whiteBase: "#FFFFFF",
+        blackBase: "#171717"
+      }
     };
 
     if (locale) {

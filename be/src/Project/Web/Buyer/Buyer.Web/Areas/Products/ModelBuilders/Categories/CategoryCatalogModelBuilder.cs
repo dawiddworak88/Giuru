@@ -64,10 +64,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                     componentModel.Language,
                     componentModel.SearchTerm,
                     false,
-                    PaginationConstants.DefaultPageIndex,
-                    ProductConstants.ProductsCatalogPaginationPageSize,
+                    Constants.DefaultPageIndex,
+                    Constants.DefaultItemsPerPage,
                     componentModel.Token,
                     SortingConstants.Default);
+
                 viewModel.FilterCollector = new FiltersCollectorViewModel
                 {
                     AllFilters = _productLocalizer.GetString("AllFilters"),

@@ -3,7 +3,6 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
@@ -23,9 +22,10 @@ using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
-using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Shared.ViewModels.Filters;
 using Foundation.GenericRepository.Definitions;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Paginations;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -73,123 +73,179 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.ShowAddToCartButton = true;
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
-            viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
+            viewModel.ItemsPerPage = Constants.DefaultItemsPerPage;
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
-            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
+            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, Constants.DefaultItemsPerPage);
+            viewModel.Filters = componentModel.Filters;
 
-            var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
-                componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
+            var products = await this.productsService.GetProductsAsync(
+                componentModel.Token,
+                componentModel.Language,
+                null,
+                Constants.DefaultPageIndex,
+                Constants.DefaultItemsPerPage,
+                "stock",
+                SortingConstants.Default,
+                componentModel.Filters);
 
-            var outletItems = await this.outletRepository.GetOutletProductsAsync(
-                componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
-
-            if (inventories?.Data is not null && inventories.Data.Any())
+            if (products.Data.OrEmptyIfNull().Any())
             {
-                var products = await this.productsService.GetProductsAsync(
-                    inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
-                    null, false, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token, SortingConstants.Default);
+                var inventories = await this.inventoryRepository.GetAvailbleProductsByProductIdsAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    products.Data.Select(x => x.Id));
 
-                if (products is not null)
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
-                    var prices = Enumerable.Empty<Price>();
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        products.Data.Select(x => new PriceProduct
+                        {
+                            PrimarySku = x.PrimaryProductSku,
+                            FabricsGroup = x.FabricsGroup,
+                            SleepAreaSize = x.SleepAreaSize,
+                            ExtraPacking = x.ExtraPacking,
+                            PaletteSize = x.PaletteSize,
+                            Size = x.Size,
+                            PointsOfLight = x.PointsOfLight,
+                            LampshadeType = x.LampshadeType,
+                            LampshadeSize = x.LampshadeSize,
+                            LinearLight = x.LinearLight,
+                            Mirror = x.Mirror,
+                            Shape = x.Shape,
+                            PrimaryColor = x.PrimaryColor,
+                            SecondaryColor = x.SecondaryColor,
+                            ShelfType = x.ShelfType
+                        }),
+                        new PriceClient
+                        {
+                            Id = componentModel.ClientId,
+                            Name = componentModel.Name,
+                            CurrencyCode = componentModel.CurrencyCode,
+                            ExtraPacking = componentModel.ExtraPacking,
+                            PaletteLoading = componentModel.PaletteLoading,
+                            Country = componentModel.Country,
+                            DeliveryZipCode = componentModel.DeliveryZipCode
+                        });
+                }
 
-                    if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                for (int i = 0; i < products.Data.Count(); i++)
+                {
+                    var product = products.Data.ElementAtOrDefault(i);
+
+                    if (product is null)
                     {
-                        prices = await _priceService.GetPrices(
-                            _options.Value.GrulaAccessToken,
-                            DateTime.UtcNow,
-                            products.Data.Select(x => new PriceProduct
-                            {
-                                PrimarySku = x.PrimaryProductSku,
-                                FabricsGroup = x.FabricsGroup,
-                                SleepAreaSize = x.SleepAreaSize,
-                                ExtraPacking = x.ExtraPacking,
-                                PaletteSize = x.PaletteSize,
-                                Size = x.Size,
-                                PointsOfLight = x.PointsOfLight,
-                                LampshadeType = x.LampshadeType,
-                                LampshadeSize = x.LampshadeSize,
-                                LinearLight = x.LinearLight,
-                                Mirror = x.Mirror,
-                                Shape = x.Shape,
-                                PrimaryColor = x.PrimaryColor,
-                                SecondaryColor = x.SecondaryColor,
-                                ShelfType = x.ShelfType
-                            }),
-                            new PriceClient
-                            {
-                                Id = componentModel.ClientId,
-                                Name = componentModel.Name,
-                                CurrencyCode = componentModel.CurrencyCode,
-                                ExtraPacking = componentModel.ExtraPacking,
-                                PaletteLoading = componentModel.PaletteLoading,
-                                Country = componentModel.Country,
-                                DeliveryZipCode = componentModel.DeliveryZipCode
-                            });
+                        continue;
                     }
 
-                    for (int i = 0; i < products.Data.Count(); i++)
+                    var availableStockQuantity = inventories.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+
+                    if (availableStockQuantity > 0)
                     {
-                        var product = products.Data.ElementAtOrDefault(i);
+                        product.AvailableQuantity = availableStockQuantity;
+                        product.CanOrder = true;
+                        product.InStock = true;
+                    }
 
-                        if (product is null)
+                    if (prices.Any())
+                    {
+                        var price = prices.ElementAtOrDefault(i);
+
+                        if (price is not null)
                         {
-                            continue;
-                        }
-
-                        var availableStockQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
-
-                        if (availableStockQuantity > 0)
-                        {
-                            product.AvailableQuantity = availableStockQuantity;
-                            product.CanOrder = true;
-                            product.InStock = true;
-                            product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
-                        }
-
-                        var availableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
-
-                        if (availableOutletQuantity > 0)
-                        {
-                            product.AvailableOutletQuantity = availableOutletQuantity;
-                            product.InOutlet = true;
-                        }
-
-                        if (prices.Any())
-                        {
-                            var price = prices.ElementAtOrDefault(i);
-
-                            if (price is not null)
+                            product.Price = new ProductPriceViewModel
                             {
-                                product.Price = new ProductPriceViewModel
+                                Current = price.CurrentPrice,
+                                Currency = price.CurrencyCode
+                            };
+                        }
+                    }
+                }
+
+                viewModel.FilterCollector = new FiltersCollectorViewModel
+                {
+                    AllFilters = _productLocalizer.GetString("AllFilters"),
+                    SortLabel = _productLocalizer.GetString("SortLabel"),
+                    ClearAllFilters = _productLocalizer.GetString("ClearAllFilters"),
+                    SeeResult = _productLocalizer.GetString("SeeResult"),
+                    FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
+                    SortItems = new List<SortItemViewModel>
+                    {
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                    },
+                    FilterInputs = new List<FilterViewModel>
+                    {
+                        new SingleFilterViewModel
+                        {
+                            Key = "category",
+                            Label = this.globalLocalizer.GetString("Category"),
+                            Items = products.Filters.FirstOrDefault(x => x.Name == "category").Values.Select(x => new FilterItemViewModel
+                            {
+                                Label = x,
+                                Value = x
+                            })
+                        },
+                        new SingleFilterViewModel
+                        {
+                            Key = "color",
+                            Label = this.globalLocalizer.GetString("Color"),
+                            Items = products.Filters.FirstOrDefault(x => x.Name == "color").Values.Select(x => new FilterItemViewModel
+                            {
+                                Label = x,
+                                Value = x
+                            })
+                        },
+                        new NestedFilterViewModel
+                        {
+                            Key = "dimensions",
+                            Label = this.globalLocalizer.GetString("Dimensions"),
+                            IsNested = true,
+                            Items = new List<NestedFilterItemViewModel>
+                            {
+                                new NestedFilterItemViewModel
                                 {
-                                    Current = price.CurrentPrice,
-                                    Currency = price.CurrencyCode
-                                };
+                                    Label = this.globalLocalizer.GetString("Height"),
+                                    Key = "height",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Width"),
+                                    Key = "width",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Depth"),
+                                    Key = "depth",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
                             }
                         }
                     }
+                };
 
-                    viewModel.FilterCollector = new FiltersCollectorViewModel
-                    {
-                        AllFilters = _productLocalizer.GetString("AllFilters"),
-                        SortLabel = _productLocalizer.GetString("SortLabel"),
-                        ClearAllFilters = _productLocalizer.GetString("ClearAllFilters"),
-                        SeeResult = _productLocalizer.GetString("SeeResult"),
-                        FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
-                        SortItems = new List<SortItemViewModel>
-                        {
-                            new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
-                            new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
-                            new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
-                        }
-                    };
-
-                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
-                    {
-                        Data = products.Data
-                    };
-                }
+                viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, products.PageSize)
+                {
+                    Data = products.Data
+                };
             }
 
             return viewModel;

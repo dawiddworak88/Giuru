@@ -75,99 +75,95 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             viewModel.ShowAddToCartButton = true;
             viewModel.Title = this.globalLocalizer.GetString("Outlet");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletApi", new { Area = "Products" });
-            viewModel.ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage;
-            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
+            viewModel.ItemsPerPage = Constants.DefaultItemsPerPage;
+            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, Constants.DefaultItemsPerPage);
             viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.IsDefaultOutletOrder = true;
+            viewModel.Filters = componentModel.Filters;
 
-            var outletItems = await this.outletRepository.GetOutletProductsAsync(
-                componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
+            var products = await this.productsService.GetProductsAsync(
+                componentModel.Token,
+                componentModel.Language,
+                null,
+                Constants.DefaultPageIndex,
+                Constants.DefaultItemsPerPage,
+                "outlet",
+                SortingConstants.Default,
+                componentModel.Filters);
 
-            var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
-                componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
-
-            if (outletItems?.Data is not null && outletItems.Data.Any())
+            if (products.Data.OrEmptyIfNull().Any())
             {
-                var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId), null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token, SortingConstants.Default);
+                var outletItems = await this.outletRepository.GetOutletProductsByProductsIdAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    products.Data.Select(x => x.Id));
 
-                if (products is not null)
+                var prices = Enumerable.Empty<Price>();
+
+                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
-                    var prices = Enumerable.Empty<Price>();
+                    prices = await _priceService.GetPrices(
+                        _options.Value.GrulaAccessToken,
+                        DateTime.UtcNow,
+                        products.Data.Select(x => new PriceProduct
+                        {
+                            PrimarySku = x.PrimaryProductSku,
+                            FabricsGroup = x.FabricsGroup,
+                            SleepAreaSize = x.SleepAreaSize,
+                            ExtraPacking = x.ExtraPacking,
+                            PaletteSize = x.PaletteSize,
+                            Size = x.Size,
+                            PointsOfLight = x.PointsOfLight,
+                            LampshadeType = x.LampshadeType,
+                            LampshadeSize = x.LampshadeSize,
+                            LinearLight = x.LinearLight,
+                            Mirror = x.Mirror,
+                            Shape = x.Shape,
+                            PrimaryColor = x.PrimaryColor,
+                            SecondaryColor = x.SecondaryColor,
+                            ShelfType = x.ShelfType,
+                            IsOutlet = (outletItems.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
+                        }),
+                        new PriceClient
+                        {
+                            Id = componentModel.ClientId,
+                            Name = componentModel.Name,
+                            CurrencyCode = componentModel.CurrencyCode,
+                            ExtraPacking = componentModel.ExtraPacking,
+                            PaletteLoading = componentModel.PaletteLoading,
+                            Country = componentModel.Country,
+                            DeliveryZipCode = componentModel.DeliveryZipCode
+                        });
+                }
 
-                    if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                for (int i = 0; i < products.Data.Count(); i++)
+                {
+                    var product = products.Data.ElementAtOrDefault(i);
+
+                    if (product is null)
                     {
-                        prices = await _priceService.GetPrices(
-                            _options.Value.GrulaAccessToken,
-                            DateTime.UtcNow,
-                            products.Data.Select(x => new PriceProduct
-                            {
-                                PrimarySku = x.PrimaryProductSku,
-                                FabricsGroup = x.FabricsGroup,
-                                SleepAreaSize = x.SleepAreaSize,
-                                ExtraPacking = x.ExtraPacking,
-                                PaletteSize = x.PaletteSize,
-                                Size = x.Size,
-                                PointsOfLight = x.PointsOfLight,
-                                LampshadeType = x.LampshadeType,
-                                LampshadeSize = x.LampshadeSize,
-                                LinearLight = x.LinearLight,
-                                Mirror = x.Mirror,
-                                Shape = x.Shape,
-                                PrimaryColor = x.PrimaryColor,
-                                SecondaryColor = x.SecondaryColor,
-                                ShelfType = x.ShelfType,
-                                IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
-                            }),
-                            new PriceClient
-                            {
-                                Id = componentModel.ClientId,
-                                Name = componentModel.Name,
-                                CurrencyCode = componentModel.CurrencyCode,
-                                ExtraPacking = componentModel.ExtraPacking,
-                                PaletteLoading = componentModel.PaletteLoading,
-                                Country = componentModel.Country,
-                                DeliveryZipCode = componentModel.DeliveryZipCode
-                            });
+                        continue;
                     }
 
-                    for (int i = 0; i < products.Data.Count(); i++)
+                    var availableOutletQuantity = outletItems.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+
+                    if (availableOutletQuantity > 0)
                     {
-                        var product = products.Data.ElementAtOrDefault(i);
+                        product.AvailableOutletQuantity = availableOutletQuantity;
+                        product.CanOrder = true;
+                        product.InOutlet = true;
+                    }
 
-                        if (product is null)
-                        {
-                            continue;
-                        }
-
-                        var availableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
-
-                        if (availableOutletQuantity > 0)
-                        {
-                            product.AvailableOutletQuantity = availableOutletQuantity;
-                            product.CanOrder = true;
-                            product.InOutlet = true;
-                        }
-
-                        product.OutletTitle = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Title;
-                        product.OutletDescription = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Description;
-
-                        var availableStockQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
-
-                        if (availableStockQuantity > 0)
-                        {
-                            product.AvailableQuantity = availableStockQuantity;
-                            product.InStock = true;
-                        }
-
+                    if (prices.Any())
+                    {
                         var price = prices.ElementAtOrDefault(i);
 
                         if (price is not null)
                         {
                             product.Price = new ProductPriceViewModel
                             {
-                                Currency = price.CurrencyCode,
-                                Current = price.CurrentPrice
+                                Current = price.CurrentPrice,
+                                Currency = price.CurrencyCode
                             };
                         }
                     }
@@ -181,14 +177,76 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                     SeeResult = _productLocalizer.GetString("SeeResult"),
                     FiltersLabel = _productLocalizer.GetString("FiltersLabel"),
                     SortItems = new List<SortItemViewModel>
+                    {
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
+                        new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                    },
+                    FilterInputs = new List<FilterViewModel>
+                    {
+                        new SingleFilterViewModel
                         {
-                            new SortItemViewModel { Label = _productLocalizer.GetString("SortDefault"), Key = SortingConstants.Default },
-                            new SortItemViewModel { Label = _productLocalizer.GetString("SortNewest"), Key = SortingConstants.Newest },
-                            new SortItemViewModel { Label = _productLocalizer.GetString("SortName"), Key = SortingConstants.Name }
+                            Key = "category",
+                            Label = this.globalLocalizer.GetString("Category"),
+                            Items = products.Filters.FirstOrDefault(x => x.Name == "category").Values.Select(x => new FilterItemViewModel
+                            {
+                                Label = x,
+                                Value = x
+                            })
+                        },
+                        new SingleFilterViewModel
+                        {
+                            Key = "color",
+                            Label = this.globalLocalizer.GetString("Color"),
+                            Items = products.Filters.FirstOrDefault(x => x.Name == "color").Values.Select(x => new FilterItemViewModel
+                            {
+                                Label = x,
+                                Value = x
+                            })
+                        },
+                        new NestedFilterViewModel
+                        {
+                            Key = "dimensions",
+                            Label = this.globalLocalizer.GetString("Dimensions"),
+                            IsNested = true,
+                            Items = new List<NestedFilterItemViewModel>
+                            {
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Height"),
+                                    Key = "height",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "height")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Width"),
+                                    Key = "width",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "width")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                                new NestedFilterItemViewModel
+                                {
+                                    Label = this.globalLocalizer.GetString("Depth"),
+                                    Key = "depth",
+                                    Items = products.Filters.FirstOrDefault(x => x.Name == "depth")?.Values.Select(x => new FilterItemViewModel
+                                    {
+                                        Label = x,
+                                        Value = x
+                                    })
+                                },
+                            }
                         }
+                    }
                 };
 
-                viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, OutletConstants.Catalog.DefaultItemsPerPage)
+                viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, products.PageSize)
                 {
                     Data = products.Data
                 };

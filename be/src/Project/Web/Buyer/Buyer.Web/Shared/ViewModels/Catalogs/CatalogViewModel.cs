@@ -4,6 +4,7 @@ using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Search.Models;
 using System;
 using System.Collections.Generic;
 
@@ -37,6 +38,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public FiltersCollectorViewModel FilterCollector { get; set; }
+        public QueryFilters Filters { get; set; }
         public string GetProductPriceUrl { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
