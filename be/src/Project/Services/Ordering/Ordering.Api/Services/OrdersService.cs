@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Index.HPRtree;
 using Newtonsoft.Json;
 using Ordering.Api.Configurations;
 using Ordering.Api.Definitions;
@@ -28,6 +29,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Ordering.Api.Services
 {
@@ -792,59 +794,101 @@ namespace Ordering.Api.Services
             };
         }
 
-        public async Task SyncOrderLinesStatusesAsync(UpdateOrderLinesStatusesServiceModel model)
+        public async Task<IEnumerable<OrderLineUpdatedStatusServiceModel>> SyncOrderLinesStatusesAsync(UpdateOrderLinesStatusesServiceModel model)
         {
-            foreach (var item in model.OrderItems.OrEmptyIfNull())
+            var syncResults = new List<OrderLineUpdatedStatusServiceModel>();
+
+            var syncBatches = model.OrderItems
+                .OrEmptyIfNull()
+                .GroupBy(x => x.Id);
+
+            var orderStatuses = await _context.OrderStatuses
+                .AsNoTracking()
+                .Where(x => x.IsActive)
+                .ToListAsync();
+
+            foreach (var syncBatchItem in syncBatches)
             {
-                var orderItem = await _context.OrderItems.Where(x => x.OrderId == item.Id && x.IsActive).Skip(item.OrderLineIndex - 1).FirstOrDefaultAsync();
+                var orderId = syncBatchItem.Key;
 
-                if (orderItem is not null)
+                await using var tx = await _context.Database.BeginTransactionAsync();
+
+                foreach (var item in syncBatchItem)
                 {
-                    var newOrderItemStatus = await _context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == item.StatusId && x.IsActive);
+                    var orderItem = await _context.OrderItems
+                        .Where(x => x.OrderId == item.Id && x.IsActive)
+                        .Skip(item.OrderLineIndex - 1)
+                        .FirstOrDefaultAsync();
 
-                    if (newOrderItemStatus is not null)
+                    if (orderItem is null) 
+                        continue;
+
+                    Guid? prevStatusId = null, prevStateId = null;
+
+                    if (orderItem.LastOrderItemStatusChangeId.HasValue)
                     {
-                        if (newOrderItemStatus.Id == OrderStatusesConstants.NewId)
-                        {
-                            _logger.LogError($"OrdersService New item: {JsonConvert.SerializeObject(item)}");
-                            _logger.LogError($"OrdersService New orderItem: {JsonConvert.SerializeObject(orderItem)}");
-                            _logger.LogError($"OrdersService New newOrderItemStatus: {JsonConvert.SerializeObject(newOrderItemStatus)}");
-                        }
+                        var lastOrderItemStatus = await _context.OrderItemStatusChanges
+                            .FirstOrDefaultAsync(x => x.Id == orderItem.LastOrderItemStatusChangeId && x.IsActive);
 
-                        var orderItemStatusChange = new OrderItemStatusChange
+                        if (lastOrderItemStatus is not null)
                         {
-                            OrderItemId = orderItem.Id,
-                            OrderItemStateId = newOrderItemStatus.OrderStateId,
-                            OrderItemStatusId = newOrderItemStatus.Id
+                            prevStatusId = lastOrderItemStatus.OrderItemStatusId;
+                            prevStateId = lastOrderItemStatus.OrderItemStateId;
+                        }
+                    }
+
+                    var newOrderItemStatus = orderStatuses
+                        .FirstOrDefault(x => x.Id == item.StatusId && x.IsActive);
+
+                    if (newOrderItemStatus is null) 
+                        continue;
+
+                    if (prevStatusId == newOrderItemStatus.Id) 
+                        continue;
+
+                    var orderStatusChange = new OrderItemStatusChange
+                    {
+                        OrderItemId = orderItem.Id,
+                        OrderItemStateId = newOrderItemStatus.OrderStateId,
+                        OrderItemStatusId = newOrderItemStatus.Id
+                    };
+
+                    await _context.OrderItemStatusChanges.AddAsync(orderStatusChange.FillCommonProperties());
+
+                    orderItem.LastOrderItemStatusChangeId = orderStatusChange.Id;
+                    orderItem.LastModifiedDate = DateTime.UtcNow;
+
+                    foreach (var commentItem in item.CommentTranslations.OrEmptyIfNull().Where(x => !string.IsNullOrWhiteSpace(x.Text)))
+                    {
+                        var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
+                        {
+                            OrderItemStatusChangeComment = commentItem.Text,
+                            Language = commentItem.Language,
+                            OrderItemStatusChangeId = orderStatusChange.Id
                         };
 
-                        await _context.OrderItemStatusChanges.AddAsync(orderItemStatusChange.FillCommonProperties());
-
-                        await _context.SaveChangesAsync();
-
-                        orderItem.LastOrderItemStatusChangeId = orderItemStatusChange.Id;
-                        orderItem.LastModifiedDate = DateTime.UtcNow;
-
-                        await _context.SaveChangesAsync();
-
-                        foreach (var commentItem in item.CommentTranslations.OrEmptyIfNull().Where(x => string.IsNullOrWhiteSpace(x.Text) is false))
-                        {
-                            var orderItemStatusChangeTranslation = new OrderItemStatusChangeCommentTranslation
-                            {
-                                OrderItemStatusChangeComment = commentItem.Text,
-                                Language = commentItem.Language,
-                                OrderItemStatusChangeId = orderItemStatusChange.Id
-                            };
-
-                            await _context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
-
-                            await _context.SaveChangesAsync();
-                        }
-
-                        await MapStatusesToOrderStatusId(orderItem.OrderId);
+                        await _context.OrderItemStatusChangesCommentTranslations.AddAsync(orderItemStatusChangeTranslation.FillCommonProperties());
                     }
+
+                    syncResults.Add(new OrderLineUpdatedStatusServiceModel
+                    {
+                        OrderId = orderItem.OrderId,
+                        OrderLineIndex = item.OrderLineIndex,
+                        PreviousStatusId = prevStatusId,
+                        PreviousStateId = prevStateId,
+                        NewStatusId = newOrderItemStatus.Id,
+                        NewStateId = newOrderItemStatus.OrderStateId,
+                    });
                 }
-            };
+
+                await _context.SaveChangesAsync();
+
+                await MapStatusesToOrderStatusId(orderId);
+
+                await tx.CommitAsync();
+            }
+
+            return syncResults;
         }
 
         public async Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model)
