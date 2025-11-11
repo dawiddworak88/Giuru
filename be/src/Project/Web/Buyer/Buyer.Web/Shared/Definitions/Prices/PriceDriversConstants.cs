@@ -23,5 +23,6 @@
         public const string PrimaryColorDriver = "Primary Color";
         public const string SecondaryColorDriver = "Secondary Color";
         public const string ShelfTypeDriver = "Shelf Type";
+        public const string StockDriver = "Stock";
     }
 }

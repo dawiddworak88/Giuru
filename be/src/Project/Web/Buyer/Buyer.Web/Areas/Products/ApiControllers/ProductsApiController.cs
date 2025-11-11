@@ -171,7 +171,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                        IsStock = (availableProducts.FirstOrDefault(inv => inv.ProductSku == x.Sku)?.AvailableQuantity > 0).ToYesOrNo()
                     });
 
                     prices = await _priceService.GetPrices(
@@ -372,7 +373,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                        IsStock = (inventories.FirstOrDefault(inv => inv.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                     });
 
                     prices = await _priceService.GetPrices(
@@ -476,7 +478,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                        IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
+                        IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo(),
+                        IsStock = ((await _inventoryRepository.GetAvailbleProductBySkuAsync(token, language, sku))?.AvailableQuantity > 0).ToYesOrNo()
                     },
                     new PriceClient
                     {

@@ -54,7 +54,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     MoreInfo = x.MoreInfo,
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
-                    Currency = x.Currency
+                    Currency = x.Currency,
+                    IsStock = x.IsStock
                 }));
 
             var basketResponseModel = new BasketResponseModel
@@ -81,7 +82,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     MoreInfo = x.MoreInfo,
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
-                    Currency = x.Currency
+                    Currency = x.Currency,
+                    IsStock = x.IsStock
                 });
             }
 

@@ -117,7 +117,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
                             SecondaryColor = x.SecondaryColor,
-                            ShelfType = x.ShelfType
+                            ShelfType = x.ShelfType,
+                            IsStock = (inventoryItems.FirstOrDefault(inv => inv.ProductSku == x.Sku)?.AvailableQuantity > 0).ToYesOrNo()
                         }),
                         new PriceClient
                         {

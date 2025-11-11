@@ -17,5 +17,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public decimal? UnitPrice { get; set; }
         public decimal? Price { get; set; }
         public string Currency { get; set; }
+        public string IsStock { get; set; }
     }
 }

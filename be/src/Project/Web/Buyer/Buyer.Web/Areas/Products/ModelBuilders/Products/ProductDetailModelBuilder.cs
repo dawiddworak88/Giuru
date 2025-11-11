@@ -162,6 +162,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (product.PrimaryProductId.HasValue &&
                     string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
+                    var inventory = await _productsRepository.GetProductStockAsync(componentModel.Id);
+                    
                     var price = await _priceService.GetPrice(
                         _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
@@ -181,7 +183,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                             PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                             SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                            ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                            ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                            IsStock = (inventory?.AvailableQuantity > 0).ToYesOrNo()
                         },
                         new PriceClient
                         {
@@ -255,8 +258,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                     viewModel.Files = await _filesModelBuilder.BuildModelAsync(fileComponentModel);
                 }
-
-                var inventory = await _productsRepository.GetProductStockAsync(componentModel.Id);
 
                 if (inventory is not null && inventory.AvailableQuantity.HasValue && inventory.AvailableQuantity.Value > 0)
                 {

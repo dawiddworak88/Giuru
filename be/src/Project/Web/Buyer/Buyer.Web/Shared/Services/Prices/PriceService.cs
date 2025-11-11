@@ -218,6 +218,15 @@ namespace Buyer.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.IsStock))
+            {
+                priceDrivers.Add(new PriceDriver
+                {
+                    Name = PriceDriversConstants.StockDriver,
+                    Value = product.IsStock
+                });
+            }
+
             if (!string.IsNullOrWhiteSpace(product.Mirror))
             {
                 priceDrivers.Add(new PriceDriver

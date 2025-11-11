@@ -18,5 +18,6 @@
         public string SecondaryColor { get; set; }
         public string ShelfType { get; set; }
         public string IsOutlet { get; set; }
+        public string IsStock { get; set; }
     }
 }

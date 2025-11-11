@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
@@ -27,17 +28,20 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     {
         private readonly IProductsService productsService;
         private readonly IOutletRepository outletRepository;
+        private readonly IInventoryRepository _inventoryRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
 
         public OutletApiController(
             IProductsService productsService,
             IOutletRepository outletRepository,
+            IInventoryRepository inventoryRepository,
             IOptions<AppSettings> options,
             IPriceService priceService)
         {
             this.productsService = productsService;
             this.outletRepository= outletRepository;
+            _inventoryRepository = inventoryRepository;
             _options = options;
             _priceService = priceService;
         }
@@ -57,6 +61,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                 if (products is not null)
                 {
+                    var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventoryByIds(
+                        token,
+                        language,
+                        products.Data.Select(x => x.Id));
+
                     var prices = Enumerable.Empty<Price>();
 
                     if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
@@ -81,7 +90,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 PrimaryColor = x.PrimaryColor,
                                 SecondaryColor = x.SecondaryColor,
                                 ShelfType = x.ShelfType,
-                                IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
+                                IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo(),
+                                IsStock = (inventoryItems.FirstOrDefault(inv => inv.ProductSku == x.Sku)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient
                             {
