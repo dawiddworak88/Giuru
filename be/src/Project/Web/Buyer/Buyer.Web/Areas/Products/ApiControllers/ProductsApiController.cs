@@ -355,6 +355,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             {
                 var prices = Enumerable.Empty<Price>();
 
+                var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
+                    token,
+                    language,
+                    products.Data.Select(x => x.Id));
+
                 if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
                     var priceProducts = products.Data.Select(async x => new PriceProduct
@@ -392,11 +397,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                         });
                 }
-
-                var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
-                    token,
-                    language,
-                    products.Data.Select(x => x.Id));
 
                 var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
                     token,
@@ -479,7 +479,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                         IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo(),
-                        IsStock = ((await _inventoryRepository.GetAvailbleProductBySkuAsync(token, language, sku))?.AvailableQuantity > 0).ToYesOrNo()
+                        IsStock = ((await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(token, language, [product.Id])).FirstOrDefault().AvailableQuantity > 0).ToYesOrNo()
                     },
                     new PriceClient
                     {

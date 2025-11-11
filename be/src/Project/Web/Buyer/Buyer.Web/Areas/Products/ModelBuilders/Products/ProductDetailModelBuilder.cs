@@ -150,6 +150,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.ToastSuccessAddProductToBasket = _toastSuccessAddProductToBasket.BuildModel();
 
                 var outlet = await _productsRepository.GetProductOutletAsync(componentModel.Id);
+                var inventory = await _productsRepository.GetProductStockAsync(componentModel.Id);
 
                 if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
                 {
@@ -162,8 +163,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (product.PrimaryProductId.HasValue &&
                     string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
-                    var inventory = await _productsRepository.GetProductStockAsync(componentModel.Id);
-                    
                     var price = await _priceService.GetPrice(
                         _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
