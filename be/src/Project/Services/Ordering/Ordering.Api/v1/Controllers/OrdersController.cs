@@ -603,7 +603,7 @@ namespace Ordering.Api.v1.Controllers
         /// <returns>The updated order line status.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [Route("orderlinesstatuses")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<OrderLineUpdatedStatusResponseModel>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SyncOrderLines(SyncOrderLinesStatusesRequestModel request)
@@ -633,9 +633,17 @@ namespace Ordering.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await _ordersService.SyncOrderLinesStatusesAsync(serviceModel);
+                var updatedStatuses = await _ordersService.SyncOrderLinesStatusesAsync(serviceModel);
 
-                return StatusCode((int)HttpStatusCode.OK);
+                return StatusCode((int)HttpStatusCode.OK, updatedStatuses.Select(x => new OrderLineUpdatedStatusResponseModel
+                {
+                    OrderId = x.OrderId,
+                    OrderLineIndex = x.OrderLineIndex,
+                    PreviousStateId = x.PreviousStateId,
+                    PreviousStatusId = x.PreviousStatusId,
+                    NewStateId = x.NewStateId,
+                    NewStatusId = x.NewStatusId
+                }));
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
