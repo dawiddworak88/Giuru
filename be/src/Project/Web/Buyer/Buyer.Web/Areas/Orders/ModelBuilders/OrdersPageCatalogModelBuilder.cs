@@ -99,7 +99,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            var excludedStatusIds = new[] { OrdersConstants.OrderStatuses.HoldId, OrdersConstants.OrderStatuses.CancelId };
+            var excludedStatusIds = new[] { OrdersConstants.OrderStatuses.HoldId, OrdersConstants.OrderStatuses.ClosedId };
 
             viewModel.OrdersStatuses = orderStatuses
                 .OrEmptyIfNull()
