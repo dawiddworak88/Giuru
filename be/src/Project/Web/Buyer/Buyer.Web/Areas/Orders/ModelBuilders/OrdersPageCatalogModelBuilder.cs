@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ComponentModels;
+using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
@@ -10,6 +11,7 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -97,11 +99,16 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            viewModel.OrdersStatuses = orderStatuses.OrEmptyIfNull().Select(os => new ListItemViewModel
-            {
-                Id = os.Id,
-                Name = os.Name
-            });
+            var excludedStatusIds = new[] { OrdersConstants.OrderStatuses.HoldId, OrdersConstants.OrderStatuses.CancelId };
+
+            viewModel.OrdersStatuses = orderStatuses
+                .OrEmptyIfNull()
+                .Where(os => !excludedStatusIds.Contains(os.Id))
+                .Select(os => new ListItemViewModel
+                {
+                    Id = os.Id,
+                    Name = os.Name
+                });
 
             viewModel.PagedItems = await _ordersRepository.GetOrdersAsync(
                 componentModel.Token, 
