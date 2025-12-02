@@ -5,6 +5,7 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using System;
@@ -56,16 +57,17 @@ namespace Seller.Web.Areas.Media.Repositories.Files
             return default;
         }
 
-        public async Task SaveChunkAsync(string token, string language, byte[] file, string filename, int? chunkNumber)
+        public async Task SaveChunkAsync(string token, string language, byte[] file, string filename, int? chunkNumber, Guid uploadId)
         {
-            var requestModel = new FileRequestModelBase
+            var requestModel = new UploadMediaChunkRequestModel
             {
+                UploadId = uploadId,
                 File = file,
                 Filename = filename,
                 ChunkNumber = chunkNumber
             };
 
-            var apiRequest = new ApiRequest<FileRequestModelBase>
+            var apiRequest = new ApiRequest<UploadMediaChunkRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -73,7 +75,7 @@ namespace Seller.Web.Areas.Media.Repositories.Files
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.FileChunksApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<FileRequestModelBase>, FileRequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<UploadMediaChunkRequestModel>, UploadMediaChunkRequestModel, BaseResponseModel>(apiRequest);
             
             if (!response.IsSuccessStatusCode)
             {
@@ -81,11 +83,12 @@ namespace Seller.Web.Areas.Media.Repositories.Files
             }
         }
 
-        public async Task<Guid> SaveChunksCompleteAsync(string token, string language, Guid? id, string filename)
+        public async Task<Guid> SaveChunksCompleteAsync(string token, string language, Guid? id, string filename, Guid uploadId)
         {
             var requestModel = new FileChunksSaveCompleteRequestModel
             {
                 Id = id,
+                UploadId = uploadId,
                 Filename = filename
             };
 
