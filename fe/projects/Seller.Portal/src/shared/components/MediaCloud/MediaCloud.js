@@ -182,6 +182,9 @@ function MediaCloud(props) {
         formData.append("filename", fileToUploadInChunksFilename);
         formData.append("uploadId", uploadId);
 
+        console.log("Uploading chunk ", chunkCounter, " for file ", fileToUploadInChunksFilename);
+        console.log("uploadId: ", uploadId);
+
         const requestOptions = {
             method: "POST",
             body: formData
