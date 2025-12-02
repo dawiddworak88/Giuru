@@ -8,8 +8,9 @@ namespace Media.Api.Validators
     {
         public UpdateMediaItemFromChunksModelValidator()
         {
-            this.RuleFor(x => x.Filename).NotNull().NotEmpty();
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
+            this.RuleFor(x => x.UploadId).NotNull().NotEmpty();
+            this.RuleFor(x => x.Filename).NotNull().NotEmpty();
             this.RuleFor(x => x.OrganisationId).NotNull().NotEmpty();
         }
     }
