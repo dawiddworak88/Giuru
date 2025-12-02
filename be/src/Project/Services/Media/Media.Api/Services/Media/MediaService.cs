@@ -444,29 +444,49 @@ namespace Media.Api.Services.Media
         
         public async Task CreateFileChunkAsync(CreateFileChunkServiceModel model)
         {
-            var path = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", $"{model.File.FileName}{model.ChunkSumber}");
+            var directory = Path.Combine(
+                    MediaConstants.Paths.TempPath,
+                    model.OrganisationId.ToString());
 
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            Directory.CreateDirectory(directory);
 
-            using (var fs = File.Create(path))
-            {
-                await model.File.CopyToAsync(fs);
-            }
+            var fileName = $"{model.UploadId}_{model.ChunkSumber}";
+            var path = Path.Combine(directory, fileName);
+
+            await using var fs = File.Create(path);
+
+            await model.File.CopyToAsync(fs);
         }
 
         public async Task<Guid> CreateFileFromChunksAsync(CreateMediaItemFromChunksServiceModel model)
         {
-            string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
+            var directory = Path.Combine(
+                    MediaConstants.Paths.TempPath,
+                    model.OrganisationId?.ToString());
 
-            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+            var searchPattern = $"{model.UploadId}_*";
+
+            string[] filePaths = Directory.GetFiles(directory, searchPattern)
+                .OrderBy(p =>
+                {
+                    var name = Path.GetFileName(p);
+                    var parts = name.Split('_');
+
+                    return int.Parse(parts[1]);
+                })
+                .ToArray();
+
+            if (!filePaths.Any())
+                throw new InvalidOperationException($"No chunks found for upload {model.UploadId}");
+
+            string newPath = Path.Combine(directory, model.Filename);
 
             foreach (var filePath in filePaths)
             {
                 MergeChunks(newPath, filePath);
-                File.Delete(filePath);
             }
 
-            using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
+            await using var stream = new FileStream(newPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 
             var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
 
@@ -478,6 +498,8 @@ namespace Media.Api.Services.Media
                 Username = model.Username
             });
 
+            stream.Close();
+
             File.Delete(newPath);
 
             return id;
@@ -485,17 +507,33 @@ namespace Media.Api.Services.Media
 
         public async Task<Guid> UpdateFileFromChunksAsync(UpdateMediaItemFromChunksServiceModel model)
         {
-            string newPath = Path.Combine($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}", model.Filename);
+            var directory = Path.Combine(
+                    MediaConstants.Paths.TempPath,
+                    model.OrganisationId?.ToString());
 
-            string[] filePaths = Directory.GetFiles($"{MediaConstants.Paths.TempPath}/{model.OrganisationId}").Where(p => p.Contains(model.Filename)).OrderBy(p => Int32.Parse(p.Replace(model.Filename, "$").Split('$')[1])).ToArray();
+            var searchPattern = $"{model.UploadId}_*";
+
+            string[] filePaths = Directory.GetFiles(directory, searchPattern)
+                .OrderBy(p =>
+                {
+                    var name = Path.GetFileName(p);
+                    var parts = name.Split('_');
+
+                    return int.Parse(parts[1]);
+                })
+                .ToArray();
+
+            if (!filePaths.Any())
+                throw new InvalidOperationException($"No chunks found for upload {model.UploadId}");
+
+            string newPath = Path.Combine(directory, model.Filename);
 
             foreach (var filePath in filePaths)
             {
                 MergeChunks(newPath, filePath);
-                File.Delete(filePath);
             }
 
-            using var stream = new MemoryStream(File.ReadAllBytes(newPath).ToArray());
+            await using var stream = new FileStream(newPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 
             var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
 
@@ -508,38 +546,24 @@ namespace Media.Api.Services.Media
                 Username = model.Username
             });
 
+            stream.Close();
+
             File.Delete(newPath);
 
             return id;
         }
 
-        private static void MergeChunks(string chunk1, string chunk2)
+        private static void MergeChunks(string targetPath, string sourcePath)
         {
-            FileStream fs1 = null;
-            FileStream fs2 = null;
+            Directory.CreateDirectory(Path.GetDirectoryName(targetPath)!);
 
-            try
+            using (var fs1 = new FileStream(targetPath, FileMode.Append, FileAccess.Write, FileShare.None))
+            using (var fs2 = new FileStream(sourcePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                fs1 = File.Open(chunk1, FileMode.Append);
-                fs2 = File.Open(chunk2, FileMode.Open);
-                var fs2Content = new byte[fs2.Length];
-                fs2.Read(fs2Content, 0, (int)fs2.Length);
-                fs1.Write(fs2Content, 0, (int)fs2.Length);
+                fs2.CopyTo(fs1);
             }
-            finally
-            {
-                if (fs1 is not null)
-                {
-                    fs1.Close();
-                }
 
-                if (fs2 is not null)
-                {
-                    fs2.Close();
-                }
-
-                File.Delete(chunk2);
-            }
+            File.Delete(sourcePath);
         }
     }
 }
