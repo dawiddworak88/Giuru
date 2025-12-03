@@ -5,8 +5,6 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Media.ApiRequestModels;
-using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
@@ -57,9 +55,9 @@ namespace Seller.Web.Areas.Media.Repositories.Files
             return default;
         }
 
-        public async Task SaveChunkAsync(string token, string language, byte[] file, string filename, int? chunkNumber, Guid uploadId)
+        public async Task SaveChunkAsync(string token, string language, byte[] file, string filename, int? chunkNumber, string uploadId)
         {
-            var requestModel = new UploadMediaChunkRequestModel
+            var requestModel = new FileRequestModelBase
             {
                 UploadId = uploadId,
                 File = file,
@@ -67,7 +65,9 @@ namespace Seller.Web.Areas.Media.Repositories.Files
                 ChunkNumber = chunkNumber
             };
 
-            var apiRequest = new ApiRequest<UploadMediaChunkRequestModel>
+            Console.WriteLine($"Uploading chunk {chunkNumber} for uploadId {uploadId}");
+
+            var apiRequest = new ApiRequest<FileRequestModelBase>
             {
                 Language = language,
                 Data = requestModel,
@@ -75,7 +75,7 @@ namespace Seller.Web.Areas.Media.Repositories.Files
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.FileChunksApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<UploadMediaChunkRequestModel>, UploadMediaChunkRequestModel, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<FileRequestModelBase>, FileRequestModelBase, BaseResponseModel>(apiRequest);
             
             if (!response.IsSuccessStatusCode)
             {
