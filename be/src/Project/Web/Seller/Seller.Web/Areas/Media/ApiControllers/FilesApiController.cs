@@ -136,8 +136,11 @@ namespace Seller.Web.Areas.Media.ApiControllers
             [FromForm] IFormFile chunk, 
             int? chunkNumber, 
             string filename,
-            Guid uploadId)
+            string uploadId)
         {
+            Console.WriteLine("Received chunk upload request");
+            Console.WriteLine($"Filename: {filename}, ChunkNumber: {chunkNumber}, UploadId: {uploadId}");
+
             if (chunk is not null && chunkNumber.HasValue && string.IsNullOrWhiteSpace(filename) is false)
             {
                 using (var ms = new MemoryStream())
