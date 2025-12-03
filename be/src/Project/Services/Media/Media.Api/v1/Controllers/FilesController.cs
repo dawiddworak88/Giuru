@@ -200,8 +200,6 @@ namespace Media.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name
             };
 
-            Console.WriteLine($"Received chunk number: {model.ChunkNumber} for UploadId: {model.UploadId} in Media Api Controller");
-
             var validator = new CreateFileChunkModelValidator();
 
             var validationResult = await validator.ValidateAsync(serviceModel);

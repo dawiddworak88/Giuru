@@ -65,8 +65,6 @@ namespace Seller.Web.Areas.Media.Repositories.Files
                 ChunkNumber = chunkNumber
             };
 
-            Console.WriteLine($"Uploading chunk {chunkNumber} for uploadId {uploadId}");
-
             var apiRequest = new ApiRequest<FileRequestModelBase>
             {
                 Language = language,
