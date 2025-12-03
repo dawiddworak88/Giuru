@@ -5,7 +5,7 @@ namespace Media.Api.ServicesModels
 {
     public class CreateMediaItemFromChunksServiceModel : BaseServiceModel
     {
-        public Guid? UploadId { get; set; }
+        public Guid UploadId { get; set; }
         public string Filename { get; set; }
     }
 }

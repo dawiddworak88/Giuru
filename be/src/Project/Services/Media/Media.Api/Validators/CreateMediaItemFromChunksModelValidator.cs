@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Foundation.Extensions.Validators;
 using Media.Api.ServicesModels;
+using System;
 
 namespace Media.Api.Validators
 {
@@ -8,7 +9,7 @@ namespace Media.Api.Validators
     {
         public CreateMediaItemFromChunksModelValidator()
         {
-            this.RuleFor(x => x.UploadId).NotNull().NotEmpty();
+            this.RuleFor(x => x.UploadId).NotEqual(Guid.Empty);
             this.RuleFor(x => x.Filename).NotNull().NotEmpty();
         }
     }

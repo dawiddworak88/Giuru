@@ -164,8 +164,8 @@ function MediaCloud(props) {
             setFileToUploadInChunksFilename(file.name);
 
             const countChunks = file.size % props.chunkSize === 0
-            ? file.size / props.chunkSize
-            : Math.floor(file.size / props.chunkSize) + 1;
+                ? file.size / props.chunkSize
+                : Math.floor(file.size / props.chunkSize) + 1;
 
             setChunkCount(countChunks);
             setChunkCounter(0);
@@ -241,15 +241,26 @@ function MediaCloud(props) {
                         }
 
                         if ((fileToUploadInChunksIndex + 1) < filesToUploadInChunks.length) {
-                            setFileToUploadinChunksIndex(fileToUploadInChunksIndex + 1);
-                            setFileToUploadInChunks(filesToUploadInChunks[fileToUploadInChunksIndex + 1]);
-                            setFileToUploadInChunksFilename(filesToUploadInChunks[fileToUploadInChunksIndex + 1].name);
+                            const nextIndex = fileToUploadInChunksIndex + 1;
+                            const nextFile = filesToUploadInChunks[nextIndex];
+
+                            setFileToUploadinChunksIndex(nextIndex);
+                            setFileToUploadInChunks(nextFile);
+                            setFileToUploadInChunksFilename(nextFile.name);
                             setBeginingOfTheChunk(0);
                             setEndOfTheChunk(props.chunkSize);
+
+                            const nextChunkCount = nextFile.size % props.chunkSize === 0
+                                ? nextFile.size / props.chunkSize
+                                : Math.floor(nextFile.size / props.chunkSize) + 1;
+                            
+                            setChunkCount(nextChunkCount);
                             setChunkCounter(0);
-                            setChunkCount(0);
                             setFileUploadProgress(0);
-                            setUploadId(null);
+
+                            const newUploadId = uuidv4();
+
+                            setUploadId(newUploadId);
                         }
                         else {
                             setFilesToUploadInChunks([]);

@@ -141,7 +141,13 @@
   <data name="MetaDataLabel" xml:space="preserve">
     <value>Metadaten</value>
   </data>
+  <data name="ChunkDirectoryNotFound" xml:space="preserve">
+    <value>Chunk-Verzeichnis nicht gefunden.</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Medien hinzufügen</value>
+  </data>
+  <data name="NoChunksFound" xml:space="preserve">
+    <value>Es wurden keine Chunk-Dateien gefunden.</value>
   </data>
 </root>

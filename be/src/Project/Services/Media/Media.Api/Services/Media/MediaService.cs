@@ -16,7 +16,6 @@ using Foundation.Extensions.ExtensionMethods;
 using Media.Api.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.Extensions.Exceptions;
-using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +24,7 @@ using Foundation.EventBus.Abstractions;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
+using System.Net;
 
 namespace Media.Api.Services.Media
 {
@@ -462,9 +462,12 @@ namespace Media.Api.Services.Media
         {
             var directory = Path.Combine(
                     MediaConstants.Paths.TempPath,
-                    model.OrganisationId?.ToString());
+                    model.OrganisationId.ToString());
 
             var searchPattern = $"{model.UploadId}_*";
+
+            if (!Directory.Exists(directory))
+                throw new CustomException(_mediaResources.GetString("ChunkDirectoryNotFound"), (int)HttpStatusCode.UnprocessableEntity);
 
             string[] filePaths = Directory.GetFiles(directory, searchPattern)
                 .OrderBy(p =>
@@ -477,7 +480,7 @@ namespace Media.Api.Services.Media
                 .ToArray();
 
             if (!filePaths.Any())
-                throw new InvalidOperationException($"No chunks found for upload {model.UploadId}");
+                throw new CustomException(_mediaResources.GetString("NoChunksFound"), (int)HttpStatusCode.UnprocessableEntity);
 
             string newPath = Path.Combine(directory, model.Filename);
 
@@ -498,8 +501,6 @@ namespace Media.Api.Services.Media
                 Username = model.Username
             });
 
-            stream.Close();
-
             File.Delete(newPath);
 
             return id;
@@ -513,6 +514,9 @@ namespace Media.Api.Services.Media
 
             var searchPattern = $"{model.UploadId}_*";
 
+            if (!Directory.Exists(directory))
+                throw new CustomException(_mediaResources.GetString("ChunkDirectoryNotFound"), (int)HttpStatusCode.UnprocessableEntity);
+
             string[] filePaths = Directory.GetFiles(directory, searchPattern)
                 .OrderBy(p =>
                 {
@@ -524,7 +528,7 @@ namespace Media.Api.Services.Media
                 .ToArray();
 
             if (!filePaths.Any())
-                throw new InvalidOperationException($"No chunks found for upload {model.UploadId}");
+                throw new CustomException(_mediaResources.GetString("NoChunksFound"), (int)HttpStatusCode.UnprocessableEntity);
 
             string newPath = Path.Combine(directory, model.Filename);
 
@@ -545,8 +549,6 @@ namespace Media.Api.Services.Media
                 OrganisationId = model.OrganisationId,
                 Username = model.Username
             });
-
-            stream.Close();
 
             File.Delete(newPath);
 
