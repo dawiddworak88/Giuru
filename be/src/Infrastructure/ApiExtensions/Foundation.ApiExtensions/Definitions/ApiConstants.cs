@@ -120,6 +120,7 @@
             public static readonly string LanguageContentName = "language";
             public static readonly string GuidContentName = "id";
             public static readonly string ChunkNumberContentName = "chunkNumber";
+            public static readonly string UploadIdContentName = "uploadId";
         }
 
         public struct Grula

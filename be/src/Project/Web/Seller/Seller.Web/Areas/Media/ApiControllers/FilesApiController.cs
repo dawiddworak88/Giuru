@@ -132,9 +132,17 @@ namespace Seller.Web.Areas.Media.ApiControllers
 
         [HttpPost]
         [RequestSizeLimit(ApiConstants.Request.RequestSizeLimit)]
-        public async Task<IActionResult> PostChunk([FromForm] IFormFile chunk, int? chunkNumber, string filename)
+        public async Task<IActionResult> PostChunk(
+            [FromForm] IFormFile chunk, 
+            int? chunkNumber, 
+            string filename,
+            string uploadId)
         {
-            if (chunk is not null && chunkNumber.HasValue && string.IsNullOrWhiteSpace(filename) is false)
+            if (chunk is not null &&
+                chunk.Length > 0 &&
+                chunkNumber.HasValue && 
+                string.IsNullOrWhiteSpace(filename) is false &&
+                string.IsNullOrWhiteSpace(uploadId) is false)
             {
                 using (var ms = new MemoryStream())
                 {
@@ -145,7 +153,8 @@ namespace Seller.Web.Areas.Media.ApiControllers
                         CultureInfo.CurrentUICulture.Name,
                         ms.ToArray(),
                         filename,
-                        chunkNumber);
+                        chunkNumber,
+                        uploadId);
 
                     return this.StatusCode((int)HttpStatusCode.OK);
                 }
@@ -157,14 +166,17 @@ namespace Seller.Web.Areas.Media.ApiControllers
         [HttpPost]
         public async Task<IActionResult> PostChunksComplete([FromBody] UploadMediaChunkCompleteRequestModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.Filename) is true)
+            if (string.IsNullOrWhiteSpace(model.Filename) || model.UploadId == Guid.Empty)
             {
                 return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
 
             var fileId = await this.filesRepository.SaveChunksCompleteAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name, model.Id, model.Filename);
+                CultureInfo.CurrentUICulture.Name, 
+                model.Id, 
+                model.Filename,
+                model.UploadId);
 
             var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
                         await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
