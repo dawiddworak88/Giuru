@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
 using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace Media.Api.Services.Media
 {
@@ -35,18 +36,21 @@ namespace Media.Api.Services.Media
         private readonly IChecksumService _checksumService;
         private readonly IStringLocalizer _mediaResources;
         private readonly IEventBus _eventBus;
+        private readonly ILogger<MediaService> _logger;
 
         public MediaService(MediaContext context, 
             IMediaRepository mediaRepository, 
             IChecksumService checksumService,
             IEventBus eventBus,
-            IStringLocalizer<MediaResources> mediaResources)
+            IStringLocalizer<MediaResources> mediaResources,
+            ILogger<MediaService> logger)
         {
             _context = context;
             _mediaRepository = mediaRepository;
             _mediaResources = mediaResources;
             _checksumService = checksumService;
             _eventBus = eventBus;
+            _logger = logger;
         }
 
         public async Task<Guid> CreateFileAsync(CreateMediaItemServiceModel serviceModel)
@@ -453,6 +457,11 @@ namespace Media.Api.Services.Media
             var fileName = $"{model.UploadId}_{model.ChunkSumber}";
             var path = Path.Combine(directory, fileName);
 
+            if (fileName.Contains("..") || fileName.Contains(Path.DirectorySeparatorChar))
+            {
+                throw new CustomException(_mediaResources.GetString("InvalidFileName"), (int)HttpStatusCode.BadRequest);
+            }
+
             await using var fs = File.Create(path);
 
             await model.File.CopyToAsync(fs);
@@ -484,26 +493,70 @@ namespace Media.Api.Services.Media
 
             string newPath = Path.Combine(directory, model.Filename);
 
-            foreach (var filePath in filePaths)
+            FileStream stream = null;
+
+            try
             {
-                MergeChunks(newPath, filePath);
+                foreach (var filePath in filePaths)
+                {
+                    MergeChunks(newPath, filePath);
+                }
+
+                stream = new FileStream(newPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
+
+                var id = await this.CreateFileAsync(new CreateMediaItemServiceModel
+                {
+                    File = formFile,
+                    OrganisationId = model.OrganisationId,
+                    Language = model.Language,
+                    Username = model.Username
+                });
+
+                return id;
             }
-
-            await using var stream = new FileStream(newPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-
-            var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
-
-            var id = await this.CreateFileAsync(new CreateMediaItemServiceModel
+            finally
             {
-                File = formFile,
-                OrganisationId = model.OrganisationId,
-                Language = model.Language,
-                Username = model.Username
-            });
+                if (stream is not null)
+                {
+                    try
+                    {
+                        await stream.DisposeAsync();
+                    }
+                    catch
+                    {
+                        _logger.LogWarning($"Failed to dispose stream for merged file: {newPath}");
+                    }
+                }
 
-            File.Delete(newPath);
+                foreach (var filePath in filePaths)
+                {
+                    try
+                    {
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+                    }
+                    catch
+                    {
+                        _logger.LogWarning($"Failed to delete chunk file: {filePath}");
+                    }
+                }
 
-            return id;
+                try
+                {
+                    if (File.Exists(newPath))
+                    {
+                        File.Delete(newPath);
+                    }
+                }
+                catch
+                {
+                    _logger.LogWarning($"Failed to delete merged file: {newPath}");
+                }
+            }
         }
 
         public async Task<Guid> UpdateFileFromChunksAsync(UpdateMediaItemFromChunksServiceModel model)
@@ -532,27 +585,71 @@ namespace Media.Api.Services.Media
 
             string newPath = Path.Combine(directory, model.Filename);
 
-            foreach (var filePath in filePaths)
+            FileStream stream = null;
+
+            try
             {
-                MergeChunks(newPath, filePath);
+                foreach (var filePath in filePaths)
+                {
+                    MergeChunks(newPath, filePath);
+                }
+
+                stream = new FileStream(newPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
+
+                var id = await this.UpdateFileAsync(new UpdateMediaItemServiceModel
+                {
+                    File = formFile,
+                    Id = model.Id,
+                    Language = model.Language,
+                    OrganisationId = model.OrganisationId,
+                    Username = model.Username
+                });
+
+                return id;
             }
-
-            await using var stream = new FileStream(newPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-
-            var formFile = new FormFile(stream, 0, stream.Length, model.Filename, model.Filename);
-
-            var id = await this.UpdateFileAsync(new UpdateMediaItemServiceModel
+            finally
             {
-                File = formFile,
-                Id = model.Id,
-                Language = model.Language,
-                OrganisationId = model.OrganisationId,
-                Username = model.Username
-            });
+                if (stream is not null)
+                {
+                    try
+                    {
+                        await stream.DisposeAsync();
+                    }
+                    catch
+                    {
+                        _logger.LogWarning($"Failed to dispose stream for merged file: {newPath}");
+                    }
+                }
 
-            File.Delete(newPath);
+                foreach (var filePath in filePaths)
+                {
+                    try
+                    {
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+                    }
+                    catch
+                    {
+                        _logger.LogWarning($"Failed to delete chunk file: {filePath}");
+                    }
+                }
 
-            return id;
+                try
+                {
+                    if (File.Exists(newPath))
+                    {
+                        File.Delete(newPath);
+                    }
+                }
+                catch
+                {
+                    _logger.LogWarning($"Failed to delete merged file: {newPath}");
+                }
+            }
         }
 
         private static void MergeChunks(string targetPath, string sourcePath)
@@ -564,8 +661,6 @@ namespace Media.Api.Services.Media
             {
                 fs2.CopyTo(fs1);
             }
-
-            File.Delete(sourcePath);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Media.Api.ServicesModels
 {
     public class CreateFileChunkServiceModel : BaseServiceModel
     {
-        public Guid UploadId { get; set; }
+        public string UploadId { get; set; }
         public IFormFile File { get; set; }
         public int? ChunkSumber { get; set; }
     }

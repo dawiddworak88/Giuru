@@ -150,4 +150,7 @@
   <data name="NoChunksFound" xml:space="preserve">
     <value>No chunk files found.</value>
   </data>
+  <data name="InvalidFileName" xml:space="preserve">
+    <value>Invalid file name.</value>
+  </data>
 </root>

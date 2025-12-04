@@ -159,6 +159,11 @@ function MediaCloud(props) {
 
             const newUploadId = uuidv4();
 
+            if (!newUploadId) {
+                toast.error(props.generalErrorMessage);
+                return;
+            }
+
             setUploadId(newUploadId);
 
             setFileToUploadInChunksFilename(file.name);
@@ -260,6 +265,11 @@ function MediaCloud(props) {
 
                             const newUploadId = uuidv4();
 
+                            if (!newUploadId) {
+                                toast.error(props.generalErrorMessage);
+                                return;
+                            }
+                            
                             setUploadId(newUploadId);
                         }
                         else {

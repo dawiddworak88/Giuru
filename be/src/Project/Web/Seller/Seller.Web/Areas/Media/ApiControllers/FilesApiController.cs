@@ -138,7 +138,9 @@ namespace Seller.Web.Areas.Media.ApiControllers
             string filename,
             string uploadId)
         {
-            if (chunk is not null && chunkNumber.HasValue && 
+            if (chunk is not null &&
+                chunk.Length > 0 &&
+                chunkNumber.HasValue && 
                 string.IsNullOrWhiteSpace(filename) is false &&
                 string.IsNullOrWhiteSpace(uploadId) is false)
             {
