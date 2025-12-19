@@ -1,9 +1,11 @@
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
+using Giuru.IntegrationTests.Definitions;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -41,7 +43,7 @@ namespace Giuru.IntegrationTests
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("redis")
                 .WithPortBinding(9113, 6379)
-                .WithExposedPort(9113)
+                .WithExposedPort(6379)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(6379))
                 .Build();
 
@@ -54,7 +56,7 @@ namespace Giuru.IntegrationTests
                 .WithPassword("YourStrongPassword!")
                 .WithNetworkAliases("sqldata")
                 .WithPortBinding(9111, 1433)
-                .WithExposedPort(9111)
+                .WithExposedPort(1433)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
                 .Build();
 
@@ -68,6 +70,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("discovery.type", "single-node")
                 .WithEnvironment("xpack.security.enabled", "false")
                 .WithEnvironment("xpack.security.http.ssl.enabled", "false")
+                .WithExposedPort(9200)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9200))
                 .Build();
 
@@ -78,7 +81,7 @@ namespace Giuru.IntegrationTests
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("rabbitmq")
                 .WithPortBinding(9000, 5672)
-                .WithExposedPort(9000)
+                .WithExposedPort(5672)
                 .WithUsername("RMQ_USER")
                 .WithPassword("YourStrongPassword!")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5672))
@@ -94,7 +97,7 @@ namespace Giuru.IntegrationTests
                 .WithName("mock-auth")
                 .WithImage(mockAuthImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9105)
+                .WithExposedPort(8080)
                 .WithPortBinding(9105, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("EmailClaim", "seller@user.com")
@@ -117,7 +120,7 @@ namespace Giuru.IntegrationTests
                 .WithName("client-api")
                 .WithImage(clientApiImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9106)
+                .WithExposedPort(8080)
                 .WithPortBinding(9106, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
@@ -141,7 +144,7 @@ namespace Giuru.IntegrationTests
                 .WithName("catalog-api")
                 .WithImage(catalogApiImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9101)
+                .WithExposedPort(8080)
                 .WithPortBinding(9101, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
@@ -168,7 +171,7 @@ namespace Giuru.IntegrationTests
                 .WithName("catalog-background-tasks")
                 .WithImage(catalogBackgroundTasksImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9104)
+                .WithExposedPort(8080)
                 .WithPortBinding(9104, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
@@ -194,7 +197,7 @@ namespace Giuru.IntegrationTests
                 .WithName("ordering-api")
                 .WithImage(orderingApiImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9102)
+                .WithExposedPort(8080)
                 .WithPortBinding(9102, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
@@ -219,7 +222,7 @@ namespace Giuru.IntegrationTests
                 .WithName("basket-api")
                 .WithImage(basketApiImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9103)
+                .WithExposedPort(8080)
                 .WithPortBinding(9103, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
@@ -243,7 +246,7 @@ namespace Giuru.IntegrationTests
                 .WithName("inventory-api")
                 .WithImage(inventoryApiImage)
                 .WithNetwork(_giuruNetwork)
-                .WithExposedPort(9107)
+                .WithExposedPort(8080)
                 .WithPortBinding(9107, 8080)
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
                 .WithEnvironment("RedisUrl", "redis")
@@ -311,6 +314,9 @@ namespace Giuru.IntegrationTests
             buyerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             BuyerWebClient = new RestClient(buyerWebFactpry);
+/*
+            await WaitUntilAuthReadyAsync(sellerWebFactpry, "SellerWeb", "/__test/auth-ready");
+            await WaitUntilAuthReadyAsync(buyerWebFactpry, "BuyerWeb", "/__test/auth-ready");*/
         }
 
         public async Task DisposeAsync()
@@ -350,5 +356,32 @@ namespace Giuru.IntegrationTests
             await _inventoryApiContainer.StopAsync();
             await _inventoryApiContainer.DisposeAsync();
         }
+
+       /* private static async Task WaitUntilAuthReadyAsync(HttpClient client, string name, string endpointUrl)
+        {
+            var deadline = DateTime.UtcNow.AddSeconds(30);
+            HttpResponseMessage? last = null;
+
+            while (DateTime.UtcNow < deadline)
+            {
+                try
+                {
+                    last = await client.GetAsync(endpointUrl);
+
+                    if (last.IsSuccessStatusCode)
+                        return;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"{name} auth readiness check failed: {ex.Message}", ex);
+                    // serwis jeszcze siê rozkrêca
+                }
+
+                await Task.Delay(300);
+            }
+
+            var status = last is null ? "(no response)" : $"{(int)last.StatusCode} {last.ReasonPhrase}";
+            throw new TimeoutException($"{name} auth not ready after 30s. Last status: {status}");
+        }*/
     }
 }
