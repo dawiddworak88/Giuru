@@ -17,6 +17,7 @@ namespace Giuru.IntegrationTests.HttpClients
 
         public async Task<string> GetTokenAsync(string tokenEndpoint)
         {
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _httpClient.GetAsync(tokenEndpoint);
@@ -28,6 +29,11 @@ namespace Giuru.IntegrationTests.HttpClients
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
+
+            if (tokenResponse?.AccessToken is null || string.IsNullOrWhiteSpace(tokenResponse.AccessToken))
+            {
+                throw new Exception($"Token response missing Token field. Body: {responseContent}");
+            }
 
             return tokenResponse.AccessToken;
         }
