@@ -7,6 +7,8 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Giuru.IntegrationTests.Definitions;
 using Giuru.IntegrationTests.Helpers;
+using Seller.Web.Areas.Inventory.ApiRequestModels;
+using Seller.Web.Areas.Inventory.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +26,38 @@ namespace Giuru.IntegrationTests
             _apiFixture = apiFixture;
         }
 
-        [Fact]
+        private static async Task<Guid> EnsureWarehouseExistsAsync(ApiFixture apiFixture)
+        {
+            var existing = await apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<Warehouse>>>(
+                $"{ApiEndpoints.GetInventoryWarehouseApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
+
+            var warehouse = existing?.Data?.FirstOrDefault(x => x.Name == "Integration Test Warehouse");
+
+            if (warehouse is not null && warehouse.Id != Guid.Empty)
+            {
+                return warehouse.Id;
+            }
+
+
+            var created = await apiFixture.SellerWebClient.PostAsync<SaveWarehouseRequestModel, BaseResponseModel>(
+                ApiEndpoints.InventoryWarehousesApiEndpoint,
+                new SaveWarehouseRequestModel
+                {
+                    Name = "Integration Test Warehouse",
+                    Location = "Integration Test"
+                });
+
+            Assert.NotNull(created);
+            Assert.NotEqual(Guid.Empty, created.Id);
+
+            return created.Id.Value;
+        }
+
+        [Fact] 
         public async Task AddToBasket_WithNormalStockAndOutletProducts_CheckoutOrder_Returns_Orders()
         {
+            var warehouseId = await EnsureWarehouseExistsAsync(_apiFixture);
+
             var stockProduct = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture, 
                     new ProductRequestModel
                     {
@@ -36,6 +67,7 @@ namespace Giuru.IntegrationTests
                         IsPublished = Products.Anton.IsPublished,
                         Ean = Products.Anton.Ean
                     },
+                    warehouseId,
                     ApiEndpoints.InventoriesApiEndpoint);
 
             var outletProduct = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture, 
@@ -47,6 +79,7 @@ namespace Giuru.IntegrationTests
                         IsPublished = Products.Aga.IsPublished,
                         Ean = Products.Aga.Ean
                     },
+                    warehouseId,
                     ApiEndpoints.OutletsApiEndpoint);
 
             var basket = await _apiFixture.BuyerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
