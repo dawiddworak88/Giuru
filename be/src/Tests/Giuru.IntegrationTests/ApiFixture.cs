@@ -1,11 +1,9 @@
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
-using Giuru.IntegrationTests.Definitions;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
-using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -314,9 +312,6 @@ namespace Giuru.IntegrationTests
             buyerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             BuyerWebClient = new RestClient(buyerWebFactpry);
-/*
-            await WaitUntilAuthReadyAsync(sellerWebFactpry, "SellerWeb", "/__test/auth-ready");
-            await WaitUntilAuthReadyAsync(buyerWebFactpry, "BuyerWeb", "/__test/auth-ready");*/
         }
 
         public async Task DisposeAsync()
@@ -356,32 +351,5 @@ namespace Giuru.IntegrationTests
             await _inventoryApiContainer.StopAsync();
             await _inventoryApiContainer.DisposeAsync();
         }
-
-       /* private static async Task WaitUntilAuthReadyAsync(HttpClient client, string name, string endpointUrl)
-        {
-            var deadline = DateTime.UtcNow.AddSeconds(30);
-            HttpResponseMessage? last = null;
-
-            while (DateTime.UtcNow < deadline)
-            {
-                try
-                {
-                    last = await client.GetAsync(endpointUrl);
-
-                    if (last.IsSuccessStatusCode)
-                        return;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"{name} auth readiness check failed: {ex.Message}", ex);
-                    // serwis jeszcze siê rozkrêca
-                }
-
-                await Task.Delay(300);
-            }
-
-            var status = last is null ? "(no response)" : $"{(int)last.StatusCode} {last.ReasonPhrase}";
-            throw new TimeoutException($"{name} auth not ready after 30s. Last status: {status}");
-        }*/
     }
 }
