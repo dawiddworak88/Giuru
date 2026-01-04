@@ -68,8 +68,13 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("discovery.type", "single-node")
                 .WithEnvironment("xpack.security.enabled", "false")
                 .WithEnvironment("xpack.security.http.ssl.enabled", "false")
+                .WithEnvironment("ES_JAVA_OPTS", "-Xms512m -Xmx512m")
                 .WithExposedPort(9200)
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(9200))
+                .WithPortBinding(9200, 9200)
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(9200)
+                    .ForPath("/_cluster/health")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _elasticsearchContainer.StartAsync();
