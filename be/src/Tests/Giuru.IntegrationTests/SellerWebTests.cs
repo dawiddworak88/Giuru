@@ -84,11 +84,13 @@ namespace Giuru.IntegrationTests
 
             var getResults = await DataHelper.GetDataAsync(
                 () => _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<Product>>>($"{ApiEndpoints.GetProductsApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}"),
-                x => x.Id == updateProductId);
+                x => x != null && x.Id == updateProductId);
 
             Assert.NotNull(getResults);
-            Assert.Null(getResults.Data.FirstOrDefault().Description);
-            Assert.NotNull(getResults.Data.FirstOrDefault(x => x.Id == updateProductId));
+            Assert.NotNull(getResults.Data);
+            var product = getResults.Data.FirstOrDefault(x => x.Id == updateProductId);
+            Assert.NotNull(product);
+            Assert.Null(product.Description);
         }
     }
 }

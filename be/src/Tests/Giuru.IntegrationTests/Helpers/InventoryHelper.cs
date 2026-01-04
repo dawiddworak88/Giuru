@@ -16,6 +16,9 @@ namespace Giuru.IntegrationTests.Helpers
             Assert.NotNull(newProduct);
             Assert.NotEqual(Guid.Empty, newProduct.Id);
 
+            var productVisible = await ProductWaitHelper.WaitForProductToBeVisibleAsync(apiFixture, newProduct.Id.Value);
+            Assert.True(productVisible, $"Product {newProduct.Id} did not become visible in search within timeout");
+
             if (endpoint is not null && warehouseId.HasValue)
             {
                 var addToStock = await apiFixture.SellerWebClient.PostAsync<InventoryRequestModel, BaseResponseModel>(endpoint, new InventoryRequestModel
