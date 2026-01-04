@@ -31,7 +31,6 @@ namespace Giuru.IntegrationTests
 
         public RestClient SellerWebClient { get; private set; }
         public RestClient BuyerWebClient { get; private set; }
-        public string ElasticsearchUrl { get; private set; }
 
         public async Task InitializeAsync()
         {
@@ -313,8 +312,6 @@ namespace Giuru.IntegrationTests
             buyerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             BuyerWebClient = new RestClient(buyerWebFactpry);
-
-            ElasticsearchUrl = $"http://{_elasticsearchContainer.Hostname}:{_elasticsearchContainer.GetMappedPublicPort(9200)}";
         }
 
         public async Task DisposeAsync()
