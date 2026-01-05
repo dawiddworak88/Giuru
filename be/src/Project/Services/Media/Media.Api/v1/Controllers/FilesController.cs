@@ -186,12 +186,13 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route("chunks")]
-        public async Task<IActionResult> PostChunk([FromForm] UploadMediaRequestModel model)
+        public async Task<IActionResult> PostChunk([FromForm] UploadMediaChunkRequestModel model)
         {
             var organisationClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new CreateFileChunkServiceModel
             {
+                UploadId = model.UploadId,
                 File = model.File,
                 ChunkSumber = model.ChunkNumber,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -231,6 +232,7 @@ namespace Media.Api.v1.Controllers
                 var serviceModel = new UpdateMediaItemFromChunksServiceModel
                 {
                     Id = model.Id,
+                    UploadId = model.UploadId,
                     Filename = model.Filename,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
@@ -254,6 +256,7 @@ namespace Media.Api.v1.Controllers
             {
                 var serviceModel = new CreateMediaItemFromChunksServiceModel
                 {
+                    UploadId = model.UploadId,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name,

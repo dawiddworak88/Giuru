@@ -20,7 +20,7 @@ namespace Giuru.IntegrationTests.Helpers
             {
                 var getResults = await fetchData();
 
-                if (getResults.Data.Any(condition))
+                if (getResults?.Data != null && getResults.Data.Any(condition))
                 {
                     return getResults;
                 }
@@ -29,7 +29,7 @@ namespace Giuru.IntegrationTests.Helpers
                 elapsedSeconds++;
             }
 
-            return null;
+            throw new TimeoutException($"Data matching condition was not found within {timeoutInSeconds} seconds");
         }
     }
 }

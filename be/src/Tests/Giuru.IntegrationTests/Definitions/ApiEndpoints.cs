@@ -13,5 +13,7 @@
         public const string GetInventoriesApiEndpoint = "Inventory/InventoriesApi/Get";
         public const string OutletsApiEndpoint = "Inventory/OutletsApi";
         public const string GetOutletsApiEndpoint = "Inventory/OutletsApi/Get";
+        public const string GetInventoryWarehouseApiEndpoint = "Inventory/WarehousesApi/Get";
+        public const string InventoryWarehousesApiEndpoint = "Inventory/WarehousesApi";
     }
 }

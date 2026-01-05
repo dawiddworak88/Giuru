@@ -141,7 +141,16 @@
   <data name="MetaDataLabel" xml:space="preserve">
     <value>Metadane</value>
   </data>
+  <data name="ChunkDirectoryNotFound" xml:space="preserve">
+    <value>Nie znaleziono katalogu fragmentów.</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Dodaj media</value>
+  </data>
+  <data name="NoChunksFound" xml:space="preserve">
+    <value>Nie znaleziono plików chunków.</value>
+  </data>
+  <data name="InvalidFileName" xml:space="preserve">
+    <value>Nieprawidłowa nazwa pliku.</value>
   </data>
 </root>

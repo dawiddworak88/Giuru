@@ -1,6 +1,6 @@
 ﻿namespace Giuru.IntegrationTests
 {
-    [CollectionDefinition(nameof(ApiCollection))]
+    [CollectionDefinition(nameof(ApiCollection), DisableParallelization = true)]
     public class ApiCollection : ICollectionFixture<ApiFixture>
     {
     }

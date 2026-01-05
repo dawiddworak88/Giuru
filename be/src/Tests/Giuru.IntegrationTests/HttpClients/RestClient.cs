@@ -26,12 +26,17 @@ namespace Giuru.IntegrationTests.HttpClients
 
             var result = await response.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrWhiteSpace(result) is false)
+            if (!response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<T>(result);
+                throw new HttpRequestException($"POST {requestUrl} failed: {(int)response.StatusCode} {response.ReasonPhrase}. Body: {JsonConvert.SerializeObject(result)}");
             }
 
-            return default;
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                throw new InvalidOperationException($"POST {requestUrl} returned empty body with {(int)response.StatusCode}.");
+            }
+
+            return JsonConvert.DeserializeObject<T>(result);
         }
 
         public async Task<T> GetAsync<T>(string requestUrl)
@@ -40,12 +45,17 @@ namespace Giuru.IntegrationTests.HttpClients
 
             var result = await response.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrWhiteSpace(result) is false)
+            if (!response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<T>(result);
+                throw new HttpRequestException($"GET {requestUrl} failed: {(int)response.StatusCode} {response.ReasonPhrase}. Body: {JsonConvert.SerializeObject(result)}");
             }
 
-            return default;
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                throw new InvalidOperationException($"GET {requestUrl} returned empty body with {(int)response.StatusCode}.");
+            }
+
+            return JsonConvert.DeserializeObject<T>(result);
         }
     }
 }

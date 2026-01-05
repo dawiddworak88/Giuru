@@ -5,7 +5,6 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
@@ -56,10 +55,11 @@ namespace Seller.Web.Areas.Media.Repositories.Files
             return default;
         }
 
-        public async Task SaveChunkAsync(string token, string language, byte[] file, string filename, int? chunkNumber)
+        public async Task SaveChunkAsync(string token, string language, byte[] file, string filename, int? chunkNumber, string uploadId)
         {
             var requestModel = new FileRequestModelBase
             {
+                UploadId = uploadId,
                 File = file,
                 Filename = filename,
                 ChunkNumber = chunkNumber
@@ -81,11 +81,12 @@ namespace Seller.Web.Areas.Media.Repositories.Files
             }
         }
 
-        public async Task<Guid> SaveChunksCompleteAsync(string token, string language, Guid? id, string filename)
+        public async Task<Guid> SaveChunksCompleteAsync(string token, string language, Guid? id, string filename, Guid uploadId)
         {
             var requestModel = new FileChunksSaveCompleteRequestModel
             {
                 Id = id,
+                UploadId = uploadId,
                 Filename = filename
             };
 

@@ -83,7 +83,7 @@ namespace Inventory.Api.Services.InventoryItems
                     Name = serviceModel.ProductName
                 };
 
-                _context.Products.Add(product.FillCommonProperties());
+                await _context.Products.AddAsync(product.FillCommonProperties());
             }
 
             var inventory = new InventoryItem
@@ -97,7 +97,7 @@ namespace Inventory.Api.Services.InventoryItems
                 SellerId = serviceModel.OrganisationId.Value
             };
 
-            _context.Inventory.Add(inventory.FillCommonProperties());
+            await _context.Inventory.AddAsync(inventory.FillCommonProperties());
 
             await _context.SaveChangesAsync();
 
