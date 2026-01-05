@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore ${{ env.API_SOLUTION_PATH }}
       - name: Test
-        run: dotnet test --filter "FullyQualifiedName~IntegrationTests" --logger trx --results-directory ${{ env.TESTS_RESULTS_UPLOAD_FOLDER }} --no-build ${{ env.API_SOLUTION_PATH }}
+        run: dotnet test --filter "FullyQualifiedName!~IntegrationTests" --logger trx --results-directory ${{ env.TESTS_RESULTS_UPLOAD_FOLDER }} --no-build ${{ env.API_SOLUTION_PATH }}
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v4
         with:
