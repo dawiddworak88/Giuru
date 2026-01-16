@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.OutletItems
@@ -49,6 +48,13 @@ namespace Inventory.Api.Services.OutletItems
             if (product is null)
             {
                 throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
+            }
+
+            var outletProductExists = _context.Outlet.Where(x => x.ProductId == product.Id && x.Id != outlet.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
+
+            if (outletProductExists.Any())
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
 
             product.Name = model.ProductName;
@@ -103,6 +109,13 @@ namespace Inventory.Api.Services.OutletItems
                 };
 
                 _context.Products.Add(outletProduct.FillCommonProperties());
+            }
+
+            var outletProductExists = _context.Outlet.Where(x => x.ProductId == outletProduct.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
+
+            if (outletProductExists.Any())
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
 
             var outletItem = new OutletItem

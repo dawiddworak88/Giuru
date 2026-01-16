@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.InventoryItems
@@ -51,6 +50,13 @@ namespace Inventory.Api.Services.InventoryItems
                 throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
+            var inventoryProductExists = _context.Inventory.Where(x => x.ProductId == product.Id && x.Id != inventory.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
+
+            if (inventoryProductExists.Any())
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
+            }
+
             product.Name = serviceModel.ProductName;
             product.Sku = serviceModel.ProductSku;
             product.Ean = serviceModel.ProductEan;
@@ -84,6 +90,13 @@ namespace Inventory.Api.Services.InventoryItems
                 };
 
                 await _context.Products.AddAsync(product.FillCommonProperties());
+            }
+
+            var inventoryProductExists = _context.Inventory.Where(x => x.ProductId == product.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
+
+            if (inventoryProductExists.Any())
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
 
             var inventory = new InventoryItem
