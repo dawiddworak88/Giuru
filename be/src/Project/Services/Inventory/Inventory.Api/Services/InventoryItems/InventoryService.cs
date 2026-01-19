@@ -50,9 +50,9 @@ namespace Inventory.Api.Services.InventoryItems
                 throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
             }
 
-            var inventoryProductExists = _context.Inventory.Where(x => x.ProductId == product.Id && x.Id != inventory.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
+            var isInventoryProductExists = await _context.Inventory.AnyAsync(x => x.ProductId == product.Id && x.Id != inventory.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
 
-            if (inventoryProductExists.Any())
+            if (isInventoryProductExists)
             {
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
@@ -92,9 +92,9 @@ namespace Inventory.Api.Services.InventoryItems
                 await _context.Products.AddAsync(product.FillCommonProperties());
             }
 
-            var inventoryProductExists = _context.Inventory.Where(x => x.ProductId == product.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
+            var isInventoryProductExists = await _context.Inventory.AnyAsync(x => x.ProductId == product.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
 
-            if (inventoryProductExists.Any())
+            if (isInventoryProductExists)
             {
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }

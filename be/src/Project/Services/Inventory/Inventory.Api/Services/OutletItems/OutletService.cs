@@ -50,9 +50,9 @@ namespace Inventory.Api.Services.OutletItems
                 throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
             }
 
-            var outletProductExists = _context.Outlet.Where(x => x.ProductId == product.Id && x.Id != outlet.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
+            var isOutletProductExists = await _context.Outlet.AnyAsync(x => x.ProductId == product.Id && x.Id != outlet.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
 
-            if (outletProductExists.Any())
+            if (isOutletProductExists)
             {
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
@@ -111,9 +111,9 @@ namespace Inventory.Api.Services.OutletItems
                 _context.Products.Add(outletProduct.FillCommonProperties());
             }
 
-            var outletProductExists = _context.Outlet.Where(x => x.ProductId == outletProduct.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
+            var isOutletProductExists = await _context.Outlet.AnyAsync(x => x.ProductId == outletProduct.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
 
-            if (outletProductExists.Any())
+            if (isOutletProductExists)
             {
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
