@@ -148,7 +148,24 @@ namespace Inventory.Api.Services.OutletItems
         {
             _logger.LogWarning($"Received outlet products for organisation {model.OrganisationId} with {model.OutletItems.Count()} items");
 
-            foreach (var item in model.OutletItems.OrEmptyIfNull())
+            var groupedItems = model.OutletItems
+                .OrEmptyIfNull()
+                .GroupBy(x => new { x.ProductId, x.WarehouseId })
+                .Select(g => new
+                {
+                    g.Key.ProductId,
+                    g.Key.WarehouseId,
+                    ProductEan = g.First().ProductEan,
+                    ProductSku = g.First().ProductSku,
+                    ProductName = g.First().ProductName,
+                    Quantity = g.Sum(x => x.Quantity),
+                    AvailableQuantity = g.Sum(x => x.AvailableQuantity),
+                    Title = g.First().Title,
+                    Description = g.First().Description
+                })
+                .ToList();
+
+            foreach (var item in groupedItems)
             {
                 var outletProduct = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 

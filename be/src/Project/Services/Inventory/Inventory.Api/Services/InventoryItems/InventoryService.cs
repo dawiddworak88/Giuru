@@ -121,7 +121,23 @@ namespace Inventory.Api.Services.InventoryItems
         {
             _logger.LogWarning($"Received inventory products for organisation {model.OrganisationId} with {model.InventoryItems.Count()} items");
 
-            foreach (var item in model.InventoryItems.OrEmptyIfNull())
+            var groupedItems = model.InventoryItems
+                .OrEmptyIfNull()
+                .GroupBy(x => new { x.ProductId, x.WarehouseId })
+                .Select(g => new
+                {
+                    g.Key.ProductId,
+                    g.Key.WarehouseId,
+                    ProductEan = g.First().ProductEan,
+                    ProductSku = g.First().ProductSku,
+                    ProductName = g.First().ProductName,
+                    Quantity = g.Sum(x => x.Quantity),
+                    AvailableQuantity = g.Sum(x => x.AvailableQuantity),
+                    ExpectedDelivery = g.First().ExpectedDelivery
+                })
+                .ToList();
+
+            foreach (var item in groupedItems)
             {
                 var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 
