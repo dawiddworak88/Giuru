@@ -249,4 +249,7 @@
   <data name="WarehouseDeleteInventoryConflict" xml:space="preserve">
     <value>Podczas usuwania nastąpił konflikt. Magazyn jest używany w stanach magazynowych.</value>
   </data>
+  <data name="InventoryOutletSaveConflict" xml:space="preserve">
+    <value>W magazynie istnieje już pozycja z tym produktem. Proszę edytować istniejący produkt.</value>
+  </data>
 </root>

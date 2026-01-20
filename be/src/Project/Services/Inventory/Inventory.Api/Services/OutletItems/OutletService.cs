@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.OutletItems
@@ -49,6 +48,13 @@ namespace Inventory.Api.Services.OutletItems
             if (product is null)
             {
                 throw new NotFoundException(_inventoryLocalizer.GetString("OutletNotFound"));
+            }
+
+            var isOutletProductExists = await _context.Outlet.AnyAsync(x => x.ProductId == product.Id && x.Id != outlet.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
+
+            if (isOutletProductExists)
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
 
             product.Name = model.ProductName;
@@ -105,6 +111,13 @@ namespace Inventory.Api.Services.OutletItems
                 _context.Products.Add(outletProduct.FillCommonProperties());
             }
 
+            var isOutletProductExists = await _context.Outlet.AnyAsync(x => x.ProductId == outletProduct.Id && x.WarehouseId == model.WarehouseId && x.IsActive);
+
+            if (isOutletProductExists)
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
+            }
+
             var outletItem = new OutletItem
             {
                 WarehouseId = model.WarehouseId.Value,
@@ -135,7 +148,24 @@ namespace Inventory.Api.Services.OutletItems
         {
             _logger.LogWarning($"Received outlet products for organisation {model.OrganisationId} with {model.OutletItems.Count()} items");
 
-            foreach (var item in model.OutletItems.OrEmptyIfNull())
+            var groupedItems = model.OutletItems
+                .OrEmptyIfNull()
+                .GroupBy(x => new { x.ProductId, x.WarehouseId })
+                .Select(g => new
+                {
+                    g.Key.ProductId,
+                    g.Key.WarehouseId,
+                    ProductEan = g.First().ProductEan,
+                    ProductSku = g.First().ProductSku,
+                    ProductName = g.First().ProductName,
+                    Quantity = g.Sum(x => x.Quantity),
+                    AvailableQuantity = g.Sum(x => x.AvailableQuantity),
+                    Title = g.First().Title,
+                    Description = g.First().Description
+                })
+                .ToList();
+
+            foreach (var item in groupedItems)
             {
                 var outletProduct = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 

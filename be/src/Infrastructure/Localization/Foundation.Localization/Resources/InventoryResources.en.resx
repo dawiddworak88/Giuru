@@ -249,4 +249,7 @@
   <data name="WarehouseDeleteInventoryConflict" xml:space="preserve">
     <value>A conflict occurred during deletion. The warehouse is used in stock records.</value>
   </data>
+  <data name="InventoryOutletSaveConflict" xml:space="preserve">
+    <value>There is already an item with this product in the warehouse. Please edit the existing product.</value>
+  </data>
 </root>
