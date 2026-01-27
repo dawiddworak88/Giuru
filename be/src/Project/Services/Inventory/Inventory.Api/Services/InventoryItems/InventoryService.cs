@@ -498,22 +498,24 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
-            var inventory = _context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
-
-            if (inventory is not null)
+            if (bookedQuantity > 0) 
             {
-                var productQuantity = inventory.Quantity + bookedQuantity;
+                var inventory = _context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
 
-                if (productQuantity < 0)
+                if (inventory is not null)
                 {
-                    productQuantity = 0;
+                    var productQuantity = inventory.AvailableQuantity - bookedQuantity;
+
+                    if (productQuantity < 0)
+                    {
+                        productQuantity = 0;
+                    }
+
+                    inventory.AvailableQuantity = productQuantity;
+                    inventory.LastModifiedDate = DateTime.UtcNow;
+
+                    await _context.SaveChangesAsync();
                 }
-
-                inventory.Quantity = productQuantity;
-                inventory.AvailableQuantity = productQuantity;
-                inventory.LastModifiedDate = DateTime.UtcNow;
-
-                await _context.SaveChangesAsync();
             }
         }
 
