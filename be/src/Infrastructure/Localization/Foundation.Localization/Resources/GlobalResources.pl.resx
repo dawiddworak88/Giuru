@@ -189,6 +189,9 @@
   <data name="DownloadCenter" xml:space="preserve">
     <value>Centrum pobierania</value>
   </data>
+  <data name="DeliveryNotices" xml:space="preserve">
+    <value>Awizacje</value>
+  </data>
   <data name="DropFile" xml:space="preserve">
     <value>Upuść plik tutaj...</value>
   </data>

@@ -5,6 +5,7 @@ namespace Buyer.Web.Shared.Configurations
     public class AppSettings
     {
         public string CatalogUrl { get; set; }
+        public string DeliveryNoticesUrl { get; set; }
         public string IdentityUrl { get; set; }
         public string InventoryUrl { get; set; }
         public string ClientUrl { get; set; }
