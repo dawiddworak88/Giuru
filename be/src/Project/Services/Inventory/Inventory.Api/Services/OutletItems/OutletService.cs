@@ -548,25 +548,24 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task UpdateOutletQuantity(Guid? productId, double bookedQuantity)
         {
-            if (bookedQuantity > 0)
+            if (productId is null || bookedQuantity <= 0) return;
+            
+            var outlet = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == productId.Value && x.IsActive);
+
+            if (outlet is not null)
             {
-                var outlet = _context.Outlet.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
+                var productQuantity = outlet.AvailableQuantity - bookedQuantity;
 
-                if (outlet is not null)
+                if (productQuantity < 0)
                 {
-                    var productQuantity = outlet.AvailableQuantity - bookedQuantity;
-
-                    if (productQuantity < 0)
-                    {
-                        productQuantity = 0;
-                    }
-
-                    outlet.AvailableQuantity = productQuantity;
-                    outlet.LastModifiedDate = DateTime.UtcNow;
-
-                    await _context.SaveChangesAsync();
+                    productQuantity = 0;
                 }
-            }
+
+                outlet.AvailableQuantity = productQuantity;
+                outlet.LastModifiedDate = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+            } 
         }
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
