@@ -102,13 +102,13 @@ namespace Basket.Api.Services
                     stockItems.Add(new BasketCheckoutProductEventModel
                     {
                         ProductId = group.FirstOrDefault().ProductId,
-                        BookedQuantity = (int)-group.Sum(x => x.StockQuantity)
+                        BookedQuantity = (int)group.Sum(x => x.StockQuantity)
                     });
 
                     outletItems.Add(new BasketCheckoutProductEventModel
                     {
                         ProductId = group.FirstOrDefault().ProductId,
-                        BookedQuantity = (int)-group.Sum(x => x.OutletQuantity)
+                        BookedQuantity = (int)group.Sum(x => x.OutletQuantity)
                     });
                 }
 
