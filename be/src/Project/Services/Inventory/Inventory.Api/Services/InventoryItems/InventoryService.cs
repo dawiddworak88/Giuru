@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.InventoryItems
@@ -49,6 +48,13 @@ namespace Inventory.Api.Services.InventoryItems
             if (product is null)
             {
                 throw new NotFoundException(_inventoryLocalizer.GetString("InventoryNotFound"));
+            }
+
+            var isInventoryProductExists = await _context.Inventory.AnyAsync(x => x.ProductId == product.Id && x.Id != inventory.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
+
+            if (isInventoryProductExists)
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
             }
 
             product.Name = serviceModel.ProductName;
@@ -86,6 +92,13 @@ namespace Inventory.Api.Services.InventoryItems
                 await _context.Products.AddAsync(product.FillCommonProperties());
             }
 
+            var isInventoryProductExists = await _context.Inventory.AnyAsync(x => x.ProductId == product.Id && x.WarehouseId == serviceModel.WarehouseId && x.IsActive);
+
+            if (isInventoryProductExists)
+            {
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletSaveConflict"));
+            }
+
             var inventory = new InventoryItem
             {
                 WarehouseId = serviceModel.WarehouseId.Value,
@@ -108,7 +121,23 @@ namespace Inventory.Api.Services.InventoryItems
         {
             _logger.LogWarning($"Received inventory products for organisation {model.OrganisationId} with {model.InventoryItems.Count()} items");
 
-            foreach (var item in model.InventoryItems.OrEmptyIfNull())
+            var groupedItems = model.InventoryItems
+                .OrEmptyIfNull()
+                .GroupBy(x => new { x.ProductId, x.WarehouseId })
+                .Select(g => new
+                {
+                    g.Key.ProductId,
+                    g.Key.WarehouseId,
+                    ProductEan = g.First().ProductEan,
+                    ProductSku = g.First().ProductSku,
+                    ProductName = g.First().ProductName,
+                    Quantity = g.Sum(x => x.Quantity),
+                    AvailableQuantity = g.Sum(x => x.AvailableQuantity),
+                    ExpectedDelivery = g.First().ExpectedDelivery
+                })
+                .ToList();
+
+            foreach (var item in groupedItems)
             {
                 var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 
@@ -469,18 +498,19 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
-            var inventory = _context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
+            if (productId is null || bookedQuantity <= 0) return;
+            
+            var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == productId && x.IsActive);
 
             if (inventory is not null)
             {
-                var productQuantity = inventory.Quantity + bookedQuantity;
+                var productQuantity = inventory.AvailableQuantity - bookedQuantity;
 
                 if (productQuantity < 0)
                 {
                     productQuantity = 0;
                 }
 
-                inventory.Quantity = productQuantity;
                 inventory.AvailableQuantity = productQuantity;
                 inventory.LastModifiedDate = DateTime.UtcNow;
 

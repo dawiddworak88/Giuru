@@ -1,4 +1,5 @@
 ﻿using Foundation.Extensions.ModelBuilders;
+using System;
 using System.Collections.Generic;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.Links.ViewModels;
@@ -72,6 +73,16 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                     Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                 }
             };
+
+            if (!string.IsNullOrWhiteSpace(_settings.CurrentValue.DeliveryNoticesUrl))
+            {
+                links.Insert(1, new LinkViewModel
+                {
+                    Text = _globalLocalizer.GetString("DeliveryNotices"),
+                    Url = _settings.CurrentValue.DeliveryNoticesUrl,
+                    Target = "_blank"
+                });
+            }
 
             var mainNavigationLinks = await _graphQlRepository.GetMainNavigationLinksAsync(componentModel.Language, _settings.CurrentValue.DefaultCulture);
 

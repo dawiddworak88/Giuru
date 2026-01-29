@@ -249,4 +249,7 @@
   <data name="WarehouseDeleteInventoryConflict" xml:space="preserve">
     <value>Beim Löschen ist ein Konflikt aufgetreten. Das Lager wird in den Lagerbeständen verwendet.</value>
   </data>
+  <data name="InventoryOutletSaveConflict" xml:space="preserve">
+    <value>Im Lager ist bereits eine Position mit diesem Produkt vorhanden. Bitte bearbeiten Sie das bestehende Produkt.</value>
+  </data>
 </root>
