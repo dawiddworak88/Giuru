@@ -35,6 +35,8 @@ using Foundation.ApiExtensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Foundation.Extensions.Filters;
 using Foundation.Extensions.Formatters;
+using Microsoft.Extensions.Logging;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +47,7 @@ if (!builder.Environment.IsDevelopment())
     builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     {
         loggerConfiguration.MinimumLevel.Warning();
+        loggerConfiguration.MinimumLevel.Override("IdentityServer4", LogEventLevel.Debug);
         loggerConfiguration.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
         loggerConfiguration.Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
         loggerConfiguration.Enrich.FromLogContext();

@@ -33,6 +33,7 @@ using Foundation.Telemetry.DependencyInjection;
 using Buyer.Web.Areas.Dashboard.DependencyInjection;
 using Buyer.Web.Shared.Middlewares;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -231,6 +232,11 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+
+app.MapGet("/__auth-test", async (HttpContext ctx) =>
+{
+    await ctx.ChallengeAsync("oidc");
+});
 
 app.MapHealthChecks("/hc", new HealthCheckOptions
 {
