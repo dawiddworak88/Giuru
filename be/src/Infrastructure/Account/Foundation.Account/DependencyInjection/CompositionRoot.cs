@@ -86,29 +86,29 @@ namespace Foundation.Account.DependencyInjection
 
                 options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
 
-                options.Events.OnRedirectToIdentityProvider = context =>
-                {
-                    if (string.Equals(context.Request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
-                        string.Equals(context.Request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal))
-                    {
-                        context.Response.Clear();
-                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        context.Response.Headers["Location"] = "/Accounts/Account/SignOutNow";
-                        context.Properties.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}";
-                    }
-                    else
-                    {
-                        context.Properties.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.PathBase}";
-                        context.Properties.Items.Add(OpenIdConnectDefaults.RedirectUriForCodePropertiesKey, context.ProtocolMessage.RedirectUri);
-                        context.ProtocolMessage.State = options.StateDataFormat.Protect(context.Properties);
-                        context.Response.StatusCode = (int)HttpStatusCode.Redirect;
-                        context.Response.Headers["Location"] = context.ProtocolMessage.CreateAuthenticationRequestUrl();
-                    }
+                //options.Events.OnRedirectToIdentityProvider = context =>
+                //{
+                //    if (string.Equals(context.Request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
+                //        string.Equals(context.Request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal))
+                //    {
+                //        context.Response.Clear();
+                //        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                //        context.Response.Headers["Location"] = "/Accounts/Account/SignOutNow";
+                //        context.Properties.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}";
+                //    }
+                //    else
+                //    {
+                //        context.Properties.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.PathBase}";
+                //        context.Properties.Items.Add(OpenIdConnectDefaults.RedirectUriForCodePropertiesKey, context.ProtocolMessage.RedirectUri);
+                //        context.ProtocolMessage.State = options.StateDataFormat.Protect(context.Properties);
+                //        context.Response.StatusCode = (int)HttpStatusCode.Redirect;
+                //        context.Response.Headers["Location"] = context.ProtocolMessage.CreateAuthenticationRequestUrl();
+                //    }
 
-                    context.HandleResponse();
+                //    context.HandleResponse();
 
-                    return Task.CompletedTask;
-                };
+                //    return Task.CompletedTask;
+                //};
             });
         }
     }
