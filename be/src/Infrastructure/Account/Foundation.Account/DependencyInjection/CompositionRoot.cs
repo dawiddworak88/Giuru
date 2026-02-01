@@ -91,16 +91,23 @@ namespace Foundation.Account.DependencyInjection
 
                 options.Events.OnRedirectToIdentityProvider = context =>
                 {
-                    var hasSession = context.HttpContext.User?.Identity?.IsAuthenticated;
+                    var hasSession = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
 
                     Console.WriteLine($"HasSession: {hasSession}");
-                    Console.WriteLine($"Request: {JsonConvert.SerializeObject(context.Request)}");
 
-                    context.ProtocolMessage.Prompt = "none";
-                    context.ProtocolMessage.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.PathBase}";
-                    context.HandleResponse();
+                    if (hasSession)
+                    {
+                        context.ProtocolMessage.Prompt = "none";
+                        context.ProtocolMessage.RedirectUri = context.Properties.RedirectUri;
+                        context.HandleResponse();
+                    }
+                    else
+                    {
+                        context.ProtocolMessage.Prompt = "login";
+                    }
 
-                    return Task.CompletedTask;
+
+                        return Task.CompletedTask;
                 };
                 //options.Events.OnRedirectToIdentityProvider = context =>
                 //{
