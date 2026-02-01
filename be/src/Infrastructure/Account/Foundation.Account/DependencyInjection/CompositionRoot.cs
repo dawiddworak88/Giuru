@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -89,7 +91,14 @@ namespace Foundation.Account.DependencyInjection
 
                 options.Events.OnRedirectToIdentityProvider = context =>
                 {
+                    var hasSession = context.HttpContext.User?.Identity?.IsAuthenticated;
+
+                    Console.WriteLine($"HasSession: {hasSession}");
+                    Console.WriteLine($"Request: {JsonConvert.SerializeObject(context.Request)}");
+
                     context.ProtocolMessage.Prompt = "none";
+                    context.ProtocolMessage.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.PathBase}";
+                    context.HandleResponse();
 
                     return Task.CompletedTask;
                 };
