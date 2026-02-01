@@ -70,6 +70,7 @@ namespace Foundation.Account.DependencyInjection
                 options.ClientId = configuration["ClientId"];
                 options.ClientSecret = configuration["ClientSecret"];
                 options.ResponseType = "code";
+                options.UsePkce = true;
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
