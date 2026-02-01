@@ -92,7 +92,7 @@ namespace Foundation.Account.DependencyInjection
                     context.ProtocolMessage.Prompt = "none";
 
                     return Task.CompletedTask;
-                }
+                };
                 //options.Events.OnRedirectToIdentityProvider = context =>
                 //{
                 //    if (string.Equals(context.Request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
