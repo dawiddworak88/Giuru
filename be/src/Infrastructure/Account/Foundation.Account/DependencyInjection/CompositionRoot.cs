@@ -99,7 +99,6 @@ namespace Foundation.Account.DependencyInjection
                     {
                         context.ProtocolMessage.Prompt = "none";
                         context.ProtocolMessage.RedirectUri = context.Properties.RedirectUri;
-                        context.HandleResponse();
                     }
                     else
                     {
