@@ -140,6 +140,19 @@ builder.Services.AddApiVersioning();
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "idsrv.session";
+
+    options.Cookie.Domain = ".eltap.com";
+
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    options.LoginPath = "/Accounts/SignIn";
+    options.LogoutPath = "/Accounts/SignOut";
+});
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity API", Version = "v1" });
