@@ -48,7 +48,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
-    loggerConfiguration.MinimumLevel.Warning();
+    loggerConfiguration.MinimumLevel.Debug();
     loggerConfiguration.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
     loggerConfiguration.Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
     loggerConfiguration.Enrich.FromLogContext();

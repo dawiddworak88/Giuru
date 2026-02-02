@@ -79,7 +79,7 @@ namespace Foundation.Account.DependencyInjection
 
                 options.SignInScheme = "Cookies";
                 options.Authority = configuration["IdentityUrl"];
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = true;
 
                 options.ClientId = configuration["ClientId"];
                 options.ClientSecret = configuration["ClientSecret"];
