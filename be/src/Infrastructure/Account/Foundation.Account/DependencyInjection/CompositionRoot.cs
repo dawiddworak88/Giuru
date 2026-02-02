@@ -86,6 +86,8 @@ namespace Foundation.Account.DependencyInjection
                 options.ResponseType = "code";
                 options.UsePkce = true;
 
+                options.CallbackPath = "/signin-oidc";
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = ClaimTypes.Name,
