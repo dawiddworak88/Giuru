@@ -202,13 +202,13 @@ app.UseResponseCompression();
 
 app.UseGeneralStaticFiles();
 
-app.UseRouting();
-
 app.UseAuthentication();
 
 app.UseMiddleware<ClaimsEnrichmentMiddleware>();
 
 app.UseAuthorization();
+
+app.UseRouting();
 
 app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
 
