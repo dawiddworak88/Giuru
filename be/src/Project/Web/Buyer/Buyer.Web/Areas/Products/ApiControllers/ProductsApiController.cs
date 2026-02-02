@@ -418,8 +418,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Sku = product.Sku,
                         Name = product.Name,
                         Images = product.Images,
-                        StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
-                        OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                        StockQuantity = inventories.Where(x => x.ProductId == product.Id).Sum(x => x.AvailableQuantity) ?? 0,
+                        OutletQuantity = outlets.Where(y => y.ProductId == product.Id).Sum(x => x.AvailableQuantity) ?? 0,
                     };
 
                     if (prices.Any())
