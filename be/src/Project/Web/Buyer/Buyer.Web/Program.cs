@@ -214,6 +214,8 @@ app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMo
 
 app.UseSecurityHeaders(builder.Configuration);
 
+app.MapControllers();
+
 app.MapControllerRoute(
     name: "localizedAreaRoute",
     pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();

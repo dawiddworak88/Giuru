@@ -220,9 +220,12 @@ app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMo
 
 app.UseSecurityHeaders(builder.Configuration);
 
+app.MapControllers();
+
 app.MapControllerRoute(
     name: "localizedAreaRoute",
-    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
+    pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}")
+    .RequireAuthorization("SellerOnly");
 
 app.MapControllerRoute(
     name: "default",
