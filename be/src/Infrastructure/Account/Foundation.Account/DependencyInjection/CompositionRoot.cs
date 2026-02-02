@@ -89,7 +89,7 @@ namespace Foundation.Account.DependencyInjection
 
                 options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
 
-                options.Events.OnRedirectToIdentityProvider = context =>
+                /*options.Events.OnRedirectToIdentityProvider = context =>
                 {
                     var hasSession = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
 
@@ -107,8 +107,8 @@ namespace Foundation.Account.DependencyInjection
 
 
                         return Task.CompletedTask;
-                };
-                //options.Events.OnRedirectToIdentityProvider = context =>
+                };*/
+                /*//options.Events.OnRedirectToIdentityProvider = context =>
                 //{
                 //    if (string.Equals(context.Request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
                 //        string.Equals(context.Request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal))
@@ -125,7 +125,7 @@ namespace Foundation.Account.DependencyInjection
                 //        context.ProtocolMessage.State = options.StateDataFormat.Protect(context.Properties);
                 //        context.Response.StatusCode = (int)HttpStatusCode.Redirect;
                 //        context.Response.Headers["Location"] = context.ProtocolMessage.CreateAuthenticationRequestUrl();
-                //    }
+                //    }*/
 
                 //    context.HandleResponse();
 
