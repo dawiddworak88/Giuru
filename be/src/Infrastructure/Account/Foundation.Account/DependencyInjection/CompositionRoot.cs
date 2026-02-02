@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -57,12 +58,18 @@ namespace Foundation.Account.DependencyInjection
             .AddCookie("Cookies")
             .AddOpenIdConnect("oidc", options =>
             {
-                if (environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+                options.CorrelationCookie.SameSite = SameSiteMode.None;
+                options.NonceCookie.SameSite = SameSiteMode.None;
+
+                if (environment.IsDevelopment())
                 {
-                    options.CorrelationCookie.SameSite = SameSiteMode.Lax;
-                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
-                    options.NonceCookie.SameSite = SameSiteMode.Lax;
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;   // tylko jeśli HTTP
                     options.NonceCookie.SecurePolicy = CookieSecurePolicy.None;
+                }
+                else
+                {
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
 
                 options.SignInScheme = "Cookies";
@@ -88,49 +95,6 @@ namespace Foundation.Account.DependencyInjection
                 options.Scope.Add(AccountConstants.Scopes.Roles);
 
                 options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
-
-                /*options.Events.OnRedirectToIdentityProvider = context =>
-                {
-                    var hasSession = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
-
-                    Console.WriteLine($"HasSession: {hasSession}");
-
-                    if (hasSession)
-                    {
-                        context.ProtocolMessage.Prompt = "none";
-                        context.ProtocolMessage.RedirectUri = context.Properties.RedirectUri;
-                    }
-                    else
-                    {
-                        context.ProtocolMessage.Prompt = "login";
-                    }
-
-
-                        return Task.CompletedTask;
-                };*/
-                /*//options.Events.OnRedirectToIdentityProvider = context =>
-                //{
-                //    if (string.Equals(context.Request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
-                //        string.Equals(context.Request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal))
-                //    {
-                //        context.Response.Clear();
-                //        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                //        context.Response.Headers["Location"] = "/Accounts/Account/SignOutNow";
-                //        context.Properties.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}";
-                //    }
-                //    else
-                //    {
-                //        context.Properties.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.PathBase}";
-                //        context.Properties.Items.Add(OpenIdConnectDefaults.RedirectUriForCodePropertiesKey, context.ProtocolMessage.RedirectUri);
-                //        context.ProtocolMessage.State = options.StateDataFormat.Protect(context.Properties);
-                //        context.Response.StatusCode = (int)HttpStatusCode.Redirect;
-                //        context.Response.Headers["Location"] = context.ProtocolMessage.CreateAuthenticationRequestUrl();
-                //    }*/
-
-                //    context.HandleResponse();
-
-                //    return Task.CompletedTask;
-                //};
             });
         }
     }
