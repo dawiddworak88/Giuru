@@ -87,12 +87,19 @@ if (!builder.Environment.IsDevelopment())
         true);
 }
 
-builder.Services.AddDataProtection().UseCryptographicAlgorithms(
-    new AuthenticatedEncryptorConfiguration
-    {
-        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
-        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-    }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
+builder.Services
+    .AddDataProtection()
+    .SetApplicationName("eltap-sso") 
+    .UseCryptographicAlgorithms(
+        new AuthenticatedEncryptorConfiguration
+        {
+            EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+            ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+        })
+    .PersistKeysToStackExchangeRedis(
+        ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]),
+        "eltap-sso-dp-keys" 
+    );
 
 if (builder.Configuration.GetValue<bool>("IntegrationTestsEnabled") is true)
 {
