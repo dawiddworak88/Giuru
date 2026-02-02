@@ -125,7 +125,6 @@ namespace Foundation.Account.DependencyInjection
                     {
                         Console.WriteLine("[OIDC] Silent login failed – forcing interactive login.");
 
-                        // Przekierowanie do normalnego loginu
                         var redirectUri = context.Properties.RedirectUri ?? "/";
                         context.Response.Redirect("/Account/Login?redirectUri=" + Uri.EscapeDataString(redirectUri));
                         context.HandleResponse();
@@ -135,6 +134,13 @@ namespace Foundation.Account.DependencyInjection
                         Console.WriteLine($"[OIDC] Remote failure: {context.Failure.Message}");
                     }
 
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnMessageReceived = context =>
+                {
+                    Console.WriteLine($"[OIDC] MessageReceived: {context.ProtocolMessage?.Error}");
+                    Console.WriteLine($"[OIDC] Prompt: {context.ProtocolMessage?.Prompt}");
                     return Task.CompletedTask;
                 };
 
