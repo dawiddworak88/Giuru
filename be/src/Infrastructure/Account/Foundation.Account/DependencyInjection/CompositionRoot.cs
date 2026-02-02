@@ -55,10 +55,18 @@ namespace Foundation.Account.DependencyInjection
                 options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
             })
-            .AddCookie("Cookies")
+            .AddCookie("Cookies", options =>
+            {
+                options.Cookie.Name = $"Cookies-{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}-{configuration["ClientId"]}";
+                options.Cookie.SameSite = SameSiteMode.None; // potrzebne dla cross-site
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // wymusza HTTPS
+            })
             .AddOpenIdConnect("oidc", options =>
             {
+                options.CorrelationCookie.Name = $"Correlation-{configuration["ClientId"]}";
                 options.CorrelationCookie.SameSite = SameSiteMode.None;
+
+                options.NonceCookie.Name = $"Nonce-{configuration["ClientId"]}";
                 options.NonceCookie.SameSite = SameSiteMode.None;
 
                 if (environment.IsDevelopment())
@@ -95,6 +103,22 @@ namespace Foundation.Account.DependencyInjection
                 options.Scope.Add(AccountConstants.Scopes.Roles);
 
                 options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
+
+                options.Events.OnRedirectToIdentityProvider = context =>
+                {
+                    var hasSession = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
+
+                    if (hasSession)
+                    {
+                        context.ProtocolMessage.Prompt = "none"; // silent login
+                    }
+                    else
+                    {
+                        context.ProtocolMessage.Prompt = "login"; // normal login
+                    }
+
+                    return Task.CompletedTask;
+                };
             });
         }
     }
