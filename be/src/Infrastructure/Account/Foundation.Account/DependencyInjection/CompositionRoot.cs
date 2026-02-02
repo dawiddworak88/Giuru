@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
@@ -106,17 +107,40 @@ namespace Foundation.Account.DependencyInjection
 
                 options.Events.OnRedirectToIdentityProvider = context =>
                 {
-                    var hasSession = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
+                    Console.WriteLine($"[OIDC] Redirect to IdentityServer for {context.Options.ClientId}");
+                    Console.WriteLine($"[OIDC] Local user authenticated: {context.HttpContext.User?.Identity?.IsAuthenticated}");
 
-                    if (hasSession)
+                    // Silent login – próbujemy najpierw
+                    context.ProtocolMessage.Prompt = "none";
+                    context.ProtocolMessage.RedirectUri = context.Properties.RedirectUri;
+
+                    context.HandleResponse();
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnRemoteFailure = context =>
+                {
+                    if (context.Failure is OpenIdConnectProtocolException ex &&
+                        ex.Message.Contains("login_required"))
                     {
-                        context.ProtocolMessage.Prompt = "none"; // silent login
+                        Console.WriteLine("[OIDC] Silent login failed – forcing interactive login.");
+
+                        // Przekierowanie do normalnego loginu
+                        var redirectUri = context.Properties.RedirectUri ?? "/";
+                        context.Response.Redirect("/Account/Login?redirectUri=" + Uri.EscapeDataString(redirectUri));
+                        context.HandleResponse();
                     }
                     else
                     {
-                        context.ProtocolMessage.Prompt = "login"; // normal login
+                        Console.WriteLine($"[OIDC] Remote failure: {context.Failure.Message}");
                     }
 
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnTokenValidated = context =>
+                {
+                    Console.WriteLine($"[OIDC] Token validated for {context.Principal.Identity.Name}");
                     return Task.CompletedTask;
                 };
             });
