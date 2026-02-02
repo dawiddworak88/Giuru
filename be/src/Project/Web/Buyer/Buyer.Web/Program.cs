@@ -177,6 +177,14 @@ builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    options.LogoutPath = "/Accounts/Account/SignOutNow";
+});
+
 var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
@@ -191,22 +199,6 @@ if (!app.Environment.IsDevelopment())
 app.UseGeneralException();
 
 app.UseResponseCompression();
-
-if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
-{
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.Lax
-    });
-}
-else
-{
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.None,
-        Secure = CookieSecurePolicy.Always
-    });
-}
 
 app.UseGeneralStaticFiles();
 

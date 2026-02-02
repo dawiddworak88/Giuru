@@ -142,15 +142,11 @@ builder.Services.ConigureHealthChecks(builder.Configuration);
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.Name = "idsrv.session";
-
-    options.Cookie.Domain = ".eltap.com";
-
-    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
-    options.LoginPath = "/Accounts/SignIn";
-    options.LogoutPath = "/Accounts/SignOut";
+    options.LogoutPath = "/Accounts/Account/SignOutNow";
+    options.LoginPath = "/Accounts/Account/SignIn";
 });
 
 builder.Services.AddSwaggerGen(c =>
@@ -182,22 +178,6 @@ app.UseGeneralStaticFiles();
 var scope = app.Services.CreateAsyncScope();
 
 app.ConfigureDatabaseMigrations(builder.Configuration, scope.ServiceProvider.GetService<IUserService>());
-
-if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
-{
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.Lax
-    });
-}
-else
-{
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.None,
-        Secure = CookieSecurePolicy.Always
-    });
-}
 
 app.UseRouting();
 

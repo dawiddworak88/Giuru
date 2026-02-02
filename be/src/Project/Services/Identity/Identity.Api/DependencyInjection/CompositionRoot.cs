@@ -18,6 +18,7 @@ using Identity.Api.Services.UserApprovals;
 using Identity.Api.Services.Users;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,8 @@ namespace Identity.Api.DependencyInjection
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
+
+                options.Authentication.CookieSameSiteMode = SameSiteMode.None;
             })
             .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
             .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)

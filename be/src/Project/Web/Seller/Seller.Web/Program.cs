@@ -167,6 +167,14 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
 });
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    options.LogoutPath = "/Accounts/Account/SignOutNow";
+});
+
 builder.Services.AddOpenTelemetryTracing(
     builder.Configuration["OpenTelemetryTracingCollectorUrl"],
     Assembly.GetExecutingAssembly().GetName().Name,
@@ -199,22 +207,6 @@ if (!app.Environment.IsDevelopment())
 app.UseGeneralException();
 
 app.UseResponseCompression();
-
-if (app.Environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
-{
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.Lax
-    });
-}
-else
-{
-    app.UseCookiePolicy(new CookiePolicyOptions
-    {
-        MinimumSameSitePolicy = SameSiteMode.None,
-        Secure = CookieSecurePolicy.Always
-    });
-}
 
 app.UseGeneralStaticFiles();
 

@@ -5,6 +5,7 @@ using Identity.Api.Configurations;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Services.Organisations;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;

@@ -58,16 +58,12 @@ namespace Foundation.Account.DependencyInjection
             })
             .AddCookie("Cookies", options =>
             {
-                options.Cookie.Name = $"Cookies-{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}-{configuration["ClientId"]}";
-                options.Cookie.SameSite = SameSiteMode.None; // potrzebne dla cross-site
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // wymusza HTTPS
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             })
             .AddOpenIdConnect("oidc", options =>
             {
-                options.CorrelationCookie.Name = $"Correlation-{configuration["ClientId"]}";
                 options.CorrelationCookie.SameSite = SameSiteMode.None;
-
-                options.NonceCookie.Name = $"Nonce-{configuration["ClientId"]}";
                 options.NonceCookie.SameSite = SameSiteMode.None;
 
                 if (environment.IsDevelopment())
@@ -104,51 +100,6 @@ namespace Foundation.Account.DependencyInjection
                 options.Scope.Add(AccountConstants.Scopes.Roles);
 
                 options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
-
-                options.Events.OnRedirectToIdentityProvider = context =>
-                {
-                    Console.WriteLine($"[OIDC] Redirect to IdentityServer for {context.Options.ClientId}");
-                    Console.WriteLine($"[OIDC] Local user authenticated: {context.HttpContext.User?.Identity?.IsAuthenticated}");
-
-                    // Silent login – próbujemy najpierw
-                    context.ProtocolMessage.Prompt = "none";
-                    context.ProtocolMessage.RedirectUri = context.Properties.RedirectUri;
-
-                    context.HandleResponse();
-                    return Task.CompletedTask;
-                };
-
-                options.Events.OnRemoteFailure = context =>
-                {
-                    if (context.Failure is OpenIdConnectProtocolException ex &&
-                        ex.Message.Contains("login_required"))
-                    {
-                        Console.WriteLine("[OIDC] Silent login failed – forcing interactive login.");
-
-                        var redirectUri = context.Properties.RedirectUri ?? "/";
-                        context.Response.Redirect("/Account/Login?redirectUri=" + Uri.EscapeDataString(redirectUri));
-                        context.HandleResponse();
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[OIDC] Remote failure: {context.Failure.Message}");
-                    }
-
-                    return Task.CompletedTask;
-                };
-
-                options.Events.OnMessageReceived = context =>
-                {
-                    Console.WriteLine($"[OIDC] MessageReceived: {context.ProtocolMessage?.Error}");
-                    Console.WriteLine($"[OIDC] Prompt: {context.ProtocolMessage?.Prompt}");
-                    return Task.CompletedTask;
-                };
-
-                options.Events.OnTokenValidated = context =>
-                {
-                    Console.WriteLine($"[OIDC] Token validated for {context.Principal.Identity.Name}");
-                    return Task.CompletedTask;
-                };
             });
         }
     }
