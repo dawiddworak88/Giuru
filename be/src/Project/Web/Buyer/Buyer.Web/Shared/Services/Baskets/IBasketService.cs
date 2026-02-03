@@ -8,6 +8,5 @@ namespace Buyer.Web.Shared.Services.Baskets
     public interface IBasketService
     {
         Task<IEnumerable<BasketItem>> GetBasketAsync(Guid? basketId, string token, string language);
-        Task ValidateStockOutletQuantitiesAsync(Guid? basketId, string token, string language);
     }
 }
