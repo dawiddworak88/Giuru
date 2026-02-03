@@ -382,7 +382,7 @@ services:
       - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
       - PossibleExtraPackingAttributeKeys=extraPacking
       - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
-      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisgruppe
       - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
       - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - PossibleWidthAttributeKeys=width
@@ -440,7 +440,7 @@ services:
       - OrganisationId=${ORGANISATION_ID}
       - PossibleExtraPackingAttributeKeys=extraPacking
       - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
-      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisgruppe
       - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
       - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - PossibleWidthAttributeKeys=width
@@ -461,6 +461,7 @@ services:
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - DefaultCurrency=EUR
     volumes:
       - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
