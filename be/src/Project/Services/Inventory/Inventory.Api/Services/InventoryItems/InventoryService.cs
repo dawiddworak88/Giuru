@@ -499,23 +499,29 @@ namespace Inventory.Api.Services.InventoryItems
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
             if (productId is null || bookedQuantity <= 0) return;
-            
-            var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == productId && x.IsActive);
 
-            if (inventory is not null)
+            var inventories = await _context.Inventory
+                .Where(x => x.ProductId == productId && x.IsActive)
+                .ToListAsync();
+
+            if (inventories.Any() is false) return;
+
+            var totalAvailableQuantity = inventories.Sum(x => x.AvailableQuantity);
+            if (bookedQuantity > totalAvailableQuantity)
+                throw new ConflictException("Insufficient stock");
+
+            var remainingToAllocate = bookedQuantity;
+            foreach (var item in inventories)
             {
-                var productQuantity = inventory.AvailableQuantity - bookedQuantity;
+                if (remainingToAllocate <= 0) break;
 
-                if (productQuantity < 0)
-                {
-                    productQuantity = 0;
-                }
-
-                inventory.AvailableQuantity = productQuantity;
-                inventory.LastModifiedDate = DateTime.UtcNow;
-
-                await _context.SaveChangesAsync();
+                var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
+                item.AvailableQuantity -= toDeduct;
+                item.LastModifiedDate = DateTime.UtcNow;
+                remainingToAllocate -= toDeduct;
             }
+
+            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<InventorySumServiceModel> GetInventoriesByProductsIds(GetInventoriesByProductsIdsServiceModel model)

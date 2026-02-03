@@ -550,22 +550,29 @@ namespace Inventory.Api.Services.OutletItems
         {
             if (productId is null || bookedQuantity <= 0) return;
             
-            var outlet = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == productId.Value && x.IsActive);
+            var outlets = await _context.Outlet.
+                Where(x => x.ProductId == productId.Value && x.IsActive)
+                .ToListAsync();
 
-            if (outlet is not null)
+            if (outlets.Any() is false) return;
+
+            var totalAvailableQuantity = outlets.Sum(x => x.AvailableQuantity);
+            if (bookedQuantity > totalAvailableQuantity)
+                throw new ConflictException("Insufficient outlet");
+
+            var remainingToAllocate = bookedQuantity;
+
+            foreach (var item in outlets)
             {
-                var productQuantity = outlet.AvailableQuantity - bookedQuantity;
+                if (remainingToAllocate <= 0) break;
 
-                if (productQuantity < 0)
-                {
-                    productQuantity = 0;
-                }
+                var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
+                item.AvailableQuantity -= toDeduct;
+                item.LastModifiedDate = DateTime.UtcNow;
+                remainingToAllocate -= toDeduct;
+            }
 
-                outlet.AvailableQuantity = productQuantity;
-                outlet.LastModifiedDate = DateTime.UtcNow;
-
-                await _context.SaveChangesAsync();
-            } 
+            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
