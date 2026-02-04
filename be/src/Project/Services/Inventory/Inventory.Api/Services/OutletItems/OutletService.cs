@@ -577,22 +577,36 @@ namespace Inventory.Api.Services.OutletItems
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
         {
-            return from o in _context.Outlet
-                   join warehouse in _context.Warehouses on o.WarehouseId equals warehouse.Id
-                   join product in _context.Products on o.ProductId equals product.Id
-                   join ot in _context.OutletTranslations on o.Id equals ot.OutletItemId
-                   where model.Ids.Contains(o.ProductId) && product.IsActive && o.IsActive
-                   select new OutletSumServiceModel
-                   {
-                       ProductId = product.Id,
-                       ProductName = product.Name,
-                       ProductEan = product.Ean,
-                       ProductSku = product.Sku,
-                       Title = ot.Title,
-                       Description = ot.Description,
-                       Quantity = o.Quantity,
-                       AvailableQuantity = o.AvailableQuantity,
-                   };
+            var outletItems = _context.Outlet
+                .Include(x => x.Translations)
+                .Include(x => x.Product)
+                .Include(x => x.Warehouse)
+                .AsSingleQuery()
+                .Where(x => model.Ids.Contains(x.ProductId) && x.IsActive);
+
+            return outletItems.Select(x => new
+            {
+                x.ProductId,
+                ProductName = x.Product.Name,
+                ProductEan = x.Product.Ean,
+                ProductSku = x.Product.Sku,
+                Translation = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)
+                  ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id),
+                x.Quantity,
+                x.AvailableQuantity
+            })
+            .AsEnumerable()
+            .Select(x => new OutletSumServiceModel
+            {
+                ProductId = x.ProductId,
+                ProductName = x.ProductName,
+                ProductEan = x.ProductEan,
+                ProductSku = x.ProductSku,
+                Title = x.Translation?.Title,
+                Description = x.Translation?.Description,
+                Quantity = x.Quantity,
+                AvailableQuantity = x.AvailableQuantity,
+            });
         }
     }
 }
