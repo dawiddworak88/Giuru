@@ -74,5 +74,49 @@ namespace Buyer.Web.Shared.Services.Baskets
 
             return default;
         }
+
+        public async Task ValidateStockOutletQuantitiesAsync(Guid? basketId, string token, string language)
+        {
+            var basket = await this.basketRepository.GetBasketById(token, language, basketId);
+
+            if (basket is not null && basket.Items.Any())
+            {
+                if (basket.Items.Any(x => x.StockQuantity > 0))
+                {
+                    var stockItems = basket.Items.Where(x => x.StockQuantity > 0);
+
+                    var inventoryProducts = await this.inventoryRepository.GetAvailbleProductsByProductIdsAsync(token, language, stockItems.Select(x => x.ProductId.Value));
+
+                    foreach (var item in stockItems)
+                    {
+                        var inventoryProductAvailableQuantitiy = inventoryProducts.Where(x => x.ProductId == item.ProductId).Sum(x => x.AvailableQuantity);
+                        var itemStockQuantity = stockItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.StockQuantity);
+
+                        if (itemStockQuantity > inventoryProductAvailableQuantitiy)
+                        {
+                            throw new CustomException($"{this.orderLocalizer.GetString("StockQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {itemStockQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {inventoryProductAvailableQuantitiy}", (int)HttpStatusCode.Conflict);
+                        }
+                    }
+                }
+
+                if (basket.Items.Any(x => x.OutletQuantity > 0))
+                {
+                    var outletItems = basket.Items.Where(x => x.OutletQuantity > 0);
+
+                    var outletProducts = await this.outletRepository.GetOutletProductsByProductsIdAsync(token, language, outletItems.Select(x => x.ProductId.Value));
+
+                    foreach (var item in outletItems)
+                    {
+                        var outletProductAvailableQuantity = outletProducts.Where(x => x.ProductId == item.ProductId).Sum(x => x.AvailableQuantity);
+                        var itemOutletQuantity = outletItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.OutletQuantity);
+
+                        if (itemOutletQuantity > outletProductAvailableQuantity)
+                        {
+                            throw new CustomException($"{this.orderLocalizer.GetString("OutletQuantityError").Value} {item.ProductName} ({item.ProductSku}) {this.globalLocalizer.GetString("InBasket")} {itemOutletQuantity} {this.globalLocalizer.GetString("MaximalLabel")} {outletProductAvailableQuantity}", (int)HttpStatusCode.Conflict);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

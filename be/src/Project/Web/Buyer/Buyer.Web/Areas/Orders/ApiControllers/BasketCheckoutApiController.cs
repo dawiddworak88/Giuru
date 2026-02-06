@@ -70,6 +70,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
 
+            await _basketService.ValidateStockOutletQuantitiesAsync(model.BasketId, token, language);
+
             var deliveryAddressesIds = new List<Guid>();
 
             if (model.ShippingAddressId.HasValue)
