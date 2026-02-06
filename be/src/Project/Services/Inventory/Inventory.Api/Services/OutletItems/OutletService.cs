@@ -97,7 +97,7 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel model)
         {
             var outletProduct = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.ProductId && x.IsActive);
-            
+
             if (outletProduct is null)
             {
                 outletProduct = new Product
@@ -308,7 +308,7 @@ namespace Inventory.Api.Services.OutletItems
                         AvailableQuantity = x.AvailableQuantity,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate
-                    });;
+                    }); ;
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -411,7 +411,7 @@ namespace Inventory.Api.Services.OutletItems
                     AvailableQuantity = outletItems.Sum(x => x.AvailableQuantity),
                     Quantity = outletItems.Sum(x => x.Quantity),
                     ProductEan = outletItems.FirstOrDefault().ProductEan,
-                    Title= outletItems.FirstOrDefault().Title,
+                    Title = outletItems.FirstOrDefault().Title,
                     Description = outletItems.FirstOrDefault().Description,
                     Details = outletItems.Select(item => new OutletServiceModel
                     {
@@ -518,7 +518,7 @@ namespace Inventory.Api.Services.OutletItems
                     .GroupBy(x => x.ProductId)
                     .Where(x => x.Sum(y => y.AvailableQuantity) > 0)
                     .Select(y => new OutletSumServiceModel
-                    { 
+                    {
                         ProductId = y.FirstOrDefault().ProductId,
                         ProductName = y.FirstOrDefault().Product.Name,
                         ProductSku = y.FirstOrDefault().Product.Sku,
@@ -549,23 +549,22 @@ namespace Inventory.Api.Services.OutletItems
         public async Task UpdateOutletQuantity(Guid? productId, double bookedQuantity)
         {
             if (productId is null || bookedQuantity <= 0) return;
-            
-            var outlets = await _context.Outlet.
-                Where(x => x.ProductId == productId.Value && x.IsActive)
+
+            var outlets = await _context.Outlet
+                .Where(x => x.ProductId == productId.Value && x.IsActive)
+                .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
-            if (outlets.Any() is false) return;
+            if (outlets.OrEmptyIfNull().Any() is false) return;
 
             var totalAvailableQuantity = outlets.Sum(x => x.AvailableQuantity);
             if (bookedQuantity > totalAvailableQuantity)
-                throw new ConflictException("Insufficient outlet");
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
             var remainingToAllocate = bookedQuantity;
-
             foreach (var item in outlets)
             {
                 if (remainingToAllocate <= 0) break;
-
                 var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
                 item.AvailableQuantity -= toDeduct;
                 item.LastModifiedDate = DateTime.UtcNow;
@@ -573,6 +572,7 @@ namespace Inventory.Api.Services.OutletItems
             }
 
             await _context.SaveChangesAsync();
+
         }
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
@@ -580,33 +580,22 @@ namespace Inventory.Api.Services.OutletItems
             var outletItems = _context.Outlet
                 .Include(x => x.Translations)
                 .Include(x => x.Product)
-                .Include(x => x.Warehouse)
                 .AsSingleQuery()
-                .Where(x => model.Ids.Contains(x.ProductId) && x.IsActive);
+                .Where(x => model.Ids.Contains(x.ProductId) && x.Product.IsActive && x.IsActive)
+                .ToList()
+                .Select(x => new OutletSumServiceModel
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.Product.Name,
+                    ProductEan = x.Product.Ean,
+                    ProductSku = x.Product.Sku,
+                    Title = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Title ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Title,
+                    Description = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Description ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Description,
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity,
+                });
 
-            return outletItems.Select(x => new
-            {
-                x.ProductId,
-                ProductName = x.Product.Name,
-                ProductEan = x.Product.Ean,
-                ProductSku = x.Product.Sku,
-                Translation = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)
-                  ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id),
-                x.Quantity,
-                x.AvailableQuantity
-            })
-            .AsEnumerable()
-            .Select(x => new OutletSumServiceModel
-            {
-                ProductId = x.ProductId,
-                ProductName = x.ProductName,
-                ProductEan = x.ProductEan,
-                ProductSku = x.ProductSku,
-                Title = x.Translation?.Title,
-                Description = x.Translation?.Description,
-                Quantity = x.Quantity,
-                AvailableQuantity = x.AvailableQuantity,
-            });
+            return outletItems;
         }
     }
 }
