@@ -336,17 +336,34 @@ function NewOrderForm(props) {
                                 disabled={product == null}
                                 value={quantity}
                                 onChange={(e) => {
-                                    if (productFromOutlet && e.target.value > maxOutlet) {
-                                        e.target.value = maxOutlet;
+                                    const rawValue = e.target.value;
+
+                                    if (rawValue === '') {
+                                        setQuantity('');
+                                        return;
                                     }
 
-                                    setQuantity(e.target.value);
+                                    let newValue = Number(rawValue);
+
+                                    if (isNaN(newValue)) {
+                                        return;
+                                    }
+
+                                    if (productFromOutlet && newValue > maxOutlet) {
+                                        newValue = maxOutlet;
+                                    }
+
+                                    setQuantity(newValue);
                                 }}
                                 onBlur={() => {
                                     let numericValue = Number(quantity);
 
-                                    if (isNaN(numericValue) || numericValue < 0) {
+                                    if (isNaN(numericValue) || numericValue < 1 || quantity === '') {
                                         numericValue = 1;
+                                    }
+
+                                    if (productFromOutlet && numericValue > maxOutlet) {
+                                        numericValue = maxOutlet;
                                     }
 
                                     setQuantity(numericValue);
