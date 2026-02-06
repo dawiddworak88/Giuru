@@ -502,13 +502,14 @@ namespace Inventory.Api.Services.InventoryItems
 
             var inventories = await _context.Inventory
                 .Where(x => x.ProductId == productId && x.IsActive)
+                .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
-            if (inventories.Any() is false) return;
+            if (inventories.OrEmptyIfNull().Any() is false) return;
 
             var totalAvailableQuantity = inventories.Sum(x => x.AvailableQuantity);
             if (bookedQuantity > totalAvailableQuantity)
-                throw new ConflictException("Insufficient stock");
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
             var remainingToAllocate = bookedQuantity;
             foreach (var item in inventories)
