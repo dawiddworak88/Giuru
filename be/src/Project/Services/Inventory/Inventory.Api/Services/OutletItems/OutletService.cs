@@ -308,7 +308,7 @@ namespace Inventory.Api.Services.OutletItems
                         AvailableQuantity = x.AvailableQuantity,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate
-                    }); ;
+                    });
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
