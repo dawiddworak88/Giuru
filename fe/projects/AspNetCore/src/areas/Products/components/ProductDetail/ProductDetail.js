@@ -83,12 +83,12 @@ function ProductDetail(props) {
         const getPriceInfo = () => {
             if (productVariant && productVariant.price) {
                 return {
-                    price: parseFloat(productVariant.price.current * quantity).toFixed(2),
+                    price: parseFloat(productVariant.price.current).toFixed(2),
                     currency: productVariant.price.currency
                 };
             } else if (props.price) {
                 return {
-                    price: parseFloat(props.price.current * quantity).toFixed(2),
+                    price: parseFloat(props.price.current).toFixed(2),
                     currency: props.price.currency
                 };
             } else {
@@ -110,9 +110,6 @@ function ProductDetail(props) {
             quantity,
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
-            unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price.current * quantity).toFixed(2) : null,
-            currency: product.price ? product.price.currency : null,
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
