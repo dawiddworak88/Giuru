@@ -131,7 +131,7 @@ function Catalog(props) {
             images: getImages(),
             stockQuantity: productVariant.availableQuantity,
             outletQuantity: productVariant.availableOutletQuantity,
-            price: productVariant.price ? parseFloat(productVariant.price.current * quantity).toFixed(2) : null,
+            price: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
             currency: productVariant.price ? productVariant.price.currency : null
         }
 
