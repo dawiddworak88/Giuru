@@ -555,7 +555,7 @@ namespace Inventory.Api.Services.OutletItems
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
-            if (outlets.OrEmptyIfNull().Any() is false) return;
+            if (outlets.Any() is false) return;
 
             var totalAvailableQuantity = outlets.Sum(x => x.AvailableQuantity);
             if (bookedQuantity > totalAvailableQuantity)
@@ -565,24 +565,37 @@ namespace Inventory.Api.Services.OutletItems
             foreach (var item in outlets)
             {
                 if (remainingToAllocate <= 0) break;
+
                 var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
-                item.AvailableQuantity -= toDeduct;
-                item.LastModifiedDate = DateTime.UtcNow;
+
+                var affected = await _context.Database.ExecuteSqlRawAsync(
+                    @"UPDATE Inventory 
+                      SET AvailableQuantity = AvailableQuantity - {0},
+                          LastModifiedDate = {1}
+                      WHERE Id = {2} 
+                        AND AvailableQuantity >= {0}",
+                    toDeduct, DateTime.UtcNow, item.Id);
+
+                if (affected == 0)
+                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+
                 remainingToAllocate -= toDeduct;
             }
-
-            await _context.SaveChangesAsync();
-
         }
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
         {
+            var outletIds = _context.Outlet
+                .Where(x => model.Ids.Contains(x.ProductId) && x.Product.IsActive && x.IsActive)
+                .Select(x => x.Id)
+                .ToList();
+
             var outletItems = _context.Outlet
                 .Include(x => x.Translations)
                 .Include(x => x.Product)
                 .AsSingleQuery()
-                .Where(x => model.Ids.Contains(x.ProductId) && x.Product.IsActive && x.IsActive)
-                .ToList()
+                .Where(x => outletIds.Contains(x.ProductId))
+                .AsEnumerable()
                 .Select(x => new OutletSumServiceModel
                 {
                     ProductId = x.ProductId,
