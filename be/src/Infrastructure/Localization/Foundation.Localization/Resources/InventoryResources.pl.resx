@@ -253,6 +253,6 @@
     <value>W magazynie istnieje już pozycja z tym produktem. Proszę edytować istniejący produkt.</value>
   </data>
   <data name="InventoryOutletQuantityConflict" xml:space="preserve">
-    <value>Próbowano złożyć zamówienie na więszką ilość niż jest dostępna.</value>
+    <value>Próbowano złożyć zamówienie na większą ilość niż jest dostępna.</value>
   </data>
 </root>
