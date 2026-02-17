@@ -505,7 +505,7 @@ namespace Inventory.Api.Services.InventoryItems
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
 
-            if (inventories.OrEmptyIfNull().Any() is false) return;
+            if (inventories.Any() is false) return;
 
             var totalAvailableQuantity = inventories.Sum(x => x.AvailableQuantity);
             if (bookedQuantity > totalAvailableQuantity)
