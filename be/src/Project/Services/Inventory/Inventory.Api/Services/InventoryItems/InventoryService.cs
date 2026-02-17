@@ -517,12 +517,20 @@ namespace Inventory.Api.Services.InventoryItems
                 if (remainingToAllocate <= 0) break;
 
                 var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
-                item.AvailableQuantity -= toDeduct;
-                item.LastModifiedDate = DateTime.UtcNow;
+
+                var affected = await _context.Database.ExecuteSqlRawAsync(
+                    @"UPDATE Inventory 
+                      SET AvailableQuantity = AvailableQuantity - {0},
+                          LastModifiedDate = {1}
+                      WHERE Id = {2} 
+                        AND AvailableQuantity >= {0}",
+                    toDeduct, DateTime.UtcNow, item.Id);
+
+                if (affected == 0)
+                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+
                 remainingToAllocate -= toDeduct;
             }
-
-            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<InventorySumServiceModel> GetInventoriesByProductsIds(GetInventoriesByProductsIdsServiceModel model)
