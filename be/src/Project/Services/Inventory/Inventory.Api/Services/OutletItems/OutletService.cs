@@ -569,7 +569,7 @@ namespace Inventory.Api.Services.OutletItems
                 var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
 
                 var affected = await _context.Database.ExecuteSqlRawAsync(
-                    @"UPDATE Inventory 
+                    @"UPDATE Outlet
                       SET AvailableQuantity = AvailableQuantity - {0},
                           LastModifiedDate = {1}
                       WHERE Id = {2} 
@@ -594,7 +594,7 @@ namespace Inventory.Api.Services.OutletItems
                 .Include(x => x.Translations)
                 .Include(x => x.Product)
                 .AsSingleQuery()
-                .Where(x => outletIds.Contains(x.ProductId))
+                .Where(x => outletIds.Contains(x.Id))
                 .AsEnumerable()
                 .Select(x => new OutletSumServiceModel
                 {
