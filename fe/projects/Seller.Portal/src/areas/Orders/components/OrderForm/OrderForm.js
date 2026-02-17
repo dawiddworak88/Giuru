@@ -558,7 +558,7 @@ function OrderForm(props) {
                                     onBlur={() => {
                                         let numericValue = Number(quantity);
 
-                                        if (isNaN(numericValue) || numericValue < 1 || quantity === '') {
+                                        if (isNaN(numericValue) || numericValue < 1) {
                                             numericValue = 1;
                                         }
 
