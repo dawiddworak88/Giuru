@@ -279,7 +279,7 @@ const NewsItemForm = (props) => {
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} 
                                 accept={{
-                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip", ".xlsx", ".xls"]
                                 }}/>
                         </div>
                         <div className="field">
