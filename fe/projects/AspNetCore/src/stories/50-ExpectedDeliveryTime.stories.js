@@ -78,26 +78,11 @@ const DeliveryRow = ({ days, locale, labels }) => (
   </div>
 );
 
-// Built-in translations (no labels passed)
-const BuiltInStory = () => (
+const DeliveryStory = () => (
   <div style={styles.container}>
     {locales.map((locale) => (
       <div key={locale} style={styles.section}>
-        <div style={styles.localeTitle}>Locale: {locale} (built-in)</div>
-        {businessDayScenarios.map((days) => (
-          <DeliveryRow key={days} days={days} locale={locale} />
-        ))}
-      </div>
-    ))}
-  </div>
-);
-
-// SSR labels passed from backend
-const SsrLabelsStory = () => (
-  <div style={styles.container}>
-    {locales.map((locale) => (
-      <div key={locale} style={styles.section}>
-        <div style={styles.localeTitle}>Locale: {locale} (SSR labels)</div>
+        <div style={styles.localeTitle}>Locale: {locale}</div>
         {businessDayScenarios.map((days) => (
           <DeliveryRow key={days} days={days} locale={locale} labels={ssrLabels[locale]} />
         ))}
@@ -106,11 +91,8 @@ const SsrLabelsStory = () => (
   </div>
 );
 
-export const AllLocalesBuiltIn = () => <BuiltInStory />;
-AllLocalesBuiltIn.story = { name: "All locales — built-in translations" };
-
-export const AllLocalesSsrLabels = () => <SsrLabelsStory />;
-AllLocalesSsrLabels.story = { name: "All locales — SSR labels from backend" };
+export const AllLocales = () => <DeliveryStory />;
+AllLocales.story = { name: "All locales" };
 
 export const Polish = () => (
   <div style={styles.singleResult}>
@@ -142,7 +124,7 @@ LongDelivery.story = { name: "Long delivery (> 7 days)" };
 
 const ExpectedDeliveryTimeStories = {
   title: "Shared/ExpectedDeliveryTime",
-  component: BuiltInStory,
+  component: DeliveryStory,
 };
 
 export default ExpectedDeliveryTimeStories;
