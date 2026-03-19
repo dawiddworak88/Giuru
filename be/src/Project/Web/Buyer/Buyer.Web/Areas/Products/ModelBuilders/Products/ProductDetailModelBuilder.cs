@@ -359,6 +359,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                            accessToken: componentModel.Token,
+                           customerId: componentModel.SellerId.Value,
                            skus: [.. productVariants.Data.OrEmptyIfNull().Select(x => x.Sku)]);
 
                         var leadTimesDict = leadTimes?.Items?.ToDictionary(x => x.Sku, x => x);
