@@ -226,6 +226,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                     var leadTime = await _leadTimeRepository.GetLeadTimesAsync(
                         accessToken: componentModel.Token,
+                        customerId: componentModel.SellerId.Value,
                         skus: [product.Sku]);
 
                     if (leadTime?.Items is not null)
