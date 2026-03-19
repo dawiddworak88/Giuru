@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Middlewares;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.Helpers;
