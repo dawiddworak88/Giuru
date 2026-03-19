@@ -1,6 +1,9 @@
+import React from "react";
+import PropTypes from "prop-types";
 import moment from "moment";
 import "moment/locale/pl";
 import "moment/locale/de";
+import "./ExpectedDeliveryTime.scss";
 
 import {
   permanentHolidays,
@@ -22,17 +25,7 @@ const isBusinessDay = (date) => {
 const applyTemplate = (template, vars) =>
   template.replace(/\{(\w+)\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : `{${key}}`));
 
-/**
- * @param {number} deliveryBusinessDays
- * @param {string} [locale="en"]
- * @param {object} labels - Translations passed from SSR/backend.
- * @param {string} labels.withinWeekLabel          - e.g. "We will deliver on {dayName}, {date}"
- * @param {string} [labels.withinWeekWednesdayLabel] - Optional separate template for Wednesday (Polish grammar).
- *                                                     Falls back to withinWeekLabel when not provided.
- * @param {string} labels.moreThanWeekLabel        - e.g. "We will deliver within {days} days"
- * @param {string[]} [labels.weekdaysAccusative]   - Optional array of day names in accusative case (index 0=Sun).
- */
-export const calculateFinalDeliveryDay = (deliveryBusinessDays, locale = "en", labels = {}) => {
+const calculateDeliveryMessage = (deliveryBusinessDays, locale, labels) => {
   const now = moment();
   let currentDate = now.clone();
 
@@ -76,3 +69,42 @@ export const calculateFinalDeliveryDay = (deliveryBusinessDays, locale = "en", l
 
   return applyTemplate(labels.moreThanWeekLabel, { days: deliveryLengthInDays });
 };
+
+const ExpectedDeliveryTime = (props) => {
+  const message = calculateDeliveryMessage(
+    props.deliveryBusinessDays,
+    props.locale,
+    props.labels || {}
+  );
+
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <div className="expected-delivery-time">
+      <div className="expected-delivery-time__dot-status">
+        <div className="expected-delivery-time__dot" />
+        <span className="expected-delivery-time__message">{message}</span>
+      </div>
+    </div>
+  );
+};
+
+ExpectedDeliveryTime.propTypes = {
+  deliveryBusinessDays: PropTypes.number.isRequired,
+  locale: PropTypes.string,
+  labels: PropTypes.shape({
+    withinWeekLabel: PropTypes.string,
+    withinWeekWednesdayLabel: PropTypes.string,
+    moreThanWeekLabel: PropTypes.string,
+    weekdaysAccusative: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
+
+ExpectedDeliveryTime.defaultProps = {
+  locale: "en",
+  labels: {},
+};
+
+export default ExpectedDeliveryTime;

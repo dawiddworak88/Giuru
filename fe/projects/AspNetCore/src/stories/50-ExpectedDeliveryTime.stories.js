@@ -1,5 +1,7 @@
 import React from "react";
-import { calculateFinalDeliveryDay } from "../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
+import ExpectedDeliveryTime from "../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
+import "../shared/layouts/index.scss";
+import "../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime.scss";
 
 const locales = ["pl", "de", "en"];
 const businessDayScenarios = [1, 2, 3, 5, 7, 10, 14];
@@ -65,16 +67,14 @@ const styles = {
   result: {
     color: "#171717",
   },
-  singleResult: {
-    fontFamily: "'Nunito', sans-serif",
-    padding: "2rem",
-  },
 };
 
 const DeliveryRow = ({ days, locale, labels }) => (
   <div style={styles.row}>
     <span style={styles.label}>{days} business day{days > 1 ? "s" : ""}:</span>
-    <span style={styles.result}>{calculateFinalDeliveryDay(days, locale, labels)}</span>
+    <span style={styles.result}>
+      <ExpectedDeliveryTime deliveryBusinessDays={days} locale={locale} labels={labels} />
+    </span>
   </div>
 );
 
@@ -95,36 +95,28 @@ export const AllLocales = () => <DeliveryStory />;
 AllLocales.story = { name: "All locales" };
 
 export const Polish = () => (
-  <div style={styles.singleResult}>
-    <strong>Result:</strong> {calculateFinalDeliveryDay(3, "pl", ssrLabels.pl)}
-  </div>
+  <ExpectedDeliveryTime deliveryBusinessDays={3} locale="pl" labels={ssrLabels.pl} />
 );
 Polish.story = { name: "Polish (pl) — 3 business days" };
 
 export const German = () => (
-  <div style={styles.singleResult}>
-    <strong>Result:</strong> {calculateFinalDeliveryDay(3, "de", ssrLabels.de)}
-  </div>
+  <ExpectedDeliveryTime deliveryBusinessDays={3} locale="de" labels={ssrLabels.de} />
 );
 German.story = { name: "German (de) — 3 business days" };
 
 export const English = () => (
-  <div style={styles.singleResult}>
-    <strong>Result:</strong> {calculateFinalDeliveryDay(3, "en", ssrLabels.en)}
-  </div>
+  <ExpectedDeliveryTime deliveryBusinessDays={3} locale="en" labels={ssrLabels.en} />
 );
 English.story = { name: "English (en) — 3 business days" };
 
 export const LongDelivery = () => (
-  <div style={styles.singleResult}>
-    <strong>Result:</strong> {calculateFinalDeliveryDay(14, "en", ssrLabels.en)}
-  </div>
+  <ExpectedDeliveryTime deliveryBusinessDays={14} locale="en" labels={ssrLabels.en} />
 );
 LongDelivery.story = { name: "Long delivery (> 7 days)" };
 
 const ExpectedDeliveryTimeStories = {
   title: "Shared/ExpectedDeliveryTime",
-  component: DeliveryStory,
+  component: ExpectedDeliveryTime,
 };
 
 export default ExpectedDeliveryTimeStories;
