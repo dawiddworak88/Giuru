@@ -8,11 +8,11 @@ using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
+using Buyer.Web.Shared.Repositories.LeadTime;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -40,6 +40,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -51,7 +52,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
-            IPriceService priceService
+            IPriceService priceService,
+            ILeadTimeRepository leadTimeRepository
             )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
@@ -64,6 +66,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _linkGenerator = linkGenerator;
             _options = options;
             _priceService = priceService;
+            _leadTimeRepository = leadTimeRepository;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -131,6 +134,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         });
                 }
 
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: componentModel.Token,
+                    customerId: componentModel.SellerId.Value,
+                    skus: [..products.Data.Select(x => x.Sku)]);
+
                 for (int i = 0; i < products.Data.Count(); i++)
                 {
                     var product = products.Data.ElementAtOrDefault(i);
@@ -172,6 +180,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         }
                     }
 
+                    product.LeadTimeDays = leadTimes.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
                     product.CanOrder = true;
                 }
 
