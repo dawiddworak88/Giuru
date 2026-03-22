@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using static Foundation.ApiExtensions.Shared.Definitions.ApiConstants;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -139,6 +140,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                     customerId: componentModel.SellerId.Value,
                     skus: [..products.Data.Select(x => x.Sku)]);
 
+                Console.WriteLine($"LeadTimes: {string.Join(", ", leadTimes.Items.Select(x => $"{x.Sku}: {x.LeadTimeDays} days"))}");
+
+
                 for (int i = 0; i < products.Data.Count(); i++)
                 {
                     var product = products.Data.ElementAtOrDefault(i);
@@ -181,6 +185,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                     }
 
                     product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+
+                    if (leadTimes?.Items is not null)
+                    {
+                        var leadTime = leadTimes.Items.FirstOrDefault(x => x.Sku == product.Sku);
+
+                        product.LeadTimeDays = leadTime?.LeadTimeDays ?? 0;
+                    }
+
                     product.CanOrder = true;
                 }
 
