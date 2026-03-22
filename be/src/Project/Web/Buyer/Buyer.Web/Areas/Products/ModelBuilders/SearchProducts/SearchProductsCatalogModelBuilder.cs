@@ -180,7 +180,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         }
                     }
 
-                    product.LeadTimeDays = leadTimes.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
                     product.CanOrder = true;
                 }
 
