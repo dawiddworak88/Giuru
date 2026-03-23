@@ -5,11 +5,13 @@ using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Repositories.LeadTime;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +21,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
@@ -31,18 +34,21 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOutletRepository _outletRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
 
         public SearchProductsApiController(
             IProductsService productsService,
             IOutletRepository outletRepository,
             IInventoryRepository inventoryRepository,
             IOptions<AppSettings> options,
-            IPriceService priceService)
+            IPriceService priceService,
+            ILeadTimeRepository leadTimeRepository)
         {
             _productsService = productsService;
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
             _options = options;
+            _leadTimeRepository = leadTimeRepository;
             _priceService = priceService;
         }
 
@@ -95,6 +101,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         });
                 }
 
+                var customerId = GuidHelper.ParseNullable(User.FindFirst(AccountConstants.Claims.OrganisationIdClaim).Value);
+
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: token,
+                    customerId: customerId.Value,
+                    skus: [..products.Data.Select(x => x.Sku)]);
+
                 for (int i = 0; i < products.Data.Count(); i++)
                 {
                     var product = products.Data.ElementAtOrDefault(i);
@@ -136,6 +149,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         }
                     }
 
+                    product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
                     product.CanOrder = true;
                 }
 
