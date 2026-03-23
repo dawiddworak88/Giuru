@@ -229,10 +229,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         customerId: componentModel.SellerId.Value,
                         skus: [product.Sku]);
 
-                    if (leadTime?.Items is not null)
-                    {
-                        viewModel.LeadTimeDays = leadTime.Items.FirstOrDefault().LeadTimeDays;
-                    }
+                    viewModel.LeadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
                 }
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
@@ -360,9 +357,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                            accessToken: componentModel.Token,
                            customerId: componentModel.SellerId.Value,
-                           skus: [.. productVariants.Data.OrEmptyIfNull().Select(x => x.Sku)]);
-
-                        var leadTimesDict = leadTimes?.Items?.ToDictionary(x => x.Sku, x => x);
+                           skus: [.. productVariants.Data.Select(x => x.Sku)]);
 
                         for (var i = 0; i < productVariants.Data.Count(); i++) 
                         {
@@ -409,6 +404,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 };
                             }
 
+                            carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                            
                             carouselItems.Add(carouselItem);
                         }
 

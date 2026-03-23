@@ -258,6 +258,7 @@ function Catalog(props) {
                 )}
             {props.sidebar &&
                 <Sidebar
+                    locale={props.locale}
                     productId={productVariant ? productVariant.id : null}
                     isOpen={isSidebarOpen}
                     manyUses={true}

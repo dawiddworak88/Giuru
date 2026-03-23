@@ -286,7 +286,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         }
                     }
 
-                    carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
                     carouselItems.Add(carouselItem);
                 }
 
