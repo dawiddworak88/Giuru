@@ -399,6 +399,7 @@ function ProductDetail(props) {
                     </div>
                 </div>
                 <Sidebar
+                    locale={props.locale}
                     productId={props.productId}
                     isOpen={isSidebarOpen}
                     manyUses={false}
@@ -406,7 +407,16 @@ function ProductDetail(props) {
                     handleOrder={handleModal}
                     labels={props.sidebar}
                 />
-                <CarouselGrid items={props.productVariants} className="pt-6" />
+                <CarouselGrid  
+                    items={props.productVariants} 
+                    className="pt-6" 
+                    locale={props.locale} 
+                    labels={{
+                        withinWeekLabel: props.withinWeekLabel,
+                        withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
+                        moreThanWeekLabel: props.moreThanWeekLabel,
+                        weekdaysAccusative: props.weekdaysAccusative 
+                    }}/>
                 {props.files &&
                     <Files {...props.files} />
                 }

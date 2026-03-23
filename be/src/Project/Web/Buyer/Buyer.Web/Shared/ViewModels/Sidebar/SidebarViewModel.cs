@@ -17,5 +17,9 @@
         public string InOutletLabel { get; set; }
         public string LoadingLabel { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
+        public string WithinWeekLabel { get; set; }
+        public string WithinWeekWednesdayLabel { get; set; }
+        public string MoreThanWeekLabel { get; set; }
+        public string[] WeekdaysAccusative { get; set; }
     }
 }

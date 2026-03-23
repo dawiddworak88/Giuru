@@ -205,6 +205,7 @@ function Catalog(props) {
                                                     <div className="mt-3">
                                                         <ExpectedDeliveryTime 
                                                             deliveryBusinessDays={item.leadTimeDays}
+                                                            locale={props.locale}
                                                             labels={{
                                                                 withinWeekLabel: props.withinWeekLabel,
                                                                 withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
