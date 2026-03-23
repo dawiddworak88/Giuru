@@ -19,6 +19,7 @@ namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
         public double? AvailableQuantity { get; set; }
         public bool InOutlet { get; set; }
         public double? AvailableOutletQuantity { get; set; }
+        public int LeadTimeDays { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public DateTime? CreatedDate { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
