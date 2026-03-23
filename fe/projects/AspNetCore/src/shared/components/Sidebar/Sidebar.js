@@ -156,7 +156,8 @@ const Sidebar = (props) => {
                                                                 labels={{
                                                                     withinWeekLabel: labels.withinWeekLabel,
                                                                     withinWeekWednesdayLabel: labels.withinWeekWednesdayLabel,
-                                                                    moreThanWeekLabel: labels.moreThanWeekLabel
+                                                                    moreThanWeekLabel: labels.moreThanWeekLabel,
+                                                                    weekdaysAccusative: labels.weekdaysAccusative
                                                                 }}
                                                             />
                                                         </div>

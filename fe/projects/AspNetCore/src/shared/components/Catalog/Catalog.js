@@ -209,7 +209,8 @@ function Catalog(props) {
                                                             labels={{
                                                                 withinWeekLabel: props.withinWeekLabel,
                                                                 withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
-                                                                moreThanWeekLabel: props.moreThanWeekLabel
+                                                                moreThanWeekLabel: props.moreThanWeekLabel,
+                                                                weekdaysAccusative: props.weekdaysAccusatives
                                                             }}
                                                         />
                                                     </div>

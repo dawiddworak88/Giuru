@@ -41,6 +41,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string WithinWeekLabel { get; set; }
         public string WithinWeekWednesdayLabel { get; set; }
         public string MoreThanWeekLabel { get; set; }
+        public string[] WeekdaysAccusative { get; set; }
         public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }
         public string MinOrderQuantityErrorMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }

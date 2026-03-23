@@ -35,6 +35,7 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -141,18 +142,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 WithinWeekWednesdayLabel = _productLocalizer.GetString("DeliveryWithinWeekWednesdayLabel")
             };
 
-            if (componentModel.Language == "pl")
+            if (componentModel.Language == PolishWeekdaysConstants.LanguageCode)
             {
-                viewModel.WeekdaysAccusative = new[]
-                {
-                    "niedzielę",
-                    "poniedziałek",
-                    "wtorek",
-                    "środę",
-                    "czwartek",
-                    "piątek",
-                    "sobotę"
-                };
+                viewModel.WeekdaysAccusative = PolishWeekdaysConstants.WeekdaysAccusative;
             }
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);

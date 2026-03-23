@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Shared.Configurations;
+﻿using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Toasts;
@@ -72,6 +73,11 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 MoreThanWeekLabel = _productLocalizer.GetString("DeliveryMoreThanWeekLabel"),
                 WithinWeekWednesdayLabel = _productLocalizer.GetString("DeliveryWithinWeekWednesdayLabel")
             };
+
+            if (componentModel.Language == PolishWeekdaysConstants.LanguageCode)
+            {
+                viewModel.WeekdaysAccusative = PolishWeekdaysConstants.WeekdaysAccusative;
+            }
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {
