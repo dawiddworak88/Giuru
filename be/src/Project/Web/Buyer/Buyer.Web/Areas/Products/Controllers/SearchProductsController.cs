@@ -47,8 +47,6 @@ namespace Buyer.Web.Areas.Products.Controllers
                 DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
             };
 
-            Console.WriteLine($"SellerId: {componentModel.SellerId}");
-
             var viewModel = await this.searchProductsPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);

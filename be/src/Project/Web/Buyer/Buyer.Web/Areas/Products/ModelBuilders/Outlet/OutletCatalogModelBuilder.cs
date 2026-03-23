@@ -25,6 +25,7 @@ using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
 using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Shared.Repositories.LeadTime;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -39,6 +40,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IInventoryRepository inventoryRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -50,7 +52,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             LinkGenerator linkGenerator,
             IInventoryRepository inventoryRepository,
             IOptions<AppSettings> options,
-            IPriceService priceService)
+            IPriceService priceService,
+            ILeadTimeRepository leadTimeRepository)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -61,6 +64,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.inventoryRepository = inventoryRepository;
             _options = options;
             _priceService = priceService;
+            _leadTimeRepository = leadTimeRepository;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -126,6 +130,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             });
                     }
 
+                    var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: componentModel.Token,
+                        customerId: componentModel.SellerId.Value,
+                        skus: [.. products.Data.Select(x => x.Sku)]);
+
                     for (int i = 0; i < products.Data.Count(); i++)
                     {
                         var product = products.Data.ElementAtOrDefault(i);
@@ -165,6 +174,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 Current = price.CurrentPrice
                             };
                         }
+
+                        product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
                     }
                 }
 
