@@ -1,7 +1,9 @@
 ﻿using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Managers.Entities;
+using Client.Api.IntegrationEvents;
 using Client.Api.ServicesModels.Clients;
+using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
@@ -22,13 +24,16 @@ namespace Client.Api.Services.Clients
     {
         private readonly ClientContext _context;
         private readonly IStringLocalizer _clientLocalizer;
+        private readonly IEventBus _eventBus;
 
         public ClientsService(
             ClientContext context,
-            IStringLocalizer<ClientResources> clientLocalizer)
+            IStringLocalizer<ClientResources> clientLocalizer,
+            IEventBus eventBus)
         {
             _context = context;
             _clientLocalizer = clientLocalizer;
+            _eventBus = eventBus;
         }
 
         public PagedResults<IEnumerable<ClientServiceModel>> Get(GetClientsServiceModel model)
@@ -223,6 +228,13 @@ namespace Client.Api.Services.Clients
 
             await _context.SaveChangesAsync();
 
+            var upsertedClientMessage = new UpsertedClientIntegrationEvent
+            {
+                ClientId = client.Id
+            };
+
+            _eventBus.Publish(upsertedClientMessage);
+
             return await GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
@@ -275,6 +287,13 @@ namespace Client.Api.Services.Clients
             }
 
             await _context.SaveChangesAsync();
+
+            var upsertedClientMessage = new UpsertedClientIntegrationEvent
+            {
+                ClientId = client.Id
+            };
+
+            _eventBus.Publish(upsertedClientMessage);
 
             return await GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }

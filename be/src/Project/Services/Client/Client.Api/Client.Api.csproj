@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="8.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
 	<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.12" />
@@ -41,6 +42,8 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\EventBus\Foundation.EventBus\Foundation.EventBus.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\EventBus\Foundation.EventBusRabbitMq\Foundation.EventBusRabbitMq.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Mailing\Foundation.Mailing\Foundation.Mailing.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Telemetry\Foundation.Telemetry\Foundation.Telemetry.csproj" />
   </ItemGroup>

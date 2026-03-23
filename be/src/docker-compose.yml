@@ -67,6 +67,7 @@ services:
     depends_on: 
       - sqldata
       - redis
+      - rabbitmq
 
   inventory-api:
     image: ${REGISTRY:-giuru}/inventory-api:${PLATFORM:-linux}-${TAG:-latest}

@@ -47,6 +47,15 @@ namespace Client.Api.DependencyInjection
                     tags: new string[] { "clientdb" });
             }
 
+            if (string.IsNullOrWhiteSpace(configuration["EventBusConnection"]) is false)
+            {
+                hcBuilder
+                    .AddRabbitMQ(
+                        configuration["EventBusConnection"],
+                        name: "client-api-messagebus",
+                        tags: new string[] { "messagebus" });
+            }
+
             return services;
         }
     }
