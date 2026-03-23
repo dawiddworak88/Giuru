@@ -416,7 +416,8 @@ function ProductDetail(props) {
                         withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
                         moreThanWeekLabel: props.moreThanWeekLabel,
                         weekdaysAccusative: props.weekdaysAccusative 
-                    }}/>
+                    }}
+                />
                 {props.files &&
                     <Files {...props.files} />
                 }

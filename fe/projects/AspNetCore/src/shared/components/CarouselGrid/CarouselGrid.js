@@ -65,10 +65,10 @@ function CarouselGrid(props) {
                                                         deliveryBusinessDays={carouselItem.leadTimeDays} 
                                                         locale={props.locale}
                                                         labels={{
-                                                            withinWeekLabel: props.withinWeekLabel,
-                                                            withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
-                                                            moreThanWeekLabel: props.moreThanWeekLabel,
-                                                            weekdaysAccusative: props.weekdaysAccusative 
+                                                            withinWeekLabel: props.labels.withinWeekLabel,
+                                                            withinWeekWednesdayLabel: props.labels.withinWeekWednesdayLabel,
+                                                            moreThanWeekLabel: props.labels.moreThanWeekLabel,
+                                                            weekdaysAccusative: props.labels.weekdaysAccusative 
                                                         }}
                                                     />
                                                 </div>
