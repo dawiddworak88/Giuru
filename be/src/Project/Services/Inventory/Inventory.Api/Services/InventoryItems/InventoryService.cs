@@ -77,7 +77,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             await _context.SaveChangesAsync();
 
-            var upsertedInventoryMessage = new UpsertedInventoryAvailabiIityIntegrationEvent
+            var upsertedInventoryMessage = new UpsertedInventoryAvailabilityIntegrationEvent
             {
                 ProductSkus = [product.Sku]
             };
@@ -126,7 +126,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             await _context.SaveChangesAsync();
 
-            var upsertedInventoryMessage = new UpsertedInventoryAvailabiIityIntegrationEvent
+            var upsertedInventoryMessage = new UpsertedInventoryAvailabilityIntegrationEvent
             {
                 ProductSkus = [product.Sku]
             };
@@ -235,7 +235,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (changedProductSkus.Count > 0)
             {
-                var upsertedInventoryMessage = new UpsertedInventoryAvailabiIityIntegrationEvent
+                var upsertedInventoryMessage = new UpsertedInventoryAvailabilityIntegrationEvent
                 {
                     ProductSkus = [.. changedProductSkus]
                 };

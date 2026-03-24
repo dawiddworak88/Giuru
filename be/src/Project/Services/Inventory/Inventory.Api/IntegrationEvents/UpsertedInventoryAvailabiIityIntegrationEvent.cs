@@ -2,7 +2,7 @@
 
 namespace Inventory.Api.IntegrationEvents
 {
-    public class UpsertedInventoryAvailabiIityIntegrationEvent : IntegrationEvent
+    public class UpsertedInventoryAvailabilityIntegrationEvent : IntegrationEvent
     {
         public string[] ProductSkus { get; set; }
     }
