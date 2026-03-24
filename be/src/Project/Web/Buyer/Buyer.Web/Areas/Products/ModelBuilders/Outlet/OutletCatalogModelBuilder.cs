@@ -132,7 +132,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
 
                     var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                         accessToken: componentModel.Token,
-                        customerId: componentModel.SellerId.Value,
                         skus: [.. products.Data.Select(x => x.Sku)]);
 
                     for (int i = 0; i < products.Data.Count(); i++)

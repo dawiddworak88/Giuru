@@ -101,11 +101,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             });
                     }
 
-                    var customerId = GuidHelper.ParseNullable(User.FindFirst(AccountConstants.Claims.OrganisationIdClaim).Value);
-
                     var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                         accessToken: token,
-                        customerId: customerId.Value,
                         skus: [..products.Data.Select(x => x.Sku)]);
 
                     for (int i = 0; i < products.Data.Count(); i++)

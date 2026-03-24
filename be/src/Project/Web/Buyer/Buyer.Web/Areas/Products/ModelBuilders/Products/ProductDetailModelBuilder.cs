@@ -218,7 +218,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                     var leadTime = await _leadTimeRepository.GetLeadTimesAsync(
                         accessToken: componentModel.Token,
-                        customerId: componentModel.SellerId.Value,
                         skus: [product.Sku]);
 
                     viewModel.LeadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
@@ -348,7 +347,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                            accessToken: componentModel.Token,
-                           customerId: componentModel.SellerId.Value,
                            skus: [.. productVariants.Data.Select(x => x.Sku)]);
 
                         for (var i = 0; i < productVariants.Data.Count(); i++) 

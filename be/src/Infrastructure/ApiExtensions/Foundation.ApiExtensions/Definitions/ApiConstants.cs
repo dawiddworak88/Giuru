@@ -131,7 +131,7 @@
 
         public struct LeadTime
         {
-            public static readonly string LeadTimeBySkusApiEndpoint = "/api/v1/product-lead-times";
+            public static readonly string LeadTimeBySkusApiEndpoint = "/api/v1/product-lead-times/my";
         }
 
         public struct Request

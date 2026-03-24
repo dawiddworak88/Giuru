@@ -6,6 +6,6 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
 {
     public interface ILeadTimeRepository
     {
-        Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus);
+        Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, string[] skus);
     }
 }

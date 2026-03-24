@@ -28,11 +28,10 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
             _logger = logger;
         }
 
-        public async Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
+        public async Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, string[] skus)
         {
             var requestModel = new GetLeadTimeBySkusRequestModel
             {
-                CustomerId = customerId,
                 Skus = skus.ToEndpointParameterString()
             };
 
