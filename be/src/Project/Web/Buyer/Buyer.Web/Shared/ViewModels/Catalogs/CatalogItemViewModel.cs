@@ -43,5 +43,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
         public string ShelfType { get; set; }
+        public int LeadTimeDays { get; set; }
     }
 }

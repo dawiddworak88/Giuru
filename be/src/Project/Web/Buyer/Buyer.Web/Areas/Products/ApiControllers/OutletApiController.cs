@@ -4,11 +4,14 @@ using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Repositories.LeadTime;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -29,17 +32,20 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOutletRepository outletRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
 
         public OutletApiController(
             IProductsService productsService,
             IOutletRepository outletRepository,
             IOptions<AppSettings> options,
-            IPriceService priceService)
+            IPriceService priceService,
+            ILeadTimeRepository leadTimeRepository)
         {
             this.productsService = productsService;
             this.outletRepository= outletRepository;
             _options = options;
             _priceService = priceService;
+            _leadTimeRepository = leadTimeRepository;
         }
 
         [HttpGet]
@@ -95,6 +101,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             });
                     }
 
+                    var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: token,
+                        skus: [..products.Data.Select(x => x.Sku)]);
+
                     for (int i = 0; i < products.Data.Count(); i++)
                     {
                         var product = products.Data.ElementAtOrDefault(i);
@@ -128,6 +138,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                         product.InOutlet = true;
                         product.ExpectedDelivery = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
+                        product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
                     }
 
                     return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, itemsPerPage) { Data = products.Data.OrderByDescending(x => x.AvailableQuantity) });

@@ -2,13 +2,17 @@
 using Buyer.Web.Areas.Products.ViewModels.Categories;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Middlewares;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
+using Foundation.Extensions.Helpers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Controllers

@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Shared.Configurations;
+﻿using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Toasts;
@@ -67,8 +68,16 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
+                WithinWeekLabel = _productLocalizer.GetString("DeliveryWithinWeekLabel"),
+                MoreThanWeekLabel = _productLocalizer.GetString("DeliveryMoreThanWeekLabel"),
+                WithinWeekWednesdayLabel = _productLocalizer.GetString("DeliveryWithinWeekWednesdayLabel")
             };
+
+            if (componentModel.Language == PolishWeekdaysConstants.LanguageCode)
+            {
+                viewModel.WeekdaysAccusative = PolishWeekdaysConstants.WeekdaysAccusative;
+            }
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {

@@ -40,6 +40,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         {
             var viewModel = new SearchProductsPageViewModel
             {
+                Locale = componentModel.Language,
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
                 NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),

@@ -12,6 +12,7 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Price from "../Price/Price";
 import Availability from "../Availability/Availability";
+import ExpectedDeliveryTime from "../ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -146,6 +147,20 @@ const Sidebar = (props) => {
                                                     </div>
                                                     {carouselItem.price &&
                                                         <Price {...carouselItem.price} />
+                                                    }
+                                                    {carouselItem.leadTimeDays > 0 &&
+                                                        <div className="mt-3">
+                                                            <ExpectedDeliveryTime
+                                                                deliveryBusinessDays={carouselItem.leadTimeDays}
+                                                                locale={props.locale}
+                                                                labels={{
+                                                                    withinWeekLabel: labels.withinWeekLabel,
+                                                                    withinWeekWednesdayLabel: labels.withinWeekWednesdayLabel,
+                                                                    moreThanWeekLabel: labels.moreThanWeekLabel,
+                                                                    weekdaysAccusative: labels.weekdaysAccusative
+                                                                }}
+                                                            />
+                                                        </div>
                                                     }
                                                 </div>
                                             </div>

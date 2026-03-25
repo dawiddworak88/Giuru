@@ -1,11 +1,12 @@
-﻿using Foundation.Extensions.ModelBuilders;
-using Foundation.Localization;
-using Microsoft.Extensions.Localization;
-using System.Threading.Tasks;
+﻿using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.ViewModels.Sidebar;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using System.Globalization;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.ModelBuilders.Sidebar
 {
@@ -14,17 +15,20 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<InventoryResources> inventoryLocalizer;
+        private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public SidebarModelBuilder(
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
+            IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
+            this.productLocalizer = productLocalizer;
             this.inventoryLocalizer = inventoryLocalizer;
         }
 
@@ -46,9 +50,17 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
                 LoadingLabel = this.globalLocalizer.GetString("LoadingLabel"),
                 InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                WithinWeekLabel = this.productLocalizer.GetString("DeliveryWithinWeekLabel"),
+                MoreThanWeekLabel = this.productLocalizer.GetString("DeliveryMoreThanWeekLabel"),
+                WithinWeekWednesdayLabel = this.productLocalizer.GetString("DeliveryWithinWeekWednesdayLabel")
             };
-           
+
+            if (componentModel.Language == PolishWeekdaysConstants.LanguageCode)
+            {
+                viewModel.WeekdaysAccusative = PolishWeekdaysConstants.WeekdaysAccusative;
+            }
+
             return viewModel;
         }
     }

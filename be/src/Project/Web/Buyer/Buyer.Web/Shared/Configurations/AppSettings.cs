@@ -17,6 +17,7 @@ namespace Buyer.Web.Shared.Configurations
         public string MediaUrl { get; set; }
         public string AnalyticsUrl { get; set; }
         public string DownloadCenterUrl { get; set; }
+        public string LeadTimeUrl { get; set; }
         public string CdnUrl { get; set; }
         public string GrulaUrl { get; set; }
         public string GrulaAccessToken { get; set; }

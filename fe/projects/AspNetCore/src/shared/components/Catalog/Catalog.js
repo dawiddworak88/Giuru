@@ -16,6 +16,7 @@ import Price from "../Price/Price";
 import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../services/QuantityCalculatorService";
 import Availability from "../Availability/Availability";
+import ExpectedDeliveryTime from "../ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -183,6 +184,9 @@ function Catalog(props) {
                                                         <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
+                                                {item.price && 
+                                                    <Price {...item.price} />
+                                                }
                                                 <div className="catalog-item__availability mt-3">
                                                     {item.inStock &&
                                                         <Availability 
@@ -197,8 +201,19 @@ function Catalog(props) {
                                                         />
                                                     }
                                                 </div>
-                                                {item.price && 
-                                                    <Price {...item.price} />
+                                                {item.leadTimeDays > 0 && 
+                                                    <div className="mt-3">
+                                                        <ExpectedDeliveryTime 
+                                                            deliveryBusinessDays={item.leadTimeDays}
+                                                            locale={props.locale}
+                                                            labels={{
+                                                                withinWeekLabel: props.withinWeekLabel,
+                                                                withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
+                                                                moreThanWeekLabel: props.moreThanWeekLabel,
+                                                                weekdaysAccusative: props.weekdaysAccusatives
+                                                            }}
+                                                        />
+                                                    </div>
                                                 }
                                             </div>
                                             {props.isLoggedIn &&
@@ -244,6 +259,7 @@ function Catalog(props) {
                 )}
             {props.sidebar &&
                 <Sidebar
+                    locale={props.locale}
                     productId={productVariant ? productVariant.id : null}
                     isOpen={isSidebarOpen}
                     manyUses={true}

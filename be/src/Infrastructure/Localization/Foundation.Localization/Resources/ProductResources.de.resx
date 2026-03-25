@@ -309,4 +309,13 @@
   <data name="ProductAttributeItemConflict" xml:space="preserve">
     <value>Ein solcher Attributwert existiert bereits.</value>
   </data>
+  <data name="DeliveryWithinWeekLabel" xml:space="preserve">
+    <value>Wir liefern am {dayName}, {date}</value>
+  </data>
+  <data name="DeliveryMoreThanWeekLabel" xml:space="preserve">
+    <value>Wir liefern innerhalb von {days} Tagen</value>
+  </data>
+  <data name="DeliveryWithinWeekWednesdayLabel" xml:space="preserve">
+    <value>Wir liefern Ihnen in {dayName} {date}</value>
+  </data>
 </root>

@@ -18,6 +18,7 @@ import QuantityCalculatorService from "../../../../shared/services/QuantityCalcu
 import Availability from "../../../../shared/components/Availability/Availability";
 import CopyButton from "../../../../shared/components/CopyButton/CopyButton";
 import GlobalHelper from "../../../../shared/helpers/globals/GlobalHelper";
+import ExpectedDeliveryTime from "../../../../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -317,6 +318,20 @@ function ProductDetail(props) {
                                 </div>
                             }
                         </div>
+                        {props.leadTimeDays > 0 &&
+                            <div className="mt-3">
+                                <ExpectedDeliveryTime 
+                                    deliveryBusinessDays={props.leadTimeDays}
+                                    locale={props.locale}
+                                    labels={{
+                                        withinWeekLabel: props.withinWeekLabel,
+                                        withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
+                                        moreThanWeekLabel: props.moreThanWeekLabel,
+                                        weekdaysAccusative: props.weekdaysAccusative 
+                                    }}
+                                />
+                            </div>
+                        }
                         {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">
                                 {props.isProductVariant ? (
@@ -381,6 +396,7 @@ function ProductDetail(props) {
                     </div>
                 </div>
                 <Sidebar
+                    locale={props.locale}
                     productId={props.productId}
                     isOpen={isSidebarOpen}
                     manyUses={false}
@@ -388,7 +404,17 @@ function ProductDetail(props) {
                     handleOrder={handleModal}
                     labels={props.sidebar}
                 />
-                <CarouselGrid items={props.productVariants} className="pt-6" />
+                <CarouselGrid  
+                    items={props.productVariants} 
+                    className="pt-6" 
+                    locale={props.locale} 
+                    labels={{
+                        withinWeekLabel: props.withinWeekLabel,
+                        withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
+                        moreThanWeekLabel: props.moreThanWeekLabel,
+                        weekdaysAccusative: props.weekdaysAccusative 
+                    }}
+                />
                 {props.files &&
                     <Files {...props.files} />
                 }

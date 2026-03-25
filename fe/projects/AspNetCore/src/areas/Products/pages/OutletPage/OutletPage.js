@@ -21,7 +21,7 @@ function OutletPage(props) {
           }
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
-          <Catalog {...props.catalog}></Catalog>
+          <Catalog locale={props.locale} {...props.catalog}></Catalog>
           <Footer {...props.footer}></Footer>
         </div>
       </Store>

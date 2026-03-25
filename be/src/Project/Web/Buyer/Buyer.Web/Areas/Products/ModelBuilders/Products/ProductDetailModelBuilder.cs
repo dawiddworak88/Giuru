@@ -34,6 +34,8 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Shared.ViewModels.Toasts;
+using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -57,6 +59,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IOptions<AppSettings> _options;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -76,7 +79,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IPriceService priceService,
             IOptions<AppSettings> options,
             IProductsService productsService,
-            IProductColorsService productColorsService)
+            IProductColorsService productColorsService,
+            ILeadTimeRepository leadTimeRepository)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -96,6 +100,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _options = options;
             _productsService = productsService;
             _productColorsService = productColorsService;
+            _leadTimeRepository = leadTimeRepository;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -131,8 +136,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 CopyTextError = _globalLocalizer.GetString("CopyTextError"),
                 CopyToClipboardText = _globalLocalizer.GetString("CopyToClipboardText"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
+                WithinWeekLabel = _productLocalizer.GetString("DeliveryWithinWeekLabel"),
+                MoreThanWeekLabel = _productLocalizer.GetString("DeliveryMoreThanWeekLabel"),
+                WithinWeekWednesdayLabel = _productLocalizer.GetString("DeliveryWithinWeekWednesdayLabel")
             };
+
+            if (componentModel.Language == PolishWeekdaysConstants.LanguageCode)
+            {
+                viewModel.WeekdaysAccusative = PolishWeekdaysConstants.WeekdaysAccusative;
+            }
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 
@@ -202,6 +215,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             Currency = price.CurrencyCode,
                         };
                     }
+
+                    var leadTime = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: componentModel.Token,
+                        skus: [product.Sku]);
+
+                    viewModel.LeadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
                 }
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
@@ -326,6 +345,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                });
                         }
 
+                        var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                           accessToken: componentModel.Token,
+                           skus: [.. productVariants.Data.Select(x => x.Sku)]);
+
                         for (var i = 0; i < productVariants.Data.Count(); i++) 
                         {
                             var productVariant = productVariants.Data.ElementAtOrDefault(i);
@@ -371,6 +394,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 };
                             }
 
+                            carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                            
                             carouselItems.Add(carouselItem);
                         }
 
@@ -385,6 +410,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         };
                     }
                 }
+
             }
 
             return viewModel;
