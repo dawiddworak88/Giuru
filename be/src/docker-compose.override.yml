@@ -112,6 +112,9 @@ services:
       - ApplyRecipientEmail=office@eltap.com
       - ActionSendGridClientApplyConfirmationTemplateId=${SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID}
       - ActionSendGridClientApplyTemplateId=${SENDGRID_CLIENT_APPLY_TEMPLATE_ID}
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
