@@ -49,7 +49,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime,
                 })
             };
 
@@ -82,7 +83,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                         Price = x.Price,
                         Currency = x.Currency,
                         ExternalReference = x.ExternalReference,
-                        MoreInfo = x.MoreInfo
+                        MoreInfo = x.MoreInfo,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     })
                 };
             }

@@ -19,5 +19,6 @@ namespace Buyer.Web.Areas.Orders.ApiResponseModels
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
         public string MoreInfo { get; set; }
+        public DateTime? ExpectedLeadTime { get; set; }
     }
 }

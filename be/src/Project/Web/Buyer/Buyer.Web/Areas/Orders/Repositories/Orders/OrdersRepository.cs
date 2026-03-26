@@ -158,6 +158,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             OrderItemStatusName = item.OrderItemStatusName,
                             OrderItemStatusChangeComment = item.OrderItemStatusChangeComment,
                             ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
+                            ExpectedLeadTime = item.ExpectedLeadTime,
                             MoreInfo = item.MoreInfo,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
