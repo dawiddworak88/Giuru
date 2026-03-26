@@ -17,5 +17,6 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public decimal? UnitPrice { get; set; }
         public decimal? Price { get; set; }
         public string Currency { get; set; }
+        public DateTime? LeadTime { get; set; }
     }
 }

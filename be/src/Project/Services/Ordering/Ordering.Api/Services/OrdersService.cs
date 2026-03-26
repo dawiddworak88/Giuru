@@ -121,7 +121,8 @@ namespace Ordering.Api.Services
                     Price = basketItem.Price,
                     Currency = basketItem.Currency,
                     ExternalReference = basketItem.ExternalReference,
-                    MoreInfo = basketItem.MoreInfo
+                    MoreInfo = basketItem.MoreInfo,
+                    LeadTime = basketItem.LeadTime
                 };
 
                 _context.OrderItems.Add(orderItem.FillCommonProperties());
@@ -372,6 +373,7 @@ namespace Ordering.Api.Services
                     ExternalReference = orderItem.ExternalReference,
                     MoreInfo = orderItem.MoreInfo,
                     LastOrderItemStatusChangeId = orderItem.LastOrderItemStatusChangeId,
+                    LeadTime = orderItem.LeadTime,
                     LastModifiedDate = orderItem.LastModifiedDate,
                     CreatedDate = orderItem.CreatedDate
                 };
@@ -436,6 +438,7 @@ namespace Ordering.Api.Services
                 ExternalReference = existingOrderItem.ExternalReference,
                 LastOrderItemStatusChangeId = existingOrderItem.LastOrderItemStatusChangeId,
                 MoreInfo = existingOrderItem.MoreInfo,
+                LeadTime = existingOrderItem.LeadTime,
                 LastModifiedDate = existingOrderItem.LastModifiedDate,
                 CreatedDate = existingOrderItem.CreatedDate
             };
@@ -1039,6 +1042,7 @@ namespace Ordering.Api.Services
                             Currency = item.Currency,
                             ExternalReference = item.ExternalReference,
                             MoreInfo = item.MoreInfo,
+                            LeadTime = item.LeadTime,
                             LastOrderItemStatusChangeId = item.LastOrderItemStatusChangeId,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate

@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
 using IdentityModel;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
 using Basket.Api.Configurations;
 
@@ -71,7 +70,8 @@ namespace Basket.Api.v1.Controllers
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    LeadTime = x.LeadTime
                 }),
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -103,7 +103,8 @@ namespace Basket.Api.v1.Controllers
                             Price = x.Price,
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
-                            MoreInfo = x.MoreInfo
+                            MoreInfo = x.MoreInfo,
+                            LeadTime = x.LeadTime
                         })
                     };
 
@@ -191,7 +192,8 @@ namespace Basket.Api.v1.Controllers
                             Price = x.Price,
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
-                            MoreInfo = x.MoreInfo
+                            MoreInfo = x.MoreInfo,
+                            LeadTime = x.LeadTime
                         })
                     };
 
