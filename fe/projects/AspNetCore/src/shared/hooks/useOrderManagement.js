@@ -123,7 +123,9 @@ export const useOrderManagement = ({
                     ? parseFloat(product.price * quantity).toFixed(2)
                     : null,
                 currency: product.currency,
-                expectedLeadTime: product.leadTimeDays > 0 ? calculateExpectedDeliveryDate(product.leadTimeDays) : null
+                expectedLeadTime: product.leadTimeDays > 0
+                    ? calculateExpectedDeliveryDate(product.leadTimeDays).format("YYYY-MM-DD")
+                    : null
             }
 
 
