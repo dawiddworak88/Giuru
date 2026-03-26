@@ -25,13 +25,18 @@ const isBusinessDay = (date) => {
 const applyTemplate = (template, vars) =>
   template.replace(/\{(\w+)\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : `{${key}}`));
 
-const calculateDeliveryMessage = (deliveryBusinessDays, locale, labels) => {
-  const now = moment();
-  let currentDate = now.clone();
+const getShipmentStartDate = (now) => {
+  const shipmentDate = now.clone();
 
   if (now.hour() < SHIPMENT_ON_THE_SAME_DAY_BY_HOUR) {
-    currentDate = currentDate.subtract(1, "day");
+    return shipmentDate.subtract(1, "day");
   }
+
+  return shipmentDate;
+};
+
+export const calculateExpectedDeliveryDate = (deliveryBusinessDays, now = moment()) => {
+  let currentDate = getShipmentStartDate(now);
 
   let addedBusinessDays = 0;
 
@@ -42,6 +47,13 @@ const calculateDeliveryMessage = (deliveryBusinessDays, locale, labels) => {
       addedBusinessDays++;
     }
   }
+
+  return currentDate;
+};
+
+const calculateDeliveryMessage = (deliveryBusinessDays, locale, labels) => {
+  const now = moment();
+  const currentDate = calculateExpectedDeliveryDate(deliveryBusinessDays, now);
 
   const deliveryLengthInDays = currentDate.diff(now, "day");
   const dayIndex = currentDate.day();

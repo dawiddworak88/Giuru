@@ -23,7 +23,7 @@ namespace Ordering.Api.ServicesModels
         public string OrderItemStatusChangeComment { get; set; }
         public Guid? LastOrderItemStatusChangeId { get; set; }
         public string OrderItemStatusName { get; set; }
-        public DateTime? LeadTime { get; set; }
+        public DateTime? ExpectedLeadTime { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

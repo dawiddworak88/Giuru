@@ -71,7 +71,7 @@ namespace Basket.Api.v1.Controllers
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
-                    LeadTime = x.LeadTime
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 }),
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -104,7 +104,7 @@ namespace Basket.Api.v1.Controllers
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo,
-                            LeadTime = x.LeadTime
+                            ExpectedLeadTime = x.ExpectedLeadTime
                         })
                     };
 
@@ -193,7 +193,7 @@ namespace Basket.Api.v1.Controllers
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo,
-                            LeadTime = x.LeadTime
+                            ExpectedLeadTime = x.ExpectedLeadTime
                         })
                     };
 

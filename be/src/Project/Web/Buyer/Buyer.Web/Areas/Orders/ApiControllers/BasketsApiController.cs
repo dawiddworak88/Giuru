@@ -76,7 +76,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
                     Currency = x.Currency,
-                    LeadTime = x.LeadTime
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 }));
 
             var basketResponseModel = new BasketResponseModel
@@ -103,7 +103,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
                     Currency = x.Currency,
-                    LeadTime = x.LeadTime
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 });
             }
 

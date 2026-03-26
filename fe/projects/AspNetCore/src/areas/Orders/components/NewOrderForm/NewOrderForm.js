@@ -413,6 +413,7 @@ function NewOrderForm(props) {
                                                     <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    <TableCell>{props.expectedLeadTimeLabel}</TableCell>
                                                     <TableCell>{props.unitPriceLabel}</TableCell>
                                                     <TableCell>{props.priceLabel}</TableCell>
                                                     <TableCell>{props.currencyLabel}</TableCell>
@@ -437,6 +438,7 @@ function NewOrderForm(props) {
                                                         <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
+                                                        <TableCell>{item.expectedLeadTime}</TableCell>
                                                         <TableCell>{item.unitPrice}</TableCell>
                                                         <TableCell>{item.price}</TableCell>
                                                         <TableCell>{item.currency}</TableCell>

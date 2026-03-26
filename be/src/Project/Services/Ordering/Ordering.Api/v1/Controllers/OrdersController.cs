@@ -194,6 +194,7 @@ namespace Ordering.Api.v1.Controllers
                                     OrderItemStatusId = y.OrderItemStatusId,
                                     OrderItemStatusName = y.OrderItemStatusName,
                                     OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
+                                    ExpectedLeadTime = y.ExpectedLeadTime,
                                     LastModifiedDate = y.LastModifiedDate,
                                     CreatedDate = y.CreatedDate
                                 }),
@@ -287,6 +288,7 @@ namespace Ordering.Api.v1.Controllers
                                     OrderItemStatusName = y.OrderItemStatusName,
                                     LastOrderItemStatusChangeId = y.LastOrderItemStatusChangeId,
                                     OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
+                                    ExpectedLeadTime = y.ExpectedLeadTime,
                                     LastModifiedDate = y.LastModifiedDate,
                                     CreatedDate = y.CreatedDate
                                 }),
@@ -388,6 +390,7 @@ namespace Ordering.Api.v1.Controllers
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo,
+                            ExpectedLeadTime = x.ExpectedLeadTime,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
@@ -730,6 +733,7 @@ namespace Ordering.Api.v1.Controllers
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo,
+                            ExpectedLeadTime = x.ExpectedLeadTime,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
