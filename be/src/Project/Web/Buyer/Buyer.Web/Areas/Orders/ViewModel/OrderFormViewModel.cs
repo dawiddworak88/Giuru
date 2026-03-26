@@ -67,5 +67,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public IEnumerable<ListItemViewModel> ClientAddresses { get; set; }
         public string GetProductPriceUrl { get; set; }
         public string OutletProductLabel { get; set; }
+        public string ExpectedLeadTimeLabel { get; set; }
     }
 }
