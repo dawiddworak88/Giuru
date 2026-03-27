@@ -133,7 +133,8 @@ function Catalog(props) {
             stockQuantity: productVariant.availableQuantity,
             outletQuantity: productVariant.availableOutletQuantity,
             price: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
-            currency: productVariant.price ? productVariant.price.currency : null
+            currency: productVariant.price ? productVariant.price.currency : null,
+            leadTimeDays: productVariant.leadTimeDays ? productVariant.leadTimeDays : null
         }
 
         addOrderItemToBasket({
