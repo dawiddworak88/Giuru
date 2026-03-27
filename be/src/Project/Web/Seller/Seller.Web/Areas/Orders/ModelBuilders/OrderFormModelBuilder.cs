@@ -81,7 +81,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 PriceLabel = _globalLocalizer.GetString("Price"),
                 CurrencyLabel = _globalLocalizer.GetString("Currency"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel")
+                OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel"),
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
