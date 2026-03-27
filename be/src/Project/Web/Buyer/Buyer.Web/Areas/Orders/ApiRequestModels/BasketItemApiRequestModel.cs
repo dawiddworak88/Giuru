@@ -18,6 +18,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
         public string MoreInfo { get; set; }
-        public DateTime? ExpectedLeadTime { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

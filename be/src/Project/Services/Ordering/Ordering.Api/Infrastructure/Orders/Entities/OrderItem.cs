@@ -45,6 +45,6 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
         [Column(TypeName = "nvarchar(3)")]
         public string? Currency { get; set; }
 
-        public DateTime? ExpectedLeadTime { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

@@ -11,10 +11,10 @@ namespace Ordering.Api.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<DateTime>(
+            migrationBuilder.AddColumn<DateOnly>(
                 name: "ExpectedLeadTime",
                 table: "OrderItems",
-                type: "datetime2",
+                type: "date",
                 nullable: true);
         }
 

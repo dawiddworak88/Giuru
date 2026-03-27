@@ -23,7 +23,7 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public string OrderItemStatusChangeComment { get; set; }
         public Guid? LastOrderItemStatusChangeId { get; set; }
         public string ProductAttributes { get; set; }
-        public DateTime? ExpectedLeadTime { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }
