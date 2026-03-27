@@ -20,7 +20,6 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
 import { calculateExpectedDeliveryDate } from "../../../../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
-import moment from "moment";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
