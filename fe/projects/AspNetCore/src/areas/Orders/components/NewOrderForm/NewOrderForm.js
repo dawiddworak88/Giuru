@@ -438,7 +438,7 @@ function NewOrderForm(props) {
                                                         <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
-                                                        <TableCell>{item.expectedLeadTime}</TableCell>
+                                                        <TableCell>{item.expectedLeadTime ? moment.utc(item.expectedLeadTime).local() : ""}</TableCell>
                                                         <TableCell>{item.unitPrice}</TableCell>
                                                         <TableCell>{item.price}</TableCell>
                                                         <TableCell>{item.currency}</TableCell>
