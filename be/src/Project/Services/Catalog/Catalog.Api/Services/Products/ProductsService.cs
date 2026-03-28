@@ -132,7 +132,7 @@ namespace Catalog.Api.Services.Products
 
             await _productIndexingRepository.IndexAsync(product.Id);
 
-            var upsertedProductMessage = new UpsertedProductntegrationEvent
+            var upsertedProductMessage = new UpsertedProductIntegrationEvent
             {
                 ProductId = product.Id,
                 ProductSku = product.Sku
@@ -291,7 +291,7 @@ namespace Catalog.Api.Services.Products
 
             await _productIndexingRepository.IndexAsync(product.Id);
 
-            var upsertedProductMessage = new UpsertedProductntegrationEvent
+            var upsertedProductMessage = new UpsertedProductIntegrationEvent
             {
                 ProductId = product.Id,
                 ProductSku = product.Sku
