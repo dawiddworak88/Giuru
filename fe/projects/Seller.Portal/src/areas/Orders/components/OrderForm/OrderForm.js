@@ -644,7 +644,7 @@ function OrderForm(props) {
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
-                                                            <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).local() : ""}</TableCell>
+                                                            <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                             <TableCell>{item.unitPrice}</TableCell>
                                                             <TableCell>{item.price}</TableCell>
                                                             <TableCell>{item.currency}</TableCell>

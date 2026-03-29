@@ -174,7 +174,7 @@ function EditOrderForm(props) {
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
-                                                    <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).local() : ""}</TableCell>
+                                                    <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                     <TableCell>{item.unitPrice}</TableCell>
                                                     <TableCell>{item.price}</TableCell>
                                                     <TableCell>{item.currency}</TableCell>
