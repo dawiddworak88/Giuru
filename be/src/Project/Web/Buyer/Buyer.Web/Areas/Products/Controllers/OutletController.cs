@@ -44,7 +44,8 @@ namespace Buyer.Web.Areas.Products.Controllers
                 ExtraPacking = this.User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                 PaletteLoading = this.User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                 Country = this.User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                DeliveryType = this.User.FindFirst(ClaimsEnrichmentConstants.DeliveryTypeClaimType)?.Value
             };
 
             var viewModel = await this.outletPageModelBuilder.BuildModelAsync(componentModel);
