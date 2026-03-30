@@ -309,13 +309,13 @@
   <data name="ProductAttributeItemConflict" xml:space="preserve">
     <value>Such an attribute value already exists.</value>
   </data>
-  <data name="DeliveryWithinWeekLabel" xml:space="preserve">
-    <value>We will deliver on {dayName}, {date}</value>
+  <data name="OwnTransportInStockMessage" xml:space="preserve">
+    <value>Product in stock, pick up on {date}</value>
   </data>
-  <data name="DeliveryMoreThanWeekLabel" xml:space="preserve">
-    <value>We will deliver within {days} days</value>
+  <data name="StandardLeadTimeMessage" xml:space="preserve">
+    <value>Lead time {days} days i.e. {date}.</value>
   </data>
-  <data name="DeliveryWithinWeekWednesdayLabel" xml:space="preserve">
-    <value>We will deliver to you in{dayName} {date}</value>
+  <data name="StandardDeliveryLeadTimeMessage" xml:space="preserve">
+    <value>Lead time with delivery {days} days, i.e. {date}.</value>
   </data>
 </root>

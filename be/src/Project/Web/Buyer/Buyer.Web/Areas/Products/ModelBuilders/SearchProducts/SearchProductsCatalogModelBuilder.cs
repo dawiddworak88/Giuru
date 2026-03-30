@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
 using Buyer.Web.Areas.Shared.Definitions.Products;
@@ -42,6 +43,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -54,7 +56,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
             IPriceService priceService,
-            ILeadTimeRepository leadTimeRepository
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper
             )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
@@ -68,6 +71,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _options = options;
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -81,6 +85,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+
+
 
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -137,7 +143,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 
                 var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                     accessToken: componentModel.Token,
-                    skus: [..products.Data.Select(x => x.Sku)]);
+                    skus: [.. products.Data.Select(x => x.Sku)]);
 
                 for (int i = 0; i < products.Data.Count(); i++)
                 {
@@ -156,7 +162,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.AvailableOutletQuantity = outletItem.AvailableQuantity;
                         product.OutletTitle = outletItem.Title;
                     }
-                    
+
                     var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (inventoryItem is not null)
@@ -181,6 +187,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                     }
 
                     product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock);
                     product.CanOrder = true;
                 }
 

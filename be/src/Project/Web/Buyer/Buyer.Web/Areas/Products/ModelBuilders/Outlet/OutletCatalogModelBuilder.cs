@@ -24,6 +24,7 @@ using Buyer.Web.Shared.DomainModels.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Shared.Repositories.LeadTime;
 
@@ -41,6 +42,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -53,7 +55,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             IInventoryRepository inventoryRepository,
             IOptions<AppSettings> options,
             IPriceService priceService,
-            ILeadTimeRepository leadTimeRepository)
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -65,6 +68,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             _options = options;
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -175,6 +179,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         }
 
                         product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock);
                     }
                 }
 

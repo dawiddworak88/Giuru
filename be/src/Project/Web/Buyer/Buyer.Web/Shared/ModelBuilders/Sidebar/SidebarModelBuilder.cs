@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Shared.Definitions.Products;
+﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
@@ -15,21 +16,21 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<InventoryResources> inventoryLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly LinkGenerator linkGenerator;
 
         public SidebarModelBuilder(
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer,
+            IDeliveryMessageHelper deliveryMessageHelper,
             LinkGenerator linkGenerator)
         {
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
             this.inventoryLocalizer = inventoryLocalizer;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         public async Task<SidebarViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -50,15 +51,12 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
                 LoadingLabel = this.globalLocalizer.GetString("LoadingLabel"),
                 InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
-                EanLabel = this.globalLocalizer.GetString("Ean"),
-                WithinWeekLabel = this.productLocalizer.GetString("DeliveryWithinWeekLabel"),
-                MoreThanWeekLabel = this.productLocalizer.GetString("DeliveryMoreThanWeekLabel"),
-                WithinWeekWednesdayLabel = this.productLocalizer.GetString("DeliveryWithinWeekWednesdayLabel")
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
 
-            if (componentModel.Language == PolishWeekdaysConstants.LanguageCode)
+            if (componentModel is PriceComponentModel priceComponentModel)
             {
-                viewModel.WeekdaysAccusative = PolishWeekdaysConstants.WeekdaysAccusative;
+                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(priceComponentModel.DeliveryType, false);
             }
 
             return viewModel;

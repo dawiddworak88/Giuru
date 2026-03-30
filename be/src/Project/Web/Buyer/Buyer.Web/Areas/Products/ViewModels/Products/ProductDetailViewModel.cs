@@ -59,10 +59,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string MinOrderQuantityErrorMessage { get; set; }
         public string GetProductPriceUrl { get; set; }
         public int LeadTimeDays { get; set; }
-        public string WithinWeekLabel { get; set; }
-        public string WithinWeekWednesdayLabel { get; set; }
-        public string MoreThanWeekLabel { get; set; }
-        public string[] WeekdaysAccusative { get; set; }
+        public string LeadTimeDeliveryMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }
