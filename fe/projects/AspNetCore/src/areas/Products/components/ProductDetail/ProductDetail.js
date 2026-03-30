@@ -402,7 +402,8 @@ function ProductDetail(props) {
                 <CarouselGrid  
                     items={props.productVariants} 
                     className="pt-6" 
-                    locale={props.locale} 
+                    locale={props.locale}
+                    leadTimeDeliveryMessage={props.leadTimeDeliveryMessage}
                 />
                 {props.files &&
                     <Files {...props.files} />
