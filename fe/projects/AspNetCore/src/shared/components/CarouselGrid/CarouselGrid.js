@@ -59,17 +59,12 @@ function CarouselGrid(props) {
                                                 }
                                             </a>
                                             {carouselItem.price && <Price {...carouselItem.price} />}
-                                            {carouselItem.leadTimeDays > 0 && 
+                                            {carouselItem.leadTimeDays > 0 && props.leadTimeDeliveryMessage && 
                                                 <div className="mt-3">
                                                     <ExpectedDeliveryTime 
-                                                        deliveryBusinessDays={carouselItem.leadTimeDays} 
+                                                        deliveryMessage={props.leadTimeDeliveryMessage}
+                                                        deliveryBusinessDays={carouselItem.leadTimeDays}
                                                         locale={props.locale}
-                                                        labels={{
-                                                            withinWeekLabel: props.labels.withinWeekLabel,
-                                                            withinWeekWednesdayLabel: props.labels.withinWeekWednesdayLabel,
-                                                            moreThanWeekLabel: props.labels.moreThanWeekLabel,
-                                                            weekdaysAccusative: props.labels.weekdaysAccusative 
-                                                        }}
                                                     />
                                                 </div>
                                             }
@@ -89,11 +84,6 @@ CarouselGrid.propTypes = {
     items: PropTypes.array,
     className: PropTypes.string,
     locale: PropTypes.string,
-    labels: PropTypes.shape({
-        withinWeekLabel: PropTypes.string,
-        withinWeekWednesdayLabel: PropTypes.string,
-        moreThanWeekLabel: PropTypes.string,
-    })
 };
 
 export default CarouselGrid;

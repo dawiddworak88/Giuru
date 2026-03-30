@@ -318,17 +318,12 @@ function ProductDetail(props) {
                                 </div>
                             }
                         </div>
-                        {props.leadTimeDays > 0 &&
+                        {props.leadTimeDays > 0 && props.leadTimeDeliveryMessage &&
                             <div className="mt-3">
                                 <ExpectedDeliveryTime 
+                                    deliveryMessage={props.leadTimeDeliveryMessage}
                                     deliveryBusinessDays={props.leadTimeDays}
                                     locale={props.locale}
-                                    labels={{
-                                        withinWeekLabel: props.withinWeekLabel,
-                                        withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
-                                        moreThanWeekLabel: props.moreThanWeekLabel,
-                                        weekdaysAccusative: props.weekdaysAccusative 
-                                    }}
                                 />
                             </div>
                         }
@@ -408,12 +403,6 @@ function ProductDetail(props) {
                     items={props.productVariants} 
                     className="pt-6" 
                     locale={props.locale} 
-                    labels={{
-                        withinWeekLabel: props.withinWeekLabel,
-                        withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
-                        moreThanWeekLabel: props.moreThanWeekLabel,
-                        weekdaysAccusative: props.weekdaysAccusative 
-                    }}
                 />
                 {props.files &&
                     <Files {...props.files} />

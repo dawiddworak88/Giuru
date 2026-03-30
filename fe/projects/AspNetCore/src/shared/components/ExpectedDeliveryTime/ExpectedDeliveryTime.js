@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
-import "moment/locale/pl";
-import "moment/locale/de";
 import "./ExpectedDeliveryTime.scss";
 
 import {
@@ -22,9 +20,6 @@ const isBusinessDay = (date) => {
   );
 };
 
-const applyTemplate = (template, vars) =>
-  template.replace(/\{(\w+)\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : `{${key}}`));
-
 const getShipmentStartDate = (now) => {
   const shipmentDate = now.clone();
 
@@ -40,7 +35,7 @@ export const calculateExpectedDeliveryDate = (deliveryBusinessDays, now = moment
 
   let addedBusinessDays = 0;
 
-  while (addedBusinessDays < deliveryBusinessDays) {
+  while (addedBusinessDaysw < deliveryBusinessDays) {
     currentDate = currentDate.add(1, "day");
 
     if (isBusinessDay(currentDate)) {
@@ -51,45 +46,34 @@ export const calculateExpectedDeliveryDate = (deliveryBusinessDays, now = moment
   return currentDate;
 };
 
-const calculateDeliveryMessage = (deliveryBusinessDays, locale, labels) => {
-  const now = moment();
-  const currentDate = calculateExpectedDeliveryDate(deliveryBusinessDays, now);
+const applyTemplate = (template, vars) =>
+  template.replace(/\{(\w+)\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : `{${key}}`));
 
-  const deliveryLengthInDays = currentDate.diff(now, "day");
-  const dayIndex = currentDate.day();
-  const formattedDate = currentDate.locale(locale).format("D MMMM");
-  const dayName = labels.weekdaysAccusative
-    ? labels.weekdaysAccusative[dayIndex]
-    : currentDate.locale(locale).format("dddd");
+const resolveDeliveryMessage = (deliveryMessage, deliveryBusinessDays, locale) => {
+  if (!deliveryMessage) {
+    return "";
+  }
 
-  if (deliveryLengthInDays <= 7) {
-    if (!labels.withinWeekLabel) {
-      return null;
+  if (!(deliveryBusinessDays > 0)) {
+    if (moment(deliveryMessage, moment.ISO_8601, true).isValid()) {
+      return moment(deliveryMessage).format("L");
     }
 
-    const template =
-      dayIndex === 2 && labels.withinWeekWednesdayLabel
-        ? labels.withinWeekWednesdayLabel
-        : labels.withinWeekLabel;
-
-    return applyTemplate(template, { dayName, date: formattedDate });
+    return deliveryMessage;
   }
 
-  if (!labels.moreThanWeekLabel) {
-    return null;
-  }
+  const deliveryDate = calculateExpectedDeliveryDate(deliveryBusinessDays);
+  const now = moment();
+  const days = deliveryDate.diff(now, "day");
+  const date = deliveryDate.locale(locale || "en").format("D.MM");
 
-  return applyTemplate(labels.moreThanWeekLabel, { days: deliveryLengthInDays });
+  return applyTemplate(deliveryMessage, { date, days });
 };
 
-const ExpectedDeliveryTime = (props) => {
-  const message = calculateDeliveryMessage(
-    props.deliveryBusinessDays,
-    props.locale,
-    props.labels || {}
-  );
+const ExpectedDeliveryTime = ({ deliveryMessage, deliveryBusinessDays, locale }) => {
+  const resolvedMessage = resolveDeliveryMessage(deliveryMessage, deliveryBusinessDays, locale);
 
-  if (!message) {
+  if (!resolvedMessage) {
     return null;
   }
 
@@ -97,26 +81,16 @@ const ExpectedDeliveryTime = (props) => {
     <div className="expected-delivery-time">
       <div className="expected-delivery-time__dot-status">
         <div className="expected-delivery-time__dot" />
-        <span className="expected-delivery-time__message">{message}</span>
+        <span className="expected-delivery-time__message">{resolvedMessage}</span>
       </div>
     </div>
   );
 };
 
 ExpectedDeliveryTime.propTypes = {
-  deliveryBusinessDays: PropTypes.number.isRequired,
+  deliveryMessage: PropTypes.string,
+  deliveryBusinessDays: PropTypes.number,
   locale: PropTypes.string,
-  labels: PropTypes.shape({
-    withinWeekLabel: PropTypes.string,
-    withinWeekWednesdayLabel: PropTypes.string,
-    moreThanWeekLabel: PropTypes.string,
-    weekdaysAccusative: PropTypes.arrayOf(PropTypes.string),
-  }),
-};
-
-ExpectedDeliveryTime.defaultProps = {
-  locale: "en",
-  labels: {},
 };
 
 export default ExpectedDeliveryTime;
