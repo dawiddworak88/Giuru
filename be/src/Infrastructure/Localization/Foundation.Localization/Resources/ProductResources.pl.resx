@@ -318,4 +318,7 @@
   <data name="StandardDeliveryLeadTimeMessage" xml:space="preserve">
     <value>Czas realizacji z dostawą {days} dni, tj. {date}.</value>
   </data>
+  <data name="ExpectedDeliveryDateSuffix" xml:space="preserve">
+    <value>Produkt dostępny od: {expectedDelivery}</value>
+  </data>
 </root>

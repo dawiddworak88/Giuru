@@ -1,5 +1,7 @@
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
+using System;
+using System.Globalization;
 
 namespace Buyer.Web.Areas.Products.Services.DeliveryMessages
 {
@@ -14,16 +16,31 @@ namespace Buyer.Web.Areas.Products.Services.DeliveryMessages
             _productLocalizer = productLocalizer;
         }
 
-        public string GetDeliveryMessage(string deliveryType, bool onStock)
+        public string GetDeliveryMessage(string deliveryType, bool onStock, DateTime? expectedDelivery = null)
         {
+            string message;
+
             if (deliveryType == OwnTransportDeliveryType)
             {
-                return onStock
+                message = onStock
                     ? _productLocalizer["OwnTransportInStockMessage"]
                     : _productLocalizer["StandardLeadTimeMessage"];
             }
+            else
+            {
+                message = _productLocalizer["StandardDeliveryLeadTimeMessage"];
+            }
 
-            return _productLocalizer["StandardDeliveryLeadTimeMessage"];
+            if (expectedDelivery.HasValue)
+            {
+                var formattedDate = expectedDelivery.Value.ToString("d.MM", CultureInfo.InvariantCulture);
+                var suffix = _productLocalizer["ExpectedDeliveryDateSuffix"].Value
+                    .Replace("{expectedDelivery}", formattedDate);
+
+                message += " " + suffix;
+            }
+
+            return message;
         }
     }
 }

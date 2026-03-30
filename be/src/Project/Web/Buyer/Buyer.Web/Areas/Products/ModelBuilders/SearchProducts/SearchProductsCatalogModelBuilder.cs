@@ -187,7 +187,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                     }
 
                     product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
-                    product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock);
+                    product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock, product.ExpectedDelivery);
                     product.CanOrder = true;
                 }
 

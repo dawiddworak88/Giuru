@@ -318,4 +318,7 @@
   <data name="StandardDeliveryLeadTimeMessage" xml:space="preserve">
     <value>Lead time with delivery {days} days, i.e. {date}.</value>
   </data>
+  <data name="ExpectedDeliveryDateSuffix" xml:space="preserve">
+    <value>Product available from: {expectedDelivery}</value>
+  </data>
 </root>
