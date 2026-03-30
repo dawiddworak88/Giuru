@@ -202,10 +202,10 @@ function Catalog(props) {
                                                         />
                                                     }
                                                 </div>
-                                                {item.leadTimeDays > 0 && props.leadTimeDeliveryMessage && 
+                                                {item.leadTimeDays > 0 && item.leadTimeDeliveryMessage && 
                                                     <div className="mt-3">
                                                         <ExpectedDeliveryTime 
-                                                            deliveryMessage={props.leadTimeDeliveryMessage}
+                                                            deliveryMessage={item.leadTimeDeliveryMessage}
                                                             deliveryBusinessDays={item.leadTimeDays}
                                                             locale={props.locale}
                                                         />
