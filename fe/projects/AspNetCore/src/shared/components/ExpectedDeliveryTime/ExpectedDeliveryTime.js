@@ -35,7 +35,7 @@ export const calculateExpectedDeliveryDate = (deliveryBusinessDays, now = moment
 
   let addedBusinessDays = 0;
 
-  while (addedBusinessDaysw < deliveryBusinessDays) {
+  while (addedBusinessDays < deliveryBusinessDays) {
     currentDate = currentDate.add(1, "day");
 
     if (isBusinessDay(currentDate)) {
