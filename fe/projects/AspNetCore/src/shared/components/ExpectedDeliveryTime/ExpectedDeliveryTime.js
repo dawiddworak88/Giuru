@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
-import "moment/locale/pl";
-import "moment/locale/de";
 import "./ExpectedDeliveryTime.scss";
 
 import {
@@ -22,16 +20,18 @@ const isBusinessDay = (date) => {
   );
 };
 
-const applyTemplate = (template, vars) =>
-  template.replace(/\{(\w+)\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : `{${key}}`));
-
-const calculateDeliveryMessage = (deliveryBusinessDays, locale, labels) => {
-  const now = moment();
-  let currentDate = now.clone();
+const getShipmentStartDate = (now) => {
+  const shipmentDate = now.clone();
 
   if (now.hour() < SHIPMENT_ON_THE_SAME_DAY_BY_HOUR) {
-    currentDate = currentDate.subtract(1, "day");
+    return shipmentDate.subtract(1, "day");
   }
+
+  return shipmentDate;
+};
+
+export const calculateExpectedDeliveryDate = (deliveryBusinessDays, now = moment()) => {
+  let currentDate = getShipmentStartDate(now);
 
   let addedBusinessDays = 0;
 
@@ -43,41 +43,37 @@ const calculateDeliveryMessage = (deliveryBusinessDays, locale, labels) => {
     }
   }
 
-  const deliveryLengthInDays = currentDate.diff(now, "day");
-  const dayIndex = currentDate.day();
-  const formattedDate = currentDate.locale(locale).format("D MMMM");
-  const dayName = labels.weekdaysAccusative
-    ? labels.weekdaysAccusative[dayIndex]
-    : currentDate.locale(locale).format("dddd");
-
-  if (deliveryLengthInDays <= 7) {
-    if (!labels.withinWeekLabel) {
-      return null;
-    }
-
-    const template =
-      dayIndex === 2 && labels.withinWeekWednesdayLabel
-        ? labels.withinWeekWednesdayLabel
-        : labels.withinWeekLabel;
-
-    return applyTemplate(template, { dayName, date: formattedDate });
-  }
-
-  if (!labels.moreThanWeekLabel) {
-    return null;
-  }
-
-  return applyTemplate(labels.moreThanWeekLabel, { days: deliveryLengthInDays });
+  return currentDate;
 };
 
-const ExpectedDeliveryTime = (props) => {
-  const message = calculateDeliveryMessage(
-    props.deliveryBusinessDays,
-    props.locale,
-    props.labels || {}
-  );
+const applyTemplate = (template, vars) =>
+  template.replace(/\{(\w+)\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : `{${key}}`));
 
-  if (!message) {
+const resolveDeliveryMessage = (deliveryMessage, deliveryBusinessDays, locale) => {
+  if (!deliveryMessage) {
+    return "";
+  }
+
+  if (!(deliveryBusinessDays > 0)) {
+    if (moment(deliveryMessage, moment.ISO_8601, true).isValid()) {
+      return moment(deliveryMessage).format("L");
+    }
+
+    return deliveryMessage;
+  }
+
+  const deliveryDate = calculateExpectedDeliveryDate(deliveryBusinessDays);
+  const now = moment();
+  const days = deliveryDate.diff(now, "day");
+  const date = deliveryDate.locale(locale || "en").format("D.MM");
+
+  return applyTemplate(deliveryMessage, { date, days });
+};
+
+const ExpectedDeliveryTime = ({ deliveryMessage, deliveryBusinessDays, locale }) => {
+  const resolvedMessage = resolveDeliveryMessage(deliveryMessage, deliveryBusinessDays, locale);
+
+  if (!resolvedMessage) {
     return null;
   }
 
@@ -85,26 +81,16 @@ const ExpectedDeliveryTime = (props) => {
     <div className="expected-delivery-time">
       <div className="expected-delivery-time__dot-status">
         <div className="expected-delivery-time__dot" />
-        <span className="expected-delivery-time__message">{message}</span>
+        <span className="expected-delivery-time__message">{resolvedMessage}</span>
       </div>
     </div>
   );
 };
 
 ExpectedDeliveryTime.propTypes = {
-  deliveryBusinessDays: PropTypes.number.isRequired,
+  deliveryMessage: PropTypes.string,
+  deliveryBusinessDays: PropTypes.number,
   locale: PropTypes.string,
-  labels: PropTypes.shape({
-    withinWeekLabel: PropTypes.string,
-    withinWeekWednesdayLabel: PropTypes.string,
-    moreThanWeekLabel: PropTypes.string,
-    weekdaysAccusative: PropTypes.arrayOf(PropTypes.string),
-  }),
-};
-
-ExpectedDeliveryTime.defaultProps = {
-  locale: "en",
-  labels: {},
 };
 
 export default ExpectedDeliveryTime;

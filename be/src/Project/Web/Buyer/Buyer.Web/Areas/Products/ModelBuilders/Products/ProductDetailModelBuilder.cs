@@ -33,9 +33,9 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.Repositories.LeadTime;
-using Buyer.Web.Areas.Shared.Definitions.Products;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -60,6 +60,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -80,7 +81,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IOptions<AppSettings> options,
             IProductsService productsService,
             IProductColorsService productColorsService,
-            ILeadTimeRepository leadTimeRepository)
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -101,6 +103,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _productsService = productsService;
             _productColorsService = productColorsService;
             _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -136,16 +139,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 CopyTextError = _globalLocalizer.GetString("CopyTextError"),
                 CopyToClipboardText = _globalLocalizer.GetString("CopyToClipboardText"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
-                WithinWeekLabel = _productLocalizer.GetString("DeliveryWithinWeekLabel"),
-                MoreThanWeekLabel = _productLocalizer.GetString("DeliveryMoreThanWeekLabel"),
-                WithinWeekWednesdayLabel = _productLocalizer.GetString("DeliveryWithinWeekWednesdayLabel")
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
             };
-
-            if (componentModel.Language == PolishWeekdaysConstants.LanguageCode)
-            {
-                viewModel.WeekdaysAccusative = PolishWeekdaysConstants.WeekdaysAccusative;
-            }
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 
@@ -286,6 +281,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDays = inventory.RestockableInDays;
                     viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
+
+                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {

@@ -9,6 +9,7 @@ namespace Seller.Web.Areas.Clients.DomainModels
         public string Name { get; set; }
         public string Email { get; set; }
         public string CommunicationLanguage { get; set; }
+        public Guid OrganisationId { get; set; }
         public Guid? CountryId { get; set; }
         public Guid? PreferedCurrencyId { get; set; }
         public string PhoneNumber { get; set; }

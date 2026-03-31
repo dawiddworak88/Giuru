@@ -31,6 +31,8 @@ using Seller.Web.Shared.Services.Products;
 using System.Collections.Generic;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.Services.ProductColors;
+using Seller.Web.Shared.Repositories.LeadTime;
+using Seller.Web.Areas.Clients.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -49,6 +51,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly ICurrenciesRepository _currenciesRepository;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IOptions<AppSettings> _options;
 
         public ProductsApiController(
@@ -64,6 +67,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             ICurrenciesRepository currenciesRepository,
             IProductsService productsService,
             IProductColorsService productColorsService,
+            ILeadTimeRepository leadTimeRepository,
             IOptions<AppSettings> options)
         {
             _productsRepository = productsRepository;
@@ -79,6 +83,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _currenciesRepository = currenciesRepository;
             _productsService = productsService;
             _productColorsService = productColorsService;
+            _leadTimeRepository = leadTimeRepository;
         }
 
         [HttpGet]
@@ -175,11 +180,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                 var prices = Enumerable.Empty<Price>();
 
+                var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
+
                 if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
                     var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
-
-                    var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
 
                     string clientCountryName = null;
 
@@ -243,6 +248,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         });
                 }
 
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: token,
+                    customerId: client.OrganisationId,
+                    skus: [.. products.Data.Select(x => x.Sku)]);
+
                 var productsQuantities = new List<ProductQuantitiesResponseModel>();
 
                 for (int i = 0; i < products.Data.Count(); i++)
@@ -262,6 +272,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         Images = product.Images,
                         StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
                         OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                        LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0
                     };
 
                     if (prices.Any())

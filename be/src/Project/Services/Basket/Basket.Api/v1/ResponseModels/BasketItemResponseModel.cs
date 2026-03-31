@@ -16,5 +16,6 @@ namespace Basket.Api.v1.ResponseModels
         public string Currency { get; set; }
         public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace Basket.Api.RepositoriesModels
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
         public string MoreInfo { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

@@ -130,6 +130,7 @@ function StatusOrder(props) {
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.moreInfoLabel}</TableCell>
+                                            <TableCell>{props.expectedLeadTimeLabel}</TableCell>
                                             <TableCell>{props.unitPriceLabel}</TableCell>
                                             <TableCell>{props.priceLabel}</TableCell>
                                             <TableCell>{props.currencyLabel}</TableCell>
@@ -156,6 +157,7 @@ function StatusOrder(props) {
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
+                                                    <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                     <TableCell>{item.unitPrice}</TableCell>
                                                     <TableCell>{item.price}</TableCell>
                                                     <TableCell>{item.currency}</TableCell>

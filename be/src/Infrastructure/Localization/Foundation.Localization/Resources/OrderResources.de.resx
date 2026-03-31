@@ -363,4 +363,7 @@
   <data name="OrderItemNotFound" xml:space="preserve">
     <value>Bestellposition wurde nicht gefunden.</value>
   </data>
+  <data name="ExpectedLeadTime" xml:space="preserve">
+    <value>Voraussichtlicher Liefertermin:</value>
+  </data>
 </root>

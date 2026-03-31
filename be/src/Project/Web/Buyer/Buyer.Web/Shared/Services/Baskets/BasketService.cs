@@ -66,7 +66,8 @@ namespace Buyer.Web.Shared.Services.Baskets
                         Currency = x.Currency,
                         ImageSrc = x.PictureUrl,
                         ImageAlt = x.ProductName,
-                        MoreInfo = x.MoreInfo
+                        MoreInfo = x.MoreInfo,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     });
 
                     return basketItems;

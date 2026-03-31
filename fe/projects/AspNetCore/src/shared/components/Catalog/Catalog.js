@@ -133,7 +133,8 @@ function Catalog(props) {
             stockQuantity: productVariant.availableQuantity,
             outletQuantity: productVariant.availableOutletQuantity,
             price: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
-            currency: productVariant.price ? productVariant.price.currency : null
+            currency: productVariant.price ? productVariant.price.currency : null,
+            leadTimeDays: productVariant.leadTimeDays ? productVariant.leadTimeDays : null
         }
 
         addOrderItemToBasket({
@@ -201,17 +202,12 @@ function Catalog(props) {
                                                         />
                                                     }
                                                 </div>
-                                                {item.leadTimeDays > 0 && 
+                                                {item.leadTimeDays > 0 && item.leadTimeDeliveryMessage && 
                                                     <div className="mt-3">
                                                         <ExpectedDeliveryTime 
+                                                            deliveryMessage={item.leadTimeDeliveryMessage}
                                                             deliveryBusinessDays={item.leadTimeDays}
                                                             locale={props.locale}
-                                                            labels={{
-                                                                withinWeekLabel: props.withinWeekLabel,
-                                                                withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
-                                                                moreThanWeekLabel: props.moreThanWeekLabel,
-                                                                weekdaysAccusative: props.weekdaysAccusatives
-                                                            }}
                                                         />
                                                     </div>
                                                 }

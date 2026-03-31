@@ -23,6 +23,7 @@ using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.Repositories.LeadTime;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
@@ -39,6 +40,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -50,7 +52,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IOutletRepository outletRepository,
             IOptions<AppSettings> options,
             IPriceService priceService,
-            ILeadTimeRepository leadTimeRepository)
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             this.globalLocalizer = globalLocalizer;
             this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
@@ -62,6 +65,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             _options = options;
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -172,6 +176,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         }
 
                         product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock, product.ExpectedDelivery);
                     }
 
                     viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)

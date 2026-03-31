@@ -148,17 +148,12 @@ const Sidebar = (props) => {
                                                     {carouselItem.price &&
                                                         <Price {...carouselItem.price} />
                                                     }
-                                                    {carouselItem.leadTimeDays > 0 &&
+                                                    {carouselItem.leadTimeDays > 0 && props.labels.leadTimeDeliveryMessage &&
                                                         <div className="mt-3">
                                                             <ExpectedDeliveryTime
+                                                                deliveryMessage={props.labels.leadTimeDeliveryMessage}
                                                                 deliveryBusinessDays={carouselItem.leadTimeDays}
                                                                 locale={props.locale}
-                                                                labels={{
-                                                                    withinWeekLabel: labels.withinWeekLabel,
-                                                                    withinWeekWednesdayLabel: labels.withinWeekWednesdayLabel,
-                                                                    moreThanWeekLabel: labels.moreThanWeekLabel,
-                                                                    weekdaysAccusative: labels.weekdaysAccusative
-                                                                }}
                                                             />
                                                         </div>
                                                     }

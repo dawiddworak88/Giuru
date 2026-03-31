@@ -19,6 +19,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import moment from "moment";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -413,6 +414,7 @@ function NewOrderForm(props) {
                                                     <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    <TableCell>{props.expectedLeadTimeLabel}</TableCell>
                                                     <TableCell>{props.unitPriceLabel}</TableCell>
                                                     <TableCell>{props.priceLabel}</TableCell>
                                                     <TableCell>{props.currencyLabel}</TableCell>
@@ -437,6 +439,7 @@ function NewOrderForm(props) {
                                                         <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
+                                                        <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                         <TableCell>{item.unitPrice}</TableCell>
                                                         <TableCell>{item.price}</TableCell>
                                                         <TableCell>{item.currency}</TableCell>

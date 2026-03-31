@@ -40,7 +40,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         {
             var viewModel = new OrderPageViewModel
             {
-                Locale = CultureInfo.CurrentUICulture.Name,
+                Locale = componentModel.Language,
                 Metadata = await _seoModelBuilder.BuildModelAsync(componentModel),
                 NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),

@@ -19,6 +19,7 @@ import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
+import { calculateExpectedDeliveryDate } from "../../../../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -111,7 +112,8 @@ function OrderForm(props) {
             price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
             currency: product.currency,
             externalReference,
-            moreInfo
+            moreInfo,
+            expectedLeadTime: product.leadTimeDays ? calculateExpectedDeliveryDate(product.leadTimeDays) : null,
         };
 
         if (productFromOutlet) {
@@ -617,6 +619,7 @@ function OrderForm(props) {
                                                         <TableCell>{props.deliveryFromLabel}</TableCell>
                                                         <TableCell>{props.deliveryToLabel}</TableCell>
                                                         <TableCell>{props.moreInfoLabel}</TableCell>
+                                                        <TableCell>{props.expectedLeadTimeLabel}</TableCell>
                                                         <TableCell>{props.unitPriceLabel}</TableCell>
                                                         <TableCell>{props.priceLabel}</TableCell>
                                                         <TableCell>{props.currencyLabel}</TableCell>
@@ -641,6 +644,7 @@ function OrderForm(props) {
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
+                                                            <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                             <TableCell>{item.unitPrice}</TableCell>
                                                             <TableCell>{item.price}</TableCell>
                                                             <TableCell>{item.currency}</TableCell>

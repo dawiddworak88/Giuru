@@ -3,35 +3,6 @@ import ExpectedDeliveryTime from "../shared/components/ExpectedDeliveryTime/Expe
 import "../shared/layouts/index.scss";
 import "../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime.scss";
 
-const locales = ["pl", "de", "en"];
-const businessDayScenarios = [1, 2, 3, 5, 7, 10, 14];
-
-// Simulated SSR labels as would come from the backend
-const ssrLabels = {
-  pl: {
-    withinWeekLabel: "Dostarczymy do Ciebie w {dayName} {date}",
-    withinWeekWednesdayLabel: "Dostarczymy do Ciebie we {dayName} {date}",
-    moreThanWeekLabel: "Dostarczymy do Ciebie do {days} dni",
-    weekdaysAccusative: [
-      "niedzielę",
-      "poniedziałek",
-      "wtorek",
-      "środę",
-      "czwartek",
-      "piątek",
-      "sobotę",
-    ],
-  },
-  de: {
-    withinWeekLabel: "Wir liefern am {dayName}, {date}",
-    moreThanWeekLabel: "Wir liefern innerhalb von {days} Tagen",
-  },
-  en: {
-    withinWeekLabel: "We will deliver on {dayName}, {date}",
-    moreThanWeekLabel: "We will deliver within {days} days",
-  },
-};
-
 const styles = {
   container: {
     fontFamily: "'Nunito', sans-serif",
@@ -41,7 +12,7 @@ const styles = {
   section: {
     marginBottom: "2rem",
   },
-  localeTitle: {
+  sectionTitle: {
     fontSize: "1.2rem",
     fontWeight: "bold",
     borderBottom: "2px solid #1B5A6E",
@@ -69,50 +40,50 @@ const styles = {
   },
 };
 
-const DeliveryRow = ({ days, locale, labels }) => (
+const DeliveryRow = ({ label, deliveryMessage, deliveryBusinessDays }) => (
   <div style={styles.row}>
-    <span style={styles.label}>{days} business day{days > 1 ? "s" : ""}:</span>
+    <span style={styles.label}>{label}</span>
     <span style={styles.result}>
-      <ExpectedDeliveryTime deliveryBusinessDays={days} locale={locale} labels={labels} />
+      <ExpectedDeliveryTime deliveryMessage={deliveryMessage} deliveryBusinessDays={deliveryBusinessDays} locale="pl" />
     </span>
   </div>
 );
 
 const DeliveryStory = () => (
   <div style={styles.container}>
-    {locales.map((locale) => (
-      <div key={locale} style={styles.section}>
-        <div style={styles.localeTitle}>Locale: {locale}</div>
-        {businessDayScenarios.map((days) => (
-          <DeliveryRow key={days} days={days} locale={locale} labels={ssrLabels[locale]} />
-        ))}
-      </div>
-    ))}
+    <div style={styles.section}>
+      <div style={styles.sectionTitle}>Własny transport</div>
+      <DeliveryRow label="Na stanie" deliveryMessage="Produkt na magazynie, odbierz w dniu: {date}" deliveryBusinessDays={1} />
+      <DeliveryRow label="Poza stockiem" deliveryMessage="Czas realizacji {days} dni, tj. {date}" deliveryBusinessDays={5} />
+    </div>
+    <div style={styles.section}>
+      <div style={styles.sectionTitle}>Transport Eltap</div>
+      <DeliveryRow label="Standardowy" deliveryMessage="Czas realizacji z dostawą {days} dni, tj. {date}" deliveryBusinessDays={14} />
+    </div>
+    <div style={styles.section}>
+      <div style={styles.sectionTitle}>Brak komunikatu</div>
+      <DeliveryRow label="Brak wiadomości" deliveryMessage={null} deliveryBusinessDays={0} />
+    </div>
   </div>
 );
 
-export const AllLocales = () => <DeliveryStory />;
-AllLocales.story = { name: "All locales" };
+export const AllScenarios = () => <DeliveryStory />;
+AllScenarios.story = { name: "All scenarios" };
 
-export const Polish = () => (
-  <ExpectedDeliveryTime deliveryBusinessDays={3} locale="pl" labels={ssrLabels.pl} />
+export const OwnTransportInStock = () => (
+  <ExpectedDeliveryTime deliveryMessage="Produkt na magazynie, odbierz w dniu: {date}" deliveryBusinessDays={1} locale="pl" />
 );
-Polish.story = { name: "Polish (pl) — 3 business days" };
+OwnTransportInStock.story = { name: "Własny — na stanie" };
 
-export const German = () => (
-  <ExpectedDeliveryTime deliveryBusinessDays={3} locale="de" labels={ssrLabels.de} />
+export const OwnTransportOutOfStock = () => (
+  <ExpectedDeliveryTime deliveryMessage="Czas realizacji {days} dni, tj. {date}" deliveryBusinessDays={5} locale="pl" />
 );
-German.story = { name: "German (de) — 3 business days" };
+OwnTransportOutOfStock.story = { name: "Własny — poza stockiem" };
 
-export const English = () => (
-  <ExpectedDeliveryTime deliveryBusinessDays={3} locale="en" labels={ssrLabels.en} />
+export const EltapTransport = () => (
+  <ExpectedDeliveryTime deliveryMessage="Czas realizacji z dostawą {days} dni, tj. {date}" deliveryBusinessDays={14} locale="pl" />
 );
-English.story = { name: "English (en) — 3 business days" };
-
-export const LongDelivery = () => (
-  <ExpectedDeliveryTime deliveryBusinessDays={14} locale="en" labels={ssrLabels.en} />
-);
-LongDelivery.story = { name: "Long delivery (> 7 days)" };
+EltapTransport.story = { name: "Transport Eltap" };
 
 const ExpectedDeliveryTimeStories = {
   title: "Shared/ExpectedDeliveryTime",
