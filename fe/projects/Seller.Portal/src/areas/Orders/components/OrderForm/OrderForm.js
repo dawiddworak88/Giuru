@@ -85,7 +85,7 @@ function OrderForm(props) {
     const onSuggestionSelected = (event, { suggestion }) => {
         let items = orderItems.filter(item => item.productId === suggestion.id);
 
-        if (items.length > 0) {
+        if (items && items.length > 0) {
             suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
             suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
         }
@@ -113,7 +113,9 @@ function OrderForm(props) {
             currency: product.currency,
             externalReference,
             moreInfo,
-            expectedLeadTime: product.leadTimeDays ? calculateExpectedDeliveryDate(product.leadTimeDays) : null,
+            expectedLeadTime: product.leadTimeDays > 0
+                    ? calculateExpectedDeliveryDate(product.leadTimeDays).format("YYYY-MM-DD")
+                    : null
         };
 
         if (productFromOutlet) {
