@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
@@ -34,6 +35,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IPriceService _priceService;
         private readonly IOutletRepository _outletRepository;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public AvailableProductsApiController(
             IProductsService productsService,
@@ -41,7 +43,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IPriceService priceService,
             IOptions<AppSettings> options,
             IOutletRepository outletRepository,
-            ILeadTimeRepository leadTimeRepository)
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             this.productsService = productsService;
             this.inventoryRepository = inventoryRepository;
@@ -49,6 +52,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
             _outletRepository = outletRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         [HttpGet]
@@ -157,6 +161,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         product.InStock = true;
                         product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                         product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(
+                            User.FindFirst(ClaimsEnrichmentConstants.DeliveryTypeClaimType)?.Value, product.InStock, product.ExpectedDelivery);
                     }
 
                     return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, itemsPerPage) { Data = products.Data.OrderByDescending(x => x.AvailableQuantity) });

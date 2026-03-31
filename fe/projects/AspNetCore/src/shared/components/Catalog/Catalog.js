@@ -202,17 +202,12 @@ function Catalog(props) {
                                                         />
                                                     }
                                                 </div>
-                                                {item.leadTimeDays > 0 && 
+                                                {item.leadTimeDays > 0 && item.leadTimeDeliveryMessage && 
                                                     <div className="mt-3">
                                                         <ExpectedDeliveryTime 
+                                                            deliveryMessage={item.leadTimeDeliveryMessage}
                                                             deliveryBusinessDays={item.leadTimeDays}
                                                             locale={props.locale}
-                                                            labels={{
-                                                                withinWeekLabel: props.withinWeekLabel,
-                                                                withinWeekWednesdayLabel: props.withinWeekWednesdayLabel,
-                                                                moreThanWeekLabel: props.moreThanWeekLabel,
-                                                                weekdaysAccusative: props.weekdaysAccusatives
-                                                            }}
                                                         />
                                                     </div>
                                                 }

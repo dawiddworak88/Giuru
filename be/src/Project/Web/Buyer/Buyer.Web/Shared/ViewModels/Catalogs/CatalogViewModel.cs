@@ -38,10 +38,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string GetProductPriceUrl { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string MaxAllowedOrderQuantityErrorMessage { get; set; }
-        public string WithinWeekLabel { get; set; }
-        public string WithinWeekWednesdayLabel { get; set; }
-        public string MoreThanWeekLabel { get; set; }
-        public string[] WeekdaysAccusative { get; set; }
+        public string LeadTimeDeliveryMessage { get; set; }
         public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }
         public string MinOrderQuantityErrorMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }

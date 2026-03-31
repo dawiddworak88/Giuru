@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
@@ -33,19 +34,22 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public OutletApiController(
             IProductsService productsService,
             IOutletRepository outletRepository,
             IOptions<AppSettings> options,
             IPriceService priceService,
-            ILeadTimeRepository leadTimeRepository)
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             this.productsService = productsService;
             this.outletRepository= outletRepository;
             _options = options;
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         [HttpGet]
@@ -139,6 +143,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         product.InOutlet = true;
                         product.ExpectedDelivery = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                         product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(
+                            User.FindFirst(ClaimsEnrichmentConstants.DeliveryTypeClaimType)?.Value, product.InStock, product.ExpectedDelivery);
                     }
 
                     return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(outletItems.Total, itemsPerPage) { Data = products.Data.OrderByDescending(x => x.AvailableQuantity) });

@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Shared.Configurations;
+﻿using Buyer.Web.Areas.Products.Services.DeliveryMessages;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
@@ -204,6 +205,21 @@ namespace Buyer.Web.Shared.Middlewares
                     };
 
                     claimsToCache.Add(paletteLoadingClaim);
+                }
+
+                var deliveryType = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.DeliveryTypeClientFieldName);
+
+                if (deliveryType is not null)
+                {
+                    var deliveryTypeName = DeliveryTypeResolver.Resolve(deliveryType.FieldValue);
+
+                    claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.DeliveryTypeClaimType, deliveryTypeName));
+
+                    claimsToCache.Add(new CachedClaim
+                    {
+                        Key = ClaimsEnrichmentConstants.DeliveryTypeClaimType,
+                        Value = deliveryTypeName
+                    });
                 }
             }
 
