@@ -180,7 +180,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                 var prices = Enumerable.Empty<Price>();
 
-                var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId); ;
+                var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
 
                 if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
                 {
