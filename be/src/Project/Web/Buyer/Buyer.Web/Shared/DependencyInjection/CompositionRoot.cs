@@ -47,6 +47,7 @@ using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.ModelBuilders.Toasts;
 using Buyer.Web.Shared.Repositories.Inventory;
 using System;
+using Buyer.Web.Shared.Repositories.LeadTime;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -82,6 +83,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IGlobalRepository, GlobalRepository>();
             services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ILeadTimeRepository, LeadTimeRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();

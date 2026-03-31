@@ -23,6 +23,8 @@ using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
+using Buyer.Web.Shared.Repositories.LeadTime;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -37,6 +39,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IOutletRepository outletRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -47,7 +51,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             LinkGenerator linkGenerator,
             IOutletRepository outletRepository,
             IOptions<AppSettings> options,
-            IPriceService priceService)
+            IPriceService priceService,
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             this.globalLocalizer = globalLocalizer;
             this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
@@ -58,6 +64,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.outletRepository = outletRepository;
             _options = options;
             _priceService = priceService;
+            _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -122,6 +130,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                             });
                     }
 
+                    var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: componentModel.Token,
+                        skus: [.. products.Data.Select(x => x.Sku)]);
+
                     for (int i = 0; i < products.Data.Count(); i++)
                     {
                         var product = products.Data.ElementAtOrDefault(i);
@@ -162,6 +174,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 };
                             }
                         }
+
+                        product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock, product.ExpectedDelivery);
                     }
 
                     viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)

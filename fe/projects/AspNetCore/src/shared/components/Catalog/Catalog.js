@@ -16,6 +16,7 @@ import Price from "../Price/Price";
 import { useOrderManagement } from "../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../services/QuantityCalculatorService";
 import Availability from "../Availability/Availability";
+import ExpectedDeliveryTime from "../ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -132,7 +133,8 @@ function Catalog(props) {
             stockQuantity: productVariant.availableQuantity,
             outletQuantity: productVariant.availableOutletQuantity,
             price: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
-            currency: productVariant.price ? productVariant.price.currency : null
+            currency: productVariant.price ? productVariant.price.currency : null,
+            leadTimeDays: productVariant.leadTimeDays ? productVariant.leadTimeDays : null
         }
 
         addOrderItemToBasket({
@@ -183,6 +185,9 @@ function Catalog(props) {
                                                         <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
+                                                {item.price && 
+                                                    <Price {...item.price} />
+                                                }
                                                 <div className="catalog-item__availability mt-3">
                                                     {item.inStock &&
                                                         <Availability 
@@ -197,8 +202,14 @@ function Catalog(props) {
                                                         />
                                                     }
                                                 </div>
-                                                {item.price && 
-                                                    <Price {...item.price} />
+                                                {item.leadTimeDays > 0 && item.leadTimeDeliveryMessage && 
+                                                    <div className="mt-3">
+                                                        <ExpectedDeliveryTime 
+                                                            deliveryMessage={item.leadTimeDeliveryMessage}
+                                                            deliveryBusinessDays={item.leadTimeDays}
+                                                            locale={props.locale}
+                                                        />
+                                                    </div>
                                                 }
                                             </div>
                                             {props.isLoggedIn &&
@@ -244,6 +255,7 @@ function Catalog(props) {
                 )}
             {props.sidebar &&
                 <Sidebar
+                    locale={props.locale}
                     productId={productVariant ? productVariant.id : null}
                     isOpen={isSidebarOpen}
                     manyUses={true}

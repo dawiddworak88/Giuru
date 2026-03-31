@@ -47,7 +47,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                     MoreInfo = x.MoreInfo,
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
-                    Currency = x.Currency
+                    Currency = x.Currency,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
 
@@ -79,7 +80,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                         MoreInfo = x.MoreInfo,
                         UnitPrice = x.UnitPrice,
                         Price = x.Price,
-                        Currency = x.Currency
+                        Currency = x.Currency,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     })
                 };
             }

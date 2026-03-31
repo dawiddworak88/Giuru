@@ -1,15 +1,18 @@
 ﻿using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Repositories.LeadTime;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -31,29 +34,37 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly IOutletRepository _outletRepository;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public AvailableProductsApiController(
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
             IPriceService priceService,
             IOptions<AppSettings> options,
-            IOutletRepository outletRepository)
+            IOutletRepository outletRepository,
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             this.productsService = productsService;
             this.inventoryRepository = inventoryRepository;
             _options = options;
             _priceService = priceService;
+            _leadTimeRepository = leadTimeRepository;
             _outletRepository = outletRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int pageIndex, int itemsPerPage)
         {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
                 CultureInfo.CurrentUICulture.Name,
                 pageIndex,
                 itemsPerPage,
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
+                token);
 
             if (inventories?.Data is not null && inventories.Data.Any())
             {
@@ -112,6 +123,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             });
                     }
 
+                    var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: token,
+                        skus: [.. products.Data.Select(x => x.Sku)]);
+
                     for (int i = 0; i < products.Data.Count(); i++)
                     {
                         var product = products.Data.ElementAtOrDefault(i);
@@ -145,6 +160,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                         product.InStock = true;
                         product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
+                        product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(
+                            User.FindFirst(ClaimsEnrichmentConstants.DeliveryTypeClaimType)?.Value, product.InStock, product.ExpectedDelivery);
                     }
 
                     return this.StatusCode((int)HttpStatusCode.OK, new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, itemsPerPage) { Data = products.Data.OrderByDescending(x => x.AvailableQuantity) });

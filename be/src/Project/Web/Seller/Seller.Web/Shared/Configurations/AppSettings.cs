@@ -44,5 +44,6 @@ namespace Seller.Web.Shared.Configurations
         public string DefaultCurrency { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string EnablePricesForClients { get; set; }
+        public string LeadTimeUrl { get; set; }
     }
 }

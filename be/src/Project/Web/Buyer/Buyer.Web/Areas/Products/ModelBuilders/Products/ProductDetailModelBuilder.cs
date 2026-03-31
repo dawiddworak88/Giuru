@@ -33,7 +33,9 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.ViewModels.Toasts;
+using Buyer.Web.Shared.Repositories.LeadTime;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -57,6 +59,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IOptions<AppSettings> _options;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -76,7 +80,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IPriceService priceService,
             IOptions<AppSettings> options,
             IProductsService productsService,
-            IProductColorsService productColorsService)
+            IProductColorsService productColorsService,
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -96,6 +102,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _options = options;
             _productsService = productsService;
             _productColorsService = productColorsService;
+            _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -202,6 +210,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             Currency = price.CurrencyCode,
                         };
                     }
+
+                    var leadTime = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: componentModel.Token,
+                        skus: [product.Sku]);
+
+                    viewModel.LeadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
                 }
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
@@ -268,6 +282,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
+                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
+
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
                     var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
@@ -326,6 +342,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                });
                         }
 
+                        var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                           accessToken: componentModel.Token,
+                           skus: [.. productVariants.Data.Select(x => x.Sku)]);
+
                         for (var i = 0; i < productVariants.Data.Count(); i++) 
                         {
                             var productVariant = productVariants.Data.ElementAtOrDefault(i);
@@ -371,6 +391,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 };
                             }
 
+                            carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                            
                             carouselItems.Add(carouselItem);
                         }
 
@@ -385,6 +407,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         };
                     }
                 }
+
             }
 
             return viewModel;

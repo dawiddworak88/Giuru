@@ -309,4 +309,16 @@
   <data name="ProductAttributeItemConflict" xml:space="preserve">
     <value>Such an attribute value already exists.</value>
   </data>
+  <data name="OwnTransportInStockMessage" xml:space="preserve">
+    <value>Product in stock, pick up on {date}</value>
+  </data>
+  <data name="StandardLeadTimeMessage" xml:space="preserve">
+    <value>Lead time {days} days i.e. {date}.</value>
+  </data>
+  <data name="StandardDeliveryLeadTimeMessage" xml:space="preserve">
+    <value>Lead time with delivery {days} days, i.e. {date}.</value>
+  </data>
+  <data name="ExpectedDeliveryDateSuffix" xml:space="preserve">
+    <value>Product available from: {expectedDelivery}</value>
+  </data>
 </root>

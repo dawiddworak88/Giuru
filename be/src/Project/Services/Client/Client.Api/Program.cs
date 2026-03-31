@@ -104,6 +104,8 @@ builder.Services.RegisterMailingDependencies(builder.Configuration);
 
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
+builder.Services.RegisterEventBus(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Client API", Version = "v1" });

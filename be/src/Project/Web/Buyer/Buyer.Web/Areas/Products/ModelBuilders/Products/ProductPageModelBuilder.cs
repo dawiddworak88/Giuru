@@ -40,6 +40,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
             var viewModel = new ProductPageViewModel
             {
+                Locale = componentModel.Language,
                 NotificationBar = await _notificationBarModelBuilder.BuildModelAsync(componentModel),
                 Header = await _headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await _mainNavigationModelBuilder.BuildModelAsync(componentModel),

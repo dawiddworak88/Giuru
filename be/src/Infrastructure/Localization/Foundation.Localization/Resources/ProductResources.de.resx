@@ -309,4 +309,16 @@
   <data name="ProductAttributeItemConflict" xml:space="preserve">
     <value>Ein solcher Attributwert existiert bereits.</value>
   </data>
+  <data name="OwnTransportInStockMessage" xml:space="preserve">
+    <value>Produkt auf Lager, Abholung am {date}</value>
+  </data>
+  <data name="StandardLeadTimeMessage" xml:space="preserve">
+    <value>Lieferzeit {days} Tage, d.h. {date}.</value>
+  </data>
+  <data name="StandardDeliveryLeadTimeMessage" xml:space="preserve">
+    <value>Lieferzeit mit Zustellung {days} Tage, d.h. {date}.</value>
+  </data>
+  <data name="ExpectedDeliveryDateSuffix" xml:space="preserve">
+    <value>Produkt verfügbar ab: {expectedDelivery}</value>
+  </data>
 </root>

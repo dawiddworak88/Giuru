@@ -13,5 +13,6 @@ namespace Buyer.Web.Areas.Products.ApiResponseModels
         public IEnumerable<Guid> Images { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
+        public int LeadTimeDays { get; set; }
     }
 }

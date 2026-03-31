@@ -34,6 +34,7 @@ using Microsoft.Extensions.Configuration;
 using Foundation.Extensions.Services.Cache;
 using Seller.Web.Shared.Repositories.Inventory;
 using System;
+using Seller.Web.Shared.Repositories.LeadTime;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -49,6 +50,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
             services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ILeadTimeRepository, LeadTimeRepository>();
 
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IProductsService, ProductsService>();

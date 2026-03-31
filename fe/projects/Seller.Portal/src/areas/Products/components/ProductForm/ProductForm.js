@@ -368,7 +368,7 @@ function ProductForm(props) {
                                 saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
                                 accept={{
                                     "image/*": [".png", ".jpg", ".webp"],
-                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip", ".xlsx", ".xls"]
                                 }}/>
                         </div>
                         <div className="field">

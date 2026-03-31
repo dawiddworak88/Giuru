@@ -10,6 +10,7 @@ import {
 import { Edit } from "@mui/icons-material";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../shared/components/Files/Files";
+import moment from "moment";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -147,6 +148,7 @@ function EditOrderForm(props) {
                                             <TableCell>{props.expectedDateOfProductOnStockLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.moreInfoLabel}</TableCell>
+                                            <TableCell>{props.expectedLeadTimeLabel}</TableCell>
                                             <TableCell>{props.unitPriceLabel}</TableCell>
                                             <TableCell>{props.priceLabel}</TableCell>
                                             <TableCell>{props.currencyLabel}</TableCell>
@@ -172,6 +174,7 @@ function EditOrderForm(props) {
                                                     <TableCell>{item.expectedDateOfProductOnStock}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.moreInfo}</TableCell>
+                                                    <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                     <TableCell>{item.unitPrice}</TableCell>
                                                     <TableCell>{item.price}</TableCell>
                                                     <TableCell>{item.currency}</TableCell>

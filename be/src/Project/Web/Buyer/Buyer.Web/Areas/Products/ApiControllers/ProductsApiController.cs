@@ -33,7 +33,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Buyer.Web.Shared.Repositories.LeadTime;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
@@ -51,7 +51,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly IProductColorsService _productColorsService;
-        private readonly ILogger<ProductsApiController> _logger;
+        private readonly ILeadTimeRepository _leadTimeRepository;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -65,12 +65,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IPriceService priceService,
             LinkGenerator linkGenerator,
             IProductColorsService productColorsService,
-            ILogger<ProductsApiController> logger)
+            ILeadTimeRepository leadTimeRepository)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
             _linkGenerator = linkGenerator;
             _productLocalizer = productLocalizer;
+            _leadTimeRepository = leadTimeRepository;
             _mediaService = mediaService;
             _productLocalizer = productLocalizer;
             _inventoryRepository = inventoryRepository;
@@ -79,7 +80,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _options = options;
             _priceService = priceService;
             _productColorsService = productColorsService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -190,6 +190,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         });
                 }
 
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: token,
+                    skus: [..productVariants.Data.Select(x => x.Sku)]);
+
                 for (int i = 0; i < productVariants.Data.Count(); i++)
                 {
                     var productVariant = productVariants.Data.ElementAtOrDefault(i);
@@ -273,6 +277,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         }
                     }
 
+                    carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
                     carouselItems.Add(carouselItem);
                 }
 
@@ -401,6 +406,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     language,
                     products.Data.Select(x => x.Id));
 
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: token,
+                    skus: [.. products.Data.Select(x => x.Sku)]);
+
                 var productsQuantities = new List<ProductQuantitiesResponseModel>();
 
                 for (int i = 0; i < products.Data.Count(); i++)
@@ -420,6 +429,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Images = product.Images,
                         StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
                         OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                        LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0
                     };
 
                     if (prices.Any())

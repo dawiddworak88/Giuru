@@ -129,6 +129,12 @@
             public static readonly string PricesApiEndpoint = "/api/v1/prices";
         }
 
+        public struct LeadTime
+        {
+            public static readonly string LeadTimeByCustomerApiEndpoint = "/api/v1/product-lead-times";
+            public static readonly string LeadTimeBySkusApiEndpoint = "/api/v1/product-lead-times/my";
+        }
+
         public struct Request
         {
             public const long RequestSizeLimit = 250_000_000;

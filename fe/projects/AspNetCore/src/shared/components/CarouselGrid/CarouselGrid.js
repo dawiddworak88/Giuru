@@ -7,8 +7,9 @@ import LazyLoadConstants from "../../../shared/constants/LazyLoadConstants";
 import CarouselConstants from "../Carousel/CarouselConstants";
 import { CalendarToday } from "@mui/icons-material";
 import { Hash } from "react-feather";
-import moment from "moment";
+import moment, { locale } from "moment";
 import Price from "../Price/Price";
+import ExpectedDeliveryTime from "../ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 function CarouselGrid(props) {
     return (
@@ -58,6 +59,15 @@ function CarouselGrid(props) {
                                                 }
                                             </a>
                                             {carouselItem.price && <Price {...carouselItem.price} />}
+                                            {carouselItem.leadTimeDays > 0 && props.leadTimeDeliveryMessage && 
+                                                <div className="mt-3">
+                                                    <ExpectedDeliveryTime 
+                                                        deliveryMessage={props.leadTimeDeliveryMessage}
+                                                        deliveryBusinessDays={carouselItem.leadTimeDays}
+                                                        locale={props.locale}
+                                                    />
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                     )}
@@ -72,7 +82,8 @@ function CarouselGrid(props) {
 
 CarouselGrid.propTypes = {
     items: PropTypes.array,
-    className: PropTypes.string
+    className: PropTypes.string,
+    locale: PropTypes.string,
 };
 
 export default CarouselGrid;

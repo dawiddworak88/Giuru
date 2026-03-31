@@ -132,6 +132,14 @@ namespace Catalog.Api.Services.Products
 
             await _productIndexingRepository.IndexAsync(product.Id);
 
+            var upsertedProductMessage = new UpsertedProductIntegrationEvent
+            {
+                ProductId = product.Id,
+                ProductSku = product.Sku
+            };
+
+            _eventBus.Publish(upsertedProductMessage);
+
             return product.Id;
         }
 
@@ -282,7 +290,15 @@ namespace Catalog.Api.Services.Products
             await _context.SaveChangesAsync();
 
             await _productIndexingRepository.IndexAsync(product.Id);
-            
+
+            var upsertedProductMessage = new UpsertedProductIntegrationEvent
+            {
+                ProductId = product.Id,
+                ProductSku = product.Sku
+            };
+
+            _eventBus.Publish(upsertedProductMessage);
+
             return product.Id;
         }
 

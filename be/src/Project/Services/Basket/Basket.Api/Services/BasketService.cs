@@ -89,7 +89,8 @@ namespace Basket.Api.Services
                         ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
+                        MoreInfo = x.MoreInfo,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     })
                 };
 
@@ -176,7 +177,8 @@ namespace Basket.Api.Services
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
 
@@ -201,7 +203,8 @@ namespace Basket.Api.Services
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
 
@@ -223,7 +226,8 @@ namespace Basket.Api.Services
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
         }

@@ -12,6 +12,7 @@ import AuthenticationHelper from "../../../shared/helpers/globals/Authentication
 import moment from "moment";
 import Price from "../Price/Price";
 import Availability from "../Availability/Availability";
+import ExpectedDeliveryTime from "../ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -146,6 +147,15 @@ const Sidebar = (props) => {
                                                     </div>
                                                     {carouselItem.price &&
                                                         <Price {...carouselItem.price} />
+                                                    }
+                                                    {carouselItem.leadTimeDays > 0 && props.labels.leadTimeDeliveryMessage &&
+                                                        <div className="mt-3">
+                                                            <ExpectedDeliveryTime
+                                                                deliveryMessage={props.labels.leadTimeDeliveryMessage}
+                                                                deliveryBusinessDays={carouselItem.leadTimeDays}
+                                                                locale={props.locale}
+                                                            />
+                                                        </div>
                                                     }
                                                 </div>
                                             </div>
