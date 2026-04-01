@@ -8,6 +8,7 @@ using Foundation.Extensions.ExtensionMethods;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Shared.Repositories.LeadTime
@@ -30,6 +31,8 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
 
         public async Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, string[] skus)
         {
+            if (skus.Length == 0) return default;
+
             var requestModel = new GetLeadTimeBySkusRequestModel
             {
                 Skus = skus.ToEndpointParameterString()

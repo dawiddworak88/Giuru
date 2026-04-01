@@ -30,6 +30,8 @@ namespace Seller.Web.Shared.Repositories.LeadTime
 
         public async Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
         {
+            if (skus.Length == 0) return default;
+
             var requestModel = new GetLeadTimesRequestModel
             {
                 CustomerId = customerId,
