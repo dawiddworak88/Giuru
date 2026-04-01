@@ -56,7 +56,8 @@ function ProductDetail(props) {
             sku: props.sku,
             name: props.title,
             stockQuantity: props.availableQuantity,
-            outletQuantity: props.availableOutletQuantity
+            outletQuantity: props.availableOutletQuantity,
+            leadTimeDays: props.leadTimeDays,
         };
 
         if (productVariant) {
@@ -65,7 +66,8 @@ function ProductDetail(props) {
                 sku: productVariant.subtitle,
                 name: productVariant.title,
                 stockQuantity: productVariant.availableQuantity,
-                outletQuantity: productVariant.availableOutletQuantity
+                outletQuantity: productVariant.availableOutletQuantity,
+                leadTimeDays: productVariant.leadTimeDays,
             }
         }
 
