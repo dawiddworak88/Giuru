@@ -324,8 +324,6 @@ function ProductDetail(props) {
                             <div className="mt-3">
                                 <ExpectedDeliveryTime 
                                     deliveryMessage={props.leadTimeDeliveryMessage}
-                                    deliveryBusinessDays={props.leadTimeDays}
-                                    locale={props.locale}
                                 />
                             </div>
                         }

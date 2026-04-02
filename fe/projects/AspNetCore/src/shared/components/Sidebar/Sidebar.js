@@ -152,8 +152,6 @@ const Sidebar = (props) => {
                                                         <div className="mt-3">
                                                             <ExpectedDeliveryTime
                                                                 deliveryMessage={props.labels.leadTimeDeliveryMessage}
-                                                                deliveryBusinessDays={carouselItem.leadTimeDays}
-                                                                locale={props.locale}
                                                             />
                                                         </div>
                                                     }

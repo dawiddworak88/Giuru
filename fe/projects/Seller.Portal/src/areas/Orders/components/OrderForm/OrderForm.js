@@ -19,7 +19,6 @@ import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
-import { calculateExpectedDeliveryDate } from "../../../../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -113,9 +112,7 @@ function OrderForm(props) {
             currency: product.currency,
             externalReference,
             moreInfo,
-            expectedLeadTime: product.leadTimeDays > 0
-                    ? calculateExpectedDeliveryDate(product.leadTimeDays).format("YYYY-MM-DD")
-                    : null
+            leadTimeDays: product.leadTimeDays || 0
         };
 
         if (productFromOutlet) {

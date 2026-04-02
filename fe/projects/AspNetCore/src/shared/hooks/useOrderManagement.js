@@ -10,7 +10,6 @@ import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
-import { calculateExpectedDeliveryDate } from '../components/ExpectedDeliveryTime/ExpectedDeliveryTime';
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -123,9 +122,7 @@ export const useOrderManagement = ({
                     ? parseFloat(product.price * quantity).toFixed(2)
                     : null,
                 currency: product.currency,
-                expectedLeadTime: product.leadTimeDays > 0
-                    ? calculateExpectedDeliveryDate(product.leadTimeDays).format("YYYY-MM-DD")
-                    : null
+                leadTimeDays: product.leadTimeDays || 0
             }
 
 

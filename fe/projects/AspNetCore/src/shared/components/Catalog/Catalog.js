@@ -206,8 +206,6 @@ function Catalog(props) {
                                                     <div className="mt-3">
                                                         <ExpectedDeliveryTime 
                                                             deliveryMessage={item.leadTimeDeliveryMessage}
-                                                            deliveryBusinessDays={item.leadTimeDays}
-                                                            locale={props.locale}
                                                         />
                                                     </div>
                                                 }

@@ -10,6 +10,7 @@ using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Shared.Services.DeliveryDates;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -23,15 +24,18 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IBasketRepository _basketRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IMediaService _mediaService;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
-            IMediaService mediaService)
+            IMediaService mediaService,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
             _mediaService = mediaService;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpPost]
@@ -55,7 +59,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
                     Currency = x.Currency,
-                    ExpectedLeadTime = x.ExpectedLeadTime
+                    ExpectedLeadTime = x.LeadTimeDays > 0
+                        ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(x.LeadTimeDays))
+                        : x.ExpectedLeadTime
                 }));
 
             var basketResponseModel = new BasketResponseModel

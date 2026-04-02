@@ -282,7 +282,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
+                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.LeadTimeDays, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {

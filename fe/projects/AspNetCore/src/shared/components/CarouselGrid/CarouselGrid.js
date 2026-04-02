@@ -63,8 +63,6 @@ function CarouselGrid(props) {
                                                 <div className="mt-3">
                                                     <ExpectedDeliveryTime 
                                                         deliveryMessage={props.leadTimeDeliveryMessage}
-                                                        deliveryBusinessDays={carouselItem.leadTimeDays}
-                                                        locale={props.locale}
                                                     />
                                                 </div>
                                             }
