@@ -10,6 +10,7 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
@@ -44,6 +45,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -57,7 +59,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IOptions<AppSettings> options,
             IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
-            IDeliveryMessageHelper deliveryMessageHelper
+            IDeliveryMessageHelper deliveryMessageHelper,
+            IExpectedDeliveryDateService expectedDeliveryDateService
             )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
@@ -72,6 +75,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -186,8 +190,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         }
                     }
 
-                    product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
-                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock, product.LeadTimeDays, product.ExpectedDelivery);
+                    var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    product.LeadTimeExpectedDate = leadTimeDays > 0
+                        ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                        : null;
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock, product.ExpectedDelivery);
                     product.CanOrder = true;
                 }
 

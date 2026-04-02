@@ -122,7 +122,7 @@ export const useOrderManagement = ({
                     ? parseFloat(product.price * quantity).toFixed(2)
                     : null,
                 currency: product.currency,
-                leadTimeDays: product.leadTimeDays || 0
+                expectedLeadTime: product.leadTimeExpectedDate || null
             }
 
 

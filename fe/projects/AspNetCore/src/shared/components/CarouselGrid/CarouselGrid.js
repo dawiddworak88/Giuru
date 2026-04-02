@@ -59,10 +59,12 @@ function CarouselGrid(props) {
                                                 }
                                             </a>
                                             {carouselItem.price && <Price {...carouselItem.price} />}
-                                            {carouselItem.leadTimeDays > 0 && props.leadTimeDeliveryMessage && 
+                                            {carouselItem.leadTimeExpectedDate && props.leadTimeDeliveryMessage && 
                                                 <div className="mt-3">
                                                     <ExpectedDeliveryTime 
                                                         deliveryMessage={props.leadTimeDeliveryMessage}
+                                                        expectedDeliveryDate={carouselItem.leadTimeExpectedDate}
+                                                        locale={props.locale}
                                                     />
                                                 </div>
                                             }

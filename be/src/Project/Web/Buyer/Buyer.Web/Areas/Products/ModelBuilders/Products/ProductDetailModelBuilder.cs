@@ -36,6 +36,7 @@ using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -61,6 +62,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IProductColorsService _productColorsService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -82,7 +84,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IProductsService productsService,
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
-            IDeliveryMessageHelper deliveryMessageHelper)
+            IDeliveryMessageHelper deliveryMessageHelper,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -104,6 +107,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _productColorsService = productColorsService;
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -215,7 +219,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         accessToken: componentModel.Token,
                         skus: [product.Sku]);
 
-                    viewModel.LeadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
+                    var leadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
+                    viewModel.LeadTimeExpectedDate = leadTimeDays > 0
+                        ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                        : null;
                 }
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
@@ -282,7 +289,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.LeadTimeDays, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
+                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
@@ -391,7 +398,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 };
                             }
 
-                            carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                            var variantLeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                            carouselItem.LeadTimeExpectedDate = variantLeadTimeDays > 0
+                                ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(variantLeadTimeDays))
+                                : null;
                             
                             carouselItems.Add(carouselItem);
                         }

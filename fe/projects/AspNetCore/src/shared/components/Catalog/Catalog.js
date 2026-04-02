@@ -134,7 +134,7 @@ function Catalog(props) {
             outletQuantity: productVariant.availableOutletQuantity,
             price: productVariant.price ? parseFloat(productVariant.price.current).toFixed(2) : null,
             currency: productVariant.price ? productVariant.price.currency : null,
-            leadTimeDays: productVariant.leadTimeDays ? productVariant.leadTimeDays : null
+            leadTimeExpectedDate: productVariant.leadTimeExpectedDate || null
         }
 
         addOrderItemToBasket({
@@ -202,10 +202,12 @@ function Catalog(props) {
                                                         />
                                                     }
                                                 </div>
-                                                {item.leadTimeDays > 0 && item.leadTimeDeliveryMessage && 
+                                                {item.leadTimeExpectedDate && item.leadTimeDeliveryMessage && 
                                                     <div className="mt-3">
                                                         <ExpectedDeliveryTime 
                                                             deliveryMessage={item.leadTimeDeliveryMessage}
+                                                            expectedDeliveryDate={item.leadTimeExpectedDate}
+                                                            locale={props.locale}
                                                         />
                                                     </div>
                                                 }

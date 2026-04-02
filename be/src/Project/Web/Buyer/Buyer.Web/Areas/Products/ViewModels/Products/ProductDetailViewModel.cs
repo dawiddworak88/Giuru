@@ -58,7 +58,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }
         public string MinOrderQuantityErrorMessage { get; set; }
         public string GetProductPriceUrl { get; set; }
-        public int LeadTimeDays { get; set; }
+        public DateOnly? LeadTimeExpectedDate { get; set; }
         public string LeadTimeDeliveryMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }

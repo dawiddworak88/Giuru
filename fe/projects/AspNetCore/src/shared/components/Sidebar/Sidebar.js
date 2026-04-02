@@ -148,10 +148,12 @@ const Sidebar = (props) => {
                                                     {carouselItem.price &&
                                                         <Price {...carouselItem.price} />
                                                     }
-                                                    {carouselItem.leadTimeDays > 0 && props.labels.leadTimeDeliveryMessage &&
+                                                    {carouselItem.leadTimeExpectedDate && props.labels.leadTimeDeliveryMessage &&
                                                         <div className="mt-3">
                                                             <ExpectedDeliveryTime
                                                                 deliveryMessage={props.labels.leadTimeDeliveryMessage}
+                                                                expectedDeliveryDate={carouselItem.leadTimeExpectedDate}
+                                                                locale={props.locale}
                                                             />
                                                         </div>
                                                     }

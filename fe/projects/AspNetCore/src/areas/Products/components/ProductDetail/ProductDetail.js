@@ -57,7 +57,7 @@ function ProductDetail(props) {
             name: props.title,
             stockQuantity: props.availableQuantity,
             outletQuantity: props.availableOutletQuantity,
-            leadTimeDays: props.leadTimeDays,
+            leadTimeExpectedDate: props.leadTimeExpectedDate,
         };
 
         if (productVariant) {
@@ -67,7 +67,7 @@ function ProductDetail(props) {
                 name: productVariant.title,
                 stockQuantity: productVariant.availableQuantity,
                 outletQuantity: productVariant.availableOutletQuantity,
-                leadTimeDays: productVariant.leadTimeDays,
+                leadTimeExpectedDate: productVariant.leadTimeExpectedDate,
             }
         }
 
@@ -320,10 +320,12 @@ function ProductDetail(props) {
                                 </div>
                             }
                         </div>
-                        {props.leadTimeDays > 0 && props.leadTimeDeliveryMessage &&
+                        {props.leadTimeExpectedDate && props.leadTimeDeliveryMessage &&
                             <div className="mt-3">
                                 <ExpectedDeliveryTime 
                                     deliveryMessage={props.leadTimeDeliveryMessage}
+                                    expectedDeliveryDate={props.leadTimeExpectedDate}
+                                    locale={props.locale}
                                 />
                             </div>
                         }
