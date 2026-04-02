@@ -4,7 +4,6 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.Definitions.Basket;
-using Buyer.Web.Shared.Services.DeliveryDates;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
@@ -32,20 +31,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly LinkGenerator _linkGenerator;
         private readonly IMediaService _mediaService;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
-        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             IMediaService mediaService,
-            IStringLocalizer<OrderResources> orderLocalizer,
-            IExpectedDeliveryDateService expectedDeliveryDateService)
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
             _mediaService = mediaService;
             _orderLocalizer = orderLocalizer;
-            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpPost]
@@ -80,9 +76,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
                     Currency = x.Currency,
-                    ExpectedLeadTime = x.LeadTimeDays > 0
-                        ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(x.LeadTimeDays))
-                        : x.ExpectedLeadTime
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 }));
 
             var basketResponseModel = new BasketResponseModel

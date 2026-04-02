@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -220,7 +220,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         skus: [product.Sku]);
 
                     var leadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
-                    viewModel.LeadTimeExpectedDate = leadTimeDays > 0
+                    viewModel.ExpectedLeadTime = leadTimeDays > 0
                         ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
                         : null;
                 }
@@ -399,7 +399,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             }
 
                             var variantLeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
-                            carouselItem.LeadTimeExpectedDate = variantLeadTimeDays > 0
+                            carouselItem.ExpectedLeadTime = variantLeadTimeDays > 0
                                 ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(variantLeadTimeDays))
                                 : null;
                             

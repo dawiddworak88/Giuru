@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
@@ -147,7 +147,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         product.InOutlet = true;
                         product.ExpectedDelivery = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                         var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
-                        product.LeadTimeExpectedDate = leadTimeDays > 0
+                        product.ExpectedLeadTime = leadTimeDays > 0
                             ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
                             : null;
                         product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(

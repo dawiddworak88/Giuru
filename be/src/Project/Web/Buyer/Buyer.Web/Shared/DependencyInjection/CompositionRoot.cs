@@ -50,6 +50,8 @@ using System;
 using Buyer.Web.Shared.Repositories.LeadTime;
 using Buyer.Web.Shared.Services.DeliveryDates;
 
+namespace Buyer.Web.Shared.DependencyInjection
+{
     public static class CompositionRoot
     {
         public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)

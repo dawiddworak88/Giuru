@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
@@ -191,7 +191,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                     }
 
                     var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
-                    product.LeadTimeExpectedDate = leadTimeDays > 0
+                    product.ExpectedLeadTime = leadTimeDays > 0
                         ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
                         : null;
                         product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock, product.ExpectedDelivery);

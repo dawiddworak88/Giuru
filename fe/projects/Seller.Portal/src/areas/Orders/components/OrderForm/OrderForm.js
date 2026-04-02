@@ -112,7 +112,7 @@ function OrderForm(props) {
             currency: product.currency,
             externalReference,
             moreInfo,
-            leadTimeDays: product.leadTimeDays || 0
+            expectedLeadTime: product.expectedLeadTime || null
         };
 
         if (productFromOutlet) {
