@@ -231,3 +231,4 @@ log-*.txt
 
 # BE
 be/src/.env
+/be/src/Project/Web/Buyer/Buyer.Web/wwwroot

@@ -48,6 +48,7 @@ using Buyer.Web.Shared.ModelBuilders.Toasts;
 using Buyer.Web.Shared.Repositories.Inventory;
 using System;
 using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -88,6 +89,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IExpectedDeliveryDateService, ExpectedDeliveryDateService>();
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();

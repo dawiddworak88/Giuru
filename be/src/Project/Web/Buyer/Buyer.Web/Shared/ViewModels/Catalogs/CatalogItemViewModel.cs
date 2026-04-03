@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Areas.Products.ViewModels.Products;
 using Foundation.PageContent.Components.Images;
 using System;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
         public string ShelfType { get; set; }
-        public int LeadTimeDays { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
         public string LeadTimeDeliveryMessage { get; set; }
     }
 }

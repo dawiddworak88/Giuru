@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Foundation.Extensions.ModelBuilders;
@@ -27,6 +27,7 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -43,6 +44,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -56,7 +58,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             IOptions<AppSettings> options,
             IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
-            IDeliveryMessageHelper deliveryMessageHelper)
+            IDeliveryMessageHelper deliveryMessageHelper,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -69,6 +72,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -178,7 +182,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                             };
                         }
 
-                        product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        
+                        product.ExpectedLeadTime = leadTimeDays > 0
+                            ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                            : null;
+                        
                         product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock);
                     }
                 }

@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.DomainModels.Baskets;
+using Buyer.Web.Shared.DomainModels.Baskets;
 using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
@@ -58,7 +58,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public SuccessAddProductToBasketViewModel ToastSuccessAddProductToBasket { get; set; }
         public string MinOrderQuantityErrorMessage { get; set; }
         public string GetProductPriceUrl { get; set; }
-        public int LeadTimeDays { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
         public string LeadTimeDeliveryMessage { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }

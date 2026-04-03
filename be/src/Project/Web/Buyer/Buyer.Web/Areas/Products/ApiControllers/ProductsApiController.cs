@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ApiResponseModels;
+using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
@@ -34,6 +34,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
@@ -52,6 +53,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IPriceService _priceService;
         private readonly IProductColorsService _productColorsService;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -65,7 +67,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IPriceService priceService,
             LinkGenerator linkGenerator,
             IProductColorsService productColorsService,
-            ILeadTimeRepository leadTimeRepository)
+            ILeadTimeRepository leadTimeRepository,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
@@ -80,6 +83,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _options = options;
             _priceService = priceService;
             _productColorsService = productColorsService;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpGet]
@@ -277,7 +281,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         }
                     }
 
-                    carouselItem.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                    var variantLeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                    
+                    carouselItem.ExpectedLeadTime = variantLeadTimeDays > 0
+                        ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(variantLeadTimeDays)
+                        : null;
+                    
                     carouselItems.Add(carouselItem);
                 }
 
@@ -429,8 +438,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Images = product.Images,
                         StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
                         OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
-                        LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0
                     };
+
+                    var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    productQuantity.ExpectedLeadTime = leadTimeDays > 0
+                        ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                        : null;
 
                     if (prices.Any())
                     {
