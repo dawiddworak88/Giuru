@@ -1,4 +1,4 @@
-﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Repositories.LeadTime;
+using Seller.Web.Shared.Services.DeliveryDates;
 using Seller.Web.Areas.Clients.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
@@ -52,6 +53,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
         private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IOptions<AppSettings> _options;
 
         public ProductsApiController(
@@ -68,6 +70,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IProductsService productsService,
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
+            IExpectedDeliveryDateService expectedDeliveryDateService,
             IOptions<AppSettings> options)
         {
             _productsRepository = productsRepository;
@@ -84,6 +87,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _productsService = productsService;
             _productColorsService = productColorsService;
             _leadTimeRepository = leadTimeRepository;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpGet]
@@ -272,8 +276,12 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         Images = product.Images,
                         StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
                         OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
-                        LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0
                     };
+
+                    var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    productQuantity.ExpectedLeadTime = leadTimeDays > 0
+                        ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                        : null;
 
                     if (prices.Any())
                     {

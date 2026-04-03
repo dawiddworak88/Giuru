@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
@@ -6,6 +6,7 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.Account.Definitions;
@@ -35,6 +36,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public OutletApiController(
             IProductsService productsService,
@@ -42,7 +44,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IOptions<AppSettings> options,
             IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
-            IDeliveryMessageHelper deliveryMessageHelper)
+            IDeliveryMessageHelper deliveryMessageHelper,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             this.productsService = productsService;
             this.outletRepository= outletRepository;
@@ -50,6 +53,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpGet]
@@ -142,7 +146,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                         product.InOutlet = true;
                         product.ExpectedDelivery = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
-                        product.LeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        
+                        var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        
+                        product.ExpectedLeadTime = leadTimeDays > 0
+                            ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                            : null;
+                        
                         product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(
                             User.FindFirst(ClaimsEnrichmentConstants.DeliveryTypeClaimType)?.Value, product.InStock, product.ExpectedDelivery);
                     }

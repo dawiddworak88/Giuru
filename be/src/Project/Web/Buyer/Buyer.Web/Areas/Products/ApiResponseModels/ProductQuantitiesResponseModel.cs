@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 
 namespace Buyer.Web.Areas.Products.ApiResponseModels
@@ -13,6 +13,6 @@ namespace Buyer.Web.Areas.Products.ApiResponseModels
         public IEnumerable<Guid> Images { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
-        public int LeadTimeDays { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

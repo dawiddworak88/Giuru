@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Seller.Web.Shared.ApiRequestModels;
 using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Shared.Repositories.LeadTime
 {
@@ -28,8 +29,10 @@ namespace Seller.Web.Shared.Repositories.LeadTime
             _logger = logger;
         }
 
-        public async Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
+        public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
         {
+            if (skus.Length == 0) return default;
+
             var requestModel = new GetLeadTimesRequestModel
             {
                 CustomerId = customerId,
@@ -43,9 +46,9 @@ namespace Seller.Web.Shared.Repositories.LeadTime
                 EndpointAddress = $"{_options.Value.LeadTimeUrl}{ApiConstants.LeadTime.LeadTimeByCustomerApiEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<GetLeadTimesRequestModel>, GetLeadTimesRequestModel, PagedLeadTimeResults>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<GetLeadTimesRequestModel>, GetLeadTimesRequestModel, IEnumerable<LeadTimeItem>>(apiRequest);
 
-            if (!response.IsSuccessStatusCode || response.Data?.Items is null)
+            if (!response.IsSuccessStatusCode || response.Data is null)
             {
                 _logger.LogError(
                     "Failed to retrieve lead times for SKUs: {Skus}. " +
