@@ -436,8 +436,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Sku = product.Sku,
                         Name = product.Name,
                         Images = product.Images,
-                        StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
-                        OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                        StockQuantity = inventories.Where(x => x.ProductId == product.Id).Sum(x => x.AvailableQuantity),
+                        OutletQuantity = outlets.Where(y => y.ProductId == product.Id).Sum(x => x.AvailableQuantity),
                     };
 
                     var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;

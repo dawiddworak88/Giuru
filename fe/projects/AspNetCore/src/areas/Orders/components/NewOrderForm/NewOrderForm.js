@@ -38,10 +38,10 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
-    
-    const { 
+
+    const {
         basketId,
-        orderItems, 
+        orderItems,
         addOrderItemToBasket,
         deleteOrderItemFromBasket,
         clearBasket,
@@ -323,21 +323,38 @@ function NewOrderForm(props) {
                             />
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
-                            <TextField 
-                                id="quantity" 
-                                name="quantity" 
-                                type="number" 
-                                inputProps={{ 
-                                    min: "1", 
-                                    step: "1" 
-                                }} 
+                            <TextField
+                                id="quantity"
+                                name="quantity"
+                                type="number"
+                                inputProps={{
+                                    min: "1",
+                                    step: "1"
+                                }}
                                 variant="standard"
-                                label={productFromOutlet ? `${props.quantityLabel} ${maxOutlet > 0 ? `(${props.maximalLabel} ${maxOutlet})` : ""}` : props.quantityLabel} 
-                                fullWidth={true} 
-                                disabled={product == null} 
-                                value={quantity} 
+                                label={productFromOutlet ? `${props.quantityLabel} ${maxOutlet > 0 ? `(${props.maximalLabel} ${maxOutlet})` : ""}` : props.quantityLabel}
+                                fullWidth={true}
+                                disabled={product == null}
+                                value={quantity}
                                 onChange={(e) => {
-                                    setQuantity(e.target.value);
+                                    const rawValue = e.target.value;
+
+                                    if (rawValue === '') {
+                                        setQuantity('');
+                                        return;
+                                    }
+
+                                    let newValue = Number(rawValue);
+
+                                    if (isNaN(newValue)) {
+                                        return;
+                                    }
+
+                                    if (productFromOutlet && newValue > maxOutlet) {
+                                        newValue = maxOutlet;
+                                    }
+
+                                    setQuantity(newValue);
                                 }}
                                 onBlur={() => {
                                     let numericValue = Number(quantity);
@@ -370,7 +387,7 @@ function NewOrderForm(props) {
                                 label={props.outletProductLabel}
                                 disabled={!product || product.outletQuantity === 0 || maxOutlet === 0}
                             />
-                        </div>    
+                        </div>
                         <div className="column is-2 is-flex is-align-items-flex-end">
                             <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                 fullWidth={true} value={externalReference} onChange={(e) => {

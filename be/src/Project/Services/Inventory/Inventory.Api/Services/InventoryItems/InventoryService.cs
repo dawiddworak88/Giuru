@@ -546,22 +546,37 @@ namespace Inventory.Api.Services.InventoryItems
         public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
             if (productId is null || bookedQuantity <= 0) return;
-            
-            var inventory = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == productId && x.IsActive);
 
-            if (inventory is not null)
+            var inventories = await _context.Inventory
+                .Where(x => x.ProductId == productId && x.IsActive)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+
+            if (inventories.Any() is false) return;
+
+            var totalAvailableQuantity = inventories.Sum(x => x.AvailableQuantity);
+            if (bookedQuantity > totalAvailableQuantity)
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+
+            var remainingToAllocate = bookedQuantity;
+            foreach (var item in inventories)
             {
-                var productQuantity = inventory.AvailableQuantity - bookedQuantity;
+                if (remainingToAllocate <= 0) break;
 
-                if (productQuantity < 0)
-                {
-                    productQuantity = 0;
-                }
+                var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
 
-                inventory.AvailableQuantity = productQuantity;
-                inventory.LastModifiedDate = DateTime.UtcNow;
+                var affected = await _context.Database.ExecuteSqlRawAsync(
+                    @"UPDATE Inventory 
+                      SET AvailableQuantity = AvailableQuantity - {0},
+                          LastModifiedDate = {1}
+                      WHERE Id = {2} 
+                        AND AvailableQuantity >= {0}",
+                    toDeduct, DateTime.UtcNow, item.Id);
 
-                await _context.SaveChangesAsync();
+                if (affected == 0)
+                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+
+                remainingToAllocate -= toDeduct;
             }
         }
 
