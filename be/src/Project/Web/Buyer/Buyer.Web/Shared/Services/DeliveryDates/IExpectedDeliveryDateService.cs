@@ -4,7 +4,7 @@ namespace Buyer.Web.Shared.Services.DeliveryDates
 {
     public interface IExpectedDeliveryDateService
     {
-        DateTime CalculateExpectedDeliveryDate(int deliveryBusinessDays);
-        DateTime CalculateExpectedDeliveryDate(int deliveryBusinessDays, DateTime now);
+        DateOnly CalculateExpectedDeliveryDate(int deliveryBusinessDays);
+        DateOnly CalculateExpectedDeliveryDate(int deliveryBusinessDays, DateTime now);
     }
 }

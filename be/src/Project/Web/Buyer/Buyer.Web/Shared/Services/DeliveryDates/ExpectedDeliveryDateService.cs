@@ -27,13 +27,13 @@ namespace Buyer.Web.Shared.Services.DeliveryDates
             "2033-04-17", "2033-04-18", "2033-06-05", "2033-06-16"
         };
 
-        public DateTime CalculateExpectedDeliveryDate(int deliveryBusinessDays)
+        public DateOnly CalculateExpectedDeliveryDate(int deliveryBusinessDays)
         {
             var nowInPoland = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, PolandTimeZone);
             return CalculateExpectedDeliveryDate(deliveryBusinessDays, nowInPoland);
         }
 
-        public DateTime CalculateExpectedDeliveryDate(int deliveryBusinessDays, DateTime now)
+        public DateOnly CalculateExpectedDeliveryDate(int deliveryBusinessDays, DateTime now)
         {
             var currentDate = GetShipmentStartDate(now);
 
@@ -49,7 +49,7 @@ namespace Buyer.Web.Shared.Services.DeliveryDates
                 }
             }
 
-            return currentDate.Date;
+            return DateOnly.FromDateTime(currentDate);
         }
 
         private static DateTime GetShipmentStartDate(DateTime now)

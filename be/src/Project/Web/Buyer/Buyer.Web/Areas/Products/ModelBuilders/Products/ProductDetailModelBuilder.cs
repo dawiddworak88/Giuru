@@ -220,8 +220,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         skus: [product.Sku]);
 
                     var leadTimeDays = leadTime?.Items?.FirstOrDefault()?.LeadTimeDays ?? 0;
+                   
                     viewModel.ExpectedLeadTime = leadTimeDays > 0
-                        ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                        ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
                         : null;
                 }
 
@@ -399,8 +400,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             }
 
                             var variantLeadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                            
                             carouselItem.ExpectedLeadTime = variantLeadTimeDays > 0
-                                ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(variantLeadTimeDays))
+                                ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(variantLeadTimeDays)
                                 : null;
                             
                             carouselItems.Add(carouselItem);

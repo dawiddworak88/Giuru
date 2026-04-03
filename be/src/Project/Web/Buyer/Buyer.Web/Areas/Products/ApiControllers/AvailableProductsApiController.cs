@@ -164,10 +164,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                         product.InStock = true;
                         product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
+                        
                         var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        
                         product.ExpectedLeadTime = leadTimeDays > 0
-                            ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                            ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
                             : null;
+                        
                         product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(
                             User.FindFirst(ClaimsEnrichmentConstants.DeliveryTypeClaimType)?.Value, product.InStock, product.ExpectedDelivery);
                     }

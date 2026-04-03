@@ -183,9 +183,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                         }
 
                         var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        
                         product.ExpectedLeadTime = leadTimeDays > 0
-                            ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                            ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
                             : null;
+                        
                         product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock);
                     }
                 }
