@@ -190,7 +190,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         }
                     }
 
-                    var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
 
                     product.ExpectedLeadTime = leadTimeDays > 0
                         ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)

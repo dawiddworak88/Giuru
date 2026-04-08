@@ -5,9 +5,11 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Definitions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,38 +31,50 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
             _logger = logger;
         }
 
-        public async Task<PagedLeadTimeResults> GetLeadTimesAsync(string accessToken, string[] skus)
+        public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, string[] skus)
         {
             if (skus.Length == 0) return default;
 
-            var requestModel = new GetLeadTimeBySkusRequestModel
+            int total = (int)Math.Ceiling(skus.Length / (double)Constants.MaxItemsPerPage);
+
+            var leadTimeResults = new List<LeadTimeItem>();
+
+            for (int i = 0; i < total; i++)
             {
-                Skus = skus.ToEndpointParameterString()
-            };
+                int pageIndex = i++;
+                
+                var pagedSkus = skus.Skip(i * Constants.MaxItemsPerPage).Take(Constants.MaxItemsPerPage).ToEndpointParameterString();
 
-            var apiRequest = new ApiRequest<GetLeadTimeBySkusRequestModel>
-            {
-                AccessToken = accessToken,
-                Data = requestModel,
-                EndpointAddress = $"{_options.Value.LeadTimeUrl}{ApiConstants.LeadTime.LeadTimeBySkusApiEndpoint}"
-            };
+                var requestModel = new GetLeadTimeBySkusRequestModel
+                {
+                    Skus = pagedSkus,
+                    PageIndex = pageIndex,
+                };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<GetLeadTimeBySkusRequestModel>, GetLeadTimeBySkusRequestModel, PagedLeadTimeResults>(apiRequest);
+                var apiRequest = new ApiRequest<GetLeadTimeBySkusRequestModel>
+                {
+                    AccessToken = accessToken,
+                    Data = requestModel,
+                    EndpointAddress = $"{_options.Value.LeadTimeUrl}{ApiConstants.LeadTime.LeadTimeBySkusApiEndpoint}"
+                };
 
-            if (!response.IsSuccessStatusCode || response.Data?.Items is null)
-            {
-                _logger.LogError(
-                    "Failed to retrieve lead times for SKUs: {Skus}. " +
-                    "Status Code: {StatusCode}, " +
-                    "Message: {Message}", 
-                    requestModel.Skus, 
-                    response.StatusCode, 
-                    response.Message);
+                var response = await _apiClientService.GetAsync<ApiRequest<GetLeadTimeBySkusRequestModel>, GetLeadTimeBySkusRequestModel, PagedLeadTimeResults>(apiRequest);
 
-                return default;
+                if (!response.IsSuccessStatusCode || response.Data?.Items is null)
+                {
+                    _logger.LogError(
+                        "Failed to retrieve lead times for SKUs: {Skus}. " +
+                        "Status Code: {StatusCode}, " +
+                        "Message: {Message}",
+                        requestModel.Skus,
+                        response.StatusCode,
+                        response.Message);
+                }
+
+                leadTimeResults.AddRange(response.Data.Items);
             }
 
-            return response.Data;
+            return leadTimeResults;
         }
     }
 }
