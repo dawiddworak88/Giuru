@@ -65,9 +65,11 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
                     _logger.LogError(
                         "Failed to retrieve lead times for SKUs: {Skus}. " +
                         "Status Code: {StatusCode}, " +
+                        "PageIndex: {PageIndex}, " +
                         "Message: {Message}",
                         requestModel.Skus,
                         response.StatusCode,
+                        requestModel.PageIndex,
                         response.Message);
                 }
 
