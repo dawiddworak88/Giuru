@@ -19,9 +19,10 @@ const resolveDeliveryMessage = (deliveryMessage, expectedDeliveryDate, locale) =
     return deliveryMessage;
   }
 
-  const deliveryDate = moment(expectedDeliveryDate);
-  const now = moment();
-  const days = deliveryDate.diff(now, "day");
+  const deliveryDate = moment(expectedDeliveryDate).startOf("day");
+  const now = moment().startOf("day");
+  
+  const days = deliveryDate.diff(now, "days");
   const date = deliveryDate.locale(locale || "en").format("D.MM");
 
   return applyTemplate(deliveryMessage, { date, days });
