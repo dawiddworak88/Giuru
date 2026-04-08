@@ -39,10 +39,10 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
 
             var leadTimeResults = new List<LeadTimeItem>();
 
+            int pageIndex = Constants.DefaultPageIndex;
+
             for (int i = 0; i < total; i++)
             {
-                int pageIndex = i++;
-                
                 var pagedSkus = skus.Skip(i * Constants.MaxItemsPerPage).Take(Constants.MaxItemsPerPage).ToEndpointParameterString();
 
                 var requestModel = new GetLeadTimeBySkusRequestModel
@@ -72,6 +72,8 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
                 }
 
                 leadTimeResults.AddRange(response.Data.Items);
+
+                pageIndex++;
             }
 
             return leadTimeResults;
