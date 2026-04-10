@@ -66,12 +66,18 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 {
                     var context = await _interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
 
+                    var clientId = context?.Client.ClientId;
+
+                    await _userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, clientId);
+
                     if (context is not null)
                     {
-                        await _userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId);
-
                         return Redirect(model.ReturnUrl);
                     }
+
+                    _logger.LogWarning("Authorization context was null for ReturnUrl: {ReturnUrl}. User signed in but redirecting to default page.", model.ReturnUrl);
+
+                    return Redirect("~/");
                 }
                 catch (Exception ex)
                 {

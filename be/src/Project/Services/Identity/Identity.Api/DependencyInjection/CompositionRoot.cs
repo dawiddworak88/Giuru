@@ -37,6 +37,15 @@ namespace Identity.Api.DependencyInjection
             .AddEntityFrameworkStores<IdentityContext>()
             .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+                options.Cookie.IsEssential = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(AccountConstants.TokenLifetimes.DefaultTokenLifetimeInDays);
+                options.SlidingExpiration = true;
+            });
+
             var builder = services.AddIdentityServer(options => {
 
                 options.IssuerUri = "null";

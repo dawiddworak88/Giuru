@@ -26,7 +26,7 @@ namespace Foundation.Extensions.DependencyInjection
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
                 options.KnownNetworks.Clear();
                 options.KnownProxies.Clear();
             });
