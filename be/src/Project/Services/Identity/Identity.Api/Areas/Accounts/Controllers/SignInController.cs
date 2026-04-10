@@ -41,8 +41,18 @@ namespace Identity.Api.Areas.Accounts.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string returnUrl)
+        public async Task<IActionResult> Index(string returnUrl)
         {
+            if (User?.Identity?.IsAuthenticated == true && !string.IsNullOrEmpty(returnUrl))
+            {
+                var context = await _interactionService.GetAuthorizationContextAsync(returnUrl);
+
+                if (context is not null)
+                {
+                    return Redirect(returnUrl);
+                }
+            }
+
             var signInComponentModel = new SignInComponentModel
             {
                 ReturnUrl = returnUrl,
@@ -75,7 +85,12 @@ namespace Identity.Api.Areas.Accounts.Controllers
                         return Redirect(model.ReturnUrl);
                     }
 
-                    _logger.LogWarning("Authorization context was null for ReturnUrl: {ReturnUrl}. User signed in but redirecting to default page.", model.ReturnUrl);
+                    _logger.LogWarning("Authorization context was null for ReturnUrl: {ReturnUrl}. User signed in, redirecting to ReturnUrl if available.", model.ReturnUrl);
+
+                    if (!string.IsNullOrWhiteSpace(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
 
                     return Redirect("~/");
                 }
