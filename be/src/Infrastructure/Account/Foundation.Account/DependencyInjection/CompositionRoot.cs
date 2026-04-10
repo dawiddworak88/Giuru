@@ -61,12 +61,22 @@ namespace Foundation.Account.DependencyInjection
             })
             .AddOpenIdConnect("oidc", options =>
             {
+                options.CorrelationCookie.IsEssential = true;
+                options.NonceCookie.IsEssential = true;
+
                 if (environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
                 {
                     options.CorrelationCookie.SameSite = SameSiteMode.Lax;
                     options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
                     options.NonceCookie.SameSite = SameSiteMode.Lax;
                     options.NonceCookie.SecurePolicy = CookieSecurePolicy.None;
+                }
+                else
+                {
+                    options.CorrelationCookie.SameSite = SameSiteMode.None;
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    options.NonceCookie.SameSite = SameSiteMode.None;
+                    options.NonceCookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 }
 
                 options.SignInScheme = "Cookies";
