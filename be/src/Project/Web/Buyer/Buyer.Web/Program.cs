@@ -120,13 +120,6 @@ builder.Services.AddLocalization();
 
 builder.Services.AddCultureRouteConstraint();
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.CheckConsentNeeded = context => true;
-    options.MinimumSameSitePolicy = SameSiteMode.Lax;
-    options.Secure = CookieSecurePolicy.SameAsRequest;
-});
-
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));

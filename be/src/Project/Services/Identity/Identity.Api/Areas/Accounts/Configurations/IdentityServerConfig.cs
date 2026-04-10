@@ -61,6 +61,7 @@ namespace Identity.Api.Areas.Accounts.Configurations
                         AllowedGrantTypes = GrantTypes.Code,
                         RequireConsent = false,
                         RequirePkce = true,
+                        AccessTokenLifetime = 28800,
                         RedirectUris = 
                         { 
                             $"{AccountConstants.Schemes.HttpsScheme}://{clientParameters[2]}/signin-oidc",
@@ -78,7 +79,7 @@ namespace Identity.Api.Areas.Accounts.Configurations
                             AccountConstants.Scopes.Roles,
                             AccountConstants.Scopes.All
                         },
-                        AllowOfflineAccess = false,
+                        AllowOfflineAccess = true,
                         AlwaysIncludeUserClaimsInIdToken = true
                     };
 
