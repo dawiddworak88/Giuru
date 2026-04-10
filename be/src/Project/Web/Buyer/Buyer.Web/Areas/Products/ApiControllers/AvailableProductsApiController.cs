@@ -165,7 +165,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         product.InStock = true;
                         product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                         
-                        var leadTimeDays = leadTimes?.Items?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
                         
                         product.ExpectedLeadTime = leadTimeDays > 0
                             ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
