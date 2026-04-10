@@ -16,6 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Foundation.Account.DependencyInjection
 {
@@ -110,13 +111,30 @@ namespace Foundation.Account.DependencyInjection
                         }
                         else
                         {
-                            context.Properties.RedirectUri = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.PathBase}";
+                            var scheme = context.Request.Scheme;
+
+                            if (environment.EnvironmentName != EnvironmentConstants.DevelopmentEnvironmentName)
+                            {
+                                scheme = "https";
+
+                                if (!string.IsNullOrEmpty(context.ProtocolMessage.RedirectUri) &&
+                                    context.ProtocolMessage.RedirectUri.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    context.ProtocolMessage.RedirectUri = string.Concat("https://", context.ProtocolMessage.RedirectUri.AsSpan(7));
+                                }
+                            }
+
+                            context.Properties.RedirectUri = $"{scheme}://{context.Request.Host}{context.Request.PathBase}";
                         }
 
                         return Task.CompletedTask;
                     },
                     OnRemoteFailure = context =>
                     {
+                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
+                            .CreateLogger("OpenIdConnect");
+                        logger.LogWarning(context.Failure, "OIDC remote failure for path {Path}. Redirecting to /.", context.Request.Path);
+
                         context.Response.Redirect("/");
                         context.HandleResponse();
                         return Task.CompletedTask;
