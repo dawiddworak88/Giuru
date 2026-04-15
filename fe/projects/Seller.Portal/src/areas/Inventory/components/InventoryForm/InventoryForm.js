@@ -191,7 +191,7 @@ const InventoryForm = (props) => {
                                 type="number" 
                                 variant="standard"
                                 inputProps={{ 
-                                    min: "1", 
+                                    min: "0", 
                                     step: "1" 
                                 }}
                                 label={props.quantityLabel} 
