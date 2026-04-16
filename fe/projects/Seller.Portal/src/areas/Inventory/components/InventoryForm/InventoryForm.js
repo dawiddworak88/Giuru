@@ -46,12 +46,20 @@ const InventoryForm = (props) => {
             required: {
                 isRequired: true,
                 error: props.quantityRequiredErrorMessage
+            },
+            validator: {
+                func: value => QuantityValidator.validateQuantity(value),
+                error: props.quantityFormatErrorMessage
             }
         },
         availableQuantity: {
             required: {
                 isRequired: true,
                 error: props.quantityRequiredErrorMessage
+            },
+            validator: {
+                func: value => QuantityValidator.validateQuantity(value),
+                error: props.quantityFormatErrorMessage
             }
         }
     };
@@ -190,7 +198,9 @@ const InventoryForm = (props) => {
                                 label={props.quantityLabel} 
                                 fullWidth={true} 
                                 value={quantity} 
-                                onChange={handleOnChange} />
+                                onChange={handleOnChange}
+                                error={(errors.quantity.length > 0) && dirty.quantity}
+                                helperText={dirty.quantity ? errors.quantity : ""} />
                         </div>
                         <div className="field">
                             <TextField 
@@ -204,7 +214,9 @@ const InventoryForm = (props) => {
                                 label={props.availableQuantityLabel} 
                                 fullWidth={true} 
                                 value={availableQuantity} 
-                                onChange={handleOnChange}/>
+                                onChange={handleOnChange}
+                                error={(errors.availableQuantity.length > 0) && dirty.availableQuantity}
+                                helperText={dirty.availableQuantity ? errors.availableQuantity : ""} />
                         </div>
                         <div className="field">
                             <TextField 
