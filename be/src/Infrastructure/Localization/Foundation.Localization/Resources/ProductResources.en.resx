@@ -319,6 +319,6 @@
     <value>Lead time with delivery {days} days, i.e. {date}.</value>
   </data>
   <data name="ExpectedDeliveryDateSuffix" xml:space="preserve">
-    <value>Product available from: {expectedDelivery}</value>
+    <value>Product available in stock from: {expectedDelivery}</value>
   </data>
 </root>
