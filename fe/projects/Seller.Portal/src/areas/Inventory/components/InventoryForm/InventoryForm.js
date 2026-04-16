@@ -7,8 +7,10 @@ import {
 import { Context } from "../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import { LocalizationProvider, DatePicker,} from "@mui/lab";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import {
+    DatePicker, LocalizationProvider
+} from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import QuantityValidator from "../../../../shared/helpers/validators/QuantityValidator";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
@@ -191,7 +193,6 @@ const InventoryForm = (props) => {
                                 type="number" 
                                 variant="standard"
                                 inputProps={{ 
-                                    min: "0", 
                                     step: "1" 
                                 }}
                                 label={props.quantityLabel} 
@@ -208,7 +209,6 @@ const InventoryForm = (props) => {
                                 name="availableQuantity" 
                                 type="number" 
                                 inputProps={{ 
-                                    min: "0", 
                                     step: "1" 
                                 }}
                                 label={props.availableQuantityLabel} 
@@ -235,7 +235,6 @@ const InventoryForm = (props) => {
                                 type="number" 
                                 variant="standard"
                                 inputProps={{ 
-                                    min: "0", 
                                     step: "1" 
                                 }}
                                 label={props.restockableInDaysLabel} 
@@ -249,12 +248,16 @@ const InventoryForm = (props) => {
                                     id="expectedDelivery"
                                     label={props.expectedDeliveryLabel}
                                     value={expectedDelivery}
-                                    fullWidth={true} 
                                     onChange={(date) => {
                                         setFieldValue({name: "expectedDelivery", value: date});
                                     }}
-                                    renderInput={(params) => 
-                                        <TextField {...params} variant="standard" fullWidth={true} />}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            variant="standard"
+                                            fullWidth={true}
+                                        />
+                                    )}
                                     disablePast={true}/>
                             </LocalizationProvider>
                         </div>
