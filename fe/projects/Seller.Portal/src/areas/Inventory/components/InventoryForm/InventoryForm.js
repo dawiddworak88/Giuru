@@ -46,20 +46,12 @@ const InventoryForm = (props) => {
             required: {
                 isRequired: true,
                 error: props.quantityRequiredErrorMessage
-            },
-            validator: {
-                func: value => QuantityValidator.validateQuantity(value),
-                error: props.quantityFormatErrorMessage
             }
         },
         availableQuantity: {
             required: {
                 isRequired: true,
                 error: props.quantityRequiredErrorMessage
-            },
-            validator: {
-                func: value => QuantityValidator.validateQuantity(value),
-                error: props.quantityFormatErrorMessage
             }
         }
     };
@@ -198,9 +190,7 @@ const InventoryForm = (props) => {
                                 label={props.quantityLabel} 
                                 fullWidth={true} 
                                 value={quantity} 
-                                onChange={handleOnChange}
-                                error={(errors.quantity.length > 0) && dirty.quantity}
-                                helperText={dirty.quantity ? errors.quantity : ""} />
+                                onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <TextField 
