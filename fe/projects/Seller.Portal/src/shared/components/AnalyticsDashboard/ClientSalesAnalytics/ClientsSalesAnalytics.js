@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { toast } from "react-toastify";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TextField } from "@mui/material";
 import ChartValidator from "../../../../shared/helpers/validators/ChartValidator";

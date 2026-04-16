@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
@@ -12,7 +12,7 @@ import {
     TableHead, TableRow, Paper, TextField, Button, CircularProgress
 } from "@mui/material";
 import moment from "moment";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../shared/constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";

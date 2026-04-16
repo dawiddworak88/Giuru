@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Line } from "react-chartjs-2";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { toast } from "react-toastify";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import { TextField } from "@mui/material";
 import { 
