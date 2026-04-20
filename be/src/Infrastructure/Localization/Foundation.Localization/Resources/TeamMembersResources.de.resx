@@ -147,4 +147,22 @@
   <data name="tm_subject" xml:space="preserve">
     <value>Einladung ins Team.</value>
   </data>
+  <data name="EditClientTeamMember" xml:space="preserve">
+    <value>Kunden-Teammitglied bearbeiten</value>
+  </data>
+  <data name="NavigateToClientTeamMembers" xml:space="preserve">
+    <value>Zurück zu den Kunden-Teammitgliedern</value>
+  </data>
+  <data name="NewClientTeamMemberText" xml:space="preserve">
+    <value>Kunden-Teammitglied hinzufügen</value>
+  </data>
+  <data name="SuccessfullyDeletedClientTeamMember" xml:space="preserve">
+    <value>Kunden-Teammitglied erfolgreich entfernt.</value>
+  </data>
+  <data name="SuccessfullySavedClientTeamMember" xml:space="preserve">
+    <value>Kunden-Teammitglied erfolgreich gespeichert.</value>
+  </data>
+  <data name="ClientTeamMembers" xml:space="preserve">
+    <value>Kunden-Teammitglieder</value>
+  </data>
 </root>

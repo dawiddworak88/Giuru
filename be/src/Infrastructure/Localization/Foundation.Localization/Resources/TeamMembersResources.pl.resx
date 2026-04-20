@@ -147,4 +147,22 @@
   <data name="tm_subject" xml:space="preserve">
     <value>Zaproszenie do zespołu.</value>
   </data>
+  <data name="EditClientTeamMember" xml:space="preserve">
+    <value>Edytuj członka zespołu klienta</value>
+  </data>
+  <data name="NavigateToClientTeamMembers" xml:space="preserve">
+    <value>Powróć do członków zespołu klienta</value>
+  </data>
+  <data name="NewClientTeamMemberText" xml:space="preserve">
+    <value>Dodaj członka zespołu klienta</value>
+  </data>
+  <data name="SuccessfullyDeletedClientTeamMember" xml:space="preserve">
+    <value>Pomyślnie usunięto członka zespołu klienta.</value>
+  </data>
+  <data name="SuccessfullySavedClientTeamMember" xml:space="preserve">
+    <value>Pomyślnie zapisano członka zespołu klienta.</value>
+  </data>
+  <data name="ClientTeamMembers" xml:space="preserve">
+    <value>Członkowie zespołu klienta</value>
+  </data>
 </root>
