@@ -33,7 +33,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string PhoneNumber { get; set; }
         public string PhoneNumberLabel { get; set; }
         public string ResetPasswordText { get; set; }
-        public bool HasAccount { get; set; }
         public bool IsDisabled { get; set; }
         public string NoGroupsText { get; set; }
         public string GroupsLabel { get; set; }

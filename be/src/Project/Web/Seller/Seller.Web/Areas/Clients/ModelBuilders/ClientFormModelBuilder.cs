@@ -153,8 +153,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
                     if (user is not null)
                     {
-                        viewModel.HasAccount = true;
-
                         var approvals = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
 
                         if (approvals is not null)

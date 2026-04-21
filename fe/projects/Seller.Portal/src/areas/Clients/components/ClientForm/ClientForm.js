@@ -15,7 +15,6 @@ import ClientDynamicForm from "../ClientDynamicForm/ClientDynamicForm";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
     const [formData, setFormData] = useState(props.formData ? props.formData : null);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -106,7 +105,6 @@ function ClientForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
-                        setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
                     } else {
                         toast.error(jsonResponse.message ? jsonResponse.message : props.generalErrorMessage);
@@ -117,42 +115,6 @@ function ClientForm(props) {
                 toast.error(props.generalErrorMessage);
             });
     }
-
-    const createAccount = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const payload = {
-            name: values.name,
-            email: values.email,
-            communicationLanguage: values.communicationLanguage
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(payload)
-        };
-
-        fetch(props.accountUrl, requestOptions)
-            .then((response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                AuthenticationHelper.HandleResponse(response);
-
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setCanCreateAccount(false);
-                        toast.success(jsonResponse.message);
-                    }
-                    else {
-                        toast.error(jsonResponse?.message || props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-    };
 
     const handleClientApprovalChange = (e, approval, clientApprovalIds) => {
         const updatedIds = [...clientApprovalIds]; 
@@ -434,15 +396,6 @@ function ClientForm(props) {
                                 color="primary"
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
-                            </Button>
-                            <Button
-                                className="ml-2 "
-                                type="button"
-                                color="secondary"
-                                variant="contained"
-                                onClick={createAccount}
-                                disabled={state.isLoading || !canCreateAccount}>
-                                {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
                             <a href={props.clientsUrl} className="field-button button is-text">{props.navigateToClientsLabel}</a>
                         </div>
