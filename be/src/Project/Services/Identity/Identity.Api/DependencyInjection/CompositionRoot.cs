@@ -19,10 +19,10 @@ using Identity.Api.Services.Users;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.KeyVault;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System;
 using System.Security.Cryptography.X509Certificates;
 using ITokenService = Identity.Api.Services.Tokens.ITokenService;
@@ -57,15 +57,31 @@ namespace Identity.Api.DependencyInjection
 
             if (isProduction)
             {
-                var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(async (authority, resource, scope) =>
-                {
-                    var context = new AuthenticationContext(authority);
-                    var credentials = new ClientCredential(configuration.GetValue<string>("AzureKeyVaultClientId"), configuration.GetValue<string>("AzureKeyVaultClientSecret"));
-                    var authenticationResult = await context.AcquireTokenAsync(resource, credentials);
-                    return authenticationResult.AccessToken;
-                }));
+                var keyVaultUrl = configuration.GetValue<string>("AzureKeyVaultUrl");
+                var tenantId = configuration.GetValue<string>("AzureKeyVaultTenantId");
+                var clientId = configuration.GetValue<string>("AzureKeyVaultClientId");
+                var clientSecret = configuration.GetValue<string>("AzureKeyVaultClientSecret");
+                var certificateSecretIdentifier = configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4Certificate");
+                var certificatePassword = configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4CertificatePassword");
 
-                builder.AddSigningCredential(new X509Certificate2(Convert.FromBase64String(client.GetSecretAsync(configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4Certificate")).Result.Value), configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4CertificatePassword")));
+                var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+                var secretClient = new SecretClient(new Uri(keyVaultUrl), credential);
+
+                KeyVaultSecret secret;
+                if (Uri.TryCreate(certificateSecretIdentifier, UriKind.Absolute, out var secretUri))
+                {
+                    var segments = secretUri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                    var name = segments[1];
+                    var version = segments.Length > 2 ? segments[2] : null;
+                    secret = secretClient.GetSecret(name, version).Value;
+                }
+                else
+                {
+                    secret = secretClient.GetSecret(certificateSecretIdentifier).Value;
+                }
+
+                var certificate = new X509Certificate2(Convert.FromBase64String(secret.Value), certificatePassword);
+                builder.AddSigningCredential(certificate);
             }
             else
             {
