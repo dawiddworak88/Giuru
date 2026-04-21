@@ -7,6 +7,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
     public class ClientTeamMemberPageViewModel : BasePageViewModel
     {
         public Guid? Id { get; set; }
-        public CatalogViewModel<ClientTeamMember> Catalog { get; set; }
+        public CatalogViewModel<TeamMember> Catalog { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var teamMembers = await _clientTeamMembersRepository.GetAsync(
-                token, language, organisationId, searchTerm, pageIndex, itemsPerPage, $"{nameof(ClientTeamMember.Email)} desc");
+                token, language, organisationId, searchTerm, pageIndex, itemsPerPage, $"{nameof(TeamMember.Email)} desc");
 
             return StatusCode((int)HttpStatusCode.OK, teamMembers);
         }

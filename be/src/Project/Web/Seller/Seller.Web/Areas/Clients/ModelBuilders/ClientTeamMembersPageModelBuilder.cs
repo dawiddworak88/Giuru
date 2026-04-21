@@ -16,13 +16,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> _headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> _menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>> _catalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientTeamMember>> _catalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> _footerModelBuilder;
 
         public ClientTeamMembersPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, SellerHeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>> catalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientTeamMember>> catalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             _headerModelBuilder = headerModelBuilder;

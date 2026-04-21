@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientTeamMemberPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientTeamMember>>
+    public class ClientTeamMemberPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<TeamMember>>
     {
         private readonly ICatalogModelBuilder _catalogModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
@@ -42,9 +42,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _linkGenerator = linkGenerator;
         }
 
-        public async Task<CatalogViewModel<ClientTeamMember>> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CatalogViewModel<TeamMember>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<ClientTeamMember>, ClientTeamMember>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<TeamMember>, TeamMember>();
 
             var title = _teamMembersLocalizer.GetString("ClientTeamMembers").Value;
 
@@ -93,23 +93,23 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientTeamMember.FirstName).ToCamelCase(),
+                        Title = nameof(TeamMember.FirstName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientTeamMember.LastName).ToCamelCase(),
+                        Title = nameof(TeamMember.LastName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientTeamMember.Email).ToCamelCase(),
+                        Title = nameof(TeamMember.Email).ToCamelCase(),
                         IsDateTime = false
                     }
                 }
             };
 
-            viewModel.PagedItems = await _clientTeamMembersRepository.GetAsync(componentModel.Token, componentModel.Language, client.OrganisationId, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientTeamMember.Email)} desc");
+            viewModel.PagedItems = await _clientTeamMembersRepository.GetAsync(componentModel.Token, componentModel.Language, client.OrganisationId, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(TeamMember.Email)} desc");
 
             return viewModel;
         }

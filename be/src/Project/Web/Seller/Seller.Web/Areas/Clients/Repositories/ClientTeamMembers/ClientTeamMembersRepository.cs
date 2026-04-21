@@ -29,7 +29,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientTeamMembers
             _options = options;
         }
 
-        public async Task<PagedResults<IEnumerable<ClientTeamMember>>> GetAsync(string token, string language, Guid? organisationId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<TeamMember>>> GetAsync(string token, string language, Guid? organisationId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var requestModel = new PagedClientTeamMembersRequestModel
             {
@@ -48,11 +48,11 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientTeamMembers
                 EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.ClientTeamMembersEndpoint}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<PagedClientTeamMembersRequestModel>, PagedClientTeamMembersRequestModel, PagedResults<IEnumerable<ClientTeamMember>>>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<PagedClientTeamMembersRequestModel>, PagedClientTeamMembersRequestModel, PagedResults<IEnumerable<TeamMember>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                return new PagedResults<IEnumerable<ClientTeamMember>>(response.Data.Total, response.Data.PageSize)
+                return new PagedResults<IEnumerable<TeamMember>>(response.Data.Total, response.Data.PageSize)
                 {
                     Data = response.Data.Data
                 };
@@ -66,7 +66,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientTeamMembers
             return default;
         }
 
-        public async Task<ClientTeamMember> GetAsync(string token, string language, Guid? id)
+        public async Task<TeamMember> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -76,7 +76,7 @@ namespace Seller.Web.Areas.Clients.Repositories.ClientTeamMembers
                 EndpointAddress = $"{_options.Value.IdentityUrl}{ApiConstants.Identity.ClientTeamMembersEndpoint}/{id}"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientTeamMember>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, TeamMember>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

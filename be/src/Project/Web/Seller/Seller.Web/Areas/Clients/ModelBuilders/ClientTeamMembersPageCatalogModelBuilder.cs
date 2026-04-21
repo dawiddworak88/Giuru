@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientTeamMembersPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>
+    public class ClientTeamMembersPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientTeamMember>>
     {
         private readonly ICatalogModelBuilder _catalogModelBuilder;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
@@ -40,9 +40,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientsRepository = clientsRepository;
         }
 
-        public async Task<CatalogViewModel<Client>> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CatalogViewModel<ClientTeamMember>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<Client>, Client>();
+            var viewModel = _catalogModelBuilder.BuildModel<CatalogViewModel<ClientTeamMember>, ClientTeamMember>();
 
             viewModel.Title = _teamMembersLocalizer.GetString("ClientTeamMembers");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.OrderBy = $"{nameof(Client.Name)} asc";
+            viewModel.OrderBy = $"{nameof(ClientTeamMember.Name)} asc";
 
             viewModel.Table = new CatalogTableViewModel
             {
@@ -73,28 +73,43 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Client.Name).ToCamelCase(),
+                        Title = nameof(ClientTeamMember.Name).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Client.Email).ToCamelCase(),
+                        Title = nameof(ClientTeamMember.Email).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Client.LastModifiedDate).ToCamelCase(),
+                        Title = nameof(ClientTeamMember.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Client.CreatedDate).ToCamelCase(),
+                        Title = nameof(ClientTeamMember.CreatedDate).ToCamelCase(),
                         IsDateTime = true
                     }
                 }
             };
 
-            viewModel.PagedItems = await _clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Client.CreatedDate)} desc");
+            var clients = await _clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientTeamMember.CreatedDate)} desc");
+
+            if (clients?.Data is not null)
+            {
+                viewModel.PagedItems = new PagedResults<IEnumerable<ClientTeamMember>>(clients.Total, clients.PageSize)
+                {
+                    Data = clients.Data.Select(c => new ClientTeamMember
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Email = c.Email,
+                        CreatedDate = c.CreatedDate,
+                        LastModifiedDate = c.LastModifiedDate
+                    })
+                };
+            }
 
             return viewModel;
         }

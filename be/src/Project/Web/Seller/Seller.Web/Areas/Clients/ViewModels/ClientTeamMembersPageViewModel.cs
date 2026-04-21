@@ -5,6 +5,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
 {
     public class ClientTeamMembersPageViewModel : BasePageViewModel
     {
-        public CatalogViewModel<Client> Catalog { get; set; }
+        public CatalogViewModel<ClientTeamMember> Catalog { get; set; }
     }
 }
