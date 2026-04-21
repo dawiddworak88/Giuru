@@ -81,7 +81,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     _globalLocalizer.GetString("FirstName"),
                     _globalLocalizer.GetString("LastName"),
-                    _globalLocalizer.GetString("Email")
+                    _globalLocalizer.GetString("Email"),
+                    _globalLocalizer.GetString("Status")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
@@ -110,6 +111,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     {
                         Title = nameof(TeamMember.Email).ToCamelCase(),
                         IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(TeamMember.IsDisabled).ToCamelCase(),
+                        IsActivityTag = true
                     }
                 }
             };
