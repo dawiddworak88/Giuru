@@ -2,6 +2,7 @@
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.Claims;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,10 @@ using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Threading.Tasks;
 

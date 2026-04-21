@@ -1,0 +1,10 @@
+using Foundation.Extensions.Models;
+using System;
+
+namespace Identity.Api.ServicesModels.ClientTeamMembers
+{
+    public class DeleteClientTeamMemberServiceModel : BaseServiceModel
+    {
+        public Guid? Id { get; set; }
+    }
+}

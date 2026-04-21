@@ -12,6 +12,7 @@ using Identity.Api.Repositories.GraphQl;
 using Identity.Api.Services.Approvals;
 using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Roles;
+using Identity.Api.Services.ClientTeamMembers;
 using Identity.Api.Services.TeamMembers;
 using Identity.Api.Services.Tokens;
 using Identity.Api.Services.UserApprovals;
@@ -98,6 +99,7 @@ namespace Identity.Api.DependencyInjection
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IRolesService, RolesService>();
             services.AddScoped<ITeamMemberService, TeamMemberService>();
+            services.AddScoped<IClientTeamMemberService, ClientTeamMemberService>();
             services.AddScoped<IApprovalsService, ApprovalsService>();
             services.AddScoped<IUserApprovalsService, UserApprovalsService>();
             services.AddScoped<IGraphQlRepository, GraphQlRepository>();
