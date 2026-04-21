@@ -48,14 +48,13 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Delete(Guid? id, Guid? organisationId)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             var serviceModel = new DeleteClientTeamMemberServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = organisationId
             };
 
             var validator = new DeleteClientTeamMemberModelValidator();

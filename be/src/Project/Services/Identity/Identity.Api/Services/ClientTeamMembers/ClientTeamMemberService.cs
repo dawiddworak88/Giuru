@@ -122,7 +122,7 @@ namespace Identity.Api.Services.ClientTeamMembers
 
         public async Task DeleteAsync(DeleteClientTeamMemberServiceModel model)
         {
-            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString() && x.OrganisationId == model.OrganisationId);
+            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString());
 
             if (user is null)
             {

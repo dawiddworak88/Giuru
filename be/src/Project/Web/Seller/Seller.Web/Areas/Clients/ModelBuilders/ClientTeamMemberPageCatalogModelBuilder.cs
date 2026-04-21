@@ -70,6 +70,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientTeamMembersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, organisationId = client.OrganisationId });
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientTeamMembersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, organisationId = client.OrganisationId });
 
+            viewModel.ConfirmationDialogDeleteNameProperty = [
+                nameof(TeamMember.FirstName).ToCamelCase(),
+                nameof(TeamMember.LastName).ToCamelCase()
+            ];
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
