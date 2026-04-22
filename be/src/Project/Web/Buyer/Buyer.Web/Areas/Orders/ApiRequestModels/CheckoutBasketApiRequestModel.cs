@@ -33,5 +33,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public bool HasCustomOrder { get; set; }
         public bool HasApprovalToSendEmail { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

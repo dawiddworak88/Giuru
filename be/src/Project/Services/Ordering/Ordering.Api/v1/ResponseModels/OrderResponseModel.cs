@@ -35,6 +35,7 @@ namespace Ordering.Api.v1.ResponseModels
         public string Reason { get; set; }
         public IEnumerable<OrderItemResponseModel> OrderItems { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
+        public string CreatedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
