@@ -101,7 +101,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.ClientId,
                 model.ClientName,
                 User.FindFirstValue(ClaimTypes.Email),
-                $"{User.FindFirstValue(ClaimTypes.Name)} {User.FindFirstValue(ClaimTypes.Surname)}",
                 Guid.Parse(reqCookie),
                 clientAddresses?.FirstOrDefault(x => x.Id == model.BillingAddressId),
                 clientAddresses?.FirstOrDefault(x => x.Id == model.ShippingAddressId),

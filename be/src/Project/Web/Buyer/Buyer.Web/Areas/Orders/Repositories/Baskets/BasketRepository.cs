@@ -98,7 +98,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             Guid? clientId,
             string clientName, 
             string clientEmail,
-            string createdBy,
             Guid? basketId,
             ClientAddress billingAddress,
             ClientAddress shippingAddress,
@@ -117,7 +116,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 HasCustomOrder = hasCustomOrder,
                 HasApprovalToSendEmail = hasApprovalToSendEmail,
                 Attachments = attachments,
-                CreatedBy = createdBy
             };
 
             if (billingAddress is not null)
