@@ -1,4 +1,4 @@
-﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,6 +20,7 @@ using Catalog.Api.v1.Products.ResponseModels;
 using Catalog.Api.ServicesModels.ProductAttributes;
 using System.Collections.Generic;
 using Foundation.GenericRepository.Paginations;
+using Asp.Versioning;
 
 namespace Catalog.Api.v1.Products.Controllers
 {

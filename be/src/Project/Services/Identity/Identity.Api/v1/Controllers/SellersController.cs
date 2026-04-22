@@ -1,4 +1,4 @@
-﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Controllers;
 using Identity.Api.Services.Organisations;
 using Identity.Api.ServicesModels.Organisations;
 using Identity.Api.v1.ResponseModels;
@@ -9,6 +9,7 @@ using System;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
 namespace Identity.Api.v1.Controllers
 {

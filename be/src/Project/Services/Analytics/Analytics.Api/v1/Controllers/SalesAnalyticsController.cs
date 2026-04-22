@@ -1,4 +1,4 @@
-﻿using Analytics.Api.Services.SalesAnalytics;
+using Analytics.Api.Services.SalesAnalytics;
 using Analytics.Api.ServicesModels.SalesAnalytics;
 using Analytics.Api.v1.ResponseModels;
 using Analytics.Api.Validators;
@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
 namespace Analytics.Api.v1.Controllers
 {

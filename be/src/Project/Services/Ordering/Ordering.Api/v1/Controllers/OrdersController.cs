@@ -1,4 +1,4 @@
-﻿using Foundation.Account.Definitions;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -19,6 +19,7 @@ using Ordering.Api.ServicesModels;
 using Ordering.Api.Validators;
 using Ordering.Api.v1.ResponseModels;
 using Ordering.Api.v1.RequestModels;
+using Asp.Versioning;
 
 namespace Ordering.Api.v1.Controllers
 {

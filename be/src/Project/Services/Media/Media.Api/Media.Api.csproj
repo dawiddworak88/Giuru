@@ -125,6 +125,8 @@
   </ItemGroup>
 
   <ItemGroup>
+	<PackageReference Include="Asp.Versioning.Mvc" Version="8.1.1" />
+	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
 	<PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="8.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
 	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
@@ -134,7 +136,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.26" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="8.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.26">
