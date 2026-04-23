@@ -10,7 +10,6 @@ import {
     NoSsr, FormControlLabel, Switch
 } from "@mui/material";
 import moment from "moment";
-import React from "react";
 
 const ClientTeamMemberForm = (props) => {
     const [state, dispatch] = useContext(Context);
