@@ -1,4 +1,4 @@
-﻿using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Images;
 using System.IO;
 using System.Threading.Tasks;
@@ -50,6 +50,18 @@ namespace Giuru.IntegrationTests.Images
         public string GetHostname()
         {
             return _image.GetHostname();
+        }
+        public bool MatchLatestOrNightly()
+        {
+            return _image.MatchLatestOrNightly();
+        }
+        public bool MatchVersion(Predicate<string> predicate)
+        {
+            return _image.MatchVersion(predicate);
+        }
+        public bool MatchVersion(Predicate<Version> predicate)
+        {
+            return _image.MatchVersion(predicate);
         }
     }
 }
