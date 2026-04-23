@@ -29,8 +29,7 @@ function ClientForm(props) {
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
         isDisabled: { value: props.isDisabled ? props.isDisabled : false },
         deliveryAddress: { value: props.defaultDeliveryAddressId ? props.clientAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
-        billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null },
-        clientApprovalIds: { value: props.clientApprovals ? props.clientApprovals.filter(x => x.isApproved).map(x => x.id) : [] }
+        billingAddress: { value: props.defaultBillingAddressId ? props.clientAddresses.find((item) => item.id === props.defaultBillingAddressId) : null }
     };
 
     const stateValidatorSchema = {
@@ -76,8 +75,7 @@ function ClientForm(props) {
             countryId: country ? country.id : null, 
             preferedCurrencyId: preferedCurrency ? preferedCurrency.id : null,
             defaultDeliveryAddressId: state.deliveryAddress ? state.deliveryAddress.id : null,
-            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null,
-            
+            defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
         }
 
         if (formData != null) {
@@ -116,23 +114,6 @@ function ClientForm(props) {
             });
     }
 
-    const handleClientApprovalChange = (e, approval, clientApprovalIds) => {
-        const updatedIds = [...clientApprovalIds]; 
-
-        approval.isApproved = !approval.isApproved;
-
-        if (e.target.checked) {
-            updatedIds.push(approval.id);
-        } else {
-            const index = updatedIds.indexOf(approval.id);
-            if (index !== -1) {
-                updatedIds.splice(index, 1);
-            }
-        }
-
-        return setFieldValue({name: "clientApprovalIds", value: updatedIds})
-    }
-
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
@@ -141,7 +122,7 @@ function ClientForm(props) {
     const { 
         id, name, email, country, preferedCurrency, clientGroupIds, 
         communicationLanguage, phoneNumber, clientManagerIds,
-        deliveryAddress, billingAddress, isDisabled, clientApprovalIds
+        deliveryAddress, billingAddress, isDisabled
     } = values;
 
     return (
@@ -362,33 +343,6 @@ function ClientForm(props) {
                                     label={isDisabled ? props.inActiveLabel : props.activeLabel} />
                             </NoSsr>
                         </div>
-                        {props.clientApprovals && props.clientApprovals.length > 0 &&
-                            props.clientApprovals.map((approval, index) => {
-                                return (
-                                    <div key={index} className="field">
-                                        <NoSsr>
-                                            <FormControlLabel
-                                                control={
-                                                    <Switch
-                                                        onChange={e => {
-                                                            handleClientApprovalChange(e, approval, clientApprovalIds)
-                                                        }}
-                                                        checked={approval.isApproved}
-                                                        id={approval.name}
-                                                        name={approval.name}
-                                                        color="secondary" />
-                                                }
-                                                label={approval.name} />
-                                        </NoSsr>
-                                        {approval.isApproved && approval.approvalDate &&
-                                            <p>
-                                                {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
-                                            </p>
-                                        }
-                                    </div>
-                                );
-                            })
-                        }
                         <div className="field client-form__field-row">
                             <Button
                                 type="submit"

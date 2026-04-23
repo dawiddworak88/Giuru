@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.ClientTeamMembers;
+using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Globalization;
@@ -20,17 +21,21 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     public class ClientTeamMembersApiController : BaseApiController
     {
         private readonly IClientTeamMembersRepository _clientTeamMembersRepository;
-        private readonly IOptions<AppSettings> _options;
         private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
+        private readonly IOptions<AppSettings> _options;
+
 
         public ClientTeamMembersApiController(
             IClientTeamMembersRepository clientTeamMembersRepository,
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
+            IUserApprovalsRepository userApprovalsRepository,
             IOptions<AppSettings> options)
         {
             _clientTeamMembersRepository = clientTeamMembersRepository;
-            _options = options;
             _teamMembersLocalizer = teamMembersLocalizer;
+            _userApprovalsRepository = userApprovalsRepository;
+            _options = options;
         }
 
         [HttpGet]
@@ -52,6 +57,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var teamMemberId = await _clientTeamMembersRepository.SaveAsync(token, language, organisationId, model.Id, model.FirstName, model.LastName, model.Email, model.IsDisabled, _options.Value.BuyerUrl);
+
+            await _userApprovalsRepository.SaveAsync(token, language, model.TeamMemberApprovalIds, teamMemberId);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId, Message = _teamMembersLocalizer.GetString("SuccessfullySavedClientTeamMember").Value });
         }

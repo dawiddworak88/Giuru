@@ -9,6 +9,7 @@ import {
     TextField, InputLabel, Button, CircularProgress,
     NoSsr, FormControlLabel, Switch
 } from "@mui/material";
+import moment from "moment";
 
 const ClientTeamMemberForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -18,7 +19,8 @@ const ClientTeamMemberForm = (props) => {
         email: { value: props.email ? props.email : "", error: "" },
         firstName: { value: props.firstName ? props.firstName : "", error: "" },
         lastName: { value: props.lastName ? props.lastName : "", error: "" },
-        isDisabled: { value: props.isDisabled ? props.isDisabled : false }
+        isDisabled: { value: props.isDisabled ? props.isDisabled : false },
+        teamMemberApprovalIds: { value: props.teamMemberApprovals ? props.teamMemberApprovals.filter(x => x.isApproved).map(x => x.id) : [] }
     }
 
     const stateValidatorSchema = {
@@ -73,12 +75,29 @@ const ClientTeamMemberForm = (props) => {
             });
     }
 
+    const handleTeamMemberApprovalChange = (e, approval, teamMemberApprovalIds) => {
+        const updatedIds = [...teamMemberApprovalIds]; 
+
+        approval.isApproved = !approval.isApproved;
+
+        if (e.target.checked) {
+            updatedIds.push(approval.id);
+        } else {
+            const index = updatedIds.indexOf(approval.id);
+            if (index !== -1) {
+                updatedIds.splice(index, 1);
+            }
+        }
+
+        return setFieldValue({name: "teamMemberApprovalIds", value: updatedIds})
+    }
+
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { id, email, firstName, lastName, isDisabled } = values;
+    const { id, email, firstName, lastName, isDisabled, teamMemberApprovalIds } = values;
     
     return (
         <section className="section section-small-padding">
@@ -150,6 +169,33 @@ const ClientTeamMemberForm = (props) => {
                                     label={isDisabled ? props.inActiveLabel : props.activeLabel} />
                             </NoSsr>
                         </div>
+                        {props.teamMemberApprovals && props.teamMemberApprovals.length > 0 &&
+                            props.teamMemberApprovals.map((approval, index) => {
+                                return (
+                                    <div key={index} className="field">
+                                        <NoSsr>
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch
+                                                        onChange={e => {
+                                                            handleTeamMemberApprovalChange(e, approval, teamMemberApprovalIds)
+                                                        }}
+                                                        checked={approval.isApproved}
+                                                        id={approval.name}
+                                                        name={approval.name}
+                                                        color="secondary" />
+                                                }
+                                                label={approval.name} />
+                                        </NoSsr>
+                                        {approval.isApproved && approval.approvalDate &&
+                                            <p>
+                                                {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
+                                            </p>
+                                        }
+                                    </div>
+                                );
+                            })
+                        }
                         <div className="field">
                             <Button 
                                 type="submit" 

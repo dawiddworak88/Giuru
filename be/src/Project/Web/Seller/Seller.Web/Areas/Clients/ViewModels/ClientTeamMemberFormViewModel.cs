@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels
 {
@@ -23,5 +24,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string NavigateToClientTeamMembersListText { get; set; }
         public string ClientTeamMembersUrl { get; set; }
         public string SaveUrl { get; set; }
+        public IEnumerable<ApprovalViewModel> TeamMemberApprovals { get; set; }
     }
 }

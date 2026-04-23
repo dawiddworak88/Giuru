@@ -1,12 +1,18 @@
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
-using Seller.Web.Areas.Clients.ComponentModels;
-using Seller.Web.Areas.Clients.Repositories.ClientTeamMembers;
-using Seller.Web.Areas.Clients.ViewModels;
-using Seller.Web.Shared.Repositories.Clients;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Clients.ComponentModels;
+using Seller.Web.Areas.Clients.Repositories.Approvals;
+using Seller.Web.Areas.Clients.Repositories.ClientTeamMembers;
+using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Areas.Shared.Repositories.UserApprovals;
+using Seller.Web.Shared.Repositories.Clients;
+using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
@@ -15,19 +21,25 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IClientTeamMembersRepository _clientTeamMembersRepository;
+        private readonly IApprovalsRepository _approvalsRepository;
+        private readonly IUserApprovalsRepository _userApprovalsRepository;
+        private readonly LinkGenerator _linkGenerator;
 
         public ClientTeamMemberFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
             IClientTeamMembersRepository clientTeamMembersRepository,
+            IApprovalsRepository approvalsRepository,
+            IUserApprovalsRepository userApprovalsRepository,
             LinkGenerator linkGenerator)
         {
             _linkGenerator = linkGenerator;
             _globalLocalizer = globalLocalizer;
             _clientTeamMembersRepository = clientTeamMembersRepository;
             _teamMembersLocalizer = teamMembersLocalizer;
+            _userApprovalsRepository = userApprovalsRepository;
+            _approvalsRepository = approvalsRepository;
         }
 
         public async Task<ClientTeamMemberFormViewModel> BuildModelAsync(ClientTeamMemberComponentModel componentModel)
@@ -63,6 +75,36 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.Email = teamMember.Email;
                     viewModel.IsDisabled = teamMember.IsDisabled;
                 }
+
+                var approvals = await _approvalsRepository.GetAsync(
+                    token: componentModel.Token, 
+                    language: componentModel.Language, 
+                    pageIndex: Constants.DefaultPageIndex, 
+                    itemsPerPage: Constants.DefaultItemsPerPage,
+                    searchTerm: null,
+                    orderBy: null);
+
+                if (approvals is not null)
+                {
+                    var userApprovals = await _userApprovalsRepository.GetAsync(
+                        componentModel.Token,
+                        componentModel.Language,
+                        componentModel.Id);
+
+                    viewModel.TeamMemberApprovals = approvals.Data.OrEmptyIfNull().Select(x =>
+                    {
+                        var userApproval = userApprovals.FirstOrDefault(y => y.ApprovalId == x.Id);
+
+                        return new ApprovalViewModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            ApprovalDate = userApproval is not null ? userApproval.CreatedDate : null,
+                            IsApproved = userApproval is not null
+                        };
+                    });
+                }
+
             }
 
             return viewModel;
