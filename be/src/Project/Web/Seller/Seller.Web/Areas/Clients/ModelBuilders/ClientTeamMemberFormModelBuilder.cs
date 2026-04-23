@@ -38,6 +38,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _globalLocalizer = globalLocalizer;
             _clientTeamMembersRepository = clientTeamMembersRepository;
             _teamMembersLocalizer = teamMembersLocalizer;
+            _userApprovalsRepository = userApprovalsRepository;
+            _approvalsRepository = approvalsRepository;
         }
 
         public async Task<ClientTeamMemberFormViewModel> BuildModelAsync(ClientTeamMemberComponentModel componentModel)
@@ -74,7 +76,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.IsDisabled = teamMember.IsDisabled;
                 }
 
-                var approvals = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
+                var approvals = await _approvalsRepository.GetAsync(
+                    token: componentModel.Token, 
+                    language: componentModel.Language, 
+                    pageIndex: Constants.DefaultPageIndex, 
+                    itemsPerPage: Constants.DefaultItemsPerPage,
+                    searchTerm: null,
+                    orderBy: null);
 
                 if (approvals is not null)
                 {
