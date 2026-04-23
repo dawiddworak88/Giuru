@@ -44,8 +44,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
-        private readonly IApprovalsRepository _approvalsRepository;
-        private readonly IUserApprovalsRepository _userApprovalsRepository;
+        
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -148,33 +147,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.PreferedCurrencyId = client.PreferedCurrencyId;
                     viewModel.DefaultDeliveryAddressId = client.DefaultDeliveryAddressId;
                     viewModel.DefaultBillingAddressId = client.DefaultBillingAddressId;
-
-                    var user = await _identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
-
-                    if (user is not null)
-                    {
-                        var approvals = await _approvalsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, null);
-
-                        if (approvals is not null)
-                        {
-                            var userApprovals = await _userApprovalsRepository.GetAsync(
-                                componentModel.Token,
-                                componentModel.Language,
-                                Guid.Parse(user.Id));
-
-                            viewModel.ClientApprovals = approvals.Data.OrEmptyIfNull().Select(x =>
-                            {
-                                var userApproval = userApprovals.FirstOrDefault(y => y.ApprovalId == x.Id);
-                                return new ApprovalViewModel
-                                {
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    ApprovalDate = userApproval is not null ? userApproval.CreatedDate : null,
-                                    IsApproved = userApproval is not null
-                                };
-                            });
-                        }
-                    }
                 }
             }
 
