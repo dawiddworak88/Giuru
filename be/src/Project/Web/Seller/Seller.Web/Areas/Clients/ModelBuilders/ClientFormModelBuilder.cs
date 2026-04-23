@@ -76,8 +76,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientFieldsRepository = clientFieldsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _currenciesRepository = currenciesRepository;
-            _approvalsRepository = approvalsRepository;
-            _userApprovalsRepository = userApprovalsRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
