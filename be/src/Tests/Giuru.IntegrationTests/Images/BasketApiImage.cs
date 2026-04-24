@@ -40,12 +40,14 @@ namespace Giuru.IntegrationTests.Images
         }
 
         public string Repository => _image.Repository;
-
-        public string Name => _image.Name;
-
         public string Tag => _image.Tag;
 
         public string FullName => _image.FullName;
+        public string Registry => _image.Registry;
+
+        public string Digest => _image.Digest;
+
+        public string Platform => _image.Platform;
 
         public string GetHostname()
         {

@@ -42,7 +42,7 @@ namespace Giuru.IntegrationTests
                 .WithNetworkAliases("redis")
                 .WithPortBinding(9113, 6379)
                 .WithExposedPort(6379)
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(6379))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(6379))
                 .Build();
 
             await _redisContainer.StartAsync();
@@ -55,7 +55,7 @@ namespace Giuru.IntegrationTests
                 .WithNetworkAliases("sqldata")
                 .WithPortBinding(9111, 1433)
                 .WithExposedPort(1433)
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(1433))
                 .Build();
 
             await _msSqlContainer.StartAsync();
@@ -87,7 +87,7 @@ namespace Giuru.IntegrationTests
                 .WithExposedPort(5672)
                 .WithUsername("RMQ_USER")
                 .WithPassword("YourStrongPassword!")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5672))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(5672))
                 .Build();
 
             await _rabbitMqContainer.StartAsync();
@@ -110,7 +110,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("Issuer", "null")
                 .WithEnvironment("Audience", "all")
                 .WithBindMount(Path.Combine(CommonDirectoryPath.GetProjectDirectory().DirectoryPath, "../Giuru.MockAuth/tempkey.jwk"), "/app/tempkey.jwk")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _mockAuthContainer.StartAsync();
@@ -134,7 +134,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _clientApiContainer.StartAsync();
@@ -161,7 +161,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("Brands", "4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _catalogApiContainer.StartAsync();
@@ -187,7 +187,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _catalogBackgroundTasksContainer.StartAsync();
@@ -212,7 +212,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("SendGridApiKey", "SIMPLE_SENDGRID_API_KEY")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _orderingApiContainer.StartAsync();
@@ -236,7 +236,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _basketApiContainer.StartAsync();
@@ -260,7 +260,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _inventoryApiContainer.StartAsync();
