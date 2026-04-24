@@ -1,0 +1,191 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="NoVariablesDefault" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/General Items/">
+    <File Path=".env" />
+  </Folder>
+  <Folder Name="/Infrastructure/" />
+  <Folder Name="/Infrastructure/Account/">
+    <Project Path="Infrastructure/Account/Foundation.Account/Foundation.Account.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/ApiExtensions/">
+    <Project Path="Infrastructure/ApiExtensions/Foundation.ApiExtensions/Foundation.ApiExtensions.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Catalog/">
+    <Project Path="Infrastructure/Catalog/Foundation.Catalog/Foundation.Catalog.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Content/">
+    <Project Path="Infrastructure/Content/Foundation.Content/Foundation.Content.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/EventBus/">
+    <Project Path="Infrastructure/EventBus/Foundation.EventBus/Foundation.EventBus.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+    <Project Path="Infrastructure/EventBus/Foundation.EventBusRabbitMq/Foundation.EventBusRabbitMq.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Extensions/">
+    <Project Path="Infrastructure/Extensions/Foundation.Extensions/Foundation.Extensions.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/GenericRepository/">
+    <Project Path="Infrastructure/GenericRepository/Foundation.GenericRepository/Foundation.GenericRepository.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Localization/">
+    <Project Path="Infrastructure/Localization/Foundation.Localization/Foundation.Localization.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Mailing/">
+    <Project Path="Infrastructure/Mailing/Foundation.Mailing/Foundation.Mailing.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Media/">
+    <Project Path="Infrastructure/Media/Foundation.Media/Foundation.Media.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/PageContent/">
+    <Project Path="Infrastructure/PageContent/Foundation.PageContent/Foundation.PageContent.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Prerendering/">
+    <Project Path="Infrastructure/Prerendering/Foundation.Prerendering/Foundation.Prerendering.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Presentation/">
+    <Project Path="Infrastructure/Presentation/Foundation.Presentation/Foundation.Presentation.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Search/">
+    <Project Path="Infrastructure/Search/Foundation.Search/Foundation.Search.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Security/">
+    <Project Path="Infrastructure/Security/Foundation.Security/Foundation.Security.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/Telemetry/">
+    <Project Path="Infrastructure/Telemetry/Foundation.Telemetry/Foundation.Telemetry.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/" />
+  <Folder Name="/Project/Services/" />
+  <Folder Name="/Project/Services/Analytics/">
+    <Project Path="Project/Services/Analytics/Analytics.Api/Analytics.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Basket/">
+    <Project Path="Project/Services/Basket/Basket.Api/Basket.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Catalog/">
+    <Project Path="Project/Services/Catalog/Catalog.Api/Catalog.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+    <Project Path="Project/Services/Catalog/Catalog.BackgroundTasks/Catalog.BackgroundTasks.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Client/">
+    <Project Path="Project/Services/Client/Client.Api/Client.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/DownloadCenter/">
+    <Project Path="Project/Services/DownloadCenter/DownloadCenter.Api/DownloadCenter.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Global/">
+    <Project Path="Project/Services/Global/Global.Api/Global.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Identity/">
+    <Project Path="Project/Services/Identity/Identity.Api/Identity.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Inventory/">
+    <Project Path="Project/Services/Inventory/Inventory.Api/Inventory.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Media/">
+    <Project Path="Project/Services/Media/Media.Api/Media.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/News/">
+    <Project Path="Project/Services/News/News.Api/News.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Services/Ordering/">
+    <Project Path="Project/Services/Ordering/Ordering.Api/Ordering.Api.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Web/" />
+  <Folder Name="/Project/Web/Buyer/">
+    <Project Path="Project/Web/Buyer/Buyer.Web/Buyer.Web.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Project/Web/Seller/">
+    <Project Path="Project/Web/Seller/Seller.Web/Seller.Web.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/Giuru.IntegrationTests/Giuru.IntegrationTests.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+    </Project>
+    <Project Path="Tests/Giuru.MockAuth/Giuru.MockAuth.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <BuildDependency Project="Project/Services/Analytics/Analytics.Api/Analytics.Api.csproj" />
+    <BuildDependency Project="Project/Services/Basket/Basket.Api/Basket.Api.csproj" />
+    <BuildDependency Project="Project/Services/Catalog/Catalog.Api/Catalog.Api.csproj" />
+    <BuildDependency Project="Project/Services/Catalog/Catalog.BackgroundTasks/Catalog.BackgroundTasks.csproj" />
+    <BuildDependency Project="Project/Services/Client/Client.Api/Client.Api.csproj" />
+    <BuildDependency Project="Project/Services/DownloadCenter/DownloadCenter.Api/DownloadCenter.Api.csproj" />
+    <BuildDependency Project="Project/Services/Global/Global.Api/Global.Api.csproj" />
+    <BuildDependency Project="Project/Services/Identity/Identity.Api/Identity.Api.csproj" />
+    <BuildDependency Project="Project/Services/Inventory/Inventory.Api/Inventory.Api.csproj" />
+    <BuildDependency Project="Project/Services/Media/Media.Api/Media.Api.csproj" />
+    <BuildDependency Project="Project/Services/News/News.Api/News.Api.csproj" />
+    <BuildDependency Project="Project/Services/Ordering/Ordering.Api/Ordering.Api.csproj" />
+    <BuildDependency Project="Project/Web/Buyer/Buyer.Web/Buyer.Web.csproj" />
+    <BuildDependency Project="Project/Web/Seller/Seller.Web/Seller.Web.csproj" />
+    <BuildType Solution="Release|*" Project="NoVariablesDefault" />
+    <Build />
+  </Project>
+</Solution>

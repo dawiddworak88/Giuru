@@ -17,7 +17,7 @@ jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest
     env:
-      API_SOLUTION_PATH: '${{ github.workspace }}/be/src/AspNetCore.sln'
+      API_SOLUTION_PATH: '${{ github.workspace }}/be/src/AspNetCore.slnx'
       TESTS_RESULTS_UPLOAD_FOLDER: 'testresults'
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
