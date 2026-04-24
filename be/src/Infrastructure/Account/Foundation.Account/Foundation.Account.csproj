@@ -10,13 +10,9 @@
 		<PackageReference Include="IdentityServer4.AspNetIdentity" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" />
 		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
-		<PackageReference Include="System.Net.Http" />
-		<PackageReference Include="System.Text.Encodings.Web" />
-		<PackageReference Include="System.Text.RegularExpressions" />
 	</ItemGroup>
 
 	<ItemGroup>

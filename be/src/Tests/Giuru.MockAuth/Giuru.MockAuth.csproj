@@ -24,7 +24,6 @@
 	  <PackageReference Include="IdentityServer4.AspNetIdentity" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" />
-	  <PackageReference Include="Microsoft.Extensions.Identity.Core" />
 	  <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" />
 	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
@@ -35,9 +34,6 @@
 	  <PackageReference Include="Serilog.Sinks.Http" />
 	  <PackageReference Include="Serilog.Sinks.Logz.Io" />
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
-	  <PackageReference Include="System.Net.Http" />
-	  <PackageReference Include="System.Text.Encodings.Web" />
-	  <PackageReference Include="System.Text.RegularExpressions" />
   </ItemGroup>
 
   <ItemGroup>

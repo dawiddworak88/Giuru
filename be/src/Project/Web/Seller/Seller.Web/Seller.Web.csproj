@@ -28,9 +28,6 @@
 		<PackageReference Include="Serilog.Sinks.Http" />
 		<PackageReference Include="Serilog.Sinks.Logz.Io" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
-		<PackageReference Include="System.Net.Http" />
-		<PackageReference Include="System.Text.Encodings.Web" />
-		<PackageReference Include="System.Text.RegularExpressions" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
