@@ -6,6 +6,8 @@
   </Configurations>
   <Folder Name="/General Items/">
     <File Path=".env" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/Infrastructure/" />
   <Folder Name="/Infrastructure/Account/">
