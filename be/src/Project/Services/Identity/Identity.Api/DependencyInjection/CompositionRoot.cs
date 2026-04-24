@@ -80,7 +80,7 @@ namespace Identity.Api.DependencyInjection
                     secret = secretClient.GetSecret(certificateSecretIdentifier).Value;
                 }
 
-                var certificate = new X509Certificate2(Convert.FromBase64String(secret.Value), certificatePassword);
+                var certificate = X509CertificateLoader.LoadPkcs12(Convert.FromBase64String(secret.Value), certificatePassword);
                 builder.AddSigningCredential(certificate);
             }
             else
