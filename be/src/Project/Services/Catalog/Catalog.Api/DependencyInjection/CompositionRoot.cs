@@ -34,7 +34,9 @@ namespace Catalog.Api.DependencyInjection
         {
             services.AddScoped<CatalogContext>();
 
-            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite().MigrationsAssembly("Catalog.Api")));
+            services.AddDbContext<CatalogContext>(options =>
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite().MigrationsAssembly("Catalog.Api"))
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
