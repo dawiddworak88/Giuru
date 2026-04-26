@@ -7,6 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
+COPY ["Directory.Build.props", "Directory.Packages.props", "./"]
 COPY ["Project/Services/Catalog/Catalog.BackgroundTasks/Catalog.BackgroundTasks.csproj", "Project/Services/Catalog/Catalog.BackgroundTasks/"]
 COPY ["Infrastructure/Catalog/Foundation.Catalog/Foundation.Catalog.csproj", "Infrastructure/Catalog/Foundation.Catalog/"]
 COPY ["Infrastructure/GenericRepository/Foundation.GenericRepository/Foundation.GenericRepository.csproj", "Infrastructure/GenericRepository/Foundation.GenericRepository/"]
