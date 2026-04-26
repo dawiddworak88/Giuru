@@ -8,7 +8,7 @@ using Serilog;
 using Serilog.Sinks.Logz.Io;
 using Foundation.Extensions.Filters;
 using System;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.Reflection;
 using System.IO;
 using Foundation.Localization.Definitions;
