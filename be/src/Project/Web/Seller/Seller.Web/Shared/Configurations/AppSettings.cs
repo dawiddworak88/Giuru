@@ -38,6 +38,7 @@ namespace Seller.Web.Shared.Configurations
         public string PossibleShapeAttributeKeys { get; set; }
         public string PossiblePrimaryColorAttributeKeys { get; set; }
         public string PossibleSecondaryColorAttributeKeys { get; set; }
+        public string PossibleBodyColorAttributeKeys { get; set; }
         public string PossibleShelfTypeAttributeKeys { get; set; }
         public Guid? ProductColorAttributeId { get; set; }
         public string DefaultCulture { get; set; }

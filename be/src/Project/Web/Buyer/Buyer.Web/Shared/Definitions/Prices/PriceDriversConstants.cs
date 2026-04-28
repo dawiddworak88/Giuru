@@ -22,6 +22,7 @@
         public const string LinearLightDriver = "Linear Light";
         public const string PrimaryColorDriver = "Primary Color";
         public const string SecondaryColorDriver = "Secondary Color";
+        public const string BodyColourDriver = "Body colour";
         public const string ShelfTypeDriver = "Shelf Type";
     }
 }
