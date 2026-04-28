@@ -299,6 +299,15 @@ namespace Buyer.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.BodyColour))
+            {
+                priceDrivers.Add(new PriceDriver
+                {
+                    Name = PriceDriversConstants.BodyColourDriver,
+                    Value = product.BodyColour
+                });
+            }
+
             if (!string.IsNullOrWhiteSpace(product.ShelfType))
             {
                 priceDrivers.Add(new PriceDriver

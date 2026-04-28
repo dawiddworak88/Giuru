@@ -131,6 +131,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
                             SecondaryColor = x.SecondaryColor,
+                            BodyColour = x.BodyColour,
                             ShelfType = x.ShelfType
                         }),
                         new PriceClient

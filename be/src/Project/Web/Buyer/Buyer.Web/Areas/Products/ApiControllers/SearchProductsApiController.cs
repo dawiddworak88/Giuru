@@ -95,7 +95,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             Mirror = x.Mirror,
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
-                            SecondaryColor = x.SecondaryColor
+                            SecondaryColor = x.SecondaryColor,
+                            BodyColour = x.BodyColour
                         }),
                         new PriceClient
                         {

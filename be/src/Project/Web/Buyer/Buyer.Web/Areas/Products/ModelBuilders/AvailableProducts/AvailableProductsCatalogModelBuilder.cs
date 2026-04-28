@@ -120,6 +120,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                                 Shape = x.Shape,
                                 PrimaryColor = x.PrimaryColor,
                                 SecondaryColor = x.SecondaryColor,
+                                BodyColour = x.BodyColour,
                                 ShelfType = x.ShelfType
                             }),
                             new PriceClient
