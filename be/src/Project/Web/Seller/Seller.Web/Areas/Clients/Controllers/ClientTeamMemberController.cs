@@ -25,6 +25,11 @@ namespace Seller.Web.Areas.Clients.Controllers
 
         public async Task<IActionResult> Edit(Guid? id)
         {
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Index", "ClientTeamMembers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            }
+
             var componentModel = new ComponentModelBase
             {
                 Id = id,

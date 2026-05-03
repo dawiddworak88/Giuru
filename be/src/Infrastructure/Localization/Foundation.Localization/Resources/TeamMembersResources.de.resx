@@ -165,4 +165,7 @@
   <data name="ClientTeamMembers" xml:space="preserve">
     <value>Kunden-Teammitglieder</value>
   </data>
+  <data name="TeamMemberSaveFailed" xml:space="preserve">
+    <value>Teammitglied konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.</value>
+  </data>
 </root>

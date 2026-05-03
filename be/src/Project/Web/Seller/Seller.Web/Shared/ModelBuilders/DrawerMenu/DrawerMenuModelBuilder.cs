@@ -14,18 +14,21 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<DashboardResources> _dashboardLocalizer;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
         private readonly LinkGenerator _linkGenerator;
 
         public DrawerMenuModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DashboardResources> dashboardLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
+            IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
             _dashboardLocalizer = dashboardLocalizer;
             _clientLocalizer = clientLocalizer;
+            _teamMembersLocalizer = teamMembersLocalizer;
         }
 
         public IEnumerable<DrawerMenuViewModel> BuildModel()
@@ -149,6 +152,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                             Icon = IconsConstants.Users,
                             Title = _globalLocalizer.GetString("Clients"),
                             Url = _linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Users,
+                            Title = _teamMembersLocalizer.GetString("ClientTeamMembers"),
+                            Url = _linkGenerator.GetPathByAction("Index", "ClientTeamMembers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {

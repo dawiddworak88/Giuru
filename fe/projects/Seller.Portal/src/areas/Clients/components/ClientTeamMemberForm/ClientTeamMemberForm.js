@@ -72,6 +72,9 @@ const ClientTeamMemberForm = (props) => {
                         toast.error(jsonResponse?.message || props.generalErrorMessage);
                     }
                 });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
             });
     }
 
@@ -241,3 +244,5 @@ ClientTeamMemberForm.propTypes = {
 }
 
 export default ClientTeamMemberForm;
+
+
