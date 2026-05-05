@@ -4,7 +4,6 @@
   "private": false,
   "dependencies": {
     "@babel/core": "7.23.7",
-    "@babel/plugin-proposal-class-properties": "7.17.12",
     "@babel/preset-env": "7.23.8",
     "@babel/preset-react": "7.23.3",
     "@babel/register": "7.23.7",
@@ -13,13 +12,11 @@
     "@mui/icons-material": "5.15.5",
     "@mui/material": "5.15.5",
     "@mui/styles": "5.15.5",
-    "babel-plugin-file-loader": "2.0.0",
     "bulma": "0.9.4",
     "express": "4.18.2",
     "file-loader": "6.2.0",
     "file-saver": "2.0.5",
     "html-react-parser": "5.1.1",
-    "ignore-styles": "5.0.1",
     "lodash.topath": "4.5.2",
     "lodash.union": "4.6.0",
     "marked": "11.1.1",
@@ -27,8 +24,7 @@
     "react-dom": "18.2.0",
     "react-feather": "2.0.10",
     "react-toastify": "10.0.3",
-    "shortid": "2.2.16",
-    "whatwg-fetch": "3.6.20"
+    "shortid": "2.2.16"
   },
   "scripts": {
     "storybook": "storybook dev -p 9009 -s public",
@@ -56,7 +52,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/addon-interactions": "7.6.10",
     "@storybook/addon-links": "7.6.10",
@@ -66,7 +61,6 @@
     "@storybook/test": "7.6.10",
     "autoprefixer": "10.4.17",
     "babel-loader": "^10.1.1",
-    "babel-preset-react-app": "10.0.1",
     "clean-webpack-plugin": "4.0.0",
     "css-loader": "6.9.1",
     "css-minimizer-webpack-plugin": "6.0.0",
