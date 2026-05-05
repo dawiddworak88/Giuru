@@ -3,19 +3,18 @@ const path = require("path");
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 module.exports = {
   stories: ["../src/**/*.stories.js"],
+  
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
+    "@storybook/addon-webpack5-compiler-swc"
   ],
+
   framework: {
-    name: "@storybook/react-webpack5",
-    options: {
-      builder: {
-        useSWC: true,
-      },
-    },
+    name: "@storybook/react-webpack5"
   },
+
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.(scss|sass)$/,
@@ -29,4 +28,8 @@ module.exports = {
     });
     return config;
   },
+
+  typescript: {
+    reactDocgen: "react-docgen-typescript"
+  }
 };
