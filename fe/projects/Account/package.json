@@ -23,8 +23,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-feather": "2.0.10",
-    "react-toastify": "11.1.0",
-    "shortid": "2.2.16"
+    "react-toastify": "11.1.0"
   },
   "scripts": {
     "storybook": "storybook dev -p 9009",
@@ -52,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@storybook/addon-docs": "9.1.20",
     "@storybook/addon-links": "9.1.20",
     "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
     "@storybook/react-webpack5": "9.1.20",
@@ -70,7 +70,6 @@
     "style-loader": "4.0.0",
     "url-loader": "4.1.1",
     "webpack": "5.106.2",
-    "webpack-cli": "7.0.2",
-    "@storybook/addon-docs": "9.1.20"
+    "webpack-cli": "7.0.2"
   }
 }
