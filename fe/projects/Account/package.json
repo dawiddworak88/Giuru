@@ -23,7 +23,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-feather": "2.0.10",
-    "react-toastify": "10.0.3",
+    "react-toastify": "10.0.6",
     "shortid": "2.2.16"
   },
   "scripts": {
