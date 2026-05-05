@@ -16,7 +16,7 @@
     "express": "4.18.2",
     "file-loader": "6.2.0",
     "file-saver": "2.0.5",
-    "html-react-parser": "5.1.1",
+    "html-react-parser": "6.0.1",
     "lodash.topath": "4.5.2",
     "lodash.union": "4.6.0",
     "marked": "18.0.3",
@@ -63,7 +63,7 @@
     "babel-loader": "^10.1.1",
     "clean-webpack-plugin": "4.0.0",
     "css-loader": "6.9.1",
-    "css-minimizer-webpack-plugin": "6.0.0",
+    "css-minimizer-webpack-plugin": "8.0.0",
     "mini-css-extract-plugin": "2.10.2",
     "nodemon": "3.1.14",
     "postcss": "8.5.14",
@@ -71,9 +71,9 @@
     "sass": "1.99.0",
     "sass-loader": "14.0.0",
     "storybook": "7.6.10",
-    "style-loader": "3.3.4",
+    "style-loader": "4.0.0",
     "url-loader": "4.1.1",
     "webpack": "5.106.2",
-    "webpack-cli": "5.1.4"
+    "webpack-cli": "7.0.2"
   }
 }
