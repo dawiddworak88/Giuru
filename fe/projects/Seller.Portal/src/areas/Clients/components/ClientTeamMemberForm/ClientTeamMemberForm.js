@@ -1,4 +1,4 @@
-﻿import React, { useContext } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
@@ -79,17 +79,12 @@ const ClientTeamMemberForm = (props) => {
     }
 
     const handleTeamMemberApprovalChange = (e, approval, teamMemberApprovalIds) => {
-        const updatedIds = [...teamMemberApprovalIds]; 
-
-        approval.isApproved = !approval.isApproved;
+        let updatedIds;
 
         if (e.target.checked) {
-            updatedIds.push(approval.id);
+            updatedIds = [...teamMemberApprovalIds, approval.id];
         } else {
-            const index = updatedIds.indexOf(approval.id);
-            if (index !== -1) {
-                updatedIds.splice(index, 1);
-            }
+            updatedIds = teamMemberApprovalIds.filter(id => id !== approval.id);
         }
 
         return setFieldValue({name: "teamMemberApprovalIds", value: updatedIds})
@@ -183,14 +178,14 @@ const ClientTeamMemberForm = (props) => {
                                                         onChange={e => {
                                                             handleTeamMemberApprovalChange(e, approval, teamMemberApprovalIds)
                                                         }}
-                                                        checked={approval.isApproved}
+                                                        checked={teamMemberApprovalIds.indexOf(approval.id) !== -1}
                                                         id={approval.name}
                                                         name={approval.name}
                                                         color="secondary" />
                                                 }
                                                 label={approval.name} />
                                         </NoSsr>
-                                        {approval.isApproved && approval.approvalDate &&
+                                        {teamMemberApprovalIds.indexOf(approval.id) !== -1 && approval.approvalDate &&
                                             <p>
                                                 {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
                                             </p>
