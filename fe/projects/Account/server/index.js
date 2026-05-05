@@ -13,7 +13,7 @@ app.use(express.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}
 
 const router = express.Router();
 
-router.use("^/$", serverRenderer);
+router.post("/", serverRenderer);
 
 router.use(express.static(
     path.resolve(__dirname, "..", "build"),
