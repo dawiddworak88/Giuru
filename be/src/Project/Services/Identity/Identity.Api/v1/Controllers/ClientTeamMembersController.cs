@@ -10,6 +10,7 @@ using Identity.Api.ServicesModels.ClientTeamMembers;
 using Identity.Api.v1.RequestModels;
 using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.ClientTeamMembers;
+using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -37,11 +38,15 @@ namespace Identity.Api.v1.Controllers
             _clientTeamMemberService = clientTeamMemberService;
         }
 
+        private bool IsSeller()
+        {
+            return User.Claims.Any(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
+        }
+
         /// <summary>
         /// Delete client team member by id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <param name="organisationId">The client's organisation id.</param>
         /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
@@ -50,6 +55,11 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
+            if (!IsSeller())
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden);
+            }
+
             var serviceModel = new DeleteClientTeamMemberServiceModel
             {
                 Id = id,
@@ -82,6 +92,11 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
+            if (!IsSeller())
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden);
+            }
+
             var serviceModel = new GetClientTeamMemberServiceModel
             {
                 Id = id,
@@ -128,6 +143,11 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy, Guid? organisationId)
         {
+            if (!IsSeller())
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden);
+            }
+
             var serviceModel = new GetClientTeamMembersServiceModel
             {
                 SearchTerm = searchTerm,
@@ -172,6 +192,11 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] ClientTeamMemberRequestModel request)
         {
+            if (!IsSeller())
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden);
+            }
+
             if (request.Id.HasValue)
             {
                 var serviceModel = new UpdateClientTeamMemberServiceModel
