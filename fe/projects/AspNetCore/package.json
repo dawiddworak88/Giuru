@@ -4,7 +4,6 @@
   "private": false,
   "dependencies": {
     "@babel/core": "7.23.7",
-    "@babel/plugin-proposal-class-properties": "7.17.12",
     "@babel/preset-env": "7.23.8",
     "@babel/preset-react": "7.23.3",
     "@babel/register": "7.23.7",
@@ -21,14 +20,12 @@
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.2",
     "ajv": "8.12.0",
-    "babel-plugin-file-loader": "2.0.0",
     "bulma": "0.9.4",
     "chart.js": "4.4.1",
     "draft-js": "0.11.7",
     "draft-js-export-markdown": "1.4.0",
     "draft-js-import-markdown": "1.4.1",
     "express": "4.18.2",
-    "file-loader": "6.2.0",
     "file-saver": "2.0.5",
     "html-react-parser": "5.1.1",
     "ignore-styles": "5.0.1",
@@ -51,10 +48,7 @@
     "react-lazyload": "3.2.0",
     "react-multi-carousel": "2.8.4",
     "react-responsive-carousel": "3.2.23",
-    "react-scripts": "5.0.1",
-    "react-toastify": "10.0.3",
-    "shortid": "2.2.16",
-    "whatwg-fetch": "3.6.20"
+    "react-toastify": "10.0.3"
   },
   "scripts": {
     "storybook": "storybook dev -p 9009 -s public",
@@ -82,18 +76,15 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/addon-interactions": "7.6.10",
     "@storybook/addon-links": "7.6.10",
-    "@storybook/addon-onboarding": "1.0.11",
     "@storybook/blocks": "7.6.10",
-    "@storybook/preset-create-react-app": "7.6.10",
     "@storybook/react": "7.6.10",
     "@storybook/react-webpack5": "7.6.10",
     "@storybook/test": "7.6.10",
     "autoprefixer": "10.4.17",
-    "babel-preset-react-app": "10.0.1",
+    "babel-loader": "10.1.1",
     "clean-webpack-plugin": "4.0.0",
     "css-loader": "6.9.0",
     "css-minimizer-webpack-plugin": "6.0.0",
@@ -105,7 +96,6 @@
     "sass-loader": "14.0.0",
     "storybook": "7.6.10",
     "style-loader": "3.3.4",
-    "url-loader": "4.1.1",
     "webpack": "5.89.0",
     "webpack-cli": "5.1.4"
   }
