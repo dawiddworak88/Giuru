@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { toast } from "react-toastify";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TextField } from "@mui/material";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import ChartValidator from "../../../../shared/helpers/validators/ChartValidator";
 
 const ClientsSalesAnalytics = (props) => {
@@ -81,32 +82,38 @@ const ClientsSalesAnalytics = (props) => {
                 <span>
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                            id="clients-analytics-from-date"
                             label={props.fromLabel}
                             value={fromDate}
-                            name="fromDate"
                             views={props.datePickerViews}
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
-                            renderInput={(params) => 
-                                <TextField {...params} variant="standard" />} />
+                            slotProps={{
+                                textField: {
+                                    id: "clients-analytics-from-date",
+                                    name: "fromDate",
+                                    variant: "standard"
+                                }
+                            }} />
                     </LocalizationProvider>
                 </span>
                 <span>
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                            id="clients-analytics-to-date"
                             label={props.toLabel}
                             value={toDate}
                             views={props.datePickerViews}
-                            name="toDate"
                             onChange={(date) => {
                                 handleToDate(date);
                             }}
-                            renderInput={(params) => 
-                                <TextField {...params} variant="standard" />}
-                            disableFuture={true} />
+                            disableFuture={true}
+                            slotProps={{
+                                textField: {
+                                    id: "clients-analytics-to-date",
+                                    name: "toDate",
+                                    variant: "standard"
+                                }
+                            }} />
                     </LocalizationProvider>
                 </span>
             </div>

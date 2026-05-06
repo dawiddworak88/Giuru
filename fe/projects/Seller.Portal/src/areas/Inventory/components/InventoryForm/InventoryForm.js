@@ -7,8 +7,9 @@ import {
 import { Context } from "../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import { LocalizationProvider, DatePicker,} from "@mui/lab";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import QuantityValidator from "../../../../shared/helpers/validators/QuantityValidator";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
@@ -246,16 +247,19 @@ const InventoryForm = (props) => {
                         <div className="field">
                             <LocalizationProvider dateAdapter={AdapterMoment} >
                                 <DatePicker
-                                    id="expectedDelivery"
                                     label={props.expectedDeliveryLabel}
                                     value={expectedDelivery}
-                                    fullWidth={true} 
                                     onChange={(date) => {
                                         setFieldValue({name: "expectedDelivery", value: date});
                                     }}
-                                    renderInput={(params) => 
-                                        <TextField {...params} variant="standard" fullWidth={true} />}
-                                    disablePast={true}/>
+                                    disablePast={true}
+                                    slotProps={{
+                                        textField: {
+                                            id: "expectedDelivery",
+                                            variant: "standard",
+                                            fullWidth: true
+                                        }
+                                    }} />
                             </LocalizationProvider>
                         </div>
                         <div className="field">

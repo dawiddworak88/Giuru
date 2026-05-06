@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { toast } from "react-toastify";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
-import { TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJs, CategoryScale, Tooltip, Legend, BarElement } from "chart.js";
 import ChartsConstants from "../../../../shared/constants/ChartsConstants";
@@ -93,32 +93,38 @@ const CountrySalesAnalytics = (props) => {
                 <span>
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                            id="country-sales-from-date"
                             label={props.fromLabel}
                             value={fromDate}
-                            name="fromDate"
                             views={props.datePickerViews}
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
-                            renderInput={(params) => 
-                                <TextField {...params} variant="standard" />} />
+                            slotProps={{
+                                textField: {
+                                    id: "country-sales-from-date",
+                                    name: "fromDate",
+                                    variant: "standard"
+                                }
+                            }} />
                     </LocalizationProvider>
                 </span>
                 <span>
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                            id="country-sales-to-date"
                             label={props.toLabel}
                             value={toDate}
-                            name="toDate"
                             views={props.datePickerViews}
                             onChange={(date) => {
                                 handleToDate(date);
                             }}
-                            renderInput={(params) => 
-                                <TextField {...params} variant="standard" />}
-                            disableFuture={true} />
+                            disableFuture={true}
+                            slotProps={{
+                                textField: {
+                                    id: "country-sales-to-date",
+                                    name: "toDate",
+                                    variant: "standard"
+                                }
+                            }} />
                     </LocalizationProvider>
                 </span>
             </div>

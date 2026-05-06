@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { Context } from "../../../shared/stores/Store";
 import IconConstants from "../../../shared/constants/IconConstants";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import { v4 as uuidv4 } from "uuid";
 
