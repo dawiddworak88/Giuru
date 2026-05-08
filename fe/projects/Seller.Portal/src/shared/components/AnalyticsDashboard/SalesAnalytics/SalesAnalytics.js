@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import moment from "moment";
 import { Line } from "react-chartjs-2";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { toast } from "react-toastify";
@@ -12,6 +13,20 @@ import {
 } from "chart.js";
 import ChartValidator from "../../../../shared/helpers/validators/ChartValidator";
 
+const toMomentValue = (value) => {
+    if (!value) {
+        return null;
+    }
+
+    if (moment.isMoment(value)) {
+        return value;
+    }
+
+    const parsedValue = moment(value);
+
+    return parsedValue.isValid() ? parsedValue : null;
+}
+
 if (typeof window !== "undefined") {
     ChartJs.register(
         Legend, Tooltip, CategoryScale, LinearScale, 
@@ -22,10 +37,14 @@ if (typeof window !== "undefined") {
 const SalesAnalytics = (props) => {
     const [salesAnalytics, setSalesAnalytics] = useState(props.chartDatasets ? props.chartDatasets : [])
     const [salesAnalyticsLabels, setSalesAnalyticsLabels] = useState(props.chartLabels ? props.chartLabels : [])
-    const [fromDate, setFromDate] = useState(props.fromDate);
-    const [toDate, setToDate] = useState(props.toDate);
+    const [fromDate, setFromDate] = useState(toMomentValue(props.fromDate));
+    const [toDate, setToDate] = useState(toMomentValue(props.toDate));
 
     const handleFromDate = (date) => {
+        if (!date) {
+            setFromDate(null);
+            return;
+        }
 
         if (ChartValidator.validate(date, toDate)) {
             setFromDate(date);
@@ -58,6 +77,10 @@ const SalesAnalytics = (props) => {
     }
 
     const handleToDate = (date) => {
+        if (!date) {
+            setToDate(null);
+            return;
+        }
 
         if (ChartValidator.validate(fromDate, date)) {
             setToDate(date);

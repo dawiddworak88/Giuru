@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
+import moment from "moment";
 import {
     FormControl, InputLabel, Select, MenuItem, FormHelperText, 
     CircularProgress, Autocomplete, TextField, Button
@@ -15,6 +16,20 @@ import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryS
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import SearchConstants from "../../../../shared/constants/SearchConstants";
 
+const toMomentValue = (value) => {
+    if (!value) {
+        return null;
+    }
+
+    if (moment.isMoment(value)) {
+        return value;
+    }
+
+    const parsedValue = moment(value);
+
+    return parsedValue.isValid() ? parsedValue : null;
+}
+
 const InventoryForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [products, setProducts] = useState(props.products ? props.products : []);
@@ -25,7 +40,7 @@ const InventoryForm = (props) => {
         quantity: { value: props.quantity ? props.quantity : 0, error: "" },
         restockableInDays: { value: props.restockableInDays ? props.restockableInDays : null, error: "" },
         availableQuantity: { value: props.availableQuantity ? props.availableQuantity : 0, error: "" },
-        expectedDelivery: { value: props.expectedDelivery ? props.expectedDelivery : null, error: "" },
+        expectedDelivery: { value: toMomentValue(props.expectedDelivery), error: "" },
         ean: { value: props.ean ? props.ean : null }
     };
 
