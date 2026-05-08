@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import { Drawer, List, Divider, IconButton, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Drawer, List, Divider, IconButton, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Menu } from "@mui/icons-material"
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import ColorConstants from "../../constants/ColorConstants";
@@ -58,22 +58,20 @@ function Header(props) {
                                     onClick={handleDrawerOpen}
                                     onKeyDown={handleDrawerOpen}>
                                         <List>
-                                            <ListItem onClick={handleDrawerClose}>
+                                            <ListItemButton onClick={handleDrawerClose}>
                                                 <ListItemIcon>{ListIcon(props.drawerBackIcon)}</ListItemIcon>
                                                 <ListItemText primary={props.drawerBackLabel} />
-                                            </ListItem>
+                                            </ListItemButton>
                                         </List>
                                         <Divider /><Divider />
                                     {props.drawerMenuCategories.map((category, index) => (
                                         <Fragment key={index}>
                                             <List>
                                                 {category.items.map((item, index) => (
-                                                    <a href={item.url} key={index}>
-                                                        <ListItem selected={item.isActive}>
-                                                            <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
-                                                            <ListItemText primary={item.title} />
-                                                        </ListItem>
-                                                    </a>
+                                                    <ListItemButton component="a" href={item.url} key={index} selected={item.isActive}>
+                                                        <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
+                                                        <ListItemText primary={item.title} />
+                                                    </ListItemButton>
                                                 ))}
                                             </List>
                                             <Divider />
@@ -96,7 +94,7 @@ function Header(props) {
                 </div>
                 <div className={isActive ? "navbar-menu is-active" : "navbar-menu"}>
                     <div className="navbar-start">
-                        {props.links && props.links.length > 0 && props.links.map((link, index) => 
+                        {props.links && props.links.length > 0 && props.links.map((link, index) =>
                                 <a key={index} className="navbar-item" href={link.url}>{link.text}</a>
                             )
                         }
