@@ -24,6 +24,7 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using ITokenService = Identity.Api.Services.Tokens.ITokenService;
 
@@ -64,21 +65,47 @@ namespace Identity.Api.DependencyInjection
                 var certificateSecretIdentifier = configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4Certificate");
                 var certificatePassword = configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4CertificatePassword");
 
-                var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
-                var secretClient = new SecretClient(new Uri(keyVaultUrl), credential);
+                var missing = new List<string>();
+                if (string.IsNullOrWhiteSpace(keyVaultUrl)) missing.Add("AzureKeyVaultUrl");
+                if (string.IsNullOrWhiteSpace(tenantId)) missing.Add("AzureKeyVaultTenantId");
+                if (string.IsNullOrWhiteSpace(clientId)) missing.Add("AzureKeyVaultClientId");
+                if (string.IsNullOrWhiteSpace(clientSecret)) missing.Add("AzureKeyVaultClientSecret");
+                if (string.IsNullOrWhiteSpace(certificateSecretIdentifier)) missing.Add("AzureKeyVaultGiuruIdentityServer4Certificate");
+                if (certificatePassword is null) missing.Add("AzureKeyVaultGiuruIdentityServer4CertificatePassword");
 
-                KeyVaultSecret secret;
-                if (Uri.TryCreate(certificateSecretIdentifier, UriKind.Absolute, out var secretUri))
+                if (missing.Count > 0)
                 {
-                    var segments = secretUri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
-                    var name = segments[1];
-                    var version = segments.Length > 2 ? segments[2] : null;
-                    secret = secretClient.GetSecret(name, version).Value;
+                    throw new InvalidOperationException(
+                        $"Identity.Api is running in production but required Key Vault configuration is missing: {string.Join(", ", missing)}. " +
+                        "Add these values to GitOps secrets for Identity.Api.");
                 }
-                else
+
+                if (!Uri.TryCreate(keyVaultUrl, UriKind.Absolute, out var vaultUri))
                 {
-                    secret = secretClient.GetSecret(certificateSecretIdentifier).Value;
+                    throw new InvalidOperationException(
+                        $"AzureKeyVaultUrl is not a valid absolute URI: '{keyVaultUrl}'.");
                 }
+
+                if (!Uri.TryCreate(certificateSecretIdentifier, UriKind.Absolute, out var certificateSecretUri))
+                {
+                    throw new InvalidOperationException(
+                        $"AzureKeyVaultGiuruIdentityServer4Certificate is not a valid absolute URI: '{certificateSecretIdentifier}'.");
+                }
+
+                KeyVaultSecretIdentifier secretId;
+                try
+                {
+                    secretId = new KeyVaultSecretIdentifier(certificateSecretUri);
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new InvalidOperationException(
+                        $"AzureKeyVaultGiuruIdentityServer4Certificate is not a valid Key Vault secret identifier: '{certificateSecretIdentifier}'.", ex);
+                }
+
+                var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+                var secretClient = new SecretClient(vaultUri, credential);
+                var secret = secretClient.GetSecret(secretId.Name, secretId.Version).Value;
 
                 var certificate = X509CertificateLoader.LoadPkcs12(Convert.FromBase64String(secret.Value), certificatePassword);
                 builder.AddSigningCredential(certificate);
