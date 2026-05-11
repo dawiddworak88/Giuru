@@ -20,7 +20,7 @@ import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import { TextSnippet } from "@mui/icons-material";
 import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
