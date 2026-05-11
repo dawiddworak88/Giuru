@@ -1,4 +1,4 @@
-﻿using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Images;
 using System;
 using System.IO;
@@ -40,16 +40,30 @@ namespace Giuru.IntegrationTests.Images
         }
 
         public string Repository => _image.Repository;
-
-        public string Name => _image.Name;
-
         public string Tag => _image.Tag;
 
         public string FullName => _image.FullName;
+        public string Registry => _image.Registry;
+
+        public string Digest => _image.Digest;
+
+        public string Platform => _image.Platform;
 
         public string GetHostname()
         {
             return _image.GetHostname();
+        }
+        public bool MatchLatestOrNightly()
+        {
+            return _image.MatchLatestOrNightly();
+        }
+        public bool MatchVersion(Predicate<string> predicate)
+        {
+            return _image.MatchVersion(predicate);
+        }
+        public bool MatchVersion(Predicate<Version> predicate)
+        {
+            return _image.MatchVersion(predicate);
         }
     }
 }

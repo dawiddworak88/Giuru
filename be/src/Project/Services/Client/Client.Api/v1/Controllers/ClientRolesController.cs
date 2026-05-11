@@ -1,4 +1,4 @@
-﻿using Client.Api.Services.Roles;
+using Client.Api.Services.Roles;
 using Client.Api.ServicesModels.Roles;
 using Client.Api.v1.ResponseModels;
 using Client.Api.Validators.RequestModels;
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
 namespace Client.Api.v1.Controllers
 {

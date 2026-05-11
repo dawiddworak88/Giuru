@@ -1,4 +1,4 @@
-﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Identity.Api.Services.Users;
@@ -12,6 +12,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
 namespace Identity.Api.v1.Controllers
 {

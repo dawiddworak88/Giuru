@@ -32,22 +32,22 @@ jobs:
           echo "The name of your branch is ${{ github.event.workflow_run.head_branch || github.ref }} and your repository is ${{ github.repository }}."
 
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_branch || github.ref }}
 
       - name: Set up Buildx
-        uses: docker/setup-buildx-action@v3.0.0
+        uses: docker/setup-buildx-action@v4
 
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v4
         with:
           registry: ${{ secrets.ACR_TEST_NAME }}
           username: ${{ secrets.ACR_TEST_LOGIN }}
           password: ${{ secrets.ACR_TEST_PASSWORD }}
 
       - name: Build and push Inventory-Api Docker Image
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v7
         with:
           file: ./be/src/Project/Services/Inventory/Inventory.Api/Dockerfile
           context: ./be/src
@@ -55,7 +55,7 @@ jobs:
           tags: ${{ secrets.ACR_TEST_NAME }}/inventory-api:latest, ${{ secrets.ACR_TEST_NAME }}/inventory-api:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: "Team-Eltap/giuru-gitops"
           token: ${{ secrets.GIT_REPOSITORY_TOKEN }}
