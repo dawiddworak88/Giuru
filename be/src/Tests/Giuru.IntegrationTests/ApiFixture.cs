@@ -130,7 +130,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _clientApiContainer.StartAsync();
@@ -156,7 +159,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("Brands", "4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _catalogApiContainer.StartAsync();
@@ -181,7 +187,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _catalogBackgroundTasksContainer.StartAsync();
@@ -205,7 +214,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("SendGridApiKey", "SIMPLE_SENDGRID_API_KEY")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _orderingApiContainer.StartAsync();
@@ -228,7 +240,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _basketApiContainer.StartAsync();
@@ -251,7 +266,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _inventoryApiContainer.StartAsync();
