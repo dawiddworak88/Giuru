@@ -90,14 +90,14 @@
   </Folder>
   <Folder Name="/Infrastructure/Telemetry/">
     <Project Path="Infrastructure/Telemetry/Foundation.Telemetry/Foundation.Telemetry.csproj">
-      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
   </Folder>
   <Folder Name="/Project/" />
   <Folder Name="/Project/Services/" />
   <Folder Name="/Project/Services/Analytics/">
     <Project Path="Project/Services/Analytics/Analytics.Api/Analytics.Api.csproj">
-      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
   </Folder>
   <Folder Name="/Project/Services/Basket/">
@@ -120,12 +120,12 @@
   </Folder>
   <Folder Name="/Project/Services/DownloadCenter/">
     <Project Path="Project/Services/DownloadCenter/DownloadCenter.Api/DownloadCenter.Api.csproj">
-      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
   </Folder>
   <Folder Name="/Project/Services/Global/">
     <Project Path="Project/Services/Global/Global.Api/Global.Api.csproj">
-      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
   </Folder>
   <Folder Name="/Project/Services/Identity/">
@@ -166,10 +166,10 @@
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/Giuru.IntegrationTests/Giuru.IntegrationTests.csproj">
-      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
     <Project Path="Tests/Giuru.MockAuth/Giuru.MockAuth.csproj">
-      <BuildType Solution="NoVariablesDefault|*" Project="Debug" />
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
   </Folder>
   <Project Path="docker-compose.dcproj">
