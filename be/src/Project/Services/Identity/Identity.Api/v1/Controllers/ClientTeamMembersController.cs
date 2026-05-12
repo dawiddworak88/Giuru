@@ -10,7 +10,6 @@ using Identity.Api.ServicesModels.ClientTeamMembers;
 using Identity.Api.v1.RequestModels;
 using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.ClientTeamMembers;
-using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -38,11 +37,6 @@ namespace Identity.Api.v1.Controllers
             _clientTeamMemberService = clientTeamMemberService;
         }
 
-        private bool IsSeller()
-        {
-            return User.Claims.Any(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
-        }
-
         /// <summary>
         /// Delete client team member by id.
         /// </summary>
@@ -55,16 +49,15 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (!IsSeller())
-            {
-                return StatusCode((int)HttpStatusCode.Forbidden);
-            }
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteClientTeamMemberServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                IsSeller = User.IsInRole("Seller")
             };
 
             var validator = new DeleteClientTeamMemberModelValidator();
@@ -92,16 +85,15 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            if (!IsSeller())
-            {
-                return StatusCode((int)HttpStatusCode.Forbidden);
-            }
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetClientTeamMemberServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+                Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                IsSeller = User.IsInRole("Seller")
             };
 
             var validator = new GetClientTeamMemberModelValidator();
@@ -143,10 +135,8 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy, Guid? organisationId)
         {
-            if (!IsSeller())
-            {
-                return StatusCode((int)HttpStatusCode.Forbidden);
-            }
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var isSeller = User.IsInRole("Seller");
 
             var serviceModel = new GetClientTeamMembersServiceModel
             {
@@ -156,29 +146,36 @@ namespace Identity.Api.v1.Controllers
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = organisationId
+                OrganisationId = isSeller ? organisationId : GuidHelper.ParseNullable(sellerClaim?.Value),
+                IsSeller = isSeller
             };
 
-            var teamMembers = await _clientTeamMemberService.GetAsync(serviceModel);
+            var validator = new GetClientTeamMembersModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
-            if (teamMembers is not null)
+            if (validationResult.IsValid)
             {
-                var response = new PagedResults<IEnumerable<ClientTeamMemberResponseModel>>(teamMembers.Total, teamMembers.PageSize)
-                {
-                    Data = teamMembers.Data.OrEmptyIfNull().Select(x => new ClientTeamMemberResponseModel
-                    {
-                        Id = x.Id,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                        Email = x.Email,
-                        IsDisabled = x.IsDisabled
-                    })
-                };
+                var teamMembers = await _clientTeamMemberService.GetAsync(serviceModel);
 
-                return StatusCode((int)HttpStatusCode.OK, response);
+                if (teamMembers is not null)
+                {
+                    var response = new PagedResults<IEnumerable<ClientTeamMemberResponseModel>>(teamMembers.Total, teamMembers.PageSize)
+                    {
+                        Data = teamMembers.Data.OrEmptyIfNull().Select(x => new ClientTeamMemberResponseModel
+                        {
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            Email = x.Email,
+                            IsDisabled = x.IsDisabled
+                        })
+                    };
+
+                    return StatusCode((int)HttpStatusCode.OK, response);
+                }
             }
 
-            return StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -192,10 +189,8 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] ClientTeamMemberRequestModel request)
         {
-            if (!IsSeller())
-            {
-                return StatusCode((int)HttpStatusCode.Forbidden);
-            }
+            var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var isSeller = User.IsInRole("Seller");
 
             if (request.Id.HasValue)
             {
@@ -208,7 +203,8 @@ namespace Identity.Api.v1.Controllers
                     IsDisabled = request.IsDisabled,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = request.OrganisationId
+                    OrganisationId = isSeller ? request.OrganisationId : GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = isSeller
                 };
 
                 var validator = new UpdateClientTeamMemberModelValidator();
@@ -236,7 +232,8 @@ namespace Identity.Api.v1.Controllers
                     ReturnUrl = request.ReturnUrl,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = request.OrganisationId
+                    OrganisationId = isSeller ? request.OrganisationId : GuidHelper.ParseNullable(sellerClaim?.Value),
+                    IsSeller = isSeller
                 };
 
                 var validator = new CreateClientTeamMemberModelValidator();

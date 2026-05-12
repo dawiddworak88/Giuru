@@ -6,5 +6,6 @@ namespace Identity.Api.ServicesModels.ClientTeamMembers
     public class DeleteClientTeamMemberServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
+        public bool IsSeller { get; set; }
     }
 }

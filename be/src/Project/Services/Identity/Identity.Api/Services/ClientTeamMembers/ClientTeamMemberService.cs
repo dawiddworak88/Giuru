@@ -60,13 +60,19 @@ namespace Identity.Api.Services.ClientTeamMembers
                 throw new NotFoundException(_teamMembersLocalizer.GetString("OrganisationNotFound"));
             }
 
-            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Email == model.Email);
+            var emailExistsInAnotherOrganisation = await _context.Accounts.AnyAsync(x => x.Email == model.Email && x.OrganisationId != organisation.Id);
+
+            if (emailExistsInAnotherOrganisation)
+            {
+                throw new ConflictException(_teamMembersLocalizer.GetString("TeamMemberExistsInAnotherOrganisation"));
+            }
+
+            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Email == model.Email && x.OrganisationId == organisation.Id);
 
             if (user is not null)
             {
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
-                user.OrganisationId = organisation.Id;
                 user.IsDisabled = model.IsDisabled;
 
                 await _context.SaveChangesAsync();
@@ -123,14 +129,21 @@ namespace Identity.Api.Services.ClientTeamMembers
 
         public async Task DeleteAsync(DeleteClientTeamMemberServiceModel model)
         {
-            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString());
+            var query = _context.Accounts.Where(x => x.Id == model.Id.ToString());
+
+            if (model.IsSeller is false)
+            {
+                query = query.Where(x => x.OrganisationId == model.OrganisationId);
+            }
+
+            var user = await query.FirstOrDefaultAsync();
 
             if (user is null)
             {
                 throw new NotFoundException(_teamMembersLocalizer.GetString("TeamMemberNotFound"));
             }
 
-            _context.Accounts.Remove(user);
+            user.IsDisabled = true;
 
             await _context.SaveChangesAsync();
         }
@@ -167,7 +180,14 @@ namespace Identity.Api.Services.ClientTeamMembers
 
         public async Task<ClientTeamMemberServiceModel> GetAsync(GetClientTeamMemberServiceModel model)
         {
-            var existingTeamMember = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString());
+            var query = _context.Accounts.Where(x => x.Id == model.Id.ToString());
+
+            if (model.IsSeller is false)
+            {
+                query = query.Where(x => x.OrganisationId == model.OrganisationId);
+            }
+
+            var existingTeamMember = await query.FirstOrDefaultAsync();
 
             if (existingTeamMember is null)
             {
@@ -188,18 +208,18 @@ namespace Identity.Api.Services.ClientTeamMembers
 
         public async Task<Guid> UpdateAsync(UpdateClientTeamMemberServiceModel model)
         {
-            var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == model.Id.ToString());
+            var query = _context.Accounts.Where(x => x.Id == model.Id.ToString());
+
+            if (model.IsSeller is false)
+            {
+                query = query.Where(x => x.OrganisationId == model.OrganisationId);
+            }
+
+            var user = await query.FirstOrDefaultAsync();
 
             if (user is null)
             {
                 throw new NotFoundException(_teamMembersLocalizer.GetString("TeamMemberNotFound"));
-            }
-
-            var existingUserWithEmail = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
-
-            if (existingUserWithEmail is not null)
-            {
-                existingUserWithEmail.IsDisabled = model.IsDisabled;
             }
 
             user.FirstName = model.FirstName;

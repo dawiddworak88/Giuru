@@ -135,6 +135,9 @@
   <data name="SuccessfullySavedTeamMember" xml:space="preserve">
     <value>Successfully saved team member.</value>
   </data>
+  <data name="TeamMemberExistsInAnotherOrganisation" xml:space="preserve">
+    <value>A user with this email already belongs to another organisation.</value>
+  </data>
   <data name="TeamMemberNotFound" xml:space="preserve">
     <value>Team member not found.</value>
   </data>

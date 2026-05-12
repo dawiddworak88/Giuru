@@ -12,5 +12,6 @@ namespace Identity.Api.ServicesModels.ClientTeamMembers
         public string Scheme { get; set; }
         public HostString Host { get; set; }
         public string ReturnUrl { get; set; }
+        public bool IsSeller { get; set; }
     }
 }

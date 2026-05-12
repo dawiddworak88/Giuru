@@ -21,6 +21,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientTeamMembersRepository _clientTeamMembersRepository;
         private readonly IApprovalsRepository _approvalsRepository;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
@@ -29,6 +30,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         public ClientTeamMemberFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             IClientTeamMembersRepository clientTeamMembersRepository,
             IApprovalsRepository approvalsRepository,
             IUserApprovalsRepository userApprovalsRepository,
@@ -36,6 +38,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             _linkGenerator = linkGenerator;
             _globalLocalizer = globalLocalizer;
+            _clientLocalizer = clientLocalizer;
             _clientTeamMembersRepository = clientTeamMembersRepository;
             _teamMembersLocalizer = teamMembersLocalizer;
             _userApprovalsRepository = userApprovalsRepository;
@@ -60,7 +63,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 IdLabel = _globalLocalizer.GetString("Id"),
                 ClientTeamMembersUrl = _linkGenerator.GetPathByAction("Edit", "ClientTeamMember", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, id = componentModel.ClientId }),
                 ActiveLabel = _globalLocalizer.GetString("Active"),
-                InActiveLabel = _globalLocalizer.GetString("InActive")
+                InActiveLabel = _globalLocalizer.GetString("InActive"),
+                ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel")
             };
 
             if (componentModel.Id.HasValue)

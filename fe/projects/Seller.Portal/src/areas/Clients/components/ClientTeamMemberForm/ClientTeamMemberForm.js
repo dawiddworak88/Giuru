@@ -235,7 +235,8 @@ ClientTeamMemberForm.propTypes = {
     fieldRequiredErrorMessage: PropTypes.string.isRequired,
     emailFormatErrorMessage: PropTypes.string.isRequired,
     clientTeamMembersUrl: PropTypes.string.isRequired,
-    navigateToClientTeamMembersListText: PropTypes.string.isRequired
+    navigateToClientTeamMembersListText: PropTypes.string.isRequired,
+    expressedOnLabel: PropTypes.string
 }
 
 export default ClientTeamMemberForm;
