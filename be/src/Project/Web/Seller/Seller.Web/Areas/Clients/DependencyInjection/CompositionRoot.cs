@@ -15,6 +15,7 @@ using Seller.Web.Areas.Clients.Repositories.FieldOptions;
 using Seller.Web.Areas.Clients.ComponentModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Approvals;
+using Seller.Web.Areas.Clients.Repositories.ClientTeamMembers;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -75,6 +76,14 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Approval>>, ApprovalsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApprovalFormViewModel>, ApprovalFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApprovalPageViewModel>, ApprovalPageModelBuilder>();
+
+            services.AddScoped<IClientTeamMembersRepository, ClientTeamMembersRepository>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientTeamMember>>, ClientTeamMembersPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientTeamMembersPageViewModel>, ClientTeamMembersPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientTeamMemberPageViewModel>, ClientTeamMemberPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<TeamMember>>, ClientTeamMemberPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ClientTeamMemberComponentModel, ClientTeamMemberDetailPageViewModel>, ClientTeamMemberDetailPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ClientTeamMemberComponentModel, ClientTeamMemberFormViewModel>, ClientTeamMemberFormModelBuilder>();
         }
     }
 }

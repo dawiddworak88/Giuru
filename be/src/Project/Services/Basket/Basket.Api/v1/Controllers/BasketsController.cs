@@ -250,7 +250,8 @@ namespace Basket.Api.v1.Controllers
                 Attachments = request.Attachments,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value
             };
 
             var validator = new CheckoutBasketServiceModelValidator();

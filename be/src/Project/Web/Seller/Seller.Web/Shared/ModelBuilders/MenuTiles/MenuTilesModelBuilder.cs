@@ -17,6 +17,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<DashboardResources> _dashboardResources;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptionsMonitor<AppSettings> _options;
 
@@ -24,12 +25,14 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DashboardResources> dashboardResources,
             IStringLocalizer<ClientResources> clientLocalizer,
+            IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
             IOptionsMonitor<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
             _dashboardResources = dashboardResources;
             _clientLocalizer = clientLocalizer;
+            _teamMembersLocalizer = teamMembersLocalizer;
             _linkGenerator = linkGenerator;
             _options = options;
         }
@@ -117,6 +120,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Icon = IconsConstants.Users,
                         Title = _globalLocalizer.GetString("Clients"),
                         Url = _linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
+                        Icon = IconsConstants.Users,
+                        Title = _teamMembersLocalizer.GetString("ClientTeamMembers"),
+                        Url = _linkGenerator.GetPathByAction("Index", "ClientTeamMembers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {

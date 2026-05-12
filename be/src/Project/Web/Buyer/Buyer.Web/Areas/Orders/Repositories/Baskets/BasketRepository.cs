@@ -115,7 +115,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 MoreInfo = moreInfo,
                 HasCustomOrder = hasCustomOrder,
                 HasApprovalToSendEmail = hasApprovalToSendEmail,
-                Attachments = attachments
+                Attachments = attachments,
             };
 
             if (billingAddress is not null)

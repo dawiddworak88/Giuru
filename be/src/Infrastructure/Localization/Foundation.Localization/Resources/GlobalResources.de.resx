@@ -837,4 +837,7 @@
   <data name="AllForFilters" xml:space="preserve">
     <value>Alle</value>
   </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Erstellt von</value>
+  </data>
 </root>

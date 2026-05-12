@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+﻿import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -288,6 +288,21 @@ function Catalog(props) {
         }
     }, windowWidth);
 
+    const buildUrl = (editUrl, itemId, searchTerm) => {
+        const [basePath, qs] = (editUrl || "").split("?");
+        const url = basePath + "/" + itemId;
+
+        const params = new URLSearchParams(qs || "");
+
+        if (searchTerm) {
+            params.set("searchTerm", searchTerm);
+        }
+
+        const query = params.toString();
+
+        return query ? url + "?" + query : url;
+    }
+
     const tableRow = (provided, item) => {
         return (
             <TableRow
@@ -308,7 +323,7 @@ function Catalog(props) {
                             )
                             else if (actionItem.isEdit) return (
                                 <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
-                                    <Fab href={props.editUrl + "/" + item.id + (searchTerm ? `/?searchTerm=${searchTerm}` : "")} size="small" color="secondary">
+                                    <Fab href={buildUrl(props.editUrl, item.id, searchTerm)} size="small" color="secondary">
                                         <Edit />
                                     </Fab>
                                 </Tooltip>)

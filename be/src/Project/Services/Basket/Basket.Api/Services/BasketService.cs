@@ -64,7 +64,8 @@ namespace Basket.Api.Services
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
                 HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
                 HasApprovalToSendEmail = checkoutBasketServiceModel.HasApprovalToSendEmail,
-                Attachments = checkoutBasketServiceModel.Attachments
+                Attachments = checkoutBasketServiceModel.Attachments,
+                CreatedBy = checkoutBasketServiceModel.CreatedBy
             };
 
             var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
