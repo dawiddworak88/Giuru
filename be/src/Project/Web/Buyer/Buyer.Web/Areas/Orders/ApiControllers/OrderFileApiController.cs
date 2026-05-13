@@ -123,7 +123,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             var prices = Enumerable.Empty<Price>();
 
-            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+            if (_options.Value.IsGrulaConfigured)
             {
                 var priceProducts = orderedProducts.Select(async x => new PriceProduct
                 {
