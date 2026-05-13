@@ -54,6 +54,7 @@ function Catalog(props) {
         setPage(() => newPage);
 
         const searchParameters = {
+            ...props.searchParameters,
             searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage: props.defaultItemsPerPage
@@ -92,7 +93,7 @@ function Catalog(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const searchParameters = {
-
+            ...props.searchParameters,
             searchTerm,
             pageIndex: 1,
             itemsPerPage: props.defaultItemsPerPage
@@ -277,16 +278,16 @@ function Catalog(props) {
     };
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
-            setWindowWidth(window.innerWidth);
-        
-            const handleResize = () => {
-                setWindowWidth(window.innerWidth)
-            };
-    
-            window.addEventListener("resize", handleResize);
-        }
-    }, windowWidth);
+        if (typeof window === "undefined") return;
+
+        setWindowWidth(window.innerWidth);
+
+        const handleResize = () => setWindowWidth(window.innerWidth);
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const buildUrl = (editUrl, itemId, searchTerm) => {
         const [basePath, qs] = (editUrl || "").split("?");
@@ -561,7 +562,8 @@ Catalog.propTypes = {
     confirmationDialogDeleteNameProperty: PropTypes.array,
     defaultItemsPerPage: PropTypes.number.isRequired,
     generateQRCodeLabel: PropTypes.string,
-    copyLinkLabel: PropTypes.string
+    copyLinkLabel: PropTypes.string,
+    searchParameters: PropTypes.object
 }
 
 export default Catalog;

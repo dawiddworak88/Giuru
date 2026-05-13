@@ -163,7 +163,7 @@ namespace Identity.Api.Services.ClientTeamMembers
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                teamMembers = teamMembers.Where(x => x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm) || x.Email.StartsWith(model.SearchTerm) || x.Id.ToString() == model.SearchTerm);
+                teamMembers = teamMembers.Where(x => x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm) || x.Email.StartsWith(model.SearchTerm));
             }
 
             teamMembers = teamMembers.ApplySort(model.OrderBy);

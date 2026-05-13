@@ -172,7 +172,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 }
 
                 if (product.PrimaryProductId.HasValue &&
-                    string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                    _options.Value.IsGrulaConfigured)
                 {
                     var price = await _priceService.GetPrice(
                         _options.Value.GrulaAccessToken,
@@ -314,7 +314,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         var prices = Enumerable.Empty<Price>();
 
-                        if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                        if (_options.Value.IsGrulaConfigured)
                         {
                             var priceProducts = productVariants.Data.Select(async x => new PriceProduct
                             {

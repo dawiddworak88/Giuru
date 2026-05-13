@@ -4,7 +4,6 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Seller.Web.Areas.Clients.ComponentModels;
 using Seller.Web.Areas.Clients.ViewModels;
 using System;
 using System.Globalization;

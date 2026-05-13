@@ -21,7 +21,11 @@ namespace Buyer.Web.Shared.Configurations
         public string CdnUrl { get; set; }
         public string GrulaUrl { get; set; }
         public string GrulaAccessToken { get; set; }
-        public Guid? GrulaEnvironmentId { get; set; }
+        public string GrulaEnvironmentId { get; set; }
+
+        public bool IsGrulaConfigured =>
+            !string.IsNullOrWhiteSpace(GrulaAccessToken) && Guid.TryParse(GrulaEnvironmentId, out _);
+
         public Guid? OrganisationId { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string ProductAttributes { get; set; }
