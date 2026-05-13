@@ -68,7 +68,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "ClientTeamMemberDetail", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, clientId = client?.Id, organisationId = componentModel.Id });
 
             viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "ClientTeamMembersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientTeamMembersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, organisationId = client.OrganisationId });
+            viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "ClientTeamMembersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchParameters = new Dictionary<string, object>
+            {
+                { "organisationId", client.OrganisationId }
+            };
 
             viewModel.ConfirmationDialogDeleteNameProperty = [
                 nameof(TeamMember.FirstName).ToCamelCase(),

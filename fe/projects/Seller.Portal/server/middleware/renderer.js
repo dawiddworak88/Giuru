@@ -58,8 +58,14 @@ import ClientFieldPage from "../../src/areas/Clients/pages/ClientFieldPage/Clien
 import ClientFieldOptionPage from "../../src/areas/Clients/pages/ClientFieldOptionPage/ClientFieldOptionPage";
 import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/CurrenciesPage";
 import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
+import ClientTeamMembersPage from "../../src/areas/Clients/pages/ClientTeamMembersPage/ClientTeamMembersPage";
+import ClientTeamMemberPage from "../../src/areas/Clients/pages/ClientTeamMemberPage/ClientTeamMemberPage";
+import ClientTeamMemberDetailPage from "../../src/areas/Clients/pages/ClientTeamMemberDetailPage/ClientTeamMemberDetailPage";
 
 const Components = {
+	ClientTeamMemberDetailPage,
+	ClientTeamMemberPage,
+	ClientTeamMembersPage,
 	ClientFieldOptionPage,
 	ClientFieldPage,
 	ClientFieldsPage,
