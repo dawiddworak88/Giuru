@@ -1,4 +1,4 @@
-﻿using Foundation.GenericRepository.Entities;
+using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -43,7 +43,7 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
         public decimal? Price { get; set; }
 
         [Column(TypeName = "nvarchar(3)")]
-        public string? Currency { get; set; }
+        public string Currency { get; set; }
 
         public DateOnly? ExpectedLeadTime { get; set; }
     }

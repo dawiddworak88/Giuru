@@ -36,35 +36,33 @@ namespace Giuru.IntegrationTests
         {
             _giuruNetwork = new NetworkBuilder().Build();
 
-            _redisContainer = new RedisBuilder()
+            _redisContainer = new RedisBuilder("redis:latest")
                 .WithName("redis")
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("redis")
                 .WithPortBinding(9113, 6379)
                 .WithExposedPort(6379)
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(6379))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(6379))
                 .Build();
 
             await _redisContainer.StartAsync();
 
-            _msSqlContainer = new MsSqlBuilder()
+            _msSqlContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-CU15-GDR1-ubuntu-22.04")
                 .WithName("mssql")
-                .WithImage("mcr.microsoft.com/mssql/server:2022-CU15-GDR1-ubuntu-22.04")
                 .WithNetwork(_giuruNetwork)
                 .WithPassword("YourStrongPassword!")
                 .WithNetworkAliases("sqldata")
                 .WithPortBinding(9111, 1433)
                 .WithExposedPort(1433)
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(1433))
                 .Build();
 
             await _msSqlContainer.StartAsync();
 
-            _elasticsearchContainer = new ContainerBuilder()
+            _elasticsearchContainer = new ContainerBuilder("docker.elastic.co/elasticsearch/elasticsearch:7.9.1")
                 .WithName("elasticsearch")
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("elasticsearch")
-                .WithImage("docker.elastic.co/elasticsearch/elasticsearch:7.9.1")
                 .WithEnvironment("discovery.type", "single-node")
                 .WithEnvironment("xpack.security.enabled", "false")
                 .WithEnvironment("xpack.security.http.ssl.enabled", "false")
@@ -79,7 +77,7 @@ namespace Giuru.IntegrationTests
 
             await _elasticsearchContainer.StartAsync();
 
-            _rabbitMqContainer = new RabbitMqBuilder()
+            _rabbitMqContainer = new RabbitMqBuilder("rabbitmq:latest")
                 .WithName("rabbitmq")
                 .WithNetwork(_giuruNetwork)
                 .WithNetworkAliases("rabbitmq")
@@ -87,7 +85,7 @@ namespace Giuru.IntegrationTests
                 .WithExposedPort(5672)
                 .WithUsername("RMQ_USER")
                 .WithPassword("YourStrongPassword!")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5672))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(5672))
                 .Build();
 
             await _rabbitMqContainer.StartAsync();
@@ -96,9 +94,8 @@ namespace Giuru.IntegrationTests
 
             await mockAuthImage.InitializeAsync();
 
-            _mockAuthContainer = new ContainerBuilder()
+            _mockAuthContainer = new ContainerBuilder(mockAuthImage)
                 .WithName("mock-auth")
-                .WithImage(mockAuthImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(8080)
                 .WithPortBinding(9105, 8080)
@@ -110,7 +107,7 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("Issuer", "null")
                 .WithEnvironment("Audience", "all")
                 .WithBindMount(Path.Combine(CommonDirectoryPath.GetProjectDirectory().DirectoryPath, "../Giuru.MockAuth/tempkey.jwk"), "/app/tempkey.jwk")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(8080))
                 .Build();
 
             await _mockAuthContainer.StartAsync();
@@ -119,9 +116,8 @@ namespace Giuru.IntegrationTests
 
             await clientApiImage.InitializeAsync();
 
-            _clientApiContainer = new ContainerBuilder()
+            _clientApiContainer = new ContainerBuilder(clientApiImage)
                 .WithName("client-api")
-                .WithImage(clientApiImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(8080)
                 .WithPortBinding(9106, 8080)
@@ -134,7 +130,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _clientApiContainer.StartAsync();
@@ -143,9 +142,8 @@ namespace Giuru.IntegrationTests
 
             await catalogApiImage.InitializeAsync();
 
-            _catalogApiContainer = new ContainerBuilder()
+            _catalogApiContainer = new ContainerBuilder(catalogApiImage)
                 .WithName("catalog-api")
-                .WithImage(catalogApiImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(8080)
                 .WithPortBinding(9101, 8080)
@@ -161,7 +159,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("Brands", "4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _catalogApiContainer.StartAsync();
@@ -170,9 +171,8 @@ namespace Giuru.IntegrationTests
 
             await catalogBackgroundTasksImage.InitializeAsync();
 
-            _catalogBackgroundTasksContainer = new ContainerBuilder()
+            _catalogBackgroundTasksContainer = new ContainerBuilder(catalogBackgroundTasksImage)
                 .WithName("catalog-background-tasks")
-                .WithImage(catalogBackgroundTasksImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(8080)
                 .WithPortBinding(9104, 8080)
@@ -187,7 +187,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _catalogBackgroundTasksContainer.StartAsync();
@@ -196,9 +199,8 @@ namespace Giuru.IntegrationTests
 
             await orderingApiImage.InitializeAsync();
 
-            _orderingApiContainer = new ContainerBuilder()
+            _orderingApiContainer = new ContainerBuilder(orderingApiImage)
                 .WithName("ordering-api")
-                .WithImage(orderingApiImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(8080)
                 .WithPortBinding(9102, 8080)
@@ -212,7 +214,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("SendGridApiKey", "SIMPLE_SENDGRID_API_KEY")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _orderingApiContainer.StartAsync();
@@ -221,9 +226,8 @@ namespace Giuru.IntegrationTests
 
             await basketApiImage.InitializeAsync();
 
-            _basketApiContainer = new ContainerBuilder()
+            _basketApiContainer = new ContainerBuilder(basketApiImage)
                 .WithName("basket-api")
-                .WithImage(basketApiImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(8080)
                 .WithPortBinding(9103, 8080)
@@ -236,7 +240,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _basketApiContainer.StartAsync();
@@ -245,9 +252,8 @@ namespace Giuru.IntegrationTests
 
             await inventoryApiImage.InitializeAsync();
 
-            _inventoryApiContainer = new ContainerBuilder()
+            _inventoryApiContainer = new ContainerBuilder(inventoryApiImage)
                 .WithName("inventory-api")
-                .WithImage(inventoryApiImage)
                 .WithNetwork(_giuruNetwork)
                 .WithExposedPort(8080)
                 .WithPortBinding(9107, 8080)
@@ -260,7 +266,10 @@ namespace Giuru.IntegrationTests
                 .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
                 .WithEnvironment("SupportedCultures", "de,en,pl")
                 .WithEnvironment("DefaultCulture", "en")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
                 .Build();
 
             await _inventoryApiContainer.StartAsync();

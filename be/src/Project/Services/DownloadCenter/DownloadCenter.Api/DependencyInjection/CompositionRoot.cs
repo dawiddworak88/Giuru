@@ -1,4 +1,4 @@
-﻿using DownloadCenter.Api.Infrastructure;
+using DownloadCenter.Api.Infrastructure;
 using DownloadCenter.Api.IntegrationEvents;
 using DownloadCenter.Api.IntegrationEventsHandlers;
 using DownloadCenter.Api.Services.Categories;
@@ -27,7 +27,9 @@ namespace DownloadCenter.Api.DependencyInjection
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<DownloadCenterContext>();
-            services.AddDbContext<DownloadCenterContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<DownloadCenterContext>(options => 
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite())
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)

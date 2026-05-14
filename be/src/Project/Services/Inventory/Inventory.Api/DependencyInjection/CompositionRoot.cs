@@ -1,4 +1,4 @@
-﻿using Foundation.EventBus;
+using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
 using Inventory.Api.Infrastructure;
@@ -31,7 +31,9 @@ namespace Inventory.Api.DependencyInjection
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<InventoryContext>();
-            services.AddDbContext<InventoryContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<InventoryContext>(options => 
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite())
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)

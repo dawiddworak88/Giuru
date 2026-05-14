@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
 import { Button, CircularProgress } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material"
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import ProductCardModal from "../../components/ProductCardModal/ProductCardModal";

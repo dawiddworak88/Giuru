@@ -31,7 +31,10 @@ namespace Seller.Web.Shared.Repositories.LeadTime
 
         public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
         {
-            if (skus.Length == 0) return default;
+            if (skus == null || skus.Length == 0)
+            {
+                return Array.Empty<LeadTimeItem>();
+            }
 
             var requestModel = new GetLeadTimesRequestModel
             {
@@ -48,17 +51,17 @@ namespace Seller.Web.Shared.Repositories.LeadTime
 
             var response = await _apiClientService.GetAsync<ApiRequest<GetLeadTimesRequestModel>, GetLeadTimesRequestModel, IEnumerable<LeadTimeItem>>(apiRequest);
 
-            if (!response.IsSuccessStatusCode || response.Data is null)
+            if (response == null || !response.IsSuccessStatusCode || response.Data is null)
             {
                 _logger.LogError(
                     "Failed to retrieve lead times for SKUs: {Skus}. " +
                     "Status Code: {StatusCode}, " +
-                    "Message: {Message}", 
-                    requestModel.Skus, 
-                    response.StatusCode, 
-                    response.Message);
+                    "Message: {Message}",
+                    requestModel.Skus,
+                    response?.StatusCode,
+                    response?.Message);
 
-                return default;
+                return Array.Empty<LeadTimeItem>();
             }
 
             return response.Data;

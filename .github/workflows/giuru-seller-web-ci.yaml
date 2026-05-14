@@ -17,20 +17,20 @@ jobs:
   Build-and-Test-Solutions:
     runs-on: ubuntu-latest
     env:
-      API_SOLUTION_PATH: '${{ github.workspace }}/be/src/AspNetCore.sln'
+      API_SOLUTION_PATH: '${{ github.workspace }}/be/src/AspNetCore.slnx'
       TESTS_RESULTS_UPLOAD_FOLDER: 'testresults'
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: Setup .NET 8.x
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET 10.x
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '10.x'
       - name: Restore dependencies
         run: dotnet restore ${{ env.API_SOLUTION_PATH }}
       - name: Build
@@ -38,7 +38,7 @@ jobs:
       - name: Test
         run: dotnet test --filter "FullyQualifiedName!~IntegrationTests" --logger trx --results-directory ${{ env.TESTS_RESULTS_UPLOAD_FOLDER }} --no-build ${{ env.API_SOLUTION_PATH }}
       - name: Upload dotnet test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: dotnet-results-${{ env.TESTS_RESULTS_UPLOAD_FOLDER }}
           path: ${{ env.TESTS_RESULTS_UPLOAD_FOLDER }}

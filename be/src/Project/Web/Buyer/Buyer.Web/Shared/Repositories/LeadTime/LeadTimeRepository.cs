@@ -33,7 +33,10 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
 
         public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, string[] skus)
         {
-            if (skus.Length == 0) return default;
+            if (skus == null || skus.Length == 0)
+            {
+                return Array.Empty<LeadTimeItem>();
+            }
 
             int total = (int)Math.Ceiling(skus.Length / (double)Constants.MaxItemsPerPage);
 
@@ -60,7 +63,7 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
 
                 var response = await _apiClientService.GetAsync<ApiRequest<GetLeadTimeBySkusRequestModel>, GetLeadTimeBySkusRequestModel, PagedLeadTimeResults>(apiRequest);
 
-                if (!response.IsSuccessStatusCode || response.Data?.Items is null)
+                if (response == null || !response.IsSuccessStatusCode || response.Data?.Items is null)
                 {
                     _logger.LogError(
                         "Failed to retrieve lead times for SKUs: {Skus}. " +
@@ -68,9 +71,12 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
                         "PageIndex: {PageIndex}, " +
                         "Message: {Message}",
                         requestModel.Skus,
-                        response.StatusCode,
+                        response?.StatusCode,
                         requestModel.PageIndex,
-                        response.Message);
+                        response?.Message);
+
+                    pageIndex++;
+                    continue;
                 }
 
                 leadTimeResults.AddRange(response.Data.Items);

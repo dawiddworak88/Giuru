@@ -1,4 +1,4 @@
-﻿using DownloadCenter.Api.Services.DownloadCenter;
+using DownloadCenter.Api.Services.DownloadCenter;
 using DownloadCenter.Api.ServicesModels.DownloadCenter;
 using DownloadCenter.Api.v1.RequestModel;
 using DownloadCenter.Api.v1.ResponseModel;
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
 namespace DownloadCenter.Api.v1.Controllers
 {

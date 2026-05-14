@@ -1,4 +1,4 @@
-﻿using Foundation.Account.Definitions;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -19,6 +19,7 @@ using Inventory.Api.Validators.OutletValidators;
 using Inventory.Api.ServicesModels.OutletServiceModels;
 using Inventory.Api.v1.RequestModels;
 using Inventory.Api.Services.OutletItems;
+using Asp.Versioning;
 
 namespace Outlet.Api.v1.Controllers
 {

@@ -1,21 +1,10 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
-import { makeStyles } from "@mui/styles";
-import { Drawer, List, Divider, IconButton, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Drawer, List, Divider, IconButton, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Menu } from "@mui/icons-material"
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import ColorConstants from "../../constants/ColorConstants";
 import * as Icon from "react-feather";
-
-const useStyles = makeStyles({
-    fullList: {
-        width: "auto"
-    },
-    darkMenuColor: {
-        color: ColorConstants.swampColor()
-    }
-});
 
 const drawerStyles = {
     width: "63px",
@@ -25,8 +14,7 @@ const drawerStyles = {
 function Header(props) {
 
     const [isActive, setIsActive] = useState(false);
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -57,33 +45,33 @@ function Header(props) {
                                 aria-label="open drawer"
                                 onClick={handleDrawerOpen}
                                 edge="start"
-                                style={drawerStyles}
-                                className={clsx(classes.menuButton, open && classes.hide)}>
+                                style={drawerStyles}>
                                 <Menu />
                             </IconButton>
                             <Drawer anchor="top" open={open} onClose={handleDrawerClose}>
                                 <div
-                                    className={clsx(classes.fullList, classes.darkMenuColor)}
+                                    style={{
+                                        width: "auto",
+                                        color: ColorConstants.swampColor()
+                                    }}
                                     role="presentation"
                                     onClick={handleDrawerOpen}
                                     onKeyDown={handleDrawerOpen}>
                                         <List>
-                                            <ListItem button onClick={handleDrawerClose}>
+                                            <ListItemButton onClick={handleDrawerClose}>
                                                 <ListItemIcon>{ListIcon(props.drawerBackIcon)}</ListItemIcon>
                                                 <ListItemText primary={props.drawerBackLabel} />
-                                            </ListItem>
+                                            </ListItemButton>
                                         </List>
                                         <Divider /><Divider />
                                     {props.drawerMenuCategories.map((category, index) => (
                                         <Fragment key={index}>
                                             <List>
                                                 {category.items.map((item, index) => (
-                                                    <a href={item.url} key={index}>
-                                                        <ListItem selected={item.isActive} button>
-                                                            <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
-                                                            <ListItemText primary={item.title} />
-                                                        </ListItem>
-                                                    </a>
+                                                    <ListItemButton component="a" href={item.url} key={index} selected={item.isActive}>
+                                                        <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
+                                                        <ListItemText primary={item.title} />
+                                                    </ListItemButton>
                                                 ))}
                                             </List>
                                             <Divider />
@@ -106,7 +94,7 @@ function Header(props) {
                 </div>
                 <div className={isActive ? "navbar-menu is-active" : "navbar-menu"}>
                     <div className="navbar-start">
-                        {props.links && props.links.length > 0 && props.links.map((link, index) => 
+                        {props.links && props.links.length > 0 && props.links.map((link, index) =>
                                 <a key={index} className="navbar-item" href={link.url}>{link.text}</a>
                             )
                         }
