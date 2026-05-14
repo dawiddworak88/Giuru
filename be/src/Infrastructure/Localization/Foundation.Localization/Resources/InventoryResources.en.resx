@@ -252,4 +252,7 @@
   <data name="InventoryOutletSaveConflict" xml:space="preserve">
     <value>There is already an item with this product in the warehouse. Please edit the existing product.</value>
   </data>
+  <data name="InventoryOutletQuantityConflict" xml:space="preserve">
+    <value>An attempt was made to place an order for a quantity greater than the available amount.</value>
+  </data>
 </root>

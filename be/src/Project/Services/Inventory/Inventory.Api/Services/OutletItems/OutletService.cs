@@ -97,7 +97,7 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel model)
         {
             var outletProduct = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.ProductId && x.IsActive);
-            
+
             if (outletProduct is null)
             {
                 outletProduct = new Product
@@ -308,7 +308,7 @@ namespace Inventory.Api.Services.OutletItems
                         AvailableQuantity = x.AvailableQuantity,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate
-                    });;
+                    });
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -411,7 +411,7 @@ namespace Inventory.Api.Services.OutletItems
                     AvailableQuantity = outletItems.Sum(x => x.AvailableQuantity),
                     Quantity = outletItems.Sum(x => x.Quantity),
                     ProductEan = outletItems.FirstOrDefault().ProductEan,
-                    Title= outletItems.FirstOrDefault().Title,
+                    Title = outletItems.FirstOrDefault().Title,
                     Description = outletItems.FirstOrDefault().Description,
                     Details = outletItems.Select(item => new OutletServiceModel
                     {
@@ -518,7 +518,7 @@ namespace Inventory.Api.Services.OutletItems
                     .GroupBy(x => x.ProductId)
                     .Where(x => x.Sum(y => y.AvailableQuantity) > 0)
                     .Select(y => new OutletSumServiceModel
-                    { 
+                    {
                         ProductId = y.FirstOrDefault().ProductId,
                         ProductName = y.FirstOrDefault().Product.Name,
                         ProductSku = y.FirstOrDefault().Product.Sku,
@@ -549,43 +549,66 @@ namespace Inventory.Api.Services.OutletItems
         public async Task UpdateOutletQuantity(Guid? productId, double bookedQuantity)
         {
             if (productId is null || bookedQuantity <= 0) return;
-            
-            var outlet = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == productId.Value && x.IsActive);
 
-            if (outlet is not null)
+            var outlets = await _context.Outlet
+                .Where(x => x.ProductId == productId.Value && x.IsActive)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+
+            if (outlets.Any() is false) return;
+
+            var totalAvailableQuantity = outlets.Sum(x => x.AvailableQuantity);
+            if (bookedQuantity > totalAvailableQuantity)
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+
+            var remainingToAllocate = bookedQuantity;
+            foreach (var item in outlets)
             {
-                var productQuantity = outlet.AvailableQuantity - bookedQuantity;
+                if (remainingToAllocate <= 0) break;
 
-                if (productQuantity < 0)
-                {
-                    productQuantity = 0;
-                }
+                var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
 
-                outlet.AvailableQuantity = productQuantity;
-                outlet.LastModifiedDate = DateTime.UtcNow;
+                var affected = await _context.Database.ExecuteSqlRawAsync(
+                    @"UPDATE Outlet
+                      SET AvailableQuantity = AvailableQuantity - {0},
+                          LastModifiedDate = {1}
+                      WHERE Id = {2} 
+                        AND AvailableQuantity >= {0}",
+                    toDeduct, DateTime.UtcNow, item.Id);
 
-                await _context.SaveChangesAsync();
-            } 
+                if (affected == 0)
+                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+
+                remainingToAllocate -= toDeduct;
+            }
         }
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
         {
-            return from o in _context.Outlet
-                   join warehouse in _context.Warehouses on o.WarehouseId equals warehouse.Id
-                   join product in _context.Products on o.ProductId equals product.Id
-                   join ot in _context.OutletTranslations on o.Id equals ot.OutletItemId
-                   where model.Ids.Contains(o.ProductId) && product.IsActive && o.IsActive
-                   select new OutletSumServiceModel
-                   {
-                       ProductId = product.Id,
-                       ProductName = product.Name,
-                       ProductEan = product.Ean,
-                       ProductSku = product.Sku,
-                       Title = ot.Title,
-                       Description = ot.Description,
-                       Quantity = o.Quantity,
-                       AvailableQuantity = o.AvailableQuantity,
-                   };
+            var outletIds = _context.Outlet
+                .Where(x => model.Ids.Contains(x.ProductId) && x.Product.IsActive && x.IsActive)
+                .Select(x => x.Id)
+                .ToList();
+
+            var outletItems = _context.Outlet
+                .Include(x => x.Translations)
+                .Include(x => x.Product)
+                .AsSingleQuery()
+                .Where(x => outletIds.Contains(x.Id))
+                .AsEnumerable()
+                .Select(x => new OutletSumServiceModel
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.Product.Name,
+                    ProductEan = x.Product.Ean,
+                    ProductSku = x.Product.Sku,
+                    Title = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Title ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Title,
+                    Description = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Description ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Description,
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity,
+                });
+
+            return outletItems;
         }
     }
 }
