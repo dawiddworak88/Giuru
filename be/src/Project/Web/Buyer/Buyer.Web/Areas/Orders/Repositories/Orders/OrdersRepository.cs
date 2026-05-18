@@ -197,6 +197,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                     ShippingStreet = response.Data.ShippingStreet,
                     MoreInfo = response.Data.MoreInfo,
                     Attachments = response.Data.Attachments,
+                    CreatedBy = response.Data.CreatedBy,
                     LastModifiedDate = response.Data.LastModifiedDate,
                     CreatedDate = response.Data.CreatedDate
                 };

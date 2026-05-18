@@ -36,5 +36,6 @@ namespace Basket.Api.ServicesModels
         public bool HasCustomOrder { get; set; }
         public bool HasApprovalToSendEmail { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
