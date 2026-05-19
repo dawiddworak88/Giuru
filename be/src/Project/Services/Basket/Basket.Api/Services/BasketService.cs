@@ -37,7 +37,7 @@ namespace Basket.Api.Services
                 OrganisationId = checkoutBasketServiceModel.OrganisationId,
                 Username = checkoutBasketServiceModel.Username,
                 ClientId = checkoutBasketServiceModel.ClientId,
-                SellerId = checkoutBasketServiceModel.OrganisationId,
+                SellerId = checkoutBasketServiceModel.SellerId ?? checkoutBasketServiceModel.OrganisationId,
                 ClientName = checkoutBasketServiceModel.ClientName,
                 ClientEmail = checkoutBasketServiceModel.ClientEmail,
                 BillingAddressId = checkoutBasketServiceModel.BillingAddressId,

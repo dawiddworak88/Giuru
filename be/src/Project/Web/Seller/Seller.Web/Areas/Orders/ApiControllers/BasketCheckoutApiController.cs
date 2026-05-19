@@ -90,7 +90,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingPhoneNumber,
                 model.ShippingCountryId,
                 model.MoreInfo,
-                userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId));
+                userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId),
+                client?.OrganisationId);
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }

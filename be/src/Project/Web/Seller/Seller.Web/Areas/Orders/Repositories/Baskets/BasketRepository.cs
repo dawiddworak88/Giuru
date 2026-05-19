@@ -117,11 +117,13 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingPhoneNumber,
             Guid? shippingCountryId,
             string moreInfo,
-            bool hasApprovalToSendEmail)
+            bool hasApprovalToSendEmail,
+            Guid? sellerId)
         {
             var requestModel = new CheckoutBasketRequestModel
             {
                 ClientId = clientId,
+                SellerId = sellerId,
                 ClientName = clientName,
                 ClientEmail = clientEmail,
                 BasketId = basketId,
