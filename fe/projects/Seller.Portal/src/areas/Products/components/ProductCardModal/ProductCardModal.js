@@ -88,8 +88,8 @@ const ProductCardModal = (props) => {
             onClose={props.handleClose}
             fullWidth
             maxWidth="sm"
-            PaperProps={{
-                className:"productCard-modal"
+            slotProps={{
+                paper: { className: "productCard-modal" }
             }}
         >
             <DialogTitle>{props.labels.title}</DialogTitle>

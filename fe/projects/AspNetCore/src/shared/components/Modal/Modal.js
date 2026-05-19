@@ -39,8 +39,8 @@ const Modal = (props) => {
             onClose={handleClose}
             fullWidth
             maxWidth="sm"
-            PaperProps={{
-                className:"basket-modal"
+            slotProps={{
+                paper: { className: "basket-modal" }
             }}
         >
             <DialogTitle>{labels.title}</DialogTitle>
