@@ -33,6 +33,12 @@ namespace Buyer.Web.Shared.Repositories.LeadTime
 
         public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, string[] skus)
         {
+            if (string.IsNullOrEmpty(_options.Value.LeadTimeUrl))
+            {
+                _logger.LogWarning("LeadTimeUrl is missing. Skipping lead time retrieval.");
+                return default;
+            }
+
             if (skus.Length == 0) return default;
 
             int total = (int)Math.Ceiling(skus.Length / (double)Constants.MaxItemsPerPage);
