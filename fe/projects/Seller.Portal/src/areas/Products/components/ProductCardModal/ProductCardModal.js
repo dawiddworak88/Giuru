@@ -121,9 +121,9 @@ const ProductCardModal = (props) => {
                                 fullWidth={true} 
                                 helperText={nameError ? props.labels.nameErrorMessage : ""} 
                                 error={nameError && disabledButton}
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: productAttribute.title ? false : true
-                                }}/>
+                                }}}/>
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">

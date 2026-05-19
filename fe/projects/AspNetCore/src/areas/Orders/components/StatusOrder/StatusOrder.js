@@ -184,10 +184,10 @@ function StatusOrder(props) {
                                 multiline={true}
                                 disabled={true}
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     disableUnderline: true,
                                     className: "p-2"
-                                }}
+                                }}}
                             />
                         </div>
                     </div>

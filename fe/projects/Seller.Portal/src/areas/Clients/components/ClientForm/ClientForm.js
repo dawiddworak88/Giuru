@@ -216,9 +216,9 @@ function ClientForm(props) {
                                 variant="standard"
                                 helperText={dirty.email ? errors.email : ""}
                                 error={(errors.email.length > 0) && dirty.email}
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: props.email ? true : false,
-                                }} />
+                                }}} />
                         </div>
                         <div className="field">
                             <Autocomplete
