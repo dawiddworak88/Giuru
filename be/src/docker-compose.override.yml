@@ -413,7 +413,7 @@ services:
       - DefaultCulture=${DEFAULT_CULTURE}
       - DefaultCurrency=${DEFAULT_CURRENCY}
     volumes:
-      - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/src/wwwroot/dist
+      - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
       - "5104:8080"
 
@@ -470,7 +470,7 @@ services:
       - DefaultCulture=${DEFAULT_CULTURE}
       - DefaultCurrency=${DEFAULT_CURRENCY}
     volumes:
-      - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
+      - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/src/wwwroot/dist
     ports:
       - "5107:8080"
 
