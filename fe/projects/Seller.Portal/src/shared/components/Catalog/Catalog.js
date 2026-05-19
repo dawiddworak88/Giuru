@@ -277,16 +277,13 @@ function Catalog(props) {
     };
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
+        if (typeof window !== 'undefined') {
             setWindowWidth(window.innerWidth);
-        
-            const handleResize = () => {
-                setWindowWidth(window.innerWidth)
-            };
-    
+            const handleResize = () => setWindowWidth(window.innerWidth);
             window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
         }
-    }, windowWidth);
+    }, []);
 
     const tableRow = (provided, item) => {
         return (
@@ -337,7 +334,7 @@ function Catalog(props) {
                                     </Fab>
                                 </Tooltip>)
                             else return (
-                                <div></div>)
+                                <div key={index}></div>)
                         })}
                     </TableCell>
                 }
@@ -360,7 +357,7 @@ function Catalog(props) {
                     else if (property.isDateTime) {
                         return (
                             <NoSsr key={index}>
-                                <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
                             </NoSsr>
                         )
                     }
@@ -368,7 +365,7 @@ function Catalog(props) {
                         const isDisabled = item[property.title] === true ? true : false;
 
                         return (
-                            <TableCell><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
+                            <TableCell key={index}><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
                         )
                     }
                     else {
