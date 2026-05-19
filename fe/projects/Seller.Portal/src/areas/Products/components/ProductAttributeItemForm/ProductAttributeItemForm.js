@@ -78,7 +78,7 @@ function ProductAttributeItemForm(props) {
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>}
-                        <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId} />
+                        <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId ?? ""} />
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
