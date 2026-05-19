@@ -7,6 +7,7 @@
 }
 
 .Toastify__toast-container {
+  --toastify-toast-width: auto;
   width: fit-content;
   max-width: 100vw;
 }

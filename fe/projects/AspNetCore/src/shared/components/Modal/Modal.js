@@ -37,9 +37,12 @@ const Modal = (props) => {
         <Dialog
             open={isOpen}
             onClose={handleClose}
+            fullWidth
+            maxWidth="sm"
             PaperProps={{
                 className:"basket-modal"
-            }}>
+            }}
+        >
             <DialogTitle>{labels.title}</DialogTitle>
             <DialogContent>
                 {product &&

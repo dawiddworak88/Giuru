@@ -86,6 +86,8 @@ const ProductCardModal = (props) => {
         <Dialog
             open={props.isOpen}
             onClose={props.handleClose}
+            fullWidth
+            maxWidth="sm"
             PaperProps={{
                 className:"productCard-modal"
             }}
