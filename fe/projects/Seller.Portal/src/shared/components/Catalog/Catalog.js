@@ -219,7 +219,9 @@ function Catalog(props) {
             const domQuery = `[data-rbd-drag-handle-draggable-id='${result.draggableId}']`;
             const draggedDOM = document.querySelector(domQuery);
 
-            setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+            if (draggedDOM) {
+                setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+            }
         }
         else {
             setDraggingItem({})
@@ -237,7 +239,7 @@ function Catalog(props) {
             return;
         }
 
-        const currentDraggableItemOrder = draggingItem.order - 1 - (page * props.defaultItemsPerPage);
+        const currentDraggableItemOrder = draggingItem.order - (page * props.defaultItemsPerPage);
 
         if (
             destination.droppableId === source.droppableId && 
@@ -247,16 +249,13 @@ function Catalog(props) {
             return;
         }
 
-        const newDraggableItemOrder = destination.index + 1 + (page * props.defaultItemsPerPage);
+        const newDraggableItemOrder = destination.index + (page * props.defaultItemsPerPage);
 
-        if(newDraggableItemOrder > 0) {
+        if(newDraggableItemOrder >= 0) {
             draggingItem.order = newDraggableItemOrder;
-
             const newCategoryArray = reorder(items, source.index, destination.index);
-
             handleChangeEntityOrder(draggableId, newDraggableItemOrder);
             setItems(newCategoryArray);
-    
             setDraggingItem({});
         }
     };
@@ -421,31 +420,23 @@ function Catalog(props) {
                                         onDragEnd={(result) => onDragEnd(result)}
                                         onDragStart={(result) => onDragStart(result)}
                                     >
-                                        <Droppable
-                                            droppableId="categories"
-                                            mode="virtual"
-                                            renderClone={(provided) => (
-                                                tableRow(provided, draggingItem)
-                                            )}
-                                        >
+                                        <Droppable droppableId="categories">
                                             {(providedDroppable) => (
                                                 <TableBody
                                                     ref={providedDroppable.innerRef}
                                                     {...providedDroppable.droppableProps}
                                                 >
                                                     {items.map((item, index) => (
-                                                        !isDragableDisable && draggingItem.id && placeholderProps.position == index ?
-                                                            <TableRow height={placeholderProps.height} /> :
-                                                            <Draggable
-                                                                key={item.id}
-                                                                draggableId={item.id}
-                                                                index={index}
-                                                                isDragDisabled={isDragableDisable}
-                                                            >
-                                                                {(providedDraggable) => (
-                                                                    tableRow(providedDraggable, item)
-                                                                )}
-                                                            </Draggable>
+                                                        <Draggable
+                                                            key={item.id}
+                                                            draggableId={item.id}
+                                                            index={index}
+                                                            isDragDisabled={isDragableDisable}
+                                                        >
+                                                            {(providedDraggable) => (
+                                                                tableRow(providedDraggable, item)
+                                                            )}
+                                                        </Draggable>
                                                     ))}
                                                 </TableBody>
                                             )}
