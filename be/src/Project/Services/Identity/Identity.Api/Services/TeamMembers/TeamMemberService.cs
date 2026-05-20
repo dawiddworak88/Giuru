@@ -136,23 +136,23 @@ namespace Identity.Api.Services.TeamMembers
 
         public async Task<PagedResults<IEnumerable<TeamMemberServiceModel>>> GetAsync(GetTeamMembersServiceModel model)
         {
-            var teamMembers = from u in _context.Accounts
-                              where u.OrganisationId == model.OrganisationId
-                              select new TeamMemberServiceModel
-                              {
-                                  Id = Guid.Parse(u.Id),
-                                  FirstName = u.FirstName,
-                                  LastName = u.LastName,
-                                  Email = u.Email,
-                                  IsDisabled = u.IsDisabled
-                              };
+            var accounts = _context.Accounts.Where(u => u.OrganisationId == model.OrganisationId);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                teamMembers = teamMembers.Where(x => x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm) || x.Id.ToString() == model.SearchTerm);
+                accounts = accounts.Where(u => u.FirstName.StartsWith(model.SearchTerm) || u.LastName.StartsWith(model.SearchTerm) || u.Id == model.SearchTerm);
             }
 
-            teamMembers = teamMembers.ApplySort(model.OrderBy);
+            accounts = accounts.ApplySort(model.OrderBy);
+
+            var teamMembers = accounts.Select(u => new TeamMemberServiceModel
+            {
+                Id = Guid.Parse(u.Id),
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                IsDisabled = u.IsDisabled
+            });
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
