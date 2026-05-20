@@ -419,9 +419,11 @@ function ClientForm(props) {
                                                 label={approval.name} />
                                         </NoSsr>
                                         {approval.isApproved && approval.approvalDate &&
-                                            <p>
-                                                {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
-                                            </p>
+                                            <NoSsr>
+                                                <p>
+                                                    {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
+                                                </p>
+                                            </NoSsr>
                                         }
                                     </div>
                                 );
