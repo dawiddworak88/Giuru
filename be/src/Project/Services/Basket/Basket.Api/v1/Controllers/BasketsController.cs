@@ -221,7 +221,7 @@ namespace Basket.Api.v1.Controllers
             {
                 BasketId = request.BasketId,
                 IsSeller = isSellerClaim is not null,
-                SellerId = request.SellerId,
+                SellerId = isSellerClaim is not null ? request.SellerId : null,
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
                 ClientEmail = request.ClientEmail,
