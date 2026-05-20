@@ -24,6 +24,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
@@ -31,12 +32,14 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
             IClientsRepository clientsRepository,
             IIdentityRepository identityRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
+            _clientLocalizer = clientLocalizer;
             _userApprovalsRepository = userApprovalsRepository;
             _clientsRepository = clientsRepository;
             _identityRepository = identityRepository;
@@ -54,7 +57,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             if (client is null)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ClientNotFound").Value });
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _clientLocalizer.GetString("ClientNotFound").Value });
             }
 
             var user = await _identityRepository.GetAsync(token, language, client.Email);
