@@ -161,9 +161,11 @@ const ClientsSalesAnalytics = (props) => {
                                 })}
                             </TableBody>
                         ) : (
-                            <TableRow>
-                                <TableCell colSpan={3} align="center">{props.noResultsLabel}</TableCell>
-                            </TableRow>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell colSpan={3} align="center">{props.noResultsLabel}</TableCell>
+                                </TableRow>
+                            </TableBody>
                         )}
                     </Table>
                 </TableContainer>
