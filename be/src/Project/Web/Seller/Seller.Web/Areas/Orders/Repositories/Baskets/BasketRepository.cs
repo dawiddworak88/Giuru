@@ -123,7 +123,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             var requestModel = new CheckoutBasketRequestModel
             {
                 ClientId = clientId,
-                SellerId = sellerId,
                 ClientName = clientName,
                 ClientEmail = clientEmail,
                 BasketId = basketId,
