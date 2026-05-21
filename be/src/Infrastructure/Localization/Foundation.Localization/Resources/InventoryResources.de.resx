@@ -255,4 +255,7 @@
   <data name="InventoryOutletQuantityConflict" xml:space="preserve">
     <value>Es wurde versucht, eine Bestellung mit einer größeren Menge als der verfügbaren aufzugeben.</value>
   </data>
+  <data name="InventoryOutletNotFound" xml:space="preserve">
+    <value>Produkt wurde im Lager nicht gefunden.</value>
+  </data>
 </root>
