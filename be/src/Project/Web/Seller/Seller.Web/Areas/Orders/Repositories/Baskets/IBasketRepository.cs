@@ -36,6 +36,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingPhoneNumber,
             Guid? shippingCountryId,
             string moreInfo,
-            bool hasApprovalToSendEmail);
+            bool hasApprovalToSendEmail,
+            Guid? sellerId);
     }
 }

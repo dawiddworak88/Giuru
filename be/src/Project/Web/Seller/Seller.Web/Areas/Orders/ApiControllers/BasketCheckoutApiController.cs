@@ -24,6 +24,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
@@ -31,12 +32,14 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
             IClientsRepository clientsRepository,
             IIdentityRepository identityRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
+            _clientLocalizer = clientLocalizer;
             _userApprovalsRepository = userApprovalsRepository;
             _clientsRepository = clientsRepository;
             _identityRepository = identityRepository;
@@ -52,14 +55,16 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var client = await _clientsRepository.GetClientAsync(token, language, model.ClientId);
 
-            if (client is not null)
+            if (client is null)
             {
-                var user = await _identityRepository.GetAsync(token, language, client.Email);
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _clientLocalizer.GetString("ClientNotFound").Value });
+            }
 
-                if (user is not null)
-                {
-                    userApprovals = await _userApprovalsRepository.GetAsync(token, language, Guid.Parse(user.Id));
-                }
+            var user = await _identityRepository.GetAsync(token, language, client.Email);
+
+            if (user is not null)
+            {
+                userApprovals = await _userApprovalsRepository.GetAsync(token, language, Guid.Parse(user.Id));
             }
 
             await _basketRepository.CheckoutBasketAsync(
@@ -90,7 +95,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingPhoneNumber,
                 model.ShippingCountryId,
                 model.MoreInfo,
-                userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId));
+                userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId),
+                client.OrganisationId);
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }

@@ -1,10 +1,8 @@
-﻿using Foundation.ApiExtensions.Models.Request;
 using System;
-using System.Collections.Generic;
 
-namespace Basket.Api.v1.RequestModels
+namespace Seller.Web.Areas.Orders.ApiRequestModels
 {
-    public class BasketCheckoutRequestModel : RequestModelBase
+    public class CheckoutBasketApiRequestModel
     {
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
@@ -31,10 +29,7 @@ namespace Basket.Api.v1.RequestModels
         public string ShippingStreet { get; set; }
         public string ShippingPhoneNumber { get; set; }
         public Guid? ShippingCountryId { get; set; }
-        public string Reason { get; set; }
         public string MoreInfo { get; set; }
-        public bool HasCustomOrder { get; set; }
         public bool HasApprovalToSendEmail { get; set; }
-        public IEnumerable<Guid> Attachments { get; set; }
     }
 }

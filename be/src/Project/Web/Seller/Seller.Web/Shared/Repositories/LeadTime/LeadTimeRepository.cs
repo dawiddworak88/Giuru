@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Seller.Web.Shared.ApiRequestModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Seller.Web.Shared.Repositories.LeadTime
 {
@@ -31,7 +32,13 @@ namespace Seller.Web.Shared.Repositories.LeadTime
 
         public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
         {
-            if (skus.Length == 0) return default;
+            if (string.IsNullOrEmpty(_options.Value.LeadTimeUrl))
+            {
+                _logger.LogWarning("LeadTimeUrl is missing. Skipping lead time retrieval.");
+                return Enumerable.Empty<LeadTimeItem>();
+            }
+
+            if (skus.Length == 0) return Enumerable.Empty<LeadTimeItem>();
 
             var requestModel = new GetLeadTimesRequestModel
             {
