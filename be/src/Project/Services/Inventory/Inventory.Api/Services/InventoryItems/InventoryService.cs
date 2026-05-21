@@ -502,34 +502,63 @@ namespace Inventory.Api.Services.InventoryItems
 
             var inventories = await _context.Inventory
                 .Where(x => x.ProductId == productId && x.IsActive)
-                .OrderByDescending(x => x.CreatedDate)
+                .OrderBy(x => x.CreatedDate)
+                .AsNoTracking()
                 .ToListAsync();
 
-            if (inventories.Any() is false) return;
+            if (inventories.Any() is false)
+            {
+                _logger.LogError($"UpdateInventoryQuantity: no active inventory rows found for ProductId {productId}");
+
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
+            }
 
             var totalAvailableQuantity = inventories.Sum(x => x.AvailableQuantity);
             if (bookedQuantity > totalAvailableQuantity)
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
-            var remainingToAllocate = bookedQuantity;
-            foreach (var item in inventories)
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                if (remainingToAllocate <= 0) break;
+                var remainingToAllocate = bookedQuantity;
 
-                var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
+                foreach (var item in inventories)
+                {
+                    if (remainingToAllocate <= 0) break;
 
-                var affected = await _context.Database.ExecuteSqlRawAsync(
-                    @"UPDATE Inventory 
-                      SET AvailableQuantity = AvailableQuantity - {0},
-                          LastModifiedDate = {1}
-                      WHERE Id = {2} 
-                        AND AvailableQuantity >= {0}",
-                    toDeduct, DateTime.UtcNow, item.Id);
+                    var liveQuantity = await _context.Inventory
+                        .Where(x => x.Id == item.Id && x.IsActive)
+                        .AsNoTracking()
+                        .Select(x => x.AvailableQuantity)
+                        .FirstOrDefaultAsync();
 
-                if (affected == 0)
+                    if (liveQuantity <= 0) continue;
+
+                    var toDeduct = Math.Min(liveQuantity, remainingToAllocate);
+
+                    var affected = await _context.Database.ExecuteSqlRawAsync(
+                        @"UPDATE Inventory 
+                          SET AvailableQuantity = AvailableQuantity - {0},
+                              LastModifiedDate = {1}
+                          WHERE Id = {2} 
+                            AND AvailableQuantity >= {0}",
+                        toDeduct, DateTime.UtcNow, item.Id);
+
+                    if (affected == 0) continue;
+
+                    remainingToAllocate -= toDeduct;
+                }
+
+                if (remainingToAllocate < 0)
                     throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
-                remainingToAllocate -= toDeduct;
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
 
