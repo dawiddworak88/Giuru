@@ -7,7 +7,8 @@ namespace Basket.Api.v1.RequestModels
     public class BasketCheckoutRequestModel : RequestModelBase
     {
         public Guid? BasketId { get; set; }
-        public Guid? ClientId { get; set; } 
+        public Guid? ClientId { get; set; }
+        public Guid? SellerId { get; set; }
         public string ClientName { get; set; }
         public string ClientEmail { get; set; }
         public Guid? BillingAddressId { get; set; }

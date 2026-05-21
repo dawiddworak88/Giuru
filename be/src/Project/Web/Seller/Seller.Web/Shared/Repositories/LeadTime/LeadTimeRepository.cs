@@ -1,15 +1,15 @@
-﻿using Seller.Web.Shared.Configurations;
-using Seller.Web.Shared.DomainModels.LeadTime;
-using Foundation.ApiExtensions.Communications;
+﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
 using Seller.Web.Shared.ApiRequestModels;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.DomainModels.LeadTime;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.Repositories.LeadTime
 {
@@ -31,6 +31,12 @@ namespace Seller.Web.Shared.Repositories.LeadTime
 
         public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
         {
+            if (string.IsNullOrEmpty(_options.Value.LeadTimeUrl))
+            {
+                _logger.LogWarning("LeadTimeUrl is missing. Skipping lead time retrieval.");
+                return Array.Empty<LeadTimeItem>();
+            }
+
             if (skus == null || skus.Length == 0)
             {
                 return Array.Empty<LeadTimeItem>();

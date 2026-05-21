@@ -157,7 +157,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                 var prices = Enumerable.Empty<Price>();
 
-                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                if (_options.Value.IsGrulaConfigured)
                 {
                     var priceProducts = productVariants.Data.Select(async x => new PriceProduct
                     {
@@ -369,7 +369,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             {
                 var prices = Enumerable.Empty<Price>();
 
-                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                if (_options.Value.IsGrulaConfigured)
                 {
                     var priceProducts = products.Data.Select(async x => new PriceProduct
                     {
@@ -475,7 +475,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             var product = await _productsRepository.GetProductAsync(sku, language, token);
 
-            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+            if (_options.Value.IsGrulaConfigured)
             {
                 var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, sku);
 

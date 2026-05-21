@@ -67,6 +67,9 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ClientName")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 

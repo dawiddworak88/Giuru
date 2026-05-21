@@ -36,8 +36,9 @@ namespace Ordering.Api.ServicesModels
         public string Reason { get; set; }
         public string ExternalReference { get; set; }
         public IEnumerable<OrderItemServiceModel> OrderItems { get; set; }
+        public IEnumerable<Guid> Attachments { get; set; }
+        public string CreatedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public IEnumerable<Guid> Attachments { get; set; }
     }
 }

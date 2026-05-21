@@ -34,7 +34,8 @@ namespace Seller.Web.Shared.Services.Prices
             PriceProduct product,
             PriceClient client)
         {
-            if (string.IsNullOrWhiteSpace(product.PrimarySku) ||
+            if (!_options.Value.IsGrulaConfigured ||
+                string.IsNullOrWhiteSpace(product.PrimarySku) ||
                 string.IsNullOrWhiteSpace(product.FabricsGroup) ||
                 !CanSeePrice(client?.Id))
             {
@@ -43,7 +44,7 @@ namespace Seller.Web.Shared.Services.Prices
 
             var priceQuery = new GetPriceByPriceDriversQuery
             {
-                EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
+                EnvironmentId = Guid.Parse(_options.Value.GrulaEnvironmentId),
                 PriceDrivers = CreatePriceDrivers(product, client),
                 CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
                 PricingDate = pricingDate
@@ -77,7 +78,7 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            if (!CanSeePrice(client?.Id))
+            if (!_options.Value.IsGrulaConfigured || !CanSeePrice(client?.Id))
             {
                 return Enumerable.Empty<Price>();
             }
@@ -114,7 +115,7 @@ namespace Seller.Web.Shared.Services.Prices
             {
                 var priceQuery = new GetPricesByPriceDriversQuery
                 {
-                    EnvironmentId = _options.Value.GrulaEnvironmentId.Value,
+                    EnvironmentId = Guid.Parse(_options.Value.GrulaEnvironmentId),
                     PriceRequests = batch.Select(b => b.Request).ToList(),
                 };
 

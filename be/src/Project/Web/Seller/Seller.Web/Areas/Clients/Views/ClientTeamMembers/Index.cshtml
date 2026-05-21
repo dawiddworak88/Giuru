@@ -1,0 +1,22 @@
+<div id="root" asp-prerender-module="ClientTeamMembersPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.teamMembersLocalizer.GetString("ClientTeamMembers"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.teamMembersLocalizer.GetString("ClientTeamMembers")))
+    {
+        <meta name="description" content="@this.teamMembersLocalizer.GetString("ClientTeamMembers")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/clientteammemberspage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/clientteammemberspage.js" asp-append-version="true"></script>
+}

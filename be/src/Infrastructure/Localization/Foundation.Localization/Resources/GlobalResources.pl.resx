@@ -828,9 +828,6 @@
   <data name="MinOrderQuantity" xml:space="preserve">
     <value>Minimalna ilość zamówienia to 1</value>
   </data>
-  <data name="Cards" xml:space="preserve">
-    <value>Karty</value>
-  </data>
   <data name="Download" xml:space="preserve">
     <value>Pobierz</value>
   </data>
@@ -839,5 +836,11 @@
   </data>
   <data name="AllForFilters" xml:space="preserve">
     <value>Wszystkie</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Karty</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Utworzone przez</value>
   </data>
 </root>

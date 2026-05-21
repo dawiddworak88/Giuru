@@ -37,7 +37,7 @@ namespace Basket.Api.Services
                 OrganisationId = checkoutBasketServiceModel.OrganisationId,
                 Username = checkoutBasketServiceModel.Username,
                 ClientId = checkoutBasketServiceModel.ClientId,
-                SellerId = checkoutBasketServiceModel.OrganisationId,
+                SellerId = checkoutBasketServiceModel.SellerId ?? checkoutBasketServiceModel.OrganisationId,
                 ClientName = checkoutBasketServiceModel.ClientName,
                 ClientEmail = checkoutBasketServiceModel.ClientEmail,
                 BillingAddressId = checkoutBasketServiceModel.BillingAddressId,
@@ -64,7 +64,8 @@ namespace Basket.Api.Services
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
                 HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
                 HasApprovalToSendEmail = checkoutBasketServiceModel.HasApprovalToSendEmail,
-                Attachments = checkoutBasketServiceModel.Attachments
+                Attachments = checkoutBasketServiceModel.Attachments,
+                CreatedBy = checkoutBasketServiceModel.CreatedBy
             };
 
             var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);

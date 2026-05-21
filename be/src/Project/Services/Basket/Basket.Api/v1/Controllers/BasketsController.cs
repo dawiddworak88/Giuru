@@ -222,6 +222,7 @@ namespace Basket.Api.v1.Controllers
             {
                 BasketId = request.BasketId,
                 IsSeller = isSellerClaim is not null,
+                SellerId = isSellerClaim is not null ? request.SellerId : null,
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
                 ClientEmail = request.ClientEmail,
@@ -251,7 +252,8 @@ namespace Basket.Api.v1.Controllers
                 Attachments = request.Attachments,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value
             };
 
             var validator = new CheckoutBasketServiceModelValidator();

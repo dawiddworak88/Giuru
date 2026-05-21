@@ -73,7 +73,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 {
                     var prices = Enumerable.Empty<Price>();
 
-                    if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                    if (_options.Value.IsGrulaConfigured)
                     {
                         prices = await _priceService.GetPrices(
                             _options.Value.GrulaAccessToken,

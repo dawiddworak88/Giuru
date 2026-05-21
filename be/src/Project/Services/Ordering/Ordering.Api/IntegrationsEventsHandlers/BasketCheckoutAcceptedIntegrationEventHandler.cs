@@ -82,7 +82,8 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     MoreInfo = x.MoreInfo,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 }),
-                Language = @event.Language
+                Language = @event.Language,
+                CreatedBy = @event.CreatedBy
             };
 
             var validator = new CheckoutBasketServiceModelValidator();

@@ -100,7 +100,8 @@ namespace Ordering.Api.Services
                 ShippingStreet = serviceModel.ShippingStreet,
                 ExternalReference = serviceModel.ExternalReference,
                 MoreInfo = serviceModel.MoreInfo,
-                IpAddress = serviceModel.IpAddress
+                IpAddress = serviceModel.IpAddress,
+                CreatedBy = serviceModel.CreatedBy
             };
 
             _context.Orders.Add(order.FillCommonProperties());
@@ -349,7 +350,8 @@ namespace Ordering.Api.Services
                 Reason = existingOrder.Reason,
                 OrderStateId = existingOrder.OrderStateId,
                 OrderStatusId = existingOrder.OrderStatusId,
-                OrderStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == existingOrder.OrderStatusId && y.Language == model.Language)?.Name ?? orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == existingOrder.OrderStatusId)?.Name
+                OrderStatusName = orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == existingOrder.OrderStatusId && y.Language == model.Language)?.Name ?? orderStatusTranslations.FirstOrDefault(y => y.OrderStatusId == existingOrder.OrderStatusId)?.Name,
+                CreatedBy = existingOrder.CreatedBy
             };
 
             var orderItemsList = new List<OrderItemServiceModel>();
@@ -1116,6 +1118,7 @@ namespace Ordering.Api.Services
                         orderStatusTranslations.FirstOrDefault(y => 
                             y.OrderStatusId == order.OrderStatusId)?.Name,
                     OrderItems = orderItemsModels,
+                    CreatedBy = order.CreatedBy,
                     LastModifiedDate = order.LastModifiedDate,
                     CreatedDate = order.CreatedDate
                 };
@@ -1183,7 +1186,7 @@ namespace Ordering.Api.Services
             }
         }
 
-        private bool CanSend(params string[] values)
+        private static bool CanSend(params string[] values)
         {
             return values.Any(string.IsNullOrWhiteSpace) is false;
         }

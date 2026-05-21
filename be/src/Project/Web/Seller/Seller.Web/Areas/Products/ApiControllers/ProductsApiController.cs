@@ -186,7 +186,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                 var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
 
-                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                if (_options.Value.IsGrulaConfigured)
                 {
                     var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
 
@@ -312,7 +312,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var product = await _productsRepository.GetProductAsync(sku, language, token);
 
-            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false && clientId.HasValue)
+            if (_options.Value.IsGrulaConfigured && clientId.HasValue)
             {
                 var outletItem = await _outletRepository.GetOutletItemBySkuAsync(token, language, sku);
 

@@ -67,6 +67,7 @@ namespace Identity.Api.Services.TeamMembers
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.OrganisationId = organisation.Id;
+                user.IsDisabled = model.IsDisabled;
 
                 await _context.SaveChangesAsync();
 
@@ -92,7 +93,7 @@ namespace Identity.Api.Services.TeamMembers
                 PhoneNumberConfirmed = false,
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
-                IsDisabled = false
+                IsDisabled = model.IsDisabled
             };
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(organisation.Language);
@@ -140,7 +141,7 @@ namespace Identity.Api.Services.TeamMembers
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                accounts = accounts.Where(u => u.FirstName.StartsWith(model.SearchTerm) || u.LastName.StartsWith(model.SearchTerm) || u.Id == model.SearchTerm);
+                accounts = accounts.Where(u => u.FirstName.StartsWith(model.SearchTerm) || u.LastName.StartsWith(model.SearchTerm) || u.Email.StartsWith(model.SearchTerm) || u.Id == model.SearchTerm);
             }
 
             accounts = accounts.ApplySort(model.OrderBy);

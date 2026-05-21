@@ -109,7 +109,12 @@ namespace Buyer.Web.Shared.DependencyInjection
                 .AddTypedClient(httpClient =>
                 {
                     httpClient.Timeout = TimeSpan.FromSeconds(10);
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
+
+                    var token = configuration["GrulaAccessToken"];
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    }
 
                     return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
                 });

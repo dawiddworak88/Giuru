@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+﻿import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -54,6 +54,7 @@ function Catalog(props) {
         setPage(() => newPage);
 
         const searchParameters = {
+            ...props.searchParameters,
             searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage: props.defaultItemsPerPage
@@ -92,7 +93,7 @@ function Catalog(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const searchParameters = {
-
+            ...props.searchParameters,
             searchTerm,
             pageIndex: 1,
             itemsPerPage: props.defaultItemsPerPage
@@ -284,6 +285,21 @@ function Catalog(props) {
         }
     }, []);
 
+    const buildUrl = (editUrl, itemId, searchTerm) => {
+        const [basePath, qs] = (editUrl || "").split("?");
+        const url = basePath + "/" + itemId;
+
+        const params = new URLSearchParams(qs || "");
+
+        if (searchTerm) {
+            params.set("searchTerm", searchTerm);
+        }
+
+        const query = params.toString();
+
+        return query ? url + "?" + query : url;
+    }
+
     const tableRow = (provided, item) => {
         return (
             <TableRow
@@ -304,7 +320,7 @@ function Catalog(props) {
                             )
                             else if (actionItem.isEdit) return (
                                 <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
-                                    <Fab href={props.editUrl + "/" + item.id + (searchTerm ? `/?searchTerm=${searchTerm}` : "")} size="small" color="secondary">
+                                    <Fab href={buildUrl(props.editUrl, item.id, searchTerm)} size="small" color="secondary">
                                         <Edit />
                                     </Fab>
                                 </Tooltip>)
@@ -534,7 +550,8 @@ Catalog.propTypes = {
     confirmationDialogDeleteNameProperty: PropTypes.array,
     defaultItemsPerPage: PropTypes.number.isRequired,
     generateQRCodeLabel: PropTypes.string,
-    copyLinkLabel: PropTypes.string
+    copyLinkLabel: PropTypes.string,
+    searchParameters: PropTypes.object
 }
 
 export default Catalog;

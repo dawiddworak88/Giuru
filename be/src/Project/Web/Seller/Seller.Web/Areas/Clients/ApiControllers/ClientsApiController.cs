@@ -2,6 +2,7 @@
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.Claims;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,10 @@ using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Repositories.Organisations;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,30 +30,22 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     {
         private readonly IOrganisationsRepository _organisationsRepository;
         private readonly IClientsRepository _clientsRepository;
-        private readonly IIdentityRepository _identityRepository;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
-        private readonly IClientGroupsRepository _clientGroupsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
-        private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IClaimsCacheInvalidatorService _cacheInvalidatorService;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
             IClientsRepository clientsRepository,
             IStringLocalizer<ClientResources> clientLocalizer,
-            IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
-            IUserApprovalsRepository userApprovalsRepository,
             IClaimsCacheInvalidatorService cacheInvalidatorService)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
             _clientLocalizer = clientLocalizer;
-            _identityRepository = identityRepository;
-            _clientGroupsRepository = clientGroupsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
-            _userApprovalsRepository = userApprovalsRepository;
             _cacheInvalidatorService = cacheInvalidatorService;
         }
 
@@ -97,25 +92,6 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                       FieldDefinitionId = x.FieldDefinitionId,
                       FieldValue = x.FieldValue
                   }));
-            }
-
-            if (model.HasAccount)
-            {
-                await _identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage, model.IsDisabled);
-
-                if (model.ClientGroupIds.OrEmptyIfNull().Any())
-                {
-                    var clientGroups = await _clientGroupsRepository.GetClientGroupsAsync(token, language, model.ClientGroupIds);
-
-                    if (clientGroups is not null)
-                    {
-                        await _identityRepository.AssignRolesAsync(token, language, model.Email, clientGroups.Select(x => x.Name));
-                    }
-                }
-
-                var user = await _identityRepository.GetAsync(token, language, model.Email);
-
-                await _userApprovalsRepository.SaveAsync(token, language, model.ClientApprovalIds, Guid.Parse(user.Id));
             }
 
             await _cacheInvalidatorService.InvalidateAsync(model.Email);
