@@ -552,63 +552,93 @@ namespace Inventory.Api.Services.OutletItems
 
             var outlets = await _context.Outlet
                 .Where(x => x.ProductId == productId.Value && x.IsActive)
-                .OrderByDescending(x => x.CreatedDate)
+                .OrderBy(x => x.CreatedDate)
+                .AsNoTracking()
                 .ToListAsync();
 
-            if (outlets.Any() is false) return;
+            if (outlets.Any() is false)
+            {
+                _logger.LogError($"UpdateOutletQuantity: no active outlet rows found for ProductId {productId}");
+
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
+            }
 
             var totalAvailableQuantity = outlets.Sum(x => x.AvailableQuantity);
             if (bookedQuantity > totalAvailableQuantity)
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
-            var remainingToAllocate = bookedQuantity;
-            foreach (var item in outlets)
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                if (remainingToAllocate <= 0) break;
+                var remainingToAllocate = bookedQuantity;
+                foreach (var item in outlets)
+                {
+                    if (remainingToAllocate <= 0) break;
 
-                var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
+                    var liveQuantity = await _context.Outlet
+                        .Where(x => x.Id == item.Id && x.IsActive)
+                        .AsNoTracking()
+                        .Select(x => x.AvailableQuantity)
+                        .FirstOrDefaultAsync();
 
-                var affected = await _context.Database.ExecuteSqlRawAsync(
-                    @"UPDATE Outlet
-                      SET AvailableQuantity = AvailableQuantity - {0},
-                          LastModifiedDate = {1}
-                      WHERE Id = {2} 
-                        AND AvailableQuantity >= {0}",
-                    toDeduct, DateTime.UtcNow, item.Id);
+                    if (liveQuantity <= 0) continue;
 
-                if (affected == 0)
+                    var toDeduct = Math.Min(liveQuantity, remainingToAllocate);
+
+                    var affected = await _context.Database.ExecuteSqlRawAsync(
+                        @"UPDATE Outlet
+                          SET AvailableQuantity = AvailableQuantity - {0},
+                              LastModifiedDate = {1}
+                          WHERE Id = {2} 
+                            AND AvailableQuantity >= {0}",
+                        toDeduct, DateTime.UtcNow, item.Id);
+
+                    if (affected == 0) continue;
+
+                    remainingToAllocate -= toDeduct;
+                }
+
+                if (remainingToAllocate > 0)
                     throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
-                remainingToAllocate -= toDeduct;
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
         {
-            var outletIds = _context.Outlet
+            return _context.Outlet
                 .Where(x => model.Ids.Contains(x.ProductId) && x.Product.IsActive && x.IsActive)
-                .Select(x => x.Id)
-                .ToList();
-
-            var outletItems = _context.Outlet
-                .Include(x => x.Translations)
-                .Include(x => x.Product)
-                .AsSingleQuery()
-                .Where(x => outletIds.Contains(x.Id))
-                .AsEnumerable()
                 .Select(x => new OutletSumServiceModel
                 {
+                    OutletId = x.Id,
                     ProductId = x.ProductId,
                     ProductName = x.Product.Name,
                     ProductEan = x.Product.Ean,
                     ProductSku = x.Product.Sku,
-                    Title = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Title ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Title,
-                    Description = x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id && t.Language == model.Language)?.Description ?? x.Translations.FirstOrDefault(t => t.OutletItemId == x.Id)?.Description,
+                    Title = x.Translations
+                        .Where(t => t.Language == model.Language)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                        ?? x.Translations
+                            .Select(t => t.Title)
+                            .FirstOrDefault(),
+                    Description = x.Translations
+                        .Where(t => t.Language == model.Language)
+                        .Select(t => t.Description)
+                        .FirstOrDefault()
+                        ?? x.Translations
+                            .Select(t => t.Description)
+                            .FirstOrDefault(),
                     Quantity = x.Quantity,
                     AvailableQuantity = x.AvailableQuantity,
                 });
-
-            return outletItems;
         }
     }
 }
