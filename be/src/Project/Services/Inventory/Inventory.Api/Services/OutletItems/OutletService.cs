@@ -97,7 +97,7 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel model)
         {
             var outletProduct = await _context.Products.FirstOrDefaultAsync(x => x.Id == model.ProductId && x.IsActive);
-            
+
             if (outletProduct is null)
             {
                 outletProduct = new Product
@@ -308,7 +308,7 @@ namespace Inventory.Api.Services.OutletItems
                         AvailableQuantity = x.AvailableQuantity,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate
-                    });;
+                    });
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -411,7 +411,7 @@ namespace Inventory.Api.Services.OutletItems
                     AvailableQuantity = outletItems.Sum(x => x.AvailableQuantity),
                     Quantity = outletItems.Sum(x => x.Quantity),
                     ProductEan = outletItems.FirstOrDefault().ProductEan,
-                    Title= outletItems.FirstOrDefault().Title,
+                    Title = outletItems.FirstOrDefault().Title,
                     Description = outletItems.FirstOrDefault().Description,
                     Details = outletItems.Select(item => new OutletServiceModel
                     {
@@ -518,7 +518,7 @@ namespace Inventory.Api.Services.OutletItems
                     .GroupBy(x => x.ProductId)
                     .Where(x => x.Sum(y => y.AvailableQuantity) > 0)
                     .Select(y => new OutletSumServiceModel
-                    { 
+                    {
                         ProductId = y.FirstOrDefault().ProductId,
                         ProductName = y.FirstOrDefault().Product.Name,
                         ProductSku = y.FirstOrDefault().Product.Sku,
@@ -549,43 +549,96 @@ namespace Inventory.Api.Services.OutletItems
         public async Task UpdateOutletQuantity(Guid? productId, double bookedQuantity)
         {
             if (productId is null || bookedQuantity <= 0) return;
-            
-            var outlet = await _context.Outlet.FirstOrDefaultAsync(x => x.ProductId == productId.Value && x.IsActive);
 
-            if (outlet is not null)
+            var outlets = await _context.Outlet
+                .Where(x => x.ProductId == productId.Value && x.IsActive)
+                .OrderBy(x => x.CreatedDate)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (outlets.Any() is false)
             {
-                var productQuantity = outlet.AvailableQuantity - bookedQuantity;
+                _logger.LogError($"UpdateOutletQuantity: no active outlet rows found for ProductId {productId}");
 
-                if (productQuantity < 0)
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
+            }
+
+            var totalAvailableQuantity = outlets.Sum(x => x.AvailableQuantity);
+            if (bookedQuantity > totalAvailableQuantity)
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var remainingToAllocate = bookedQuantity;
+                foreach (var item in outlets)
                 {
-                    productQuantity = 0;
+                    if (remainingToAllocate <= 0) break;
+
+                    var liveQuantity = await _context.Outlet
+                        .Where(x => x.Id == item.Id && x.IsActive)
+                        .AsNoTracking()
+                        .Select(x => x.AvailableQuantity)
+                        .FirstOrDefaultAsync();
+
+                    if (liveQuantity <= 0) continue;
+
+                    var toDeduct = Math.Min(liveQuantity, remainingToAllocate);
+
+                    var affected = await _context.Database.ExecuteSqlRawAsync(
+                        @"UPDATE Outlet
+                          SET AvailableQuantity = AvailableQuantity - {0},
+                              LastModifiedDate = {1}
+                          WHERE Id = {2} 
+                            AND AvailableQuantity >= {0}",
+                        toDeduct, DateTime.UtcNow, item.Id);
+
+                    if (affected == 0) continue;
+
+                    remainingToAllocate -= toDeduct;
                 }
 
-                outlet.AvailableQuantity = productQuantity;
-                outlet.LastModifiedDate = DateTime.UtcNow;
+                if (remainingToAllocate > 0)
+                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
-                await _context.SaveChangesAsync();
-            } 
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public IEnumerable<OutletSumServiceModel> GetOutletsByProductsIds(GetOutletsByProductsIdsServiceModel model)
         {
-            return from o in _context.Outlet
-                   join warehouse in _context.Warehouses on o.WarehouseId equals warehouse.Id
-                   join product in _context.Products on o.ProductId equals product.Id
-                   join ot in _context.OutletTranslations on o.Id equals ot.OutletItemId
-                   where model.Ids.Contains(o.ProductId) && product.IsActive && o.IsActive
-                   select new OutletSumServiceModel
-                   {
-                       ProductId = product.Id,
-                       ProductName = product.Name,
-                       ProductEan = product.Ean,
-                       ProductSku = product.Sku,
-                       Title = ot.Title,
-                       Description = ot.Description,
-                       Quantity = o.Quantity,
-                       AvailableQuantity = o.AvailableQuantity,
-                   };
+            return _context.Outlet
+                .Where(x => model.Ids.Contains(x.ProductId) && x.Product.IsActive && x.IsActive)
+                .Select(x => new OutletSumServiceModel
+                {
+                    OutletId = x.Id,
+                    ProductId = x.ProductId,
+                    ProductName = x.Product.Name,
+                    ProductEan = x.Product.Ean,
+                    ProductSku = x.Product.Sku,
+                    Title = x.Translations
+                        .Where(t => t.Language == model.Language)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                        ?? x.Translations
+                            .Select(t => t.Title)
+                            .FirstOrDefault(),
+                    Description = x.Translations
+                        .Where(t => t.Language == model.Language)
+                        .Select(t => t.Description)
+                        .FirstOrDefault()
+                        ?? x.Translations
+                            .Select(t => t.Description)
+                            .FirstOrDefault(),
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity,
+                });
         }
     }
 }
