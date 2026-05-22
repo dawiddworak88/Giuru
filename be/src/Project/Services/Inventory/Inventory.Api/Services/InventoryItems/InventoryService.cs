@@ -550,7 +550,7 @@ namespace Inventory.Api.Services.InventoryItems
                     remainingToAllocate -= toDeduct;
                 }
 
-                if (remainingToAllocate < 0)
+                if (remainingToAllocate > 0)
                     throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
 
                 await transaction.CommitAsync();
