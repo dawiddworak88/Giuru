@@ -602,7 +602,7 @@ namespace Inventory.Api.Services.InventoryItems
 
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 await transaction.RollbackAsync();
                 throw;
