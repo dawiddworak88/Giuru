@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;

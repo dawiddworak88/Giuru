@@ -22,8 +22,8 @@ const ProductDetailModal = (props) => {
             open={isOpen}
             onClose={handleClose}
             maxWidth='md'
-            PaperProps={{
-                className: "image-modal"            
+            slotProps={{
+                paper: { className: "image-modal" }
             }}
         >
             <div className="is-flex is-justify-content-end p-2">

@@ -1,4 +1,4 @@
-﻿using Foundation.Account.Definitions;
+using Foundation.Account.Definitions;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
 namespace Identity.Api.v1.Controllers
 {

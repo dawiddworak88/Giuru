@@ -1,4 +1,4 @@
-﻿using Basket.Api.v1.RequestModels;
+using Basket.Api.v1.RequestModels;
 using Basket.Api.Services;
 using Basket.Api.ServicesModelsValidators;
 using Foundation.Account.Definitions;
@@ -20,6 +20,7 @@ using Basket.Api.v1.ResponseModels;
 using IdentityModel;
 using Microsoft.Extensions.Options;
 using Basket.Api.Configurations;
+using Asp.Versioning;
 
 namespace Basket.Api.v1.Controllers
 {

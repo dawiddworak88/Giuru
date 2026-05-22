@@ -327,10 +327,10 @@ function NewOrderForm(props) {
                                 id="quantity" 
                                 name="quantity" 
                                 type="number" 
-                                inputProps={{ 
+                                slotProps={{ input: { 
                                     min: "1", 
                                     step: "1" 
-                                }} 
+                                }}}
                                 variant="standard"
                                 label={productFromOutlet ? `${props.quantityLabel} ${maxOutlet > 0 ? `(${props.maximalLabel} ${maxOutlet})` : ""}` : props.quantityLabel} 
                                 fullWidth={true} 
@@ -479,10 +479,10 @@ function NewOrderForm(props) {
                                     id="customOrder"
                                     name="customOrder"
                                     placeholder={props.customOrderLabel}
-                                    InputProps={{
+                                    slotProps={{ input: {
                                         className: "p-2",
                                         disableUnderline: true
-                                    }}
+                                    }}}
                                     rows={OrderFormConstants.minRowsForCustomOrder()}
                                     fullWidth={true}
                                     multiline={true}

@@ -1,4 +1,4 @@
-﻿using Catalog.BackgroundTasks.IntegrationEvents;
+using Catalog.BackgroundTasks.IntegrationEvents;
 using Catalog.BackgroundTasks.IntegrationEventsHandlers;
 using Catalog.BackgroundTasks.Services.CategorySchemas;
 using Catalog.BackgroundTasks.Services.Products;
@@ -29,7 +29,9 @@ namespace Catalog.BackgroundTasks.DependencyInjection
         {
             services.AddScoped<CatalogContext>();
 
-            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<CatalogContext>(options => 
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite())
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
 
         public static void RegisterSearchDependencies(this IServiceCollection services, IConfiguration configuration)

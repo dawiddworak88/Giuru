@@ -1,4 +1,4 @@
-﻿using Foundation.GenericRepository.Entities;
+using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -31,6 +31,6 @@ namespace Analytics.Api.Infrastructure.Entities.SalesAnalytics
         public decimal? Price { get; set; }
 
         [Column(TypeName = "nvarchar(3)")]
-        public string? Currency { get; set; }
+        public string Currency { get; set; }
     }
 }

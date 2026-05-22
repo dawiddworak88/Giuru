@@ -24,14 +24,14 @@ jobs:
           echo "The name of your branch is ${{ github.event.workflow_run.head_branch || github.ref }} and your repository is ${{ github.repository }}."
 
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.workflow_run.head_branch || github.ref }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v6
         with:
-          node-version: "20.14"
+          node-version: "24"
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
@@ -42,17 +42,17 @@ jobs:
         working-directory: ./fe/projects/AspNetCore
 
       - name: Set up Buildx
-        uses: docker/setup-buildx-action@v3.0.0
+        uses: docker/setup-buildx-action@v4
 
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v4
         with:
           registry: ${{ secrets.ACR_TEST_NAME }}
           username: ${{ secrets.ACR_TEST_LOGIN }}
           password: ${{ secrets.ACR_TEST_PASSWORD }}
 
       - name: Build and push Buyer-Web-React-SSR Docker Image
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v7
         with:
           file: ./fe/projects/AspNetCore/Dockerfile-ssr
           context: ./fe/projects/AspNetCore
@@ -60,7 +60,7 @@ jobs:
           tags: ${{ secrets.ACR_TEST_NAME }}/buyer-web-react-ssr:latest, ${{ secrets.ACR_TEST_NAME }}/buyer-web-react-ssr:${{ github.run_number }}
 
       - name: Build and push Buyer-Web Docker Image
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v7
         with:
           file: ./be/src/Project/Web/Buyer/Buyer.Web/Dockerfile
           context: ./be/src
@@ -68,7 +68,7 @@ jobs:
           tags: ${{ secrets.ACR_TEST_NAME }}/buyer-web:latest, ${{ secrets.ACR_TEST_NAME }}/buyer-web:${{ github.run_number }}
 
       - name: Checkout GitOps Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           repository: "Team-Eltap/giuru-gitops"
           token: ${{ secrets.GIT_REPOSITORY_TOKEN }}

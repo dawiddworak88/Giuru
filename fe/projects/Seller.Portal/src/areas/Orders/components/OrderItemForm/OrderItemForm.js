@@ -83,9 +83,9 @@ const OrderItemForm = (props) => {
                                 fullWidth={true}
                                 value={props.productSku}
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: true,
-                                }}
+                                }}}
                             />
                         </div>
                         <div className="field">
@@ -96,9 +96,9 @@ const OrderItemForm = (props) => {
                                 fullWidth={true}
                                 value={props.productName} 
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: true,
-                                }}
+                                }}}
                             />
                         </div>
                         <div className="field">
@@ -110,9 +110,9 @@ const OrderItemForm = (props) => {
                                 value={props.quantity} 
                                 type="number"
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: true,
-                                }}
+                                }}}
                             />
                         </div>
                         <div className="field">
@@ -124,9 +124,9 @@ const OrderItemForm = (props) => {
                                 value={props.stockQuantity} 
                                 type="number"
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: true,
-                                }}
+                                }}}
                             />
                         </div>
                         <div className="field">
@@ -138,9 +138,9 @@ const OrderItemForm = (props) => {
                                 value={props.outletQuantity}
                                 type="number"
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: true,
-                                }}
+                                }}}
                             />
                         </div>
                         <div className="field">
@@ -151,9 +151,9 @@ const OrderItemForm = (props) => {
                                 fullWidth={true}
                                 value={props.externalReference}
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: true,
-                                }}
+                                }}}
                             />
                         </div>
                         <div className="field">
@@ -164,9 +164,9 @@ const OrderItemForm = (props) => {
                                 fullWidth={true}
                                 value={props.moreInfo}
                                 variant="standard"
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: true,
-                                }}
+                                }}}
                             />
                         </div>
                         {props.unitPrice &&
@@ -178,9 +178,9 @@ const OrderItemForm = (props) => {
                                     fullWidth={true}
                                     value={props.unitPrice}
                                     variant="standard"
-                                    InputProps={{
+                                    slotProps={{ input: {
                                         readOnly: true,
-                                    }}
+                                    }}}
                                 />
                             </div>
                         }
@@ -193,9 +193,9 @@ const OrderItemForm = (props) => {
                                     fullWidth={true}
                                     value={props.price}
                                     variant="standard"
-                                    InputProps={{
+                                    slotProps={{ input: {
                                         readOnly: true,
-                                    }}
+                                    }}}
                                 />
                             </div>
                         }

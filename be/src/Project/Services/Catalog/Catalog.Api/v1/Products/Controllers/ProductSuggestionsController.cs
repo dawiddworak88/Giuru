@@ -1,4 +1,4 @@
-﻿using Catalog.Api.ServicesModels.Products;
+using Catalog.Api.ServicesModels.Products;
 using Catalog.Api.Services.Products;
 using Catalog.Api.Validators.Products;
 using Foundation.ApiExtensions.Controllers;
@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Asp.Versioning;
 
 namespace Catalog.Api.v1.Products.Controllers
 {

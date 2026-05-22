@@ -11,7 +11,7 @@ using Foundation.EventBusRabbitMq;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.Reflection;
 using System.IO;
 using Basket.Api.DependencyInjection;

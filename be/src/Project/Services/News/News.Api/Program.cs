@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Sinks.Logz.Io;
 using System;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.Reflection;
 using System.IO;
 using Microsoft.Extensions.Options;

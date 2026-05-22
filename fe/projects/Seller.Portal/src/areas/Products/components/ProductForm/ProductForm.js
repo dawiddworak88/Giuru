@@ -291,7 +291,7 @@ function ProductForm(props) {
                         </div>
                         <div className="field">
                             <TextField type="number" id="fulfillmentTime" name="fulfillmentTime" label={props.fulfillmentTimeLabel} fullWidth={true} variant="standard"
-                            value={fulfillmentTime} onChange={handleOnChange} />
+                            value={fulfillmentTime ?? ""} onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <InputLabel id="description-label">{props.descriptionLabel}</InputLabel>

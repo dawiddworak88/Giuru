@@ -20,7 +20,7 @@ import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import { TextSnippet } from "@mui/icons-material";
 import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -220,7 +220,9 @@ function Catalog(props) {
             const domQuery = `[data-rbd-drag-handle-draggable-id='${result.draggableId}']`;
             const draggedDOM = document.querySelector(domQuery);
 
-            setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+            if (draggedDOM) {
+                setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+            }
         }
         else {
             setDraggingItem({})
@@ -238,7 +240,7 @@ function Catalog(props) {
             return;
         }
 
-        const currentDraggableItemOrder = draggingItem.order - 1 - (page * props.defaultItemsPerPage);
+        const currentDraggableItemOrder = draggingItem.order - (page * props.defaultItemsPerPage);
 
         if (
             destination.droppableId === source.droppableId && 
@@ -248,16 +250,13 @@ function Catalog(props) {
             return;
         }
 
-        const newDraggableItemOrder = destination.index + 1 + (page * props.defaultItemsPerPage);
+        const newDraggableItemOrder = destination.index + (page * props.defaultItemsPerPage);
 
-        if(newDraggableItemOrder > 0) {
+        if(newDraggableItemOrder >= 0) {
             draggingItem.order = newDraggableItemOrder;
-
             const newCategoryArray = reorder(items, source.index, destination.index);
-
             handleChangeEntityOrder(draggableId, newDraggableItemOrder);
             setItems(newCategoryArray);
-    
             setDraggingItem({});
         }
     };
@@ -278,15 +277,12 @@ function Catalog(props) {
     };
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
-
-        setWindowWidth(window.innerWidth);
-
-        const handleResize = () => setWindowWidth(window.innerWidth);
-
-        window.addEventListener("resize", handleResize);
-
-        return () => window.removeEventListener("resize", handleResize);
+        if (typeof window !== 'undefined') {
+            setWindowWidth(window.innerWidth);
+            const handleResize = () => setWindowWidth(window.innerWidth);
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
     }, []);
 
     const buildUrl = (editUrl, itemId, searchTerm) => {
@@ -353,7 +349,7 @@ function Catalog(props) {
                                     </Fab>
                                 </Tooltip>)
                             else return (
-                                <div></div>)
+                                <div key={index}></div>)
                         })}
                     </TableCell>
                 }
@@ -376,7 +372,7 @@ function Catalog(props) {
                     else if (property.isDateTime) {
                         return (
                             <NoSsr key={index}>
-                                <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
                             </NoSsr>
                         )
                     }
@@ -384,7 +380,7 @@ function Catalog(props) {
                         const isDisabled = item[property.title] === true ? true : false;
 
                         return (
-                            <TableCell><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
+                            <TableCell key={index}><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
                         )
                     }
                     else {
@@ -440,31 +436,23 @@ function Catalog(props) {
                                         onDragEnd={(result) => onDragEnd(result)}
                                         onDragStart={(result) => onDragStart(result)}
                                     >
-                                        <Droppable
-                                            droppableId="categories"
-                                            mode="virtual"
-                                            renderClone={(provided) => (
-                                                tableRow(provided, draggingItem)
-                                            )}
-                                        >
+                                        <Droppable droppableId="categories">
                                             {(providedDroppable) => (
                                                 <TableBody
                                                     ref={providedDroppable.innerRef}
                                                     {...providedDroppable.droppableProps}
                                                 >
                                                     {items.map((item, index) => (
-                                                        !isDragableDisable && draggingItem.id && placeholderProps.position == index ?
-                                                            <TableRow height={placeholderProps.height} /> :
-                                                            <Draggable
-                                                                key={item.id}
-                                                                draggableId={item.id}
-                                                                index={index}
-                                                                isDragDisabled={isDragableDisable}
-                                                            >
-                                                                {(providedDraggable) => (
-                                                                    tableRow(providedDraggable, item)
-                                                                )}
-                                                            </Draggable>
+                                                        <Draggable
+                                                            key={item.id}
+                                                            draggableId={item.id}
+                                                            index={index}
+                                                            isDragDisabled={isDragableDisable}
+                                                        >
+                                                            {(providedDraggable) => (
+                                                                tableRow(providedDraggable, item)
+                                                            )}
+                                                        </Draggable>
                                                     ))}
                                                 </TableBody>
                                             )}
