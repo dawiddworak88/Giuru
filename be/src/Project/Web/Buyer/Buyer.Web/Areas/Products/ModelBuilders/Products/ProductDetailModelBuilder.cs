@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -33,7 +33,10 @@ using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Services.ProductColors;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.ViewModels.Toasts;
+using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -57,6 +60,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IOptions<AppSettings> _options;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -76,7 +82,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IPriceService priceService,
             IOptions<AppSettings> options,
             IProductsService productsService,
-            IProductColorsService productColorsService)
+            IProductColorsService productColorsService,
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -96,6 +105,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _options = options;
             _productsService = productsService;
             _productColorsService = productColorsService;
+            _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -160,7 +172,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 }
 
                 if (product.PrimaryProductId.HasValue &&
-                    string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                    _options.Value.IsGrulaConfigured)
                 {
                     var price = await _priceService.GetPrice(
                         _options.Value.GrulaAccessToken,
@@ -181,6 +193,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                             PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                             SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                            BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                             ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
                         },
                         new PriceClient
@@ -202,6 +215,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             Currency = price.CurrencyCode,
                         };
                     }
+
+                    var leadTime = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: componentModel.Token,
+                        skus: [product.Sku]);
+
+                    var leadTimeDays = leadTime?.FirstOrDefault()?.LeadTimeDays ?? 0;
+                   
+                    viewModel.ExpectedLeadTime = leadTimeDays > 0
+                        ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                        : null;
                 }
 
                 var imagesMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
@@ -268,6 +291,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = _inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
+                viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
+
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
                     var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
@@ -289,7 +314,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         var prices = Enumerable.Empty<Price>();
 
-                        if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                        if (_options.Value.IsGrulaConfigured)
                         {
                             var priceProducts = productVariants.Data.Select(async x => new PriceProduct
                             {
@@ -307,6 +332,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                                 PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                                 SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                                BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                                 ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
                             });
 
@@ -325,6 +351,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                    DeliveryZipCode = componentModel.DeliveryZipCode
                                });
                         }
+
+                        var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                           accessToken: componentModel.Token,
+                           skus: [.. productVariants.Data.Select(x => x.Sku)]);
 
                         for (var i = 0; i < productVariants.Data.Count(); i++) 
                         {
@@ -371,6 +401,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 };
                             }
 
+                            var variantLeadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                            
+                            carouselItem.ExpectedLeadTime = variantLeadTimeDays > 0
+                                ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(variantLeadTimeDays)
+                                : null;
+                            
                             carouselItems.Add(carouselItem);
                         }
 
@@ -385,6 +421,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         };
                     }
                 }
+
             }
 
             return viewModel;

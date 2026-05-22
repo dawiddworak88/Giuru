@@ -47,7 +47,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                     MoreInfo = x.MoreInfo,
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
-                    Currency = x.Currency
+                    Currency = x.Currency,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
 
@@ -79,7 +80,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                         MoreInfo = x.MoreInfo,
                         UnitPrice = x.UnitPrice,
                         Price = x.Price,
-                        Currency = x.Currency
+                        Currency = x.Currency,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     })
                 };
             }
@@ -115,11 +117,13 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingPhoneNumber,
             Guid? shippingCountryId,
             string moreInfo,
-            bool hasApprovalToSendEmail)
+            bool hasApprovalToSendEmail,
+            Guid? sellerId)
         {
-            var requestModel = new CheckoutBasketRequestModel
+            var requestModel = new CheckoutBasketApiRequestModel
             {
                 ClientId = clientId,
+                SellerId = sellerId,
                 ClientName = clientName,
                 ClientEmail = clientEmail,
                 BasketId = basketId,
@@ -147,7 +151,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 HasApprovalToSendEmail = hasApprovalToSendEmail
             };
 
-            var apiRequest = new ApiRequest<CheckoutBasketRequestModel>
+            var apiRequest = new ApiRequest<CheckoutBasketApiRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -155,7 +159,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsCheckoutApiEndpoint}"
             };
 
-            var response = await _apiClientService.PostAsync<ApiRequest<CheckoutBasketRequestModel>, CheckoutBasketRequestModel, BaseResponseModel>(apiRequest);
+            var response = await _apiClientService.PostAsync<ApiRequest<CheckoutBasketApiRequestModel>, CheckoutBasketApiRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

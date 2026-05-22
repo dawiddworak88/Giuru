@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Analytics.Api.IntegrationEventsModels
 {
@@ -9,6 +9,6 @@ namespace Analytics.Api.IntegrationEventsModels
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
         public decimal? Price { get; set; }
-        public string? Currency { get; set; }
+        public string Currency { get; set; }
     }
 }

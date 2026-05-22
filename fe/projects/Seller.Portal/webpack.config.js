@@ -1,4 +1,4 @@
-const path = require("path");
+﻿const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
@@ -16,8 +16,8 @@ module.exports = {
         dashboardpage: ["./src/areas/Dashboard/pages/DashboardPage/index.js", "./src/areas/Dashboard/pages/DashboardPage/DashboardPage.scss"],
         countrypage: ["./src/areas/Global/pages/CountryPage/index.js", "./src/areas/Global/pages/CountryPage/CountryPage.scss"],
         countriespage: ["./src/areas/Global/pages/CountriesPage/index.js", "./src/areas/Global/pages/CountriesPage/CountriesPage.scss"],
-        teammember: ["./src/areas/TeamMembers/pages/TeamMember/index.js", "./src/areas/TeamMembers/pages/TeamMember/TeamMember.scss"],
-        teammembers: ["./src/areas/TeamMembers/pages/TeamMembers/index.js", "./src/areas/TeamMembers/pages/TeamMembers/TeamMembers.scss"],
+        teammemberpage: ["./src/areas/TeamMembers/pages/TeamMember/index.js", "./src/areas/TeamMembers/pages/TeamMember/TeamMember.scss"],
+        teammemberspage: ["./src/areas/TeamMembers/pages/TeamMembers/index.js", "./src/areas/TeamMembers/pages/TeamMembers/TeamMembers.scss"],
         downloadcenteritempage: ["./src/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
         downloadcenterpage: ["./src/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
         downloadcentercategorypage: ["./src/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],
@@ -61,6 +61,9 @@ module.exports = {
         currencypage: ["./src/areas/Global/pages/CurrencyPage/index.js", "./src/areas/Global/pages/CurrencyPage/CurrencyPage.scss"],
         clientapprovalspage: ["./src/areas/Clients/pages/ClientApprovalsPage/index.js", "./src/areas/Clients/pages/ClientApprovalsPage/ClientApprovalsPage.scss"],
         clientapprovalpage: ["./src/areas/Clients/pages/ClientApprovalPage/index.js", "./src/areas/Clients/pages/ClientApprovalPage/ClientApprovalPage.scss"],
+        clientteammemberspage: ["./src/areas/Clients/pages/ClientTeamMembersPage/index.js", "./src/areas/Clients/pages/ClientTeamMembersPage/ClientTeamMembersPage.scss"],
+        clientteammemberpage: ["./src/areas/Clients/pages/ClientTeamMemberPage/index.js", "./src/areas/Clients/pages/ClientTeamMemberPage/ClientTeamMemberPage.scss"],
+        clientteammemberdetailpage: ["./src/areas/Clients/pages/ClientTeamMemberDetailPage/index.js", "./src/areas/Clients/pages/ClientTeamMemberDetailPage/ClientTeamMemberDetailPage.scss"],
     },
     output: {
         publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),

@@ -1,4 +1,4 @@
-FROM node:20.14-alpine
+FROM node:24-alpine
 
 RUN apk update && apk add python3 make g++
 
@@ -10,7 +10,7 @@ COPY package*.json ./
 
 USER root
 
-RUN npm ci --only=production --legacy-peer-deps
+RUN npm ci --omit=dev --legacy-peer-deps
 
 USER node
 

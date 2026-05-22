@@ -26,7 +26,7 @@ function ProductPage(props) {
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
           <Breadcrumbs {...props.breadcrumbs}></Breadcrumbs>
-          <ProductDetail {...props.productDetail}></ProductDetail>
+          <ProductDetail locale={props.locale} {...props.productDetail}></ProductDetail>
           <Footer {...props.footer}></Footer>
         </div>
       </Store>

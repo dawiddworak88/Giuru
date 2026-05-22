@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.Exceptions;
+﻿using Foundation.EventBus.Abstractions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
@@ -6,6 +7,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
+using Inventory.Api.IntegrationEvents;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -23,15 +25,18 @@ namespace Inventory.Api.Services.InventoryItems
         private readonly InventoryContext _context;
         private readonly IStringLocalizer _inventoryLocalizer;
         private readonly ILogger<InventoryService> _logger;
+        private readonly IEventBus _eventBus;
 
         public InventoryService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
-            ILogger<InventoryService> logger)
+            ILogger<InventoryService> logger,
+            IEventBus eventBus)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
             _logger = logger;
+            _eventBus = eventBus;
         }
 
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
@@ -71,6 +76,13 @@ namespace Inventory.Api.Services.InventoryItems
             inventory.LastModifiedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            var upsertedInventoryMessage = new UpsertedInventoryAvailabilityIntegrationEvent
+            {
+                ProductSkus = [product.Sku]
+            };
+
+            _eventBus.Publish(upsertedInventoryMessage);
 
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
@@ -114,6 +126,13 @@ namespace Inventory.Api.Services.InventoryItems
 
             await _context.SaveChangesAsync();
 
+            var upsertedInventoryMessage = new UpsertedInventoryAvailabilityIntegrationEvent
+            {
+                ProductSkus = [product.Sku]
+            };
+
+            _eventBus.Publish(upsertedInventoryMessage);
+
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
@@ -137,6 +156,8 @@ namespace Inventory.Api.Services.InventoryItems
                 })
                 .ToList();
 
+            var changedProductSkus = new List<string>();
+
             foreach (var item in groupedItems)
             {
                 var inventoryProduct = await _context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
@@ -145,8 +166,17 @@ namespace Inventory.Api.Services.InventoryItems
                 {
                     var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == inventoryProduct.ProductId && x.IsActive);
 
+                    var hasChanged = inventoryProduct.Quantity != item.Quantity
+                        || inventoryProduct.AvailableQuantity != item.AvailableQuantity
+                        || inventoryProduct.ExpectedDelivery != item.ExpectedDelivery;
+
                     if (product is not null)
                     {
+                        hasChanged = hasChanged
+                            || product.Ean != item.ProductEan
+                            || product.Sku != item.ProductSku
+                            || product.Name != item.ProductName;
+
                         product.Ean = item.ProductEan;
                         product.Sku = item.ProductSku;
                         product.Name = item.ProductName;
@@ -157,6 +187,11 @@ namespace Inventory.Api.Services.InventoryItems
                     inventoryProduct.AvailableQuantity = item.AvailableQuantity;
                     inventoryProduct.ExpectedDelivery = item.ExpectedDelivery;
                     inventoryProduct.LastModifiedDate = DateTime.UtcNow;
+
+                    if (hasChanged)
+                    {
+                        changedProductSkus.Add(item.ProductSku);
+                    }
                 }
                 else
                 {
@@ -190,10 +225,22 @@ namespace Inventory.Api.Services.InventoryItems
                         };
 
                         _context.Inventory.Add(inventoryItem.FillCommonProperties());
+
+                        changedProductSkus.Add(item.ProductSku);
                     }
                 }
 
                 await _context.SaveChangesAsync();
+            }
+
+            if (changedProductSkus.Count > 0)
+            {
+                var upsertedInventoryMessage = new UpsertedInventoryAvailabilityIntegrationEvent
+                {
+                    ProductSkus = [.. changedProductSkus]
+                };
+
+                _eventBus.Publish(upsertedInventoryMessage);
             }
         }
 

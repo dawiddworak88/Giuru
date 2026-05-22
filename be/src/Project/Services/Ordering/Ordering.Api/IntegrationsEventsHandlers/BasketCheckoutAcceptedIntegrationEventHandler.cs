@@ -79,9 +79,11 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 }),
-                Language = @event.Language
+                Language = @event.Language,
+                CreatedBy = @event.CreatedBy
             };
 
             var validator = new CheckoutBasketServiceModelValidator();

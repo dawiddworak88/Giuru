@@ -84,7 +84,7 @@ function OrderForm(props) {
     const onSuggestionSelected = (event, { suggestion }) => {
         let items = orderItems.filter(item => item.productId === suggestion.id);
 
-        if (items.length > 0) {
+        if (items && items.length > 0) {
             suggestion.stockQuantity -= items.reduce((sum, item) => sum + item.stockQuantity, 0);
             suggestion.outletQuantity -= items.reduce((sum, item) => sum + item.outletQuantity, 0); 
         }
@@ -111,7 +111,8 @@ function OrderForm(props) {
             price: product.price ? parseFloat(product.price * quantity).toFixed(2) : null,
             currency: product.currency,
             externalReference,
-            moreInfo
+            moreInfo,
+            expectedLeadTime: product.expectedLeadTime || null
         };
 
         if (productFromOutlet) {
@@ -634,6 +635,7 @@ function OrderForm(props) {
                                                         <TableCell>{props.deliveryFromLabel}</TableCell>
                                                         <TableCell>{props.deliveryToLabel}</TableCell>
                                                         <TableCell>{props.moreInfoLabel}</TableCell>
+                                                        <TableCell>{props.expectedLeadTimeLabel}</TableCell>
                                                         <TableCell>{props.unitPriceLabel}</TableCell>
                                                         <TableCell>{props.priceLabel}</TableCell>
                                                         <TableCell>{props.currencyLabel}</TableCell>
@@ -658,6 +660,7 @@ function OrderForm(props) {
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
+                                                            <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                             <TableCell>{item.unitPrice}</TableCell>
                                                             <TableCell>{item.price}</TableCell>
                                                             <TableCell>{item.currency}</TableCell>

@@ -21,7 +21,11 @@ namespace Seller.Web.Shared.Configurations
         public string AnalyticsUrl { get; set; }
         public string GrulaUrl { get; set; }
         public string GrulaAccessToken { get; set; }
-        public Guid? GrulaEnvironmentId { get; set; }
+        public string GrulaEnvironmentId { get; set; }
+
+        public bool IsGrulaConfigured =>
+            !string.IsNullOrWhiteSpace(GrulaAccessToken) && Guid.TryParse(GrulaEnvironmentId, out _);
+
         public string PossibleExtraPackingAttributeKeys { get; set; }
         public string PossiblePriceGroupAttributeKeys { get; set; }
         public string PossibleSleepAreaWidthAttributeKeys { get; set; }
@@ -38,11 +42,13 @@ namespace Seller.Web.Shared.Configurations
         public string PossibleShapeAttributeKeys { get; set; }
         public string PossiblePrimaryColorAttributeKeys { get; set; }
         public string PossibleSecondaryColorAttributeKeys { get; set; }
+        public string PossibleBodyColorAttributeKeys { get; set; }
         public string PossibleShelfTypeAttributeKeys { get; set; }
         public Guid? ProductColorAttributeId { get; set; }
         public string DefaultCulture { get; set; }
         public string DefaultCurrency { get; set; }
         public int? MaxAllowedOrderQuantity { get; set; }
         public string EnablePricesForClients { get; set; }
+        public string LeadTimeUrl { get; set; }
     }
 }

@@ -23,5 +23,6 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public decimal? Price { get; set; }
         public string Currency { get; set; }
         public Guid? OrderItemStatusId { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

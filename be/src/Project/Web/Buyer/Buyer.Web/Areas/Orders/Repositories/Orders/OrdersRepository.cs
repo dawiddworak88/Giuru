@@ -158,6 +158,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             OrderItemStatusName = item.OrderItemStatusName,
                             OrderItemStatusChangeComment = item.OrderItemStatusChangeComment,
                             ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
+                            ExpectedLeadTime = item.ExpectedLeadTime,
                             MoreInfo = item.MoreInfo,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
@@ -196,6 +197,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                     ShippingStreet = response.Data.ShippingStreet,
                     MoreInfo = response.Data.MoreInfo,
                     Attachments = response.Data.Attachments,
+                    CreatedBy = response.Data.CreatedBy,
                     LastModifiedDate = response.Data.LastModifiedDate,
                     CreatedDate = response.Data.CreatedDate
                 };

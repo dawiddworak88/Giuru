@@ -19,6 +19,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import moment from "moment";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -322,14 +323,14 @@ function NewOrderForm(props) {
                             />
                         </div>
                         <div className="column is-1 is-flex is-align-items-flex-end">
-                            <TextField
-                                id="quantity"
-                                name="quantity"
-                                type="number"
-                                inputProps={{
-                                    min: "1",
-                                    step: "1"
-                                }}
+                            <TextField 
+                                id="quantity" 
+                                name="quantity" 
+                                type="number" 
+                                slotProps={{ input: { 
+                                    min: "1", 
+                                    step: "1" 
+                                }}}
                                 variant="standard"
                                 label={productFromOutlet ? `${props.quantityLabel} ${maxOutlet > 0 ? `(${props.maximalLabel} ${maxOutlet})` : ""}` : props.quantityLabel}
                                 fullWidth={true}
@@ -430,6 +431,7 @@ function NewOrderForm(props) {
                                                     <TableCell className="has-text-weight-bold">{props.inTotalLabel}</TableCell>
                                                     <TableCell>{props.externalReferenceLabel}</TableCell>
                                                     <TableCell>{props.moreInfoLabel}</TableCell>
+                                                    <TableCell>{props.expectedLeadTimeLabel}</TableCell>
                                                     <TableCell>{props.unitPriceLabel}</TableCell>
                                                     <TableCell>{props.priceLabel}</TableCell>
                                                     <TableCell>{props.currencyLabel}</TableCell>
@@ -454,6 +456,7 @@ function NewOrderForm(props) {
                                                         <TableCell className="has-text-weight-bold">{getTotalQuantities(item)}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.moreInfo}</TableCell>
+                                                        <TableCell>{item.expectedLeadTime ? moment(item.expectedLeadTime).format("L") : ""}</TableCell>
                                                         <TableCell>{item.unitPrice}</TableCell>
                                                         <TableCell>{item.price}</TableCell>
                                                         <TableCell>{item.currency}</TableCell>
@@ -493,10 +496,10 @@ function NewOrderForm(props) {
                                     id="customOrder"
                                     name="customOrder"
                                     placeholder={props.customOrderLabel}
-                                    InputProps={{
+                                    slotProps={{ input: {
                                         className: "p-2",
                                         disableUnderline: true
-                                    }}
+                                    }}}
                                     rows={OrderFormConstants.minRowsForCustomOrder()}
                                     fullWidth={true}
                                     multiline={true}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Products.ApiResponseModels
@@ -13,5 +13,6 @@ namespace Seller.Web.Areas.Products.ApiResponseModels
         public IEnumerable<Guid> Images { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

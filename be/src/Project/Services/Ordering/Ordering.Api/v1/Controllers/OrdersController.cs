@@ -1,4 +1,4 @@
-﻿using Foundation.Account.Definitions;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -19,6 +19,7 @@ using Ordering.Api.ServicesModels;
 using Ordering.Api.Validators;
 using Ordering.Api.v1.ResponseModels;
 using Ordering.Api.v1.RequestModels;
+using Asp.Versioning;
 
 namespace Ordering.Api.v1.Controllers
 {
@@ -194,10 +195,12 @@ namespace Ordering.Api.v1.Controllers
                                     OrderItemStatusId = y.OrderItemStatusId,
                                     OrderItemStatusName = y.OrderItemStatusName,
                                     OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
+                                    ExpectedLeadTime = y.ExpectedLeadTime,
                                     LastModifiedDate = y.LastModifiedDate,
                                     CreatedDate = y.CreatedDate
                                 }),
                                 Attachments = x.Attachments,
+                                CreatedBy = x.CreatedBy,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -287,10 +290,12 @@ namespace Ordering.Api.v1.Controllers
                                     OrderItemStatusName = y.OrderItemStatusName,
                                     LastOrderItemStatusChangeId = y.LastOrderItemStatusChangeId,
                                     OrderItemStatusChangeComment = y.OrderItemStatusChangeComment,
+                                    ExpectedLeadTime = y.ExpectedLeadTime,
                                     LastModifiedDate = y.LastModifiedDate,
                                     CreatedDate = y.CreatedDate
                                 }),
                                 Attachments = x.Attachments,
+                                CreatedBy = x.CreatedBy,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -388,10 +393,12 @@ namespace Ordering.Api.v1.Controllers
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo,
+                            ExpectedLeadTime = x.ExpectedLeadTime,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
                         Attachments = order.Attachments,
+                        CreatedBy = order.CreatedBy,
                         LastModifiedDate = order.LastModifiedDate,
                         CreatedDate = order.CreatedDate
                     };
@@ -730,10 +737,12 @@ namespace Ordering.Api.v1.Controllers
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
                             MoreInfo = x.MoreInfo,
+                            ExpectedLeadTime = x.ExpectedLeadTime,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
                         Attachments = order.Attachments,
+                        CreatedBy = order.CreatedBy,
                         LastModifiedDate = order.LastModifiedDate,
                         CreatedDate = order.CreatedDate
                     };

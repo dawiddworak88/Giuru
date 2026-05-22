@@ -34,6 +34,8 @@ using Microsoft.Extensions.Configuration;
 using Foundation.Extensions.Services.Cache;
 using Seller.Web.Shared.Repositories.Inventory;
 using System;
+using Seller.Web.Shared.Repositories.LeadTime;
+using Seller.Web.Shared.Services.DeliveryDates;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -49,10 +51,12 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IUserApprovalsRepository, UserApprovalsRepository>();
             services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ILeadTimeRepository, LeadTimeRepository>();
 
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductColorsService, ProductColorsService>();
+            services.AddScoped<IExpectedDeliveryDateService, ExpectedDeliveryDateService>();
 
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();
@@ -71,7 +75,12 @@ namespace Seller.Web.Shared.DependencyInjection
                 .AddTypedClient(httpClient =>
                 {
                     httpClient.Timeout = TimeSpan.FromSeconds(10);
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
+
+                    var token = configuration["GrulaAccessToken"];
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    }
 
                     return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
                 });

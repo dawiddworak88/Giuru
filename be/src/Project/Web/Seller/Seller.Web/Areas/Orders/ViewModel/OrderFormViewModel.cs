@@ -50,6 +50,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string GetClientAddressesUrl { get; set; }
         public string GetProductPriceUrl { get; set; }
         public string OutletProductLabel { get; set; }
+        public string ExpectedLeadTimeLabel { get; set; }
         public int DefaultItemsPerPage { get; set; }
     }
 }

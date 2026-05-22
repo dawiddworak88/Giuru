@@ -80,6 +80,7 @@ services:
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - UseLegacyBlobServiceApiVersion=true
       - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Encrypt=false;Password=Gre@tPassw0rd
       - RedisUrl=redis
       - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;
@@ -112,6 +113,9 @@ services:
       - ApplyRecipientEmail=office@eltap.com
       - ActionSendGridClientApplyConfirmationTemplateId=${SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID}
       - ActionSendGridClientApplyTemplateId=${SENDGRID_CLIENT_APPLY_TEMPLATE_ID}
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
@@ -382,7 +386,7 @@ services:
       - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
       - PossibleExtraPackingAttributeKeys=extraPacking
       - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
-      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisgruppe
       - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
       - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - PossibleWidthAttributeKeys=width
@@ -396,6 +400,7 @@ services:
       - PossibleShapeAttributeKeys=shape,Shape
       - PossiblePrimaryColorAttributeKeys=primaryColor,PrimaryColor
       - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
+      - PossibleBodyColorAttributeKeys=bodyColour,BodyColour
       - PossibleShelfTypeAttributeKeys=shelfType,ShelfType
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
@@ -406,8 +411,9 @@ services:
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - DefaultCurrency=${DEFAULT_CURRENCY}
     volumes:
-      - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/src/wwwroot/dist
+      - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/app/wwwroot/dist
     ports:
       - "5104:8080"
 
@@ -440,7 +446,7 @@ services:
       - OrganisationId=${ORGANISATION_ID}
       - PossibleExtraPackingAttributeKeys=extraPacking
       - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
-      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisGruppe
+      - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisgruppe
       - PossibleSleepAreaDepthAttributeKeys=sleepAreaDepth
       - PossibleSleepAreaWidthAttributeKeys=sleepAreaWidth
       - PossibleWidthAttributeKeys=width
@@ -454,6 +460,7 @@ services:
       - PossibleShapeAttributeKeys=shape,Shape
       - PossiblePrimaryColorAttributeKeys=primaryColor,PrimaryColor
       - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
+      - PossibleBodyColorAttributeKeys=bodyColour,BodyColour
       - PossibleShelfTypeAttributeKeys=shelfType,ShelfType
       - ProductColorAttributeId=a04b3368-fa25-4b4a-e4eb-08d907680a85
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
@@ -461,8 +468,9 @@ services:
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - DefaultCurrency=${DEFAULT_CURRENCY}
     volumes:
-      - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/dist
+      - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/app/wwwroot/dist
     ports:
       - "5107:8080"
 

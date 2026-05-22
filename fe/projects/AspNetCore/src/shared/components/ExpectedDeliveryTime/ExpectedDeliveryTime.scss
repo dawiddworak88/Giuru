@@ -1,0 +1,23 @@
+.expected-delivery-time {
+    &__dot-status {
+        display: flex;
+        align-items: center;
+
+        & > * {
+            margin-right: 0.5rem;
+        }
+    }
+
+    &__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #0AC47A;
+    }
+
+    &__message {
+        font-size: 0.875rem;
+        color: #333;
+        line-height: 1.5rem;
+    }
+}

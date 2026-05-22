@@ -27,7 +27,10 @@ namespace Media.Api.DependencyInjection
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<MediaContext>();
-            services.AddDbContext<MediaContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()), ServiceLifetime.Scoped);
+            services.AddDbContext<MediaContext>(options =>
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite())
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)),
+                ServiceLifetime.Scoped);
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)

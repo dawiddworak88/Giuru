@@ -1,14 +1,29 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import moment from "moment";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { toast } from "react-toastify";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
-import { TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJs, CategoryScale, Tooltip, Legend, BarElement } from "chart.js";
 import ChartsConstants from "../../../../shared/constants/ChartsConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ChartValidator from "../../../../shared/helpers/validators/ChartValidator";
+
+const toMomentValue = (value) => {
+    if (!value) {
+        return null;
+    }
+
+    if (moment.isMoment(value)) {
+        return value;
+    }
+
+    const parsedValue = moment(value);
+
+    return parsedValue.isValid() ? parsedValue : null;
+}
 
 if (typeof window !== "undefined") {
     ChartJs.register(
@@ -19,10 +34,14 @@ if (typeof window !== "undefined") {
 const CountrySalesAnalytics = (props) => {
     const [countriesSales, setCountriesSales] = useState(props.chartDatasets ? props.chartDatasets : [])
     const [countriesLabels, setCountriesLabels] = useState(props.chartLabels ? props.chartLabels : [])
-    const [fromDate, setFromDate] = useState(props.fromDate);
-    const [toDate, setToDate] = useState(props.toDate);
+    const [fromDate, setFromDate] = useState(toMomentValue(props.fromDate));
+    const [toDate, setToDate] = useState(toMomentValue(props.toDate));
 
     const handleFromDate = (date) => {
+        if (!date) {
+            setFromDate(null);
+            return;
+        }
 
         if (ChartValidator.validate(date, toDate)) {
             setFromDate(date);
@@ -55,6 +74,10 @@ const CountrySalesAnalytics = (props) => {
     }
 
     const handleToDate = (date) => {
+        if (!date) {
+            setToDate(null);
+            return;
+        }
 
         if (ChartValidator.validate(fromDate, date)) {
             setToDate(date);
@@ -93,32 +116,38 @@ const CountrySalesAnalytics = (props) => {
                 <span>
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                            id="country-sales-from-date"
                             label={props.fromLabel}
                             value={fromDate}
-                            name="fromDate"
                             views={props.datePickerViews}
                             onChange={(date) => {
                                 handleFromDate(date);
                             }}
-                            renderInput={(params) => 
-                                <TextField {...params} variant="standard" />} />
+                            slotProps={{
+                                textField: {
+                                    id: "country-sales-from-date",
+                                    name: "fromDate",
+                                    variant: "standard"
+                                }
+                            }} />
                     </LocalizationProvider>
                 </span>
                 <span>
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                            id="country-sales-to-date"
                             label={props.toLabel}
                             value={toDate}
-                            name="toDate"
                             views={props.datePickerViews}
                             onChange={(date) => {
                                 handleToDate(date);
                             }}
-                            renderInput={(params) => 
-                                <TextField {...params} variant="standard" />}
-                            disableFuture={true} />
+                            disableFuture={true}
+                            slotProps={{
+                                textField: {
+                                    id: "country-sales-to-date",
+                                    name: "toDate",
+                                    variant: "standard"
+                                }
+                            }} />
                     </LocalizationProvider>
                 </span>
             </div>

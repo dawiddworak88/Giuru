@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Foundation.Extensions.ModelBuilders;
@@ -24,7 +24,10 @@ using Buyer.Web.Shared.DomainModels.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -39,6 +42,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly IInventoryRepository inventoryRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -50,7 +56,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             LinkGenerator linkGenerator,
             IInventoryRepository inventoryRepository,
             IOptions<AppSettings> options,
-            IPriceService priceService)
+            IPriceService priceService,
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -61,6 +70,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.inventoryRepository = inventoryRepository;
             _options = options;
             _priceService = priceService;
+            _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -90,7 +102,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                 {
                     var prices = Enumerable.Empty<Price>();
 
-                    if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                    if (_options.Value.IsGrulaConfigured)
                     {
                         prices = await _priceService.GetPrices(
                             _options.Value.GrulaAccessToken,
@@ -111,6 +123,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 Shape = x.Shape,
                                 PrimaryColor = x.PrimaryColor,
                                 SecondaryColor = x.SecondaryColor,
+                                BodyColour = x.BodyColour,
                                 ShelfType = x.ShelfType,
                                 IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
@@ -125,6 +138,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 DeliveryZipCode = componentModel.DeliveryZipCode
                             });
                     }
+
+                    var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                        accessToken: componentModel.Token,
+                        skus: [.. products.Data.Select(x => x.Sku)]);
 
                     for (int i = 0; i < products.Data.Count(); i++)
                     {
@@ -165,6 +182,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 Current = price.CurrentPrice
                             };
                         }
+
+                        var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                        
+                        product.ExpectedLeadTime = leadTimeDays > 0
+                            ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                            : null;
+                        
+                        product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock);
                     }
                 }
 

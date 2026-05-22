@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ApiResponseModels;
+using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
@@ -33,7 +33,8 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
@@ -51,7 +52,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
         private readonly IProductColorsService _productColorsService;
-        private readonly ILogger<ProductsApiController> _logger;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -65,12 +67,14 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IPriceService priceService,
             LinkGenerator linkGenerator,
             IProductColorsService productColorsService,
-            ILogger<ProductsApiController> logger)
+            ILeadTimeRepository leadTimeRepository,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
             _linkGenerator = linkGenerator;
             _productLocalizer = productLocalizer;
+            _leadTimeRepository = leadTimeRepository;
             _mediaService = mediaService;
             _productLocalizer = productLocalizer;
             _inventoryRepository = inventoryRepository;
@@ -79,7 +83,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _options = options;
             _priceService = priceService;
             _productColorsService = productColorsService;
-            _logger = logger;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpGet]
@@ -153,7 +157,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                 var prices = Enumerable.Empty<Price>();
 
-                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                if (_options.Value.IsGrulaConfigured)
                 {
                     var priceProducts = productVariants.Data.Select(async x => new PriceProduct
                     {
@@ -171,6 +175,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
                     });
 
@@ -189,6 +194,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
                         });
                 }
+
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: token,
+                    skus: [..productVariants.Data.Select(x => x.Sku)]);
 
                 for (int i = 0; i < productVariants.Data.Count(); i++)
                 {
@@ -273,6 +282,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         }
                     }
 
+                    var variantLeadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
+                    
+                    carouselItem.ExpectedLeadTime = variantLeadTimeDays > 0
+                        ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(variantLeadTimeDays)
+                        : null;
+                    
                     carouselItems.Add(carouselItem);
                 }
 
@@ -354,7 +369,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             {
                 var prices = Enumerable.Empty<Price>();
 
-                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                if (_options.Value.IsGrulaConfigured)
                 {
                     var priceProducts = products.Data.Select(async x => new PriceProduct
                     {
@@ -372,6 +387,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
                     });
 
@@ -401,6 +417,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     language,
                     products.Data.Select(x => x.Id));
 
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: token,
+                    skus: [.. products.Data.Select(x => x.Sku)]);
+
                 var productsQuantities = new List<ProductQuantitiesResponseModel>();
 
                 for (int i = 0; i < products.Data.Count(); i++)
@@ -421,6 +441,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         StockQuantity = inventories.Where(x => x.ProductId == product.Id).Sum(x => x.AvailableQuantity),
                         OutletQuantity = outlets.Where(y => y.ProductId == product.Id).Sum(x => x.AvailableQuantity),
                     };
+
+                    var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    productQuantity.ExpectedLeadTime = leadTimeDays > 0
+                        ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                        : null;
 
                     if (prices.Any())
                     {
@@ -450,7 +475,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             var product = await _productsRepository.GetProductAsync(sku, language, token);
 
-            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+            if (_options.Value.IsGrulaConfigured)
             {
                 var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, sku);
 
@@ -475,6 +500,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                         IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
                     },

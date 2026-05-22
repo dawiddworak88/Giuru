@@ -68,5 +68,6 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
         public string IpAddress { get; set; }
 
         public virtual IEnumerable<OrderItem> OrderItems { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

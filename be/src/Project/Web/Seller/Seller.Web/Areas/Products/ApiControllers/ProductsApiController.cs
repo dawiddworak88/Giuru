@@ -1,4 +1,4 @@
-﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +31,9 @@ using Seller.Web.Shared.Services.Products;
 using System.Collections.Generic;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.Services.ProductColors;
+using Seller.Web.Shared.Repositories.LeadTime;
+using Seller.Web.Shared.Services.DeliveryDates;
+using Seller.Web.Areas.Clients.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -49,6 +52,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly ICurrenciesRepository _currenciesRepository;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IOptions<AppSettings> _options;
 
         public ProductsApiController(
@@ -64,6 +69,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             ICurrenciesRepository currenciesRepository,
             IProductsService productsService,
             IProductColorsService productColorsService,
+            ILeadTimeRepository leadTimeRepository,
+            IExpectedDeliveryDateService expectedDeliveryDateService,
             IOptions<AppSettings> options)
         {
             _productsRepository = productsRepository;
@@ -79,6 +86,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _currenciesRepository = currenciesRepository;
             _productsService = productsService;
             _productColorsService = productColorsService;
+            _leadTimeRepository = leadTimeRepository;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpGet]
@@ -175,11 +184,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                 var prices = Enumerable.Empty<Price>();
 
-                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
+
+                if (_options.Value.IsGrulaConfigured)
                 {
                     var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
-
-                    var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
 
                     string clientCountryName = null;
 
@@ -225,6 +234,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                        BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
                     });
 
@@ -242,6 +252,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                             DeliveryZipCode = deliveryZipCode
                         });
                 }
+
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: token,
+                    customerId: client.OrganisationId,
+                    skus: [.. products.Data.Select(x => x.Sku)]);
 
                 var productsQuantities = new List<ProductQuantitiesResponseModel>();
 
@@ -263,6 +278,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         StockQuantity = inventories.Where(x => x.ProductId == product.Id).Sum(x => x.AvailableQuantity),
                         OutletQuantity = outlets.Where(y => y.ProductId == product.Id).Sum(x => x.AvailableQuantity),
                     };
+
+                    var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+                    productQuantity.ExpectedLeadTime = leadTimeDays > 0
+                        ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                        : null;
 
                     if (prices.Any())
                     {
@@ -292,7 +312,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var product = await _productsRepository.GetProductAsync(sku, language, token);
 
-            if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false && clientId.HasValue)
+            if (_options.Value.IsGrulaConfigured && clientId.HasValue)
             {
                 var outletItem = await _outletRepository.GetOutletItemBySkuAsync(token, language, sku);
 
@@ -348,6 +368,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                             Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                             PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                             SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                            BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                             ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                             IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
                         },

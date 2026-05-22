@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System;
 using System.Threading.Tasks;
@@ -12,6 +12,7 @@ using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using System.Linq;
 using Foundation.Extensions.ExtensionMethods;
+using Asp.Versioning;
 
 namespace Identity.Api.v1.Controllers
 {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+﻿import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -20,7 +20,7 @@ import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
 import { TextSnippet } from "@mui/icons-material";
 import QRCodeDialog from "../QRCodeDialog/QRCodeDialog";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -54,6 +54,7 @@ function Catalog(props) {
         setPage(() => newPage);
 
         const searchParameters = {
+            ...props.searchParameters,
             searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage: props.defaultItemsPerPage
@@ -92,7 +93,7 @@ function Catalog(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const searchParameters = {
-
+            ...props.searchParameters,
             searchTerm,
             pageIndex: 1,
             itemsPerPage: props.defaultItemsPerPage
@@ -219,7 +220,9 @@ function Catalog(props) {
             const domQuery = `[data-rbd-drag-handle-draggable-id='${result.draggableId}']`;
             const draggedDOM = document.querySelector(domQuery);
 
-            setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+            if (draggedDOM) {
+                setPlaceholderProps({ position: result.source.index, height: draggedDOM.clientHeight + 5});
+            }
         }
         else {
             setDraggingItem({})
@@ -237,7 +240,7 @@ function Catalog(props) {
             return;
         }
 
-        const currentDraggableItemOrder = draggingItem.order - 1 - (page * props.defaultItemsPerPage);
+        const currentDraggableItemOrder = draggingItem.order - (page * props.defaultItemsPerPage);
 
         if (
             destination.droppableId === source.droppableId && 
@@ -247,16 +250,13 @@ function Catalog(props) {
             return;
         }
 
-        const newDraggableItemOrder = destination.index + 1 + (page * props.defaultItemsPerPage);
+        const newDraggableItemOrder = destination.index + (page * props.defaultItemsPerPage);
 
-        if(newDraggableItemOrder > 0) {
+        if(newDraggableItemOrder >= 0) {
             draggingItem.order = newDraggableItemOrder;
-
             const newCategoryArray = reorder(items, source.index, destination.index);
-
             handleChangeEntityOrder(draggableId, newDraggableItemOrder);
             setItems(newCategoryArray);
-    
             setDraggingItem({});
         }
     };
@@ -277,16 +277,28 @@ function Catalog(props) {
     };
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
+        if (typeof window !== 'undefined') {
             setWindowWidth(window.innerWidth);
-        
-            const handleResize = () => {
-                setWindowWidth(window.innerWidth)
-            };
-    
+            const handleResize = () => setWindowWidth(window.innerWidth);
             window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
         }
-    }, windowWidth);
+    }, []);
+
+    const buildUrl = (editUrl, itemId, searchTerm) => {
+        const [basePath, qs] = (editUrl || "").split("?");
+        const url = basePath + "/" + itemId;
+
+        const params = new URLSearchParams(qs || "");
+
+        if (searchTerm) {
+            params.set("searchTerm", searchTerm);
+        }
+
+        const query = params.toString();
+
+        return query ? url + "?" + query : url;
+    }
 
     const tableRow = (provided, item) => {
         return (
@@ -308,7 +320,7 @@ function Catalog(props) {
                             )
                             else if (actionItem.isEdit) return (
                                 <Tooltip title={props.editLabel} aria-label={props.editLabel} key={index}>
-                                    <Fab href={props.editUrl + "/" + item.id + (searchTerm ? `/?searchTerm=${searchTerm}` : "")} size="small" color="secondary">
+                                    <Fab href={buildUrl(props.editUrl, item.id, searchTerm)} size="small" color="secondary">
                                         <Edit />
                                     </Fab>
                                 </Tooltip>)
@@ -337,7 +349,7 @@ function Catalog(props) {
                                     </Fab>
                                 </Tooltip>)
                             else return (
-                                <div></div>)
+                                <div key={index}></div>)
                         })}
                     </TableCell>
                 }
@@ -360,7 +372,7 @@ function Catalog(props) {
                     else if (property.isDateTime) {
                         return (
                             <NoSsr key={index}>
-                                <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
                             </NoSsr>
                         )
                     }
@@ -368,7 +380,7 @@ function Catalog(props) {
                         const isDisabled = item[property.title] === true ? true : false;
 
                         return (
-                            <TableCell><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
+                            <TableCell key={index}><Chip label={isDisabled ? props.inActiveLabel : props.activeLabel} color={isDisabled ? "default" : "success"}/></TableCell>
                         )
                     }
                     else {
@@ -424,31 +436,23 @@ function Catalog(props) {
                                         onDragEnd={(result) => onDragEnd(result)}
                                         onDragStart={(result) => onDragStart(result)}
                                     >
-                                        <Droppable
-                                            droppableId="categories"
-                                            mode="virtual"
-                                            renderClone={(provided) => (
-                                                tableRow(provided, draggingItem)
-                                            )}
-                                        >
+                                        <Droppable droppableId="categories">
                                             {(providedDroppable) => (
                                                 <TableBody
                                                     ref={providedDroppable.innerRef}
                                                     {...providedDroppable.droppableProps}
                                                 >
                                                     {items.map((item, index) => (
-                                                        !isDragableDisable && draggingItem.id && placeholderProps.position == index ?
-                                                            <TableRow height={placeholderProps.height} /> :
-                                                            <Draggable
-                                                                key={item.id}
-                                                                draggableId={item.id}
-                                                                index={index}
-                                                                isDragDisabled={isDragableDisable}
-                                                            >
-                                                                {(providedDraggable) => (
-                                                                    tableRow(providedDraggable, item)
-                                                                )}
-                                                            </Draggable>
+                                                        <Draggable
+                                                            key={item.id}
+                                                            draggableId={item.id}
+                                                            index={index}
+                                                            isDragDisabled={isDragableDisable}
+                                                        >
+                                                            {(providedDraggable) => (
+                                                                tableRow(providedDraggable, item)
+                                                            )}
+                                                        </Draggable>
                                                     ))}
                                                 </TableBody>
                                             )}
@@ -546,7 +550,8 @@ Catalog.propTypes = {
     confirmationDialogDeleteNameProperty: PropTypes.array,
     defaultItemsPerPage: PropTypes.number.isRequired,
     generateQRCodeLabel: PropTypes.string,
-    copyLinkLabel: PropTypes.string
+    copyLinkLabel: PropTypes.string,
+    searchParameters: PropTypes.object
 }
 
 export default Catalog;

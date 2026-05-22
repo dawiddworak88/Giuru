@@ -1,4 +1,4 @@
-﻿using Catalog.Api.Services.Products;
+using Catalog.Api.Services.Products;
 using Catalog.Api.ServicesModels.Products;
 using Catalog.Api.Validators.Products;
 using Foundation.Account.Definitions;
@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using Asp.Versioning;
 
 namespace Catalog.Api.v1.Products.Controllers
 {

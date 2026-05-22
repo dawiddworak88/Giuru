@@ -10,6 +10,7 @@ using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.ProductAttributeItems;
 using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels;
@@ -36,6 +37,7 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
 
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductColorsService, ProductColorsService>();
+            services.AddScoped<IDeliveryMessageHelper, DeliveryMessageHelper>();
 
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsPageViewModel>, SearchProductsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel>, SearchProductsCatalogModelBuilder>();

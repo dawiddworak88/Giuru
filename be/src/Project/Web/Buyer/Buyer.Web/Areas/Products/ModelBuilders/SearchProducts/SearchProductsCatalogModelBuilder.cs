@@ -1,18 +1,20 @@
-﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
 using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
+using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -25,6 +27,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using static Foundation.ApiExtensions.Shared.Definitions.ApiConstants;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -40,6 +43,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptions<AppSettings> _options;
         private readonly IPriceService _priceService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IDeliveryMessageHelper _deliveryMessageHelper;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -51,7 +57,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
-            IPriceService priceService
+            IPriceService priceService,
+            ILeadTimeRepository leadTimeRepository,
+            IDeliveryMessageHelper deliveryMessageHelper,
+            IExpectedDeliveryDateService expectedDeliveryDateService
             )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
@@ -64,6 +73,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _linkGenerator = linkGenerator;
             _options = options;
             _priceService = priceService;
+            _leadTimeRepository = leadTimeRepository;
+            _deliveryMessageHelper = deliveryMessageHelper;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -77,6 +89,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+
+
 
             var products = await _productsService.GetProductsAsync(
                 null,
@@ -96,7 +110,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 
                 var prices = Enumerable.Empty<Price>();
 
-                if (string.IsNullOrWhiteSpace(_options.Value.GrulaAccessToken) is false)
+                if (_options.Value.IsGrulaConfigured)
                 {
                     prices = await _priceService.GetPrices(
                         _options.Value.GrulaAccessToken,
@@ -117,6 +131,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
                             SecondaryColor = x.SecondaryColor,
+                            BodyColour = x.BodyColour,
                             ShelfType = x.ShelfType
                         }),
                         new PriceClient
@@ -130,6 +145,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             DeliveryZipCode = componentModel.DeliveryZipCode
                         });
                 }
+
+                var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                    accessToken: componentModel.Token,
+                    skus: [.. products.Data.Select(x => x.Sku)]);
 
                 for (int i = 0; i < products.Data.Count(); i++)
                 {
@@ -148,7 +167,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.AvailableOutletQuantity = outletItem.AvailableQuantity;
                         product.OutletTitle = outletItem.Title;
                     }
-                    
+
                     var inventoryItem = inventoryItems.FirstOrDefault(x => x.ProductSku == product.Sku);
 
                     if (inventoryItem is not null)
@@ -172,6 +191,13 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         }
                     }
 
+                    var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
+
+                    product.ExpectedLeadTime = leadTimeDays > 0
+                        ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                        : null;
+                    
+                    product.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, product.InStock, product.ExpectedDelivery);
                     product.CanOrder = true;
                 }
 

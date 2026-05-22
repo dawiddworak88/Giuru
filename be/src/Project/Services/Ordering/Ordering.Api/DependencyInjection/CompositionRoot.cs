@@ -28,7 +28,7 @@ namespace Ordering.Api.DependencyInjection
             {
                 opt.UseNetTopologySuite();
                 opt.CommandTimeout(900);
-            }));
+            }).ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)

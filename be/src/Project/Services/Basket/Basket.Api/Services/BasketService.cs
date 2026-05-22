@@ -37,7 +37,7 @@ namespace Basket.Api.Services
                 OrganisationId = checkoutBasketServiceModel.OrganisationId,
                 Username = checkoutBasketServiceModel.Username,
                 ClientId = checkoutBasketServiceModel.ClientId,
-                SellerId = checkoutBasketServiceModel.OrganisationId,
+                SellerId = checkoutBasketServiceModel.SellerId ?? checkoutBasketServiceModel.OrganisationId,
                 ClientName = checkoutBasketServiceModel.ClientName,
                 ClientEmail = checkoutBasketServiceModel.ClientEmail,
                 BillingAddressId = checkoutBasketServiceModel.BillingAddressId,
@@ -64,7 +64,8 @@ namespace Basket.Api.Services
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
                 HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
                 HasApprovalToSendEmail = checkoutBasketServiceModel.HasApprovalToSendEmail,
-                Attachments = checkoutBasketServiceModel.Attachments
+                Attachments = checkoutBasketServiceModel.Attachments,
+                CreatedBy = checkoutBasketServiceModel.CreatedBy
             };
 
             var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
@@ -89,7 +90,8 @@ namespace Basket.Api.Services
                         ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
+                        MoreInfo = x.MoreInfo,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     })
                 };
 
@@ -176,7 +178,8 @@ namespace Basket.Api.Services
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
 
@@ -201,7 +204,8 @@ namespace Basket.Api.Services
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
 
@@ -223,7 +227,8 @@ namespace Basket.Api.Services
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 })
             };
         }

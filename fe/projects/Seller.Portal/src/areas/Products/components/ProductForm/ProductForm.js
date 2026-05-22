@@ -49,7 +49,10 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
         ean: { value: props.ean ? props.ean : "" },
-        fulfillmentTime: { value: props.fulfillmentTime ? Number(moment.utc(1000 * props.fulfillmentTime).format("DD") - 1) : null}
+        fulfillmentTime: { value: props.fulfillmentTime
+                ? Math.floor(moment.duration(props.fulfillmentTime, 'seconds').asDays())
+                : null
+        }
     };
 
     const stateValidatorSchema = {
@@ -288,7 +291,7 @@ function ProductForm(props) {
                         </div>
                         <div className="field">
                             <TextField type="number" id="fulfillmentTime" name="fulfillmentTime" label={props.fulfillmentTimeLabel} fullWidth={true} variant="standard"
-                            value={fulfillmentTime} onChange={handleOnChange} />
+                            value={fulfillmentTime ?? ""} onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <InputLabel id="description-label">{props.descriptionLabel}</InputLabel>
@@ -368,7 +371,7 @@ function ProductForm(props) {
                                 saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl} 
                                 accept={{
                                     "image/*": [".png", ".jpg", ".webp"],
-                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip", ".xlsx", ".xls"]
                                 }}/>
                         </div>
                         <div className="field">

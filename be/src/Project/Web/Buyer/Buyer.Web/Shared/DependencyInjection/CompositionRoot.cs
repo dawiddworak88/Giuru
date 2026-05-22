@@ -47,6 +47,8 @@ using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.ModelBuilders.Toasts;
 using Buyer.Web.Shared.Repositories.Inventory;
 using System;
+using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -82,10 +84,12 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IGlobalRepository, GlobalRepository>();
             services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ILeadTimeRepository, LeadTimeRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IExpectedDeliveryDateService, ExpectedDeliveryDateService>();
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
@@ -105,7 +109,12 @@ namespace Buyer.Web.Shared.DependencyInjection
                 .AddTypedClient(httpClient =>
                 {
                     httpClient.Timeout = TimeSpan.FromSeconds(10);
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration["GrulaAccessToken"]);
+
+                    var token = configuration["GrulaAccessToken"];
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    }
 
                     return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
                 });

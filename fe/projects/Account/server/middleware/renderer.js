@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import { ServerStyleSheets } from "@mui/styles";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+import createEmotionServer from "@emotion/server/create-instance";
 
 import RegisterPage from "../../src/areas/Accounts/pages/Register/RegisterPage";
 import ResetPasswordPage from "../../src/areas/Accounts/pages/ResetPassword/ResetPasswordPage";
@@ -22,27 +24,19 @@ const serverRenderer = (req, res, next) => {
 
 	if (Component) {
 
-		const sheets = new ServerStyleSheets();
+		const cache = createCache({ key: "css" });
+		const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
 
-		ReactDOMServer.renderToString(
-			sheets.collect(
+		const html = ReactDOMServer.renderToString(
+			<CacheProvider value={cache}>
 				<Component {...req.body.parameters} />
-			)
+			</CacheProvider>
 		);
 
-		const css = sheets.toString();
+		const emotionChunks = extractCriticalToChunks(html);
+		const emotionCss = constructStyleTagsFromChunks(emotionChunks);
 
-		return res.send(
-			ReactDOMServer.renderToString(
-				<React.Fragment>
-					{css &&
-						<style id="jss-server-side">
-							{css}
-						</style>
-					}
-					<Component {...req.body.parameters} />
-				</React.Fragment>
-			));
+		return res.send(emotionCss + html);
 	}
 
 	res.status(400).end();

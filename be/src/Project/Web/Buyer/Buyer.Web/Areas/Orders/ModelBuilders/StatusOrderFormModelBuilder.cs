@@ -75,7 +75,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ExpectedDateOfProductOnStockLabel = _orderLocalizer.GetString("ExpectedDateOfProductOnStock"),
                 UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
                 PriceLabel = _globalLocalizer.GetString("Price"),
-                CurrencyLabel = _globalLocalizer.GetString("Currency")
+                CurrencyLabel = _globalLocalizer.GetString("Currency"),
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -116,7 +117,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         ExpectedDateOfProductOnStock = x.OrderItemStatusChangeComment,
                         ProductAttributes = x.ProductAttributes,
                         ImageAlt = x.ProductName,
-                        ImageSrc = x.PictureUrl
+                        ImageSrc = x.PictureUrl,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     });
                 }
 

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
+import moment from "moment";
 import {
     FormControl, InputLabel, Select, MenuItem, FormHelperText, 
     CircularProgress, Autocomplete, TextField, Button
@@ -7,12 +8,27 @@ import {
 import { Context } from "../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../shared/helpers/forms/useForm";
-import { LocalizationProvider, DatePicker,} from "@mui/lab";
-import AdapterMoment from '@mui/lab/AdapterMoment';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import QuantityValidator from "../../../../shared/helpers/validators/QuantityValidator";
 import QueryStringSerializer from "../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import SearchConstants from "../../../../shared/constants/SearchConstants";
+
+const toMomentValue = (value) => {
+    if (!value) {
+        return null;
+    }
+
+    if (moment.isMoment(value)) {
+        return value;
+    }
+
+    const parsedValue = moment(value);
+
+    return parsedValue.isValid() ? parsedValue : null;
+}
 
 const InventoryForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -24,7 +40,7 @@ const InventoryForm = (props) => {
         quantity: { value: props.quantity ? props.quantity : 0, error: "" },
         restockableInDays: { value: props.restockableInDays ? props.restockableInDays : null, error: "" },
         availableQuantity: { value: props.availableQuantity ? props.availableQuantity : 0, error: "" },
-        expectedDelivery: { value: props.expectedDelivery ? props.expectedDelivery : null, error: "" },
+        expectedDelivery: { value: toMomentValue(props.expectedDelivery), error: "" },
         ean: { value: props.ean ? props.ean : null }
     };
 
@@ -246,16 +262,19 @@ const InventoryForm = (props) => {
                         <div className="field">
                             <LocalizationProvider dateAdapter={AdapterMoment} >
                                 <DatePicker
-                                    id="expectedDelivery"
                                     label={props.expectedDeliveryLabel}
                                     value={expectedDelivery}
-                                    fullWidth={true} 
                                     onChange={(date) => {
                                         setFieldValue({name: "expectedDelivery", value: date});
                                     }}
-                                    renderInput={(params) => 
-                                        <TextField {...params} variant="standard" fullWidth={true} />}
-                                    disablePast={true}/>
+                                    disablePast={true}
+                                    slotProps={{
+                                        textField: {
+                                            id: "expectedDelivery",
+                                            variant: "standard",
+                                            fullWidth: true
+                                        }
+                                    }} />
                             </LocalizationProvider>
                         </div>
                         <div className="field">

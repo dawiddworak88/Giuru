@@ -1,4 +1,4 @@
-﻿using Foundation.GenericRepository.Paginations;
+using Foundation.GenericRepository.Paginations;
 using Global.Api.Services.Currencies;
 using Global.Api.v1.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +18,7 @@ using Global.Api.validators.Currencies;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Definitions;
 using System.Globalization;
+using Asp.Versioning;
 
 namespace Global.Api.v1.Controllers
 {

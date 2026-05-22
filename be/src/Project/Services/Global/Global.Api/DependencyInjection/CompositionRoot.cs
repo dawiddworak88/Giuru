@@ -1,4 +1,4 @@
-﻿using Global.Api.Infrastructure;
+using Global.Api.Infrastructure;
 using Global.Api.Services.Countries;
 using Global.Api.Services.Currencies;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,9 @@ namespace Global.Api.DependencyInjection
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<GlobalContext>();
-            services.AddDbContext<GlobalContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<GlobalContext>(options => 
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite())
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
     }
 }

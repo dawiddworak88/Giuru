@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../shared/stores/Store";
 import { Button, CircularProgress } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material"
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import useForm from "../../../../shared/helpers/forms/useForm";
 import ProductCardModal from "../../components/ProductCardModal/ProductCardModal";
@@ -20,6 +20,14 @@ const ProductCardForm = (props) => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [entityToEdit, setEntityToEdit] = useState(null);
+    useEffect(() => {
+        if (props.schema) {
+            const parsedSchema = JSON.parse(props.schema);
+            if (parsedSchema.definitions) {
+                setDefinitions(parsedSchema.definitions);
+            }
+        }
+    }, [props.schema]);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         schema: { value: props.schema ? JSON.parse(props.schema) : {} },
@@ -75,8 +83,6 @@ const ProductCardForm = (props) => {
 
         const objects = [];
         const elementDict = {};
-
-        setDefinitions(schema.definitions);
 
         Object.entries(schema.properties).forEach(([parameter, element]) => {
             let newElement = {

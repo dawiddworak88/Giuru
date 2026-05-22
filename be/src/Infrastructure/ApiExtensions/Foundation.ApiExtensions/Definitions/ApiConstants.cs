@@ -52,6 +52,7 @@
             public static readonly string UsersApiEndpoint = "/api/v1/users";
             public static readonly string RolesApiEndpoint = "/api/v1/roles";
             public static readonly string TeamMembersEndpoint = "/api/v1/teammembers";
+            public static readonly string ClientTeamMembersEndpoint = "/api/v1/clientteammembers";
             public static readonly string ApprovalsEndpoint = "/api/v1/approvals";
             public static readonly string UserApprovalsEndpoint = "/api/v1/userapprovals";
         }
@@ -127,6 +128,12 @@
         {
             public static readonly string PriceApiEndpoint = "/api/v1/price";
             public static readonly string PricesApiEndpoint = "/api/v1/prices";
+        }
+
+        public struct LeadTime
+        {
+            public static readonly string LeadTimeByCustomerApiEndpoint = "/api/v1/product-lead-times";
+            public static readonly string LeadTimeBySkusApiEndpoint = "/api/v1/product-lead-times/my";
         }
 
         public struct Request

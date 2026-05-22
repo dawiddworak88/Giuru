@@ -18,6 +18,7 @@ import QuantityCalculatorService from "../../../../shared/services/QuantityCalcu
 import Availability from "../../../../shared/components/Availability/Availability";
 import CopyButton from "../../../../shared/components/CopyButton/CopyButton";
 import GlobalHelper from "../../../../shared/helpers/globals/GlobalHelper";
+import ExpectedDeliveryTime from "../../../../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -55,7 +56,8 @@ function ProductDetail(props) {
             sku: props.sku,
             name: props.title,
             stockQuantity: props.availableQuantity,
-            outletQuantity: props.availableOutletQuantity
+            outletQuantity: props.availableOutletQuantity,
+            expectedLeadTime: props.expectedLeadTime,
         };
 
         if (productVariant) {
@@ -64,7 +66,8 @@ function ProductDetail(props) {
                 sku: productVariant.subtitle,
                 name: productVariant.title,
                 stockQuantity: productVariant.availableQuantity,
-                outletQuantity: productVariant.availableOutletQuantity
+                outletQuantity: productVariant.availableOutletQuantity,
+                expectedLeadTime: productVariant.expectedLeadTime,
             }
         }
 
@@ -83,12 +86,12 @@ function ProductDetail(props) {
         const getPriceInfo = () => {
             if (productVariant && productVariant.price) {
                 return {
-                    price: parseFloat(productVariant.price.current * quantity).toFixed(2),
+                    price: parseFloat(productVariant.price.current).toFixed(2),
                     currency: productVariant.price.currency
                 };
             } else if (props.price) {
                 return {
-                    price: parseFloat(props.price.current * quantity).toFixed(2),
+                    price: parseFloat(props.price.current).toFixed(2),
                     currency: props.price.currency
                 };
             } else {
@@ -110,9 +113,6 @@ function ProductDetail(props) {
             quantity,
             isOutletOrder: item.isOutletOrder,
             externalReference: item.externalReference,
-            unitPrice: product.price ? parseFloat(product.price.current).toFixed(2) : null,
-            price: product.price ? parseFloat(product.price.current * quantity).toFixed(2) : null,
-            currency: product.price ? product.price.currency : null,
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
@@ -320,6 +320,15 @@ function ProductDetail(props) {
                                 </div>
                             }
                         </div>
+                        {props.expectedLeadTime && props.leadTimeDeliveryMessage &&
+                            <div className="mt-3">
+                                <ExpectedDeliveryTime 
+                                    deliveryMessage={props.leadTimeDeliveryMessage}
+                                    expectedDeliveryDate={props.expectedLeadTime}
+                                    locale={props.locale}
+                                />
+                            </div>
+                        }
                         {props.isAuthenticated &&
                             <div className="product-detail__add-to-cart-button">
                                 {props.isProductVariant ? (
@@ -384,6 +393,7 @@ function ProductDetail(props) {
                     </div>
                 </div>
                 <Sidebar
+                    locale={props.locale}
                     productId={props.productId}
                     isOpen={isSidebarOpen}
                     manyUses={false}
@@ -391,7 +401,12 @@ function ProductDetail(props) {
                     handleOrder={handleModal}
                     labels={props.sidebar}
                 />
-                <CarouselGrid items={props.productVariants} className="pt-6" />
+                <CarouselGrid  
+                    items={props.productVariants} 
+                    className="pt-6" 
+                    locale={props.locale}
+                    leadTimeDeliveryMessage={props.leadTimeDeliveryMessage}
+                />
                 {props.files &&
                     <Files {...props.files} />
                 }

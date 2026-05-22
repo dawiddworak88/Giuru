@@ -1,0 +1,76 @@
+﻿using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Services.ApiClientServices;
+using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.ExtensionMethods;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Seller.Web.Shared.ApiRequestModels;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.DomainModels.LeadTime;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Seller.Web.Shared.Repositories.LeadTime
+{
+    public class LeadTimeRepository : ILeadTimeRepository
+    {
+        private readonly IApiClientService _apiClientService;
+        private readonly IOptions<AppSettings> _options;
+        private readonly ILogger<LeadTimeRepository> _logger;
+
+        public LeadTimeRepository(
+            IApiClientService apiClientService, 
+            IOptions<AppSettings> options,
+            ILogger<LeadTimeRepository> logger)
+        {
+            _apiClientService = apiClientService;
+            _options = options;
+            _logger = logger;
+        }
+
+        public async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string accessToken, Guid customerId, string[] skus)
+        {
+            if (string.IsNullOrEmpty(_options.Value.LeadTimeUrl))
+            {
+                _logger.LogWarning("LeadTimeUrl is missing. Skipping lead time retrieval.");
+                return Array.Empty<LeadTimeItem>();
+            }
+
+            if (skus == null || skus.Length == 0)
+            {
+                return Array.Empty<LeadTimeItem>();
+            }
+
+            var requestModel = new GetLeadTimesRequestModel
+            {
+                CustomerId = customerId,
+                Skus = skus.ToEndpointParameterString()
+            };
+
+            var apiRequest = new ApiRequest<GetLeadTimesRequestModel>
+            {
+                AccessToken = accessToken,
+                Data = requestModel,
+                EndpointAddress = $"{_options.Value.LeadTimeUrl}{ApiConstants.LeadTime.LeadTimeByCustomerApiEndpoint}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<GetLeadTimesRequestModel>, GetLeadTimesRequestModel, IEnumerable<LeadTimeItem>>(apiRequest);
+
+            if (response == null || !response.IsSuccessStatusCode || response.Data is null)
+            {
+                _logger.LogError(
+                    "Failed to retrieve lead times for SKUs: {Skus}. " +
+                    "Status Code: {StatusCode}, " +
+                    "Message: {Message}",
+                    requestModel.Skus,
+                    response?.StatusCode,
+                    response?.Message);
+
+                return Array.Empty<LeadTimeItem>();
+            }
+
+            return response.Data;
+        }
+    }
+}

@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import { resetServerContext } from 'react-beautiful-dnd';
-import { ServerStyleSheets } from "@mui/styles";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+import createEmotionServer from "@emotion/server/create-instance";
 
 import ProductCardPage from "../../src/areas/Products/pages/ProductCardPage/ProductCardPage";
 import ProductCardsPage from "../../src/areas/Products/pages/ProductCardsPage/ProductCardsPage";
@@ -58,8 +59,14 @@ import ClientFieldPage from "../../src/areas/Clients/pages/ClientFieldPage/Clien
 import ClientFieldOptionPage from "../../src/areas/Clients/pages/ClientFieldOptionPage/ClientFieldOptionPage";
 import CurrenciesPage from "../../src/areas/Global/pages/CurrenciesPage/CurrenciesPage";
 import CurrencyPage from "../../src/areas/Global/pages/CurrencyPage/CurrencyPage";
+import ClientTeamMembersPage from "../../src/areas/Clients/pages/ClientTeamMembersPage/ClientTeamMembersPage";
+import ClientTeamMemberPage from "../../src/areas/Clients/pages/ClientTeamMemberPage/ClientTeamMemberPage";
+import ClientTeamMemberDetailPage from "../../src/areas/Clients/pages/ClientTeamMemberDetailPage/ClientTeamMemberDetailPage";
 
 const Components = {
+	ClientTeamMemberDetailPage,
+	ClientTeamMemberPage,
+	ClientTeamMembersPage,
 	ClientFieldOptionPage,
 	ClientFieldPage,
 	ClientFieldsPage,
@@ -123,29 +130,19 @@ const serverRenderer = (req, res, next) => {
 
 	if (Component) {
 
-		const sheets = new ServerStyleSheets();
+		const cache = createCache({ key: "css" });
+		const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
 
-		ReactDOMServer.renderToString(
-			sheets.collect(
+		const html = ReactDOMServer.renderToString(
+			<CacheProvider value={cache}>
 				<Component {...req.body.parameters} />
-			)
+			</CacheProvider>
 		);
 
-		const css = sheets.toString();
+		const emotionChunks = extractCriticalToChunks(html);
+		const emotionCss = constructStyleTagsFromChunks(emotionChunks);
 
-		resetServerContext();
-
-		return res.send(
-			ReactDOMServer.renderToString(
-				<React.Fragment>
-					{css &&
-						<style id="jss-server-side">
-							{css}
-						</style>
-					}
-					<Component {...req.body.parameters} />
-				</React.Fragment>
-			));
+		return res.send(emotionCss + html);
 	}
 
 	res.status(400).end();

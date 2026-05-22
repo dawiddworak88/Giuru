@@ -1,4 +1,4 @@
-﻿using Analytics.Api.Infrastructure;
+using Analytics.Api.Infrastructure;
 using Analytics.Api.Infrastructure.Entities.SalesAnalytics;
 using Analytics.Api.ServicesModels.SalesAnalytics;
 using Foundation.Extensions.ExtensionMethods;
@@ -151,7 +151,7 @@ namespace Analytics.Api.Services.SalesAnalytics
 
         private async Task CreateSalesFact(
             Guid clientDimensionId, Guid productDimensionId, Guid timeDimensionId, 
-            Guid? locationDimensionId, bool isStock, bool isOutlet, decimal? price, string? currency)
+            Guid? locationDimensionId, bool isStock, bool isOutlet, decimal? price, string currency)
         {
             var salesFact = new SalesFact
             {

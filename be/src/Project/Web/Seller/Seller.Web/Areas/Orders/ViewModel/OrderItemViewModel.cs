@@ -22,5 +22,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string ExpectedDateOfProductOnStock { get; set; }
         public Guid? OrderItemStatusId { get; set; }
         public string MoreInfo { get; set; }
+        public DateOnly? ExpectedLeadTime { get; set; }
     }
 }

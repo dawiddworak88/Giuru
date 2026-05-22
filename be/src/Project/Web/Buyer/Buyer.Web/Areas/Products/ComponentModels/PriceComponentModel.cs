@@ -11,5 +11,6 @@ namespace Buyer.Web.Areas.Products.ComponentModels
         public string PaletteLoading { get; set; }
         public string Country { get; set; }
         public string DeliveryZipCode { get; set; }
+        public string DeliveryType { get; set; }
     }
 }

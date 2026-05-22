@@ -1,4 +1,4 @@
-﻿using Basket.Api.v1.RequestModels;
+using Basket.Api.v1.RequestModels;
 using Basket.Api.Services;
 using Basket.Api.ServicesModelsValidators;
 using Foundation.Account.Definitions;
@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
 using IdentityModel;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
 using Basket.Api.Configurations;
+using Asp.Versioning;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -71,7 +71,8 @@ namespace Basket.Api.v1.Controllers
                     Price = x.Price,
                     Currency = x.Currency,
                     ExternalReference = x.ExternalReference,
-                    MoreInfo = x.MoreInfo
+                    MoreInfo = x.MoreInfo,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 }),
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -103,7 +104,8 @@ namespace Basket.Api.v1.Controllers
                             Price = x.Price,
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
-                            MoreInfo = x.MoreInfo
+                            MoreInfo = x.MoreInfo,
+                            ExpectedLeadTime = x.ExpectedLeadTime
                         })
                     };
 
@@ -191,7 +193,8 @@ namespace Basket.Api.v1.Controllers
                             Price = x.Price,
                             Currency = x.Currency,
                             ExternalReference = x.ExternalReference,
-                            MoreInfo = x.MoreInfo
+                            MoreInfo = x.MoreInfo,
+                            ExpectedLeadTime = x.ExpectedLeadTime
                         })
                     };
 
@@ -219,6 +222,7 @@ namespace Basket.Api.v1.Controllers
             {
                 BasketId = request.BasketId,
                 IsSeller = isSellerClaim is not null,
+                SellerId = isSellerClaim is not null ? request.SellerId : null,
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
                 ClientEmail = request.ClientEmail,
@@ -248,7 +252,8 @@ namespace Basket.Api.v1.Controllers
                 Attachments = request.Attachments,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value
             };
 
             var validator = new CheckoutBasketServiceModelValidator();

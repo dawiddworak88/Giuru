@@ -82,7 +82,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 PriceLabel = _globalLocalizer.GetString("Price"),
                 CurrencyLabel = _globalLocalizer.GetString("Currency"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
-                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity")
+                MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -123,8 +124,10 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                         OrderItemStatusName = x.OrderItemStatusName,
                         ExpectedDateOfProductOnStock = x.OrderItemStatusChangeComment,
                         ImageAlt = x.ProductName,
-                        ImageSrc = x.PictureUrl
+                        ImageSrc = x.PictureUrl,
+                        ExpectedLeadTime = x.ExpectedLeadTime
                     });
+
                     viewModel.CustomOrder = order.MoreInfo;
 
                     if (order.ShippingAddressId is not null)

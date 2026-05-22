@@ -8,9 +8,11 @@
         public static readonly string CountryClaimType = "Country";
         public static readonly string ZipCodeClaimType = "ZipCode";
         public static readonly string CurrencyClaimType = "Currency";
+        public static readonly string DeliveryTypeClaimType = "DeliveryType";
 
         public static readonly string ExtraPackingClientFieldName = "Extra Packing";
         public static readonly string PaletteLoadingClientFieldName = "Palette Loading";
+        public static readonly string DeliveryTypeClientFieldName = "Method of delivery";
 
         public static readonly string CacheKey = "Claims";
     }

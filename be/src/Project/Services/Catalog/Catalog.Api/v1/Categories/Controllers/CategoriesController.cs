@@ -1,4 +1,4 @@
-﻿using Catalog.Api.ServicesModels.Categories;
+using Catalog.Api.ServicesModels.Categories;
 using Catalog.Api.v1.Categories.RequestModels;
 using Catalog.Api.Services.Categories;
 using Catalog.Api.Validators.Categories;
@@ -20,6 +20,7 @@ using Foundation.GenericRepository.Paginations;
 using Catalog.Api.v1.Categories.ResultModels;
 using Foundation.Extensions.ExtensionMethods;
 using Catalog.Api.v1.Categories.ResponseModels;
+using Asp.Versioning;
 
 namespace Catalog.Api.v1.Categories.Controllers
 {
