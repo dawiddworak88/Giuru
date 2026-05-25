@@ -97,35 +97,33 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                     .Include(p => p.Brand)
                     .ToArrayAsync();
 
-                var imagesTask = _catalogContext.ProductImages
+                var imagesList = await _catalogContext.ProductImages
                     .AsNoTracking()
                     .Where(i => batchIds.Contains(i.ProductId) && i.IsActive)
                     .Select(i => new { i.ProductId, i.MediaId })
                     .ToListAsync();
 
-                var videosTask = _catalogContext.ProductVideos
+                var videosList = await _catalogContext.ProductVideos
                     .AsNoTracking()
                     .Where(v => batchIds.Contains(v.ProductId) && v.IsActive)
                     .Select(v => new { v.ProductId, v.MediaId })
                     .ToListAsync();
 
-                var filesTask = _catalogContext.ProductFiles
+                var filesList = await _catalogContext.ProductFiles
                     .AsNoTracking()
                     .Where(f => batchIds.Contains(f.ProductId) && f.IsActive)
                     .Select(f => new { f.ProductId, f.MediaId })
                     .ToListAsync();
 
-                await Task.WhenAll(imagesTask, videosTask, filesTask);
-
-                var images = imagesTask.Result
+                var images = imagesList
                     .GroupBy(i => i.ProductId)
                     .ToDictionary(g => g.Key, g => g.Select(i => i.MediaId).ToArray());
 
-                var videos = videosTask.Result
+                var videos = videosList
                     .GroupBy(v => v.ProductId)
                     .ToDictionary(g => g.Key, g => g.Select(v => v.MediaId).ToArray());
 
-                var files = filesTask.Result
+                var files = filesList
                     .GroupBy(f => f.ProductId)
                     .ToDictionary(g => g.Key, g => g.Select(f => f.MediaId).ToArray());
 
