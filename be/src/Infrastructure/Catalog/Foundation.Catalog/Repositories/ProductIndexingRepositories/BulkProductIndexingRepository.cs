@@ -60,11 +60,13 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 .ToListAsync();
 
             var schemaCaches = new Dictionary<(Guid categoryId, string language), JObject>();
+
             foreach (var schema in categorySchemas)
             {
                 if (!string.IsNullOrWhiteSpace(schema.Schema))
                 {
                     var key = (schema.CategoryId, schema.Language);
+
                     if (!schemaCaches.ContainsKey(key))
                     {
                         schemaCaches[key] = JObject.Parse(schema.Schema);
@@ -167,7 +169,9 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                     if (productTranslations != null)
                     {
                         var document = CreateProductSearchModel(product, productTranslations, language, item);
+
                         PopulateProductAttributes(document, productTranslations.FormData, product.CategoryId, language, schemaCaches);
+
                         documents.Add(document);
                     }
                 }
