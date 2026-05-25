@@ -18,8 +18,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         private readonly IElasticClient _elasticClient;
         private readonly IConfiguration _configuration;
         private readonly ILogger<ProductIndexingRepository> _logger;
-        private const int BATCH_SIZE = 300;
-        private const int BULK_OPERATIONS_THRESHOLD = 5000;
+        private const int BATCH_SIZE = 100;
 
         public BulkProductIndexingRepository(
             ILogger<ProductIndexingRepository> logger,
@@ -46,14 +45,37 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         public async Task IndexBatchAsync(IEnumerable<Guid> productIds)
         {
             var supportedCultures = _configuration["SupportedCultures"].Split(",");
-            var schemaCaches = new Dictionary<(Guid categoryId, string language), JObject>();
+            var productIdsList = productIds.ToList();
 
-            await foreach (var batch in GetProductBatchesAsync(productIds))
+            var categoryIds = await _catalogContext.Products
+                .AsNoTracking()
+                .Where(p => productIdsList.Contains(p.Id))
+                .Select(p => p.CategoryId)
+                .Distinct()
+                .ToListAsync();
+
+            var categorySchemas = await _catalogContext.CategorySchemas
+                .AsNoTracking()
+                .Where(x => categoryIds.Contains(x.CategoryId) && x.IsActive)
+                .ToListAsync();
+
+            var schemaCaches = new Dictionary<(Guid categoryId, string language), JObject>();
+            foreach (var schema in categorySchemas)
+            {
+                if (!string.IsNullOrWhiteSpace(schema.Schema))
+                {
+                    var key = (schema.CategoryId, schema.Language);
+                    if (!schemaCaches.ContainsKey(key))
+                    {
+                        schemaCaches[key] = JObject.Parse(schema.Schema);
+                    }
+                }
+            }
+
+            await foreach (var batch in GetProductBatchesAsync(productIdsList))
             {
                 await ProcessBatchAsync(batch, supportedCultures, schemaCaches);
             }
-
-            await _elasticClient.Indices.RefreshAsync(Indices.Index<ProductSearchModel>());
         }
 
         private async IAsyncEnumerable<ProductBatchDto[]> GetProductBatchesAsync(IEnumerable<Guid> productIds)
@@ -66,29 +88,44 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 
                 var products = await _catalogContext.Products
                     .AsNoTracking()
+                    .AsSplitQuery()
                     .Where(p => batchIds.Contains(p.Id))
                     .Include(p => p.Translations)
                     .Include(p => p.Category).ThenInclude(c => c.Translations)
                     .Include(p => p.Brand)
                     .ToArrayAsync();
 
-                var images = await _catalogContext.ProductImages
+                var imagesTask = _catalogContext.ProductImages
                     .AsNoTracking()
                     .Where(i => batchIds.Contains(i.ProductId) && i.IsActive)
-                    .GroupBy(i => i.ProductId)
-                    .ToDictionaryAsync(g => g.Key, g => g.Select(i => i.MediaId).ToArray());
+                    .Select(i => new { i.ProductId, i.MediaId })
+                    .ToListAsync();
 
-                var videos = await _catalogContext.ProductVideos
+                var videosTask = _catalogContext.ProductVideos
                     .AsNoTracking()
                     .Where(v => batchIds.Contains(v.ProductId) && v.IsActive)
-                    .GroupBy(v => v.ProductId)
-                    .ToDictionaryAsync(g => g.Key, g => g.Select(v => v.MediaId).ToArray());
+                    .Select(v => new { v.ProductId, v.MediaId })
+                    .ToListAsync();
 
-                var files = await _catalogContext.ProductFiles
+                var filesTask = _catalogContext.ProductFiles
                     .AsNoTracking()
                     .Where(f => batchIds.Contains(f.ProductId) && f.IsActive)
+                    .Select(f => new { f.ProductId, f.MediaId })
+                    .ToListAsync();
+
+                await Task.WhenAll(imagesTask, videosTask, filesTask);
+
+                var images = imagesTask.Result
+                    .GroupBy(i => i.ProductId)
+                    .ToDictionary(g => g.Key, g => g.Select(i => i.MediaId).ToArray());
+
+                var videos = videosTask.Result
+                    .GroupBy(v => v.ProductId)
+                    .ToDictionary(g => g.Key, g => g.Select(v => v.MediaId).ToArray());
+
+                var files = filesTask.Result
                     .GroupBy(f => f.ProductId)
-                    .ToDictionaryAsync(g => g.Key, g => g.Select(f => f.MediaId).ToArray());
+                    .ToDictionary(g => g.Key, g => g.Select(f => f.MediaId).ToArray());
 
                 var primaryProductIds = products.Where(p => p.PrimaryProductId.HasValue).Select(p => p.PrimaryProductId.Value).Distinct().ToList();
                 var primaryProductSkus = primaryProductIds.Any() 
@@ -111,70 +148,60 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             }
         }
 
-        private async Task ProcessBatchAsync(
+        private Task ProcessBatchAsync(
             ProductBatchDto[] batch, 
             string[] supportedCultures, 
             Dictionary<(Guid categoryId, string language), JObject> schemaCaches)
         {
-            var bulk = new BulkDescriptor();
-            var operationCount = 0;
-            var deleteIds = new List<string>();
+            var documents = new List<ProductSearchModel>();
 
             foreach (var item in batch)
             {
                 var product = item.Product;
-                
+
                 foreach (var language in supportedCultures)
                 {
-                    var docId = $"{product.Id}_{language}";
-                    deleteIds.Add(docId);
-
                     var productTranslations = product.Translations.FirstOrDefault(x => x.Language == language && x.IsActive)
                         ?? product.Translations.FirstOrDefault(x => x.IsActive);
 
                     if (productTranslations != null)
                     {
                         var document = CreateProductSearchModel(product, productTranslations, language, item);
-                        await PopulateProductAttributesAsync(document, productTranslations.FormData, product.CategoryId, language, schemaCaches);
-
-                        bulk.Index<ProductSearchModel>(i => i
-                            .Id(docId)
-                            .Document(document));
-
-                        operationCount++;
-
-                        if (operationCount >= BULK_OPERATIONS_THRESHOLD)
-                        {
-                            await ExecuteBulkAsync(bulk, deleteIds);
-                            bulk = new BulkDescriptor();
-                            deleteIds.Clear();
-                            operationCount = 0;
-                        }
+                        PopulateProductAttributes(document, productTranslations.FormData, product.CategoryId, language, schemaCaches);
+                        documents.Add(document);
                     }
                 }
             }
 
-            if (operationCount > 0)
-            {
-                await ExecuteBulkAsync(bulk, deleteIds);
-            }
-        }
+            if (!documents.Any())
+                return Task.CompletedTask;
 
-        private async Task ExecuteBulkAsync(BulkDescriptor bulk, List<string> deleteIds)
-        {
-            if (deleteIds.Any())
-            {
-                var productIds = deleteIds.Select(id => id.Split('_')[0]).Distinct().Select(Guid.Parse);
-                await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(d => d
-                    .Query(q => q.Terms(t => t.Field(f => f.ProductId).Terms(productIds))));
-            }
+            var bulkAllObservable = _elasticClient.BulkAll(documents, b => b
+                .Index<ProductSearchModel>()
+                .BackOffRetries(3)
+                .BackOffTime("5s")
+                .Size(1000)
+                .RefreshOnCompleted(false)
+                .MaxDegreeOfParallelism(2)
+                .BufferToBulk((descriptor, buffer) =>
+                {
+                    foreach (var doc in buffer)
+                    {
+                        descriptor.Index<ProductSearchModel>(i => i
+                            .Id($"{doc.ProductId}_{doc.Language}")
+                            .Document(doc));
+                    }
+                }));
 
-            var response = await _elasticClient.BulkAsync(bulk);
-
-            if (!response.IsValid)
+            var waitHandle = bulkAllObservable.Wait(TimeSpan.FromMinutes(10), onNext: response =>
             {
-                _logger.LogError("Bulk indexing failed: {DebugInfo}", response.DebugInformation);
-            }
+                if (response.Items.Any(i => !i.IsValid))
+                {
+                    _logger.LogError("Some bulk indexing items failed in batch.");
+                }
+            });
+
+            return Task.CompletedTask;
         }
 
         private ProductSearchModel CreateProductSearchModel(
@@ -245,7 +272,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             };
         }
 
-        private async Task PopulateProductAttributesAsync(
+        private void PopulateProductAttributes(
             ProductSearchModel document, 
             string formData, 
             Guid categoryId, 
@@ -258,22 +285,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             var schemaKey = (categoryId, language);
             if (!schemaCaches.TryGetValue(schemaKey, out var schemaObject))
             {
-                var categorySchema = await _catalogContext.CategorySchemas
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.CategoryId == categoryId && x.Language == language && x.IsActive)
-                    ?? await _catalogContext.CategorySchemas
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.CategoryId == categoryId && x.IsActive);
-
-                if (!string.IsNullOrWhiteSpace(categorySchema?.Schema))
-                {
-                    schemaObject = JObject.Parse(categorySchema.Schema);
-                    schemaCaches[schemaKey] = schemaObject;
-                }
-                else
-                {
-                    return;
-                }
+                return;
             }
 
             var formDataObject = JObject.Parse(formData);
