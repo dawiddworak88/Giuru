@@ -17,11 +17,12 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         private readonly CatalogContext _catalogContext;
         private readonly IElasticClient _elasticClient;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<ProductIndexingRepository> _logger;
-        private const int BATCH_SIZE = 100;
+        private readonly ILogger<BulkProductIndexingRepository> _logger;
+        private const int BATCH_SIZE = 300;
+        private const int BULK_OPERATIONS_THRESHOLD = 5000;
 
         public BulkProductIndexingRepository(
-            ILogger<ProductIndexingRepository> logger,
+            ILogger<BulkProductIndexingRepository> logger,
             CatalogContext catalogContext,
             IElasticClient elasticClient,
             IConfiguration configuration)
@@ -78,6 +79,8 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             {
                 await ProcessBatchAsync(batch, supportedCultures, schemaCaches);
             }
+
+            await _elasticClient.Indices.RefreshAsync(Indices.Index<ProductSearchModel>());
         }
 
         private async IAsyncEnumerable<ProductBatchDto[]> GetProductBatchesAsync(IEnumerable<Guid> productIds)
@@ -148,12 +151,14 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             }
         }
 
-        private Task ProcessBatchAsync(
-            ProductBatchDto[] batch, 
-            string[] supportedCultures, 
+        private async Task ProcessBatchAsync(
+            ProductBatchDto[] batch,
+            string[] supportedCultures,
             Dictionary<(Guid categoryId, string language), JObject> schemaCaches)
         {
-            var documents = new List<ProductSearchModel>();
+            var bulk = new BulkDescriptor();
+            var operationCount = 0;
+            var deleteIds = new List<string>();
 
             foreach (var item in batch)
             {
@@ -161,6 +166,9 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
 
                 foreach (var language in supportedCultures)
                 {
+                    var docId = $"{product.Id}_{language}";
+                    deleteIds.Add(docId);
+
                     var productTranslations = product.Translations.FirstOrDefault(x => x.Language == language && x.IsActive)
                         ?? product.Translations.FirstOrDefault(x => x.IsActive);
 
@@ -170,40 +178,44 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
 
                         PopulateProductAttributes(document, productTranslations.FormData, product.CategoryId, language, schemaCaches);
 
-                        documents.Add(document);
+                        bulk.Index<ProductSearchModel>(i => i
+                            .Id(docId)
+                            .Document(document));
+
+                        operationCount++;
+
+                        if (operationCount >= BULK_OPERATIONS_THRESHOLD)
+                        {
+                            await ExecuteBulkAsync(bulk, deleteIds);
+                            bulk = new BulkDescriptor();
+                            deleteIds = new List<string>();
+                            operationCount = 0;
+                        }
                     }
                 }
             }
 
-            if (!documents.Any())
-                return Task.CompletedTask;
-
-            var bulkAllObservable = _elasticClient.BulkAll(documents, b => b
-                .Index<ProductSearchModel>()
-                .BackOffRetries(3)
-                .BackOffTime("5s")
-                .Size(1000)
-                .RefreshOnCompleted(false)
-                .MaxDegreeOfParallelism(2)
-                .BufferToBulk((descriptor, buffer) =>
-                {
-                    foreach (var doc in buffer)
-                    {
-                        descriptor.Index<ProductSearchModel>(i => i
-                            .Id($"{doc.ProductId}_{doc.Language}")
-                            .Document(doc));
-                    }
-                }));
-
-            var waitHandle = bulkAllObservable.Wait(TimeSpan.FromMinutes(10), onNext: response =>
+            if (operationCount > 0)
             {
-                if (response.Items.Any(i => !i.IsValid))
-                {
-                    _logger.LogError("Some bulk indexing items failed in batch.");
-                }
-            });
+                await ExecuteBulkAsync(bulk, deleteIds);
+            }
+        }
 
-            return Task.CompletedTask;
+        private async Task ExecuteBulkAsync(BulkDescriptor bulk, List<string> deleteIds)
+        {
+            if (deleteIds.Any())
+            {
+                var productIds = deleteIds.Select(id => id.Split('_')[0]).Distinct().Select(Guid.Parse);
+                await _elasticClient.DeleteByQueryAsync<ProductSearchModel>(d => d
+                    .Query(q => q.Terms(t => t.Field(f => f.ProductId).Terms(productIds))));
+            }
+
+            var response = await _elasticClient.BulkAsync(bulk);
+
+            if (!response.IsValid)
+            {
+                _logger.LogError("Bulk indexing failed: {DebugInfo}", response.DebugInformation);
+            }
         }
 
         private ProductSearchModel CreateProductSearchModel(
@@ -287,7 +299,13 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             var schemaKey = (categoryId, language);
             if (!schemaCaches.TryGetValue(schemaKey, out var schemaObject))
             {
-                return;
+                schemaObject = schemaCaches
+                    .Where(kv => kv.Key.categoryId == categoryId)
+                    .Select(kv => kv.Value)
+                    .FirstOrDefault();
+
+                if (schemaObject is null)
+                    return;
             }
 
             var formDataObject = JObject.Parse(formData);
