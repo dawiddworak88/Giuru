@@ -1,4 +1,6 @@
-﻿using Foundation.Account.Definitions;
+﻿using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using Foundation.Account.Definitions;
 using Foundation.Localization.Definitions;
 using Foundation.Media.Configurations;
 using Identity.Api.Areas.Accounts.Configurations;
@@ -10,9 +12,9 @@ using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Repositories.AppSecrets;
 using Identity.Api.Repositories.GraphQl;
 using Identity.Api.Services.Approvals;
+using Identity.Api.Services.ClientTeamMembers;
 using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Roles;
-using Identity.Api.Services.ClientTeamMembers;
 using Identity.Api.Services.TeamMembers;
 using Identity.Api.Services.Tokens;
 using Identity.Api.Services.UserApprovals;
@@ -20,12 +22,11 @@ using Identity.Api.Services.Users;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using ITokenService = Identity.Api.Services.Tokens.ITokenService;
 
@@ -122,6 +123,9 @@ namespace Identity.Api.DependencyInjection
                     options.Authority = configuration.GetValue<string>("IdentityUrl");
                     options.RequireHttpsMetadata = false;
                     options.ApiName = AccountConstants.ApiNames.All;
+
+                    options.RoleClaimType = ClaimTypes.Role;
+                    options.NameClaimType = ClaimTypes.Name;
                 });
 
             services.AddScoped<IUserService, UserService>();

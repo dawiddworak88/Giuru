@@ -1,26 +1,26 @@
-using Catalog.Api.ServicesModels.Products;
+using Asp.Versioning;
 using Catalog.Api.Services.Products;
+using Catalog.Api.ServicesModels.Products;
+using Catalog.Api.v1.Products.RequestModels;
+using Catalog.Api.v1.Products.ResponseModels;
+using Catalog.Api.v1.Products.ResultModels;
+using Catalog.Api.Validators.Products;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
+using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net;
-using System.Threading.Tasks;
-using Catalog.Api.Validators.Products;
-using Foundation.Extensions.ExtensionMethods;
-using System.Linq;
-using System.Security.Claims;
-using Foundation.Account.Definitions;
-using Foundation.Extensions.Helpers;
-using Catalog.Api.v1.Products.RequestModels;
-using Foundation.Extensions.Exceptions;
-using Foundation.Extensions.Definitions;
-using System.Globalization;
-using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
-using Catalog.Api.v1.Products.ResultModels;
-using Catalog.Api.v1.Products.ResponseModels;
-using Asp.Versioning;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Catalog.Api.v1.Products.Controllers
 {
@@ -124,7 +124,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     OrderBy = orderBy,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
+                    IsSeller = User.IsInRole(AccountConstants.Roles.Seller),
                     Language = CultureInfo.CurrentCulture.Name
                 };
 
@@ -191,7 +191,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller
+                    IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
                 };
 
                 var validator = new GetProductsByIdsModelValidator();
@@ -227,7 +227,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     HasPrimaryProduct = hasPrimaryProduct,
                     IsNew = isNew,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller
+                    IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
                 };
 
                 var products = await _productService.GetAsync(serviceModel);
@@ -339,7 +339,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Id = id.Value,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller),
                 Language = CultureInfo.CurrentCulture.Name
             };
 
@@ -384,7 +384,7 @@ namespace Catalog.Api.v1.Products.Controllers
                 Sku = sku,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                IsSeller = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == AccountConstants.Roles.Seller,
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller),
                 Language = CultureInfo.CurrentCulture.Name
             };
 
