@@ -22,6 +22,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             ClientAddress shippingAddress,
             string moreInfo, bool hasCustomOrder,
             bool hasApprovalToSendEmail,
-            IEnumerable<Guid> attachments);
+            IEnumerable<Guid> attachments,
+            Guid? SellerId);
     }
 }
