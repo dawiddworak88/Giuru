@@ -2,6 +2,7 @@ using Analytics.Api.Services.SalesAnalytics;
 using Analytics.Api.ServicesModels.SalesAnalytics;
 using Analytics.Api.v1.ResponseModels;
 using Analytics.Api.Validators;
+using Asp.Versioning;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
@@ -14,8 +15,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Asp.Versioning;
 
 namespace Analytics.Api.v1.Controllers
 {
@@ -51,7 +50,7 @@ namespace Analytics.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = User.IsInRole("Seller"),
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller),
                 FromDate = fromDate,
                 ToDate = toDate
             };
@@ -142,7 +141,7 @@ namespace Analytics.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = User.IsInRole("Seller"),
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller),
                 FromDate = fromDate,
                 ToDate = toDate
             };
@@ -191,7 +190,7 @@ namespace Analytics.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = this.User.IsInRole("Seller"),
+                IsSeller = this.User.IsInRole(AccountConstants.Roles.Seller),
                 FromDate = fromDate,
                 ToDate = toDate,
                 Size = size
