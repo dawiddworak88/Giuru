@@ -325,6 +325,6 @@
     <value>The product cannot be deleted while it is in stock.</value>
   </data>
   <data name="ProductDeleteOutletConflict" xml:space="preserve">
-    <value>The product cannot be deleted while it is on sale.</value>
+    <value>The product cannot be deleted while it is on outlet.</value>
   </data>
 </root>
