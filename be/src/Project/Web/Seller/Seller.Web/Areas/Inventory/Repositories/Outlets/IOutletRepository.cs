@@ -21,5 +21,6 @@ namespace Seller.Web.Areas.Inventory.Repositories
         Task<Guid> SaveAsync(
             string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, double quantity, string title, string description, string ean, double? availableQuantity, Guid? organisationId);
         Task<IEnumerable<OutletItem>> GetOutletProductsByProductsIdAsync(string token, string language, IEnumerable<Guid> ids);
+        Task<OutletItem> GetOutletItemByProductIdAsync(string token, string language, Guid? id);
     }
 }
