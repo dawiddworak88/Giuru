@@ -1,4 +1,5 @@
 ﻿using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
@@ -165,6 +166,26 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
+        }
+
+        public async Task<Basket> GetBasketByIdAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
+            };
+
+            var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
         }
     }
 }
