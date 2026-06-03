@@ -313,9 +313,10 @@ function OrderForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
                         toast.success(jsonResponse.message);
                         setDisableSaveButton(true);
+                    } else {
+                        toast.error(jsonResponse.message);
                     }
                 });
             }).catch(() => {
