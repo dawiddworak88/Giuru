@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Orders.Services.BasketService;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.DomainModels.UserApproval;
 using Seller.Web.Shared.Repositories.Clients;
@@ -28,6 +29,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly IBasketService _basketService; 
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -35,7 +37,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
             IClientsRepository clientsRepository,
-            IIdentityRepository identityRepository)
+            IIdentityRepository identityRepository,
+            IBasketService basketService)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
@@ -43,6 +46,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _userApprovalsRepository = userApprovalsRepository;
             _clientsRepository = clientsRepository;
             _identityRepository = identityRepository;
+            _basketService = basketService;
         }
 
         [HttpPost]
@@ -50,6 +54,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+
+            await _basketService.ValidateStockOutletQuantitiesAsync(token, language, model.BasketId);
 
             var userApprovals = Enumerable.Empty<UserApproval>();
 
