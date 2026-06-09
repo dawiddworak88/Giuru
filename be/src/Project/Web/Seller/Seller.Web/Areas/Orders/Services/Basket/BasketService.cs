@@ -18,19 +18,22 @@ namespace Seller.Web.Areas.Orders.Services.Basket
         private readonly IOutletRepository _outletRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
+        private readonly IStringLocalizer<InventoryResources> _inventoryLocalizer;
 
         public BasketService(
             IBasketRepository basketRepository,
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<InventoryResources> inventoryLocalizer)
         {
             _basketRepository = basketRepository;
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
             _orderLocalizer = orderLocalizer;
             _globalLocalizer = globalLocalizer;
+            _inventoryLocalizer = inventoryLocalizer;
         }
 
         public async Task ValidateStockOutletQuantitiesAsync(string token, string language, Guid? basketId)
@@ -63,7 +66,7 @@ namespace Seller.Web.Areas.Orders.Services.Basket
                     {
                         if (!inventoryAvailableByProduct.TryGetValue(productId, out var inventoryProductAvailableQuantity))
                         {
-                            throw new CustomException(_orderLocalizer.GetString("ProductsNotFound"), (int)HttpStatusCode.NotFound);
+                            throw new CustomException(_inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
                         }
 
                         if (stockData.StockQuantity > inventoryProductAvailableQuantity)
@@ -95,7 +98,7 @@ namespace Seller.Web.Areas.Orders.Services.Basket
                     {
                         if (!outletAvailableByProduct.TryGetValue(productId, out var outletProductAvailableQuantity))
                         {
-                            throw new CustomException(_orderLocalizer.GetString("ProductsNotFound"), (int)HttpStatusCode.NotFound);
+                            throw new CustomException(_inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
                         }
 
                         if (outletData.OutletQuantity > outletProductAvailableQuantity)
