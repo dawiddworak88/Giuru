@@ -51,18 +51,24 @@ namespace Seller.Web.Areas.Orders.Services.Basket
                         .GroupBy(x => x.ProductId)
                         .ToDictionary(g => g.Key, g => g.Sum(x => x.AvailableQuantity));
 
-                    var stockQuantityByProduct = stockItems
-                        .GroupBy(x => x.ProductId)
-                        .ToDictionary(g => g.Key, g => g.Sum(x => x.StockQuantity));
+                    var stockByProduct = stockItems
+                        .GroupBy(x => x.ProductId.Value)
+                        .ToDictionary(g => g.Key, g => (
+                            StockQuantity: g.Sum(x => x.StockQuantity),
+                            g.First().ProductName,
+                            g.First().ProductSku
+                        ));
 
-                    foreach (var item in stockItems)
+                    foreach (var (productId, stockData) in stockByProduct)
                     {
-                        inventoryAvailableByProduct.TryGetValue((Guid)item.ProductId, out var inventoryProductAvailableQuantity);
-                        stockQuantityByProduct.TryGetValue(item.ProductId, out var itemStockQuantity);
-
-                        if (itemStockQuantity > inventoryProductAvailableQuantity)
+                        if (!inventoryAvailableByProduct.TryGetValue(productId, out var inventoryProductAvailableQuantity))
                         {
-                            throw new CustomException($"{_orderLocalizer.GetString("StockQuantityError").Value} {item.ProductName} ({item.ProductSku}) {_globalLocalizer.GetString("InBasket")} {itemStockQuantity} {_globalLocalizer.GetString("MaximalLabel")} {inventoryProductAvailableQuantity}", (int)HttpStatusCode.Conflict);
+                            throw new CustomException(_orderLocalizer.GetString("ProductsNotFound"), (int)HttpStatusCode.NotFound);
+                        }
+
+                        if (stockData.StockQuantity > inventoryProductAvailableQuantity)
+                        {
+                            throw new CustomException($"{_orderLocalizer.GetString("StockQuantityError").Value} {stockData.ProductName} ({stockData.ProductSku}) {_globalLocalizer.GetString("InBasket")} {stockData.StockQuantity} {_globalLocalizer.GetString("MaximalLabel")} {inventoryProductAvailableQuantity}", (int)HttpStatusCode.Conflict);
                         }
                     }
                 }
@@ -77,18 +83,24 @@ namespace Seller.Web.Areas.Orders.Services.Basket
                         .GroupBy(x => x.ProductId)
                         .ToDictionary(g => g.Key, g => g.Sum(x => x.AvailableQuantity));
 
-                    var outletQuantityByProduct = outletItems
-                        .GroupBy(x => x.ProductId)
-                        .ToDictionary(g => g.Key, g => g.Sum(x => x.OutletQuantity));
+                    var outletByProduct = outletItems
+                        .GroupBy(x => x.ProductId.Value)
+                        .ToDictionary(g => g.Key, g => (
+                            OutletQuantity: g.Sum(x => x.OutletQuantity),
+                            g.First().ProductName,
+                            g.First().ProductSku
+                        ));
 
-                    foreach (var item in outletItems)
+                    foreach (var (productId, outletData) in outletByProduct)
                     {
-                        outletAvailableByProduct.TryGetValue((Guid)item.ProductId, out var outletProductAvailableQuantity);
-                        outletQuantityByProduct.TryGetValue(item.ProductId, out var itemOutletQuantity);
-
-                        if (itemOutletQuantity > outletProductAvailableQuantity)
+                        if (!outletAvailableByProduct.TryGetValue(productId, out var outletProductAvailableQuantity))
                         {
-                            throw new CustomException($"{_orderLocalizer.GetString("OutletQuantityError").Value} {item.ProductName} ({item.ProductSku}) {_globalLocalizer.GetString("InBasket")} {itemOutletQuantity} {_globalLocalizer.GetString("MaximalLabel")} {outletProductAvailableQuantity}", (int)HttpStatusCode.Conflict);
+                            throw new CustomException(_orderLocalizer.GetString("ProductsNotFound"), (int)HttpStatusCode.NotFound);
+                        }
+
+                        if (outletData.OutletQuantity > outletProductAvailableQuantity)
+                        {
+                            throw new CustomException($"{_orderLocalizer.GetString("OutletQuantityError").Value} {outletData.ProductName} ({outletData.ProductSku}) {_globalLocalizer.GetString("InBasket")} {outletData.OutletQuantity} {_globalLocalizer.GetString("MaximalLabel")} {outletProductAvailableQuantity}", (int)HttpStatusCode.Conflict);
                         }
                     }
                 }
