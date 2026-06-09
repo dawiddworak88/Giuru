@@ -198,5 +198,30 @@ namespace Seller.Web.Areas.Inventory.Repositories
 
             return default;
         }
+
+        public async Task<OutletItem> GetOutletItemByProductIdAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Outlet.ProductOutletApiEndpoint}/{id}"
+            };
+
+            var response = await _apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletItem>(apiRequest);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }

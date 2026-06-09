@@ -19,5 +19,6 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? WarehouseId, Guid? ProductId, string ProductName, string ProductSku, double Quantity, string ean, int? RestockableInDays, double? AvailableQuantity, DateTime? ExpectedDelivery, Guid? OrganisationId);
         Task<IEnumerable<InventoryItem>> GetInventoryProductByProductIdsAsync(string token, string language, IEnumerable<Guid> ids);
+        Task<InventoryItem> GetInventoryByProductIdAsync(string token, string language, Guid? id);
     }
 }

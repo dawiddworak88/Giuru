@@ -141,9 +141,31 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid? id)
         {
+            if (id is null)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest);
+            }
+
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var inventory = await _inventoryRepository.GetInventoryByProductIdAsync(token, language, id);
+
+            if (inventory is not null)
+            {
+                return StatusCode((int)HttpStatusCode.Conflict, new { Message = _productLocalizer.GetString("ProductDeleteInventoryConflict").Value });
+            }
+
+            var outlet = await _outletRepository.GetOutletItemByProductIdAsync(token, language, id);
+
+            if (outlet is not null)
+            {
+                return StatusCode((int)HttpStatusCode.Conflict, new { Message = _productLocalizer.GetString("ProductDeleteOutletConflict").Value });
+            }
+
             await _productsRepository.DeleteAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
+                token,
+                language,
                 id);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("ProductDeletedSuccessfully").Value });

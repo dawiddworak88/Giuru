@@ -177,5 +177,30 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
 
             return default;
         }
+
+        public async Task<InventoryItem> GetInventoryByProductIdAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{_settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryProductApiEndpoint}/{id}"
+            };
+
+            var response = await _apiInventoryService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, InventoryItem>(apiRequest);
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data is not null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }
