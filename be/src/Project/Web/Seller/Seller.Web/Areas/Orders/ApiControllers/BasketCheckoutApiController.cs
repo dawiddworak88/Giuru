@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
-using Seller.Web.Areas.Orders.Services.BasketService;
+using Seller.Web.Areas.Orders.Services.Basket;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.DomainModels.UserApproval;
 using Seller.Web.Shared.Repositories.Clients;

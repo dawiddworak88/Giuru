@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Orders.Services.BasketService
+namespace Seller.Web.Areas.Orders.Services.Basket
 {
     public interface IBasketService
     {

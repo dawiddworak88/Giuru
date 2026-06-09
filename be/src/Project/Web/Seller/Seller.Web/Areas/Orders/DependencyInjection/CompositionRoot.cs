@@ -9,7 +9,7 @@ using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Orders.ModelBuilders;
 using Seller.Web.Areas.Orders.ComponetModels;
-using Seller.Web.Areas.Orders.Services.BasketService;
+using Seller.Web.Areas.Orders.Services.Basket;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {
