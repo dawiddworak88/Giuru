@@ -18,6 +18,8 @@
         public string SecondaryColor { get; set; }
         public string BodyColour { get; set; }
         public string ShelfType { get; set; }
+        public string NumberOfMirrors { get; set; }
+        public string Led { get; set; }
         public string IsOutlet { get; set; }
     }
 }

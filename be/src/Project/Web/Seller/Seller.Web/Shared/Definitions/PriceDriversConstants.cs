@@ -24,5 +24,7 @@
         public const string SecondaryColorDriver = "Secondary Color";
         public const string BodyColourDriver = "Body colour";
         public const string ShelfTypeDriver = "Shelf Type";
+        public const string NumberOfMirrorsDriver = "Number of mirrors";
+        public const string LedDriver = "LED";
     }
 }

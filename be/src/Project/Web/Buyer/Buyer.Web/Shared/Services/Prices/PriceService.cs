@@ -318,6 +318,24 @@ namespace Buyer.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.NumberOfMirrors))
+            {
+                priceDrivers.Add(new PriceDriver
+                {
+                    Name = PriceDriversConstants.NumberOfMirrorsDriver,
+                    Value = product.NumberOfMirrors
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.Led))
+            {
+                priceDrivers.Add(new PriceDriver
+                {
+                    Name = PriceDriversConstants.LedDriver,
+                    Value = product.Led
+                });
+            }
+
             if (client is not null)
             {
                 if (!string.IsNullOrWhiteSpace(client.Name))
