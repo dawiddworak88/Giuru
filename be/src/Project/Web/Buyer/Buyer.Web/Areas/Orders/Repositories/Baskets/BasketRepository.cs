@@ -104,7 +104,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             string moreInfo, 
             bool hasCustomOrder,
             bool hasApprovalToSendEmail,
-            IEnumerable<Guid> attachments)
+            IEnumerable<Guid> attachments,
+            Guid? sellerId)
         {
             var requestModel = new CheckoutBasketApiRequestModel
             {
@@ -116,6 +117,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 HasCustomOrder = hasCustomOrder,
                 HasApprovalToSendEmail = hasApprovalToSendEmail,
                 Attachments = attachments,
+                SellerId = sellerId,
             };
 
             if (billingAddress is not null)
