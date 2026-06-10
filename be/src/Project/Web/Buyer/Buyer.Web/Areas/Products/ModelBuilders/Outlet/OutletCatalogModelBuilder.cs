@@ -125,6 +125,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                                 SecondaryColor = x.SecondaryColor,
                                 BodyColour = x.BodyColour,
                                 ShelfType = x.ShelfType,
+                                NumberOfMirrors = x.NumberOfMirrors,
+                                Led = x.Led,
                                 IsOutlet = (outletItems.Data.FirstOrDefault(y => y.ProductId == x.Id)?.AvailableQuantity > 0).ToYesOrNo()
                             }),
                             new PriceClient

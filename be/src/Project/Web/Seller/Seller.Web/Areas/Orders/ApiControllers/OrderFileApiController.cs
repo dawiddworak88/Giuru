@@ -191,7 +191,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                     SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
                     BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                    ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys)
+                    ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                    NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
+                    Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
                 });
 
                 prices = await _priceService.GetPrices(
