@@ -92,6 +92,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         LampshadeSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLampshadeSizeAttributeKeys),
                         LinearLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
                         Mirror = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                        NumberOfMirrors = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleNumberOfMirrorsAttributeKeys),
+                        Led = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLedAttributeKeys).ToYesOrNo(),
                         Shape = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShapeAttributeKeys),
                         PrimaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePrimaryColorAttributeKeys)),
                         SecondaryColor = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleSecondaryColorAttributeKeys)),

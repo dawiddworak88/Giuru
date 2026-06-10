@@ -396,6 +396,8 @@ services:
       - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize
       - PossibleLinearLightAttributeKeys=linearLight,LinearLight
       - PossibleMirrorAttributeKeys=mirror,Mirror
+      - PossibleNumberOfMirrorsAttributeKeys=numberOfMirrors,NumberOfMirrors
+      - PossibleLedAttributeKeys=lED,LED
       - PossibleShapeAttributeKeys=shape,Shape
       - PossiblePrimaryColorAttributeKeys=primaryColor,PrimaryColor
       - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
@@ -456,6 +458,8 @@ services:
       - PossibleLampshadeSizeAttributeKeys=lampshadeSize,LampshadeSize
       - PossibleLinearLightAttributeKeys=linearLight,LinearLight
       - PossibleMirrorAttributeKeys=mirror,Mirror
+      - PossibleNumberOfMirrorsAttributeKeys=numberOfMirrors,NumberOfMirrors
+      - PossibleLedAttributeKeys=lED,LED
       - PossibleShapeAttributeKeys=shape,Shape
       - PossiblePrimaryColorAttributeKeys=primaryColor,PrimaryColor
       - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
