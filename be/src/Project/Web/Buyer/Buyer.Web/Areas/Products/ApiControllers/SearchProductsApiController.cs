@@ -93,6 +93,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             LampshadeSize = x.LampshadeSize,
                             LinearLight = x.LinearLight,
                             Mirror = x.Mirror,
+                            NumberOfMirrors = x.NumberOfMirrors,
+                            Led = x.Led,
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
                             SecondaryColor = x.SecondaryColor,

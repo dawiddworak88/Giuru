@@ -138,6 +138,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
                     LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
                     Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                    NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
+                    Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo(),
                     Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
                     PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
                     SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),

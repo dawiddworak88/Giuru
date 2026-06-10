@@ -14,6 +14,8 @@
         public const string DeliveryAddressDriver = "Delivery Address";
         public const string OutletDriver = "Outlet";
         public const string MirrorDriver = "Mirror";
+        public const string NumberOfMirrorsDriver = "Number of Mirrors";
+        public const string LedDriver = "LED";
         public const string SizeDriver = "Size";
         public const string ShapeDriver = "Shape";
         public const string PointsOfLightDriver = "Points of Light";

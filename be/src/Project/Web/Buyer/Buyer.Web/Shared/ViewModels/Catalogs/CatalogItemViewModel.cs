@@ -39,6 +39,8 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string LampshadeSize { get; set; }
         public string LinearLight { get; set; }
         public string Mirror { get; set; }
+        public string NumberOfMirrors { get; set; }
+        public string Led { get; set; }
         public string Shape { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }

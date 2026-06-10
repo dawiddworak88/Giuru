@@ -8,6 +8,8 @@
         public string ExtraPacking { get; set; }
         public string PaletteSize { get; set; }
         public string Mirror { get; set; }
+        public string NumberOfMirrors { get; set; }
+        public string Led { get; set; }
         public string Size { get; set; }
         public string Shape { get; set; }
         public string PointsOfLight { get; set; }

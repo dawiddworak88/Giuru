@@ -45,6 +45,8 @@ namespace Buyer.Web.Shared.Configurations
         public string PossibleLampshadeSizeAttributeKeys { get; set; }
         public string PossibleLinearLightAttributeKeys { get; set; }
         public string PossibleMirrorAttributeKeys { get; set; }
+        public string PossibleNumberOfMirrorsAttributeKeys { get; set; }
+        public string PossibleLedAttributeKeys { get; set; }
         public string PossibleShapeAttributeKeys { get; set; }
         public string PossiblePrimaryColorAttributeKeys { get; set; }
         public string PossibleSecondaryColorAttributeKeys { get; set; }
