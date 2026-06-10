@@ -1,11 +1,13 @@
 ﻿using Foundation.Catalog.Infrastructure.Categories.Entities;
 using Foundation.GenericRepository.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.Catalog.Infrastructure.Products.Entities
 {
+    [Index(nameof(PrimaryProductId))]
     public class Product : Entity
     {
         public Guid? PrimaryProductId { get; set; }

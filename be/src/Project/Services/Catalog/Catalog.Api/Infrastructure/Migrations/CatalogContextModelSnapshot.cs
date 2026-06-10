@@ -343,6 +343,8 @@ namespace Catalog.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SellerId");
+
                     b.ToTable("Brands");
                 });
 
@@ -399,6 +401,8 @@ namespace Catalog.Api.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("PrimaryProductId");
+
                     b.ToTable("Products");
                 });
 
@@ -433,6 +437,8 @@ namespace Catalog.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("ProductFiles");
                 });
 
@@ -466,6 +472,8 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
                 });
@@ -542,6 +550,8 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductVideos");
                 });
