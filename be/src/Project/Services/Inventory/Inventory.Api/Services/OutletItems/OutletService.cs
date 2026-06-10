@@ -379,52 +379,45 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task<OutletSumServiceModel> GetOutletByProductId(GetOutletByProductIdServiceModel model)
         {
-            var outletItems = from o in _context.Outlet
-                              join product in _context.Products on o.ProductId equals product.Id
-                              join warehouse in _context.Warehouses on o.WarehouseId equals warehouse.Id
-                              join ot in _context.OutletTranslations on o.Id equals ot.OutletItemId
-                              where o.ProductId == model.ProductId.Value && product.IsActive && o.IsActive
-                              select new
-                              {
-                                  Id = o.Id,
-                                  ProductId = o.ProductId,
-                                  ProductName = product.Name,
-                                  ProductSku = product.Sku,
-                                  Quantity = o.Quantity,
-                                  AvailableQuantity = o.AvailableQuantity,
-                                  WarehouseId = o.WarehouseId,
-                                  WarehouseName = warehouse.Name,
-                                  ProductEan = product.Ean,
-                                  Title = ot.Title,
-                                  Description = ot.Description,
-                                  LastModifiedDate = o.LastModifiedDate,
-                                  CreatedDate = o.CreatedDate
-                              };
+            var outletItems = await _context.Outlet
+                .Where(x => x.ProductId == model.ProductId.Value && x.IsActive)
+                .Include(x => x.Product)
+                .Include(x => x.Warehouse)
+                .Include(x => x.Translations)
+                .AsSingleQuery()
+                .Where(x => x.Product.IsActive)
+                .ToListAsync();
 
             if (outletItems.OrEmptyIfNull().Any())
             {
+                var first = outletItems.First();
+
                 var outletSum = new OutletSumServiceModel
                 {
                     ProductId = model.ProductId.Value,
-                    ProductName = outletItems.FirstOrDefault().ProductName,
-                    ProductSku = outletItems.FirstOrDefault().ProductSku,
+                    ProductName = first.Product?.Name,
+                    ProductSku = first.Product?.Sku,
                     AvailableQuantity = outletItems.Sum(x => x.AvailableQuantity),
                     Quantity = outletItems.Sum(x => x.Quantity),
-                    ProductEan = outletItems.FirstOrDefault().ProductEan,
-                    Title = outletItems.FirstOrDefault().Title,
-                    Description = outletItems.FirstOrDefault().Description,
+                    ProductEan = first.Product?.Ean,
+                    Title = first.Translations.FirstOrDefault(t => t.Language == model.Language)?.Title
+                            ?? first.Translations.FirstOrDefault()?.Title,
+                    Description = first.Translations.FirstOrDefault(t => t.Language == model.Language)?.Description
+                                  ?? first.Translations.FirstOrDefault()?.Description,
                     Details = outletItems.Select(item => new OutletServiceModel
                     {
                         Id = item.Id,
                         ProductId = item.ProductId,
-                        ProductName = item.ProductName,
-                        ProductSku = item.ProductSku,
+                        ProductName = item.Product?.Name,
+                        ProductSku = item.Product?.Sku,
                         AvailableQuantity = item.AvailableQuantity,
                         Quantity = item.Quantity,
-                        Title = item.Title,
-                        Description = item.Description,
+                        Title = item.Translations.FirstOrDefault(t => t.Language == model.Language)?.Title
+                                ?? item.Translations.FirstOrDefault()?.Title,
+                        Description = item.Translations.FirstOrDefault(t => t.Language == model.Language)?.Description
+                                      ?? item.Translations.FirstOrDefault()?.Description,
                         WarehouseId = item.WarehouseId,
-                        WarehouseName = item.WarehouseName,
+                        WarehouseName = item.Warehouse?.Name,
                         LastModifiedDate = item.LastModifiedDate,
                         CreatedDate = item.CreatedDate
                     })
@@ -523,8 +516,8 @@ namespace Inventory.Api.Services.OutletItems
                         ProductName = y.FirstOrDefault().Product.Name,
                         ProductSku = y.FirstOrDefault().Product.Sku,
                         ProductEan = y.FirstOrDefault().Product.Ean,
-                        AvailableQuantity = y.FirstOrDefault().AvailableQuantity,
-                        Quantity = y.FirstOrDefault().Quantity,
+                        AvailableQuantity = y.Sum(z => z.AvailableQuantity),
+                        Quantity = y.Sum(z => z.Quantity),
                         OutletId = y.FirstOrDefault().Id,
                         Title = y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language) != null ? y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language).Title : y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id).Title,
                         Description = y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language) != null ? y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id && t.Language == model.Language).Description : y.FirstOrDefault().Translations.FirstOrDefault(t => t.OutletItemId == y.FirstOrDefault().Id).Description
