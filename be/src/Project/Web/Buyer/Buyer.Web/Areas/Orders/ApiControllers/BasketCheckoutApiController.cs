@@ -7,7 +7,9 @@ using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Baskets;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Helpers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
@@ -55,6 +57,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+            var organisationId = GuidHelper.ParseNullable(User.FindFirstValue(AccountConstants.Claims.OrganisationIdClaim));
 
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
 
@@ -107,7 +110,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.MoreInfo,
                 model.HasCustomOrder,
                 clientApprovlas.Any(x => x.ApprovalId == ApprovalsConstants.ToSendOrderConfirmationEmails),
-                model.Attachments?.Select(x => x.Id));
+                model.Attachments?.Select(x => x.Id),
+                organisationId);
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }
