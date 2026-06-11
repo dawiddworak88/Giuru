@@ -1,26 +1,28 @@
-using Foundation.Catalog.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Catalog.Api.Infrastructure.Migrations
 {
-    [DbContext(typeof(CatalogContext))]
-    [Migration("20260610120000_AddProductIndexingIndexes")]
+    /// <inheritdoc />
     public partial class AddProductIndexingIndexes : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateIndex(
-                name: "IX_ProductImages_ProductId",
-                table: "ProductImages",
+                name: "IX_ProductVideos_ProductId",
+                table: "ProductVideos",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVideos_ProductId",
-                table: "ProductVideos",
+                name: "IX_Products_PrimaryProductId",
+                table: "Products",
+                column: "PrimaryProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductImages_ProductId",
+                table: "ProductImages",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -32,22 +34,22 @@ namespace Catalog.Api.Infrastructure.Migrations
                 name: "IX_Brands_SellerId",
                 table: "Brands",
                 column: "SellerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_PrimaryProductId",
-                table: "Products",
-                column: "PrimaryProductId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_ProductImages_ProductId",
-                table: "ProductImages");
-
-            migrationBuilder.DropIndex(
                 name: "IX_ProductVideos_ProductId",
                 table: "ProductVideos");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Products_PrimaryProductId",
+                table: "Products");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ProductImages_ProductId",
+                table: "ProductImages");
 
             migrationBuilder.DropIndex(
                 name: "IX_ProductFiles_ProductId",
@@ -56,10 +58,6 @@ namespace Catalog.Api.Infrastructure.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Brands_SellerId",
                 table: "Brands");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Products_PrimaryProductId",
-                table: "Products");
         }
     }
 }
