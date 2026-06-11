@@ -96,7 +96,10 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             Shape = x.Shape,
                             PrimaryColor = x.PrimaryColor,
                             SecondaryColor = x.SecondaryColor,
-                            BodyColour = x.BodyColour
+                            BodyColour = x.BodyColour,
+                            ShelfType = x.ShelfType,
+                            NumberOfMirrors = x.NumberOfMirrors,
+                            Led = x.Led
                         }),
                         new PriceClient
                         {

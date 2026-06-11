@@ -402,6 +402,8 @@ services:
       - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
       - PossibleBodyColorAttributeKeys=bodyColour,BodyColour
       - PossibleShelfTypeAttributeKeys=shelfType,ShelfType
+      - PossibleNumberOfMirrorsAttributeKeys=numberOfMirrors,NumberOfMirrors
+      - PossibleLedAttributeKeys=lED,LED
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -462,6 +464,8 @@ services:
       - PossibleSecondaryColorAttributeKeys=secondaryColor,SecondaryColor
       - PossibleBodyColorAttributeKeys=bodyColour,BodyColour
       - PossibleShelfTypeAttributeKeys=shelfType,ShelfType
+      - PossibleNumberOfMirrorsAttributeKeys=numberOfMirrors,NumberOfMirrors
+      - PossibleLedAttributeKeys=lED,LED
       - ProductColorAttributeId=a04b3368-fa25-4b4a-e4eb-08d907680a85
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
