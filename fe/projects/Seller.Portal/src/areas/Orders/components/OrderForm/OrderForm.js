@@ -316,7 +316,7 @@ function OrderForm(props) {
                         toast.success(jsonResponse.message);
                         setDisableSaveButton(true);
                     } else {
-                        toast.error(jsonResponse.message);
+                        toast.error(jsonResponse.message || props.generalErrorMessage);
                     }
                 });
             }).catch(() => {
