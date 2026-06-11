@@ -185,6 +185,11 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 return response.Data;
             }
 
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
             return default;
         }
     }
