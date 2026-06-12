@@ -196,7 +196,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                             ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                             NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                            Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
+                            Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                         },
                         new PriceClient
                         {
@@ -337,7 +337,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                                 ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                                 NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                                Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
+                                Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                             });
 
                             prices = await _priceService.GetPrices(

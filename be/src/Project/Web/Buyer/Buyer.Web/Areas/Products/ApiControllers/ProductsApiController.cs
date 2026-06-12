@@ -178,7 +178,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                         NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
+                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                     });
 
                     prices = await _priceService.GetPrices(
@@ -392,7 +392,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                         NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
+                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                     });
 
                     prices = await _priceService.GetPrices(
@@ -507,7 +507,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                         NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys),
+                        Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo(),
                         IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
                     },
                     new PriceClient
