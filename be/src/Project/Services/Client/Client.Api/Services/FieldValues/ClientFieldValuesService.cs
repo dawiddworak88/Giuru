@@ -1,4 +1,5 @@
-﻿using Client.Api.Infrastructure;
+﻿using Client.Api.Definitions;
+using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Fields;
 using Client.Api.ServicesModels.FieldValues;
 using Foundation.Extensions.Exceptions;
@@ -40,6 +41,7 @@ namespace Client.Api.Services.FieldValues
 
             var fieldsValues = _context.ClientFieldValues
                     .Include(x => x.Translation)
+                    .Include(x => x.FieldDefinition)
                     .Where(x => x.ClientId == model.ClientId && model.FieldsValues.Select(y => y.FieldDefinitionId).Contains(x.FieldDefinitionId))
                     .AsSingleQuery()
                     .ToList();
@@ -47,14 +49,25 @@ namespace Client.Api.Services.FieldValues
             foreach (var fieldValue in model.FieldsValues.OrEmptyIfNull())
             {
                 var existingFieldValue = fieldsValues.FirstOrDefault(x => x.FieldDefinitionId == fieldValue.FieldDefinitionId);
+                var isSelectField = existingFieldValue?.FieldDefinition?.FieldType == FieldTypesConstants.SelectFieldType;
 
                 if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is true && existingFieldValue is not null)
                 {
-                    var existingTranslation = existingFieldValue.Translation.FirstOrDefault(x => x.Language == model.Language);
-
-                    if (existingTranslation is not null)
+                    if (isSelectField)
                     {
-                        _context.Remove(existingTranslation);
+                        foreach (var translation in existingFieldValue.Translation.OrEmptyIfNull().ToList())
+                        {
+                            _context.Remove(translation);
+                        }
+                    }
+                    else
+                    {
+                        var existingTranslation = existingFieldValue.Translation.FirstOrDefault(x => x.Language == model.Language);
+
+                        if (existingTranslation is not null)
+                        {
+                            _context.Remove(existingTranslation);
+                        }
                     }
 
                     continue;
@@ -84,26 +97,59 @@ namespace Client.Api.Services.FieldValues
                 }
                 else
                 {
-                    var existingTranslation = existingFieldValue.Translation?.FirstOrDefault(x => x.Language == model.Language);
-
-                    if (existingTranslation is null)
+                    if (isSelectField)
                     {
                         if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false)
                         {
-                            var newFieldValueTranslation = new ClientFieldValueTranslation
-                            {
-                                ClientFieldValueId = existingFieldValue.Id,
-                                FieldValue = fieldValue.FieldValue,
-                                Language = model.Language
-                            };
+                            var hasCurrentLanguage = false;
 
-                            _context.ClientFieldValueTranslations.Add(newFieldValueTranslation.FillCommonProperties());
+                            foreach (var translation in existingFieldValue.Translation.OrEmptyIfNull())
+                            {
+                                translation.FieldValue = fieldValue.FieldValue;
+                                translation.LastModifiedDate = DateTime.UtcNow;
+
+                                if (translation.Language == model.Language)
+                                {
+                                    hasCurrentLanguage = true;
+                                }
+                            }
+
+                            if (!hasCurrentLanguage)
+                            {
+                                var newFieldValueTranslation = new ClientFieldValueTranslation
+                                {
+                                    ClientFieldValueId = existingFieldValue.Id,
+                                    FieldValue = fieldValue.FieldValue,
+                                    Language = model.Language
+                                };
+
+                                _context.ClientFieldValueTranslations.Add(newFieldValueTranslation.FillCommonProperties());
+                            }
                         }
                     }
                     else
                     {
-                        existingTranslation.FieldValue = fieldValue.FieldValue;
-                        existingTranslation.LastModifiedDate = DateTime.UtcNow;
+                        var existingTranslation = existingFieldValue.Translation?.FirstOrDefault(x => x.Language == model.Language);
+
+                        if (existingTranslation is null)
+                        {
+                            if (string.IsNullOrWhiteSpace(fieldValue.FieldValue) is false)
+                            {
+                                var newFieldValueTranslation = new ClientFieldValueTranslation
+                                {
+                                    ClientFieldValueId = existingFieldValue.Id,
+                                    FieldValue = fieldValue.FieldValue,
+                                    Language = model.Language
+                                };
+
+                                _context.ClientFieldValueTranslations.Add(newFieldValueTranslation.FillCommonProperties());
+                            }
+                        }
+                        else
+                        {
+                            existingTranslation.FieldValue = fieldValue.FieldValue;
+                            existingTranslation.LastModifiedDate = DateTime.UtcNow;
+                        }
                     }
                 }
             }
