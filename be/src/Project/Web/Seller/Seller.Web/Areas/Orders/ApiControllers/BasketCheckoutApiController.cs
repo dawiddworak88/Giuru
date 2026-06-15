@@ -1,9 +1,13 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Inventory.Repositories;
+using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
@@ -29,7 +33,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
-        private readonly IBasketService _basketService; 
+        private readonly IBasketService _basketService;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IOutletRepository _outletRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -38,7 +44,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IUserApprovalsRepository userApprovalsRepository,
             IClientsRepository clientsRepository,
             IIdentityRepository identityRepository,
-            IBasketService basketService)
+            IBasketService basketService,
+            IInventoryRepository inventoryRepository,
+            IOutletRepository outletRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
@@ -47,6 +55,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _clientsRepository = clientsRepository;
             _identityRepository = identityRepository;
             _basketService = basketService;
+            _inventoryRepository = inventoryRepository;
+            _outletRepository = outletRepository;
         }
 
         [HttpPost]
@@ -55,7 +65,34 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await _basketService.ValidateStockOutletQuantitiesAsync(token, language, model.BasketId);
+            var basket = await _basketRepository.GetBasketByIdAsync(token, language, model.BasketId);
+
+            if (basket is null || basket.Items.Any() is false)
+            {
+                throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
+            }
+
+            var items = basket.Items.OrEmptyIfNull().ToList();
+
+            if (items.Any(x => x.StockQuantity > 0 || x.OutletQuantity > 0))
+            {
+                if (items.Any(x => x.ProductId.HasValue is false))
+                {
+                    throw new CustomException(_orderLocalizer.GetString("ProductsNotFound"), (int)HttpStatusCode.NotFound);
+                }
+
+                var inventories = await _inventoryRepository.GetInventoryProductByProductIdsAsync(
+                    token,
+                    language,
+                    items.Where(x => x.StockQuantity > 0).Select(x => x.ProductId.Value));
+
+                var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
+                    token,
+                    language,
+                    items.Where(x => x.OutletQuantity > 0).Select(x => x.ProductId.Value));
+
+                _basketService.ValidateStockOutletQuantities(items, inventories, outlets);
+            }
 
             var userApprovals = Enumerable.Empty<UserApproval>();
 
