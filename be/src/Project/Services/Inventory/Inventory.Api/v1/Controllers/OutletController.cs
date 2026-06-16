@@ -388,7 +388,7 @@ namespace Outlet.Api.v1.Controllers
             var serviceModel = new GetOutletByProductIdServiceModel
             {
                 ProductId = id,
-                Language = CultureInfo.CurrentCulture.Name
+                Language = CultureInfo.CurrentUICulture.Name
             };
 
             var validator = new GetProductByIdModelValidator();
