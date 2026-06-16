@@ -386,6 +386,7 @@ namespace Inventory.Api.Services.OutletItems
                 .Include(x => x.Translations)
                 .AsSingleQuery()
                 .Where(x => x.Product.IsActive)
+                .OrderBy(x => x.Id)
                 .ToListAsync();
 
             if (outletItems.OrEmptyIfNull().Any())
@@ -400,10 +401,10 @@ namespace Inventory.Api.Services.OutletItems
                     AvailableQuantity = outletItems.Sum(x => x.AvailableQuantity),
                     Quantity = outletItems.Sum(x => x.Quantity),
                     ProductEan = first.Product?.Ean,
-                    Title = first.Translations.FirstOrDefault(t => t.Language == model.Language)?.Title
-                            ?? first.Translations.FirstOrDefault()?.Title,
-                    Description = first.Translations.FirstOrDefault(t => t.Language == model.Language)?.Description
-                                  ?? first.Translations.FirstOrDefault()?.Description,
+                    Title = first.Translations?.FirstOrDefault(t => t.Language == model.Language)?.Title
+                            ?? first.Translations?.FirstOrDefault()?.Title,
+                    Description = first.Translations?.FirstOrDefault(t => t.Language == model.Language)?.Description
+                                  ?? first.Translations?.FirstOrDefault()?.Description,
                     Details = outletItems.Select(item => new OutletServiceModel
                     {
                         Id = item.Id,
@@ -412,10 +413,10 @@ namespace Inventory.Api.Services.OutletItems
                         ProductSku = item.Product?.Sku,
                         AvailableQuantity = item.AvailableQuantity,
                         Quantity = item.Quantity,
-                        Title = item.Translations.FirstOrDefault(t => t.Language == model.Language)?.Title
-                                ?? item.Translations.FirstOrDefault()?.Title,
-                        Description = item.Translations.FirstOrDefault(t => t.Language == model.Language)?.Description
-                                      ?? item.Translations.FirstOrDefault()?.Description,
+                        Title = item.Translations?.FirstOrDefault(t => t.Language == model.Language)?.Title
+                                ?? item.Translations?.FirstOrDefault()?.Title,
+                        Description = item.Translations?.FirstOrDefault(t => t.Language == model.Language)?.Description
+                                      ?? item.Translations?.FirstOrDefault()?.Description,
                         WarehouseId = item.WarehouseId,
                         WarehouseName = item.Warehouse?.Name,
                         LastModifiedDate = item.LastModifiedDate,
