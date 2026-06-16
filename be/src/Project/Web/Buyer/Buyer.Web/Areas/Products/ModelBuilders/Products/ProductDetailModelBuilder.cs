@@ -180,6 +180,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         new PriceProduct
                         {
                             PrimarySku = product.PrimaryProductSku,
+                            ProductVariantSku = product.Sku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
@@ -196,7 +197,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                             ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                             NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                            Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
+                            Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                         },
                         new PriceClient
                         {
@@ -321,6 +322,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             var priceProducts = productVariants.Data.Select(async x => new PriceProduct
                             {
                                 PrimarySku = x.PrimaryProductSku,
+                                ProductVariantSku = x.Sku,
                                 FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                                 ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
                                 SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
@@ -337,7 +339,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                                 ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                                 NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                                Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
+                                Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                             });
 
                             prices = await _priceService.GetPrices(

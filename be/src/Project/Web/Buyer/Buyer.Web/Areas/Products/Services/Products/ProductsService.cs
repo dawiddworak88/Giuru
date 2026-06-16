@@ -98,7 +98,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BodyColour = await this.productColorsService.ToEnglishAsync(GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleShelfTypeAttributeKeys),
                         NumberOfMirrors = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLedAttributeKeys)
+                        Led = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                     };
 
                     if (product.Images != null)

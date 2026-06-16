@@ -141,31 +141,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id is null)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest);
-            }
-
-            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var language = CultureInfo.CurrentUICulture.Name;
-
-            var inventory = await _inventoryRepository.GetInventoryByProductIdAsync(token, language, id);
-
-            if (inventory is not null)
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new { Message = _productLocalizer.GetString("ProductDeleteInventoryConflict").Value });
-            }
-
-            var outlet = await _outletRepository.GetOutletItemByProductIdAsync(token, language, id);
-
-            if (outlet is not null)
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new { Message = _productLocalizer.GetString("ProductDeleteOutletConflict").Value });
-            }
-
             await _productsRepository.DeleteAsync(
-                token,
-                language,
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
                 id);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _productLocalizer.GetString("ProductDeletedSuccessfully").Value });
@@ -243,6 +221,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                     var priceProducts = products.Data.Select(async x => new PriceProduct
                     {
                         PrimarySku = x.PrimaryProductSku,
+                        ProductVariantSku = x.Sku,
                         FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                         ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                         SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
@@ -259,7 +238,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                         ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                         NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys)
+                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
                     });
 
                     prices = await _priceService.GetPrices(
@@ -299,8 +278,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         Sku = product.Sku,
                         Name = product.Name,
                         Images = product.Images,
-                        StockQuantity = inventories.Where(x => x.ProductId == product.Id).Sum(x => x.AvailableQuantity),
-                        OutletQuantity = outlets.Where(y => y.ProductId == product.Id).Sum(x => x.AvailableQuantity),
+                        StockQuantity = inventories.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
+                        OutletQuantity = outlets.FirstOrDefault(y => y.ProductId == product.Id)?.AvailableQuantity ?? 0,
                     };
 
                     var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;
@@ -379,6 +358,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         new PriceProduct
                         {
                             PrimarySku = product.PrimaryProductSku,
+                            ProductVariantSku = product.Sku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
@@ -395,7 +375,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                             BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
                             ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
                             NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                            Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys),
+                            Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo(),
                             IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
                         },
                         new PriceClient
