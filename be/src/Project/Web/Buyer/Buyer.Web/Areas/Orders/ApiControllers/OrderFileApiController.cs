@@ -128,6 +128,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 var priceProducts = orderedProducts.Select(async x => new PriceProduct
                 {
                     PrimarySku = x.PrimaryProductSku,
+                    ProductVariantSku = x.Sku,
                     FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                     ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                     SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),

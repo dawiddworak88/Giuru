@@ -26,5 +26,7 @@
         public const string ShelfTypeDriver = "Shelf Type";
         public const string NumberOfMirrorsDriver = "Number of mirrors";
         public const string LedDriver = "LED";
+        public const string CurrencyDriver = "Currency";
+        public const string ProductVariantSkuDriver = "Product Variant SKU";
     }
 }
