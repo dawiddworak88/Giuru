@@ -221,6 +221,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                     var priceProducts = products.Data.Select(async x => new PriceProduct
                     {
                         PrimarySku = x.PrimaryProductSku,
+                        ProductVariantSku = x.Sku,
                         FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                         ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                         SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
@@ -357,6 +358,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         new PriceProduct
                         {
                             PrimarySku = product.PrimaryProductSku,
+                            ProductVariantSku = product.Sku,
                             FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
                             ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                             SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),

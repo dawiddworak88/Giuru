@@ -336,6 +336,15 @@ namespace Buyer.Web.Shared.Services.Prices
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(product.ProductVariantSku))
+            {
+                priceDrivers.Add(new PriceDriver
+                {
+                    Name = PriceDriversConstants.ProductVariantSkuDriver,
+                    Value = product.ProductVariantSku
+                });
+            }
+
             if (client is not null)
             {
                 if (!string.IsNullOrWhiteSpace(client.Name))
@@ -382,9 +391,26 @@ namespace Buyer.Web.Shared.Services.Prices
                         Value = client.DeliveryZipCode
                     });
                 }
+
+                var currencyValue = MapCurrencyDriverValue(client.CurrencyCode ?? _options.Value.DefaultCurrency);
+                if (!string.IsNullOrWhiteSpace(currencyValue))
+                {
+                    priceDrivers.Add(new PriceDriver
+                    {
+                        Name = PriceDriversConstants.CurrencyDriver,
+                        Value = currencyValue
+                    });
+                }
             }
 
             return priceDrivers;
         }
+
+        private static string MapCurrencyDriverValue(string currencyCode) => currencyCode?.ToUpperInvariant() switch
+        {
+            "EUR" => "Euro",
+            "PLN" => "Złoty",
+            _ => null
+        };
     }
 }

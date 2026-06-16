@@ -107,6 +107,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                             products.Data.Select(x => new PriceProduct
                             {
                                 PrimarySku = x.PrimaryProductSku,
+                                ProductVariantSku = x.Sku,
                                 FabricsGroup = x.FabricsGroup,
                                 SleepAreaSize = x.SleepAreaSize,
                                 ExtraPacking = x.ExtraPacking,

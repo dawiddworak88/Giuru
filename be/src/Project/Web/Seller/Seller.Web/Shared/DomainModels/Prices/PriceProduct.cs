@@ -21,5 +21,6 @@
         public string NumberOfMirrors { get; set; }
         public string Led { get; set; }
         public string IsOutlet { get; set; }
+        public string ProductVariantSku { get; set; }
     }
 }
