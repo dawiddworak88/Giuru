@@ -34,19 +34,25 @@ namespace Seller.Web.Areas.Orders.Services.Basket
                 throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
             }
 
-            ValidateStockType<InventoryItem>(
-                items,
-                quantitySelector: x => x.StockQuantity,
-                stockProducts: inventoryItems.OrEmptyIfNull(),
-                messageNotFound: _inventoryLocalizer.GetString("InventoryNotFound"),
-                messageQuantityError: _orderLocalizer.GetString("StockQuantityError").Value);
-
-            ValidateStockType<OutletItem>(
-                items,
-                quantitySelector: x => x.OutletQuantity,
-                stockProducts: outletItems.OrEmptyIfNull(),
-                messageNotFound: _inventoryLocalizer.GetString("OutletNotFound"),
-                messageQuantityError: _orderLocalizer.GetString("OutletQuantityError").Value);
+            if (inventoryItems.Any())
+            {
+                ValidateStockType<InventoryItem>(
+                    items,
+                    quantitySelector: x => x.StockQuantity,
+                    stockProducts: inventoryItems,
+                    messageNotFound: _inventoryLocalizer.GetString("InventoryNotFound"),
+                    messageQuantityError: _orderLocalizer.GetString("StockQuantityError").Value);
+            }
+            
+            if (outletItems.Any())
+            {
+                ValidateStockType<OutletItem>(
+                    items,
+                    quantitySelector: x => x.OutletQuantity,
+                    stockProducts: outletItems,
+                    messageNotFound: _inventoryLocalizer.GetString("OutletNotFound"),
+                    messageQuantityError: _orderLocalizer.GetString("OutletQuantityError").Value);
+            }
         }
 
         private void ValidateStockType<T>(
