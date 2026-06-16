@@ -1,11 +1,11 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Exceptions;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Seller.Web.Areas.Orders.ApiRequestModels;
@@ -72,7 +72,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
             }
 
-            var items = basket.Items.OrEmptyIfNull().ToList();
+            var items = basket.Items.ToList();
 
             if (items.Any(x => x.StockQuantity > 0 || x.OutletQuantity > 0))
             {
@@ -81,15 +81,16 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     throw new CustomException(_orderLocalizer.GetString("ProductsNotFound"), (int)HttpStatusCode.NotFound);
                 }
 
-                var inventories = await _inventoryRepository.GetInventoryProductByProductIdsAsync(
-                    token,
-                    language,
-                    items.Where(x => x.StockQuantity > 0).Select(x => x.ProductId.Value));
+                var inventoriesIds = items.Where(x => x.StockQuantity > 0).Select(x => x.ProductId.Value).ToList();
+                var outletsIds = items.Where(x => x.OutletQuantity > 0).Select(x => x.ProductId.Value).ToList();
 
-                var outlets = await _outletRepository.GetOutletProductsByProductsIdAsync(
-                    token,
-                    language,
-                    items.Where(x => x.OutletQuantity > 0).Select(x => x.ProductId.Value));
+                var inventories = inventoriesIds.Any()
+                    ? await _inventoryRepository.GetInventoryProductByProductIdsAsync(token, language, inventoriesIds)
+                    : Enumerable.Empty<InventoryItem>();
+
+                var outlets = outletsIds.Any()
+                    ? await _outletRepository.GetOutletProductsByProductsIdAsync(token, language, outletsIds)
+                    : Enumerable.Empty<OutletItem>();
 
                 _basketService.ValidateStockOutletQuantities(items, inventories, outlets);
             }
