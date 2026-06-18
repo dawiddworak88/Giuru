@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -173,19 +172,19 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task DeleteProductAttributeAsync(DeleteProductAttributeServiceModel model)
         {
-            var existingProductAttribute = _context.ProductAttributes.FirstOrDefault(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductAttribute = await _context.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductAttribute == null)
             {
                 throw new NotFoundException(_productLocalizer.GetString("ProductAttributeNotFound"));
             }
 
-            if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
+            if (await _context.ProductAttributeItems.AnyAsync(x => x.ProductAttributeId == existingProductAttribute.Id && x.IsActive))
             {
                 throw new ConflictException(_productLocalizer.GetString("ProductAttributeNotEmpty"));
             }
 
-            AssertCategorySchemaReference(existingProductAttribute, model.Language);
+            await AssertCategorySchemaReference(existingProductAttribute.Id, model.Language);
 
             existingProductAttribute.IsActive = false;
 
@@ -199,14 +198,14 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task DeleteProductAttributeItemAsync(DeleteProductAttributeItemServiceModel model)
         {
-            var existingProductAttributeItem = _context.ProductAttributeItems.FirstOrDefault(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductAttributeItem = await _context.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductAttributeItem == null)
             {
                 throw new NotFoundException(_productLocalizer.GetString("ProductAttributeItemNotFound"));
             }
 
-            AssertCategorySchemaReference(existingProductAttributeItem, model.Language);
+            await AssertCategorySchemaReference(existingProductAttributeItem.ProductAttributeId, model.Language);
 
             existingProductAttributeItem.IsActive = false;
 
@@ -451,55 +450,21 @@ namespace Catalog.Api.Services.ProductAttributes
             return pagedProductAttributeItemServiceModels;
         }
 
-        private void AssertCategorySchemaReference(ProductAttribute existingProductAttribute, string language)
+        private async Task AssertCategorySchemaReference(Guid attributeId, string language)
         {
-            var attributeRef = $"#/definitions/{existingProductAttribute.Id}";
+            var attributeRef = $"#/definitions/{attributeId}";
 
-            var categories = _context.Database.SqlQueryRaw<LocalizedCategorySchema>(
-              @"SELECT ct.CategoryId, ct.Name, ct.Language
-              FROM CategorySchemas cs
-              INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
-              INNER JOIN Categories c ON c.Id = ct.CategoryId
-              CROSS APPLY OPENJSON([Schema], '$.properties') AS properties
-              WHERE c.IsActive AND ISJSON(cs.[Schema]) > 0 AND JSON_VALUE(properties.value, '$.""$ref""') = @AttributeRef",
-                    new SqlParameter("@AttributeRef", attributeRef))
-                .AsNoTracking()
-                .ToList();
-
-            HandleCategorySchemaReferences(language, "ProductAttributeInUseByCategories", categories);
-        }
-
-        private void AssertCategorySchemaReference(ProductAttributeItem existingProductAttributeItem, string language)
-        {
-            var valuesList = existingProductAttributeItem.ProductAttributeItemTranslations
-                .Where(x => x.IsActive)
-                .Select(x => x.Name).ToList();
-
-            var parameters = new List<SqlParameter>
-            {
-                new SqlParameter("@attributeId", existingProductAttributeItem.ProductAttributeId)
-            };
-
-            for (int i = 0; i < valuesList.Count; i++)
-            {
-                parameters.Add(new SqlParameter($"@value{i}", valuesList[i]));
-            }
-
-            string inClause = string.Join(", ", valuesList.Select((_, i) => $"@value{i}"));
-
-            string query = $@"
-                SELECT ct.CategoryId, ct.Name, ct.Language
+            var categories = await _context.Database.SqlQueryRaw<LocalizedCategorySchema>(
+              $@"SELECT ct.CategoryId, ct.Name, ct.Language
                 FROM CategorySchemas cs
                 INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
                 INNER JOIN Categories c ON c.Id = ct.CategoryId
-                CROSS APPLY OPENJSON(cs.[Schema], '$.definitions') AS def
-                WHERE ISJSON(cs.[Schema]) > 0 AND def.[key] = @attributeId
-                  AND EXISTS (
-                    SELECT 1
-                    FROM OPENJSON(def.[value], '$.anyOf') AS anyOfItems
-                    WHERE JSON_VALUE(anyOfItems.[value], '$.title') IN ({inClause}))";
-
-            var categories = _context.Database.SqlQueryRaw<LocalizedCategorySchema>(query, parameters.ToArray()).ToList();
+                CROSS APPLY OPENJSON(cs.[Schema], '$.properties') AS properties
+                    WHERE c.IsActive = 1 AND ISJSON(cs.[Schema]) > 0
+                    AND JSON_VALUE(properties.[value], '$.""$ref""') = @AttributeRef",
+                    new SqlParameter("@AttributeRef", attributeRef))
+                .AsNoTracking()
+                .ToListAsync();
 
             HandleCategorySchemaReferences(language, "ProductAttributeInUseByCategories", categories);
         }
