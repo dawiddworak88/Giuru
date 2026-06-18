@@ -29,28 +29,23 @@ namespace Seller.Web.Areas.Orders.Services.Basket
 
         public void ValidateStockOutletQuantities(IEnumerable<BasketItem> items, IEnumerable<InventoryItem> inventoryItems, IEnumerable<OutletItem> outletItems)
         {
-            if (items.OrEmptyIfNull().Any() is false)
-            {
-                throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
-            }
-
-            if (inventoryItems.Any())
+            if (inventoryItems.OrEmptyIfNull().Any())
             {
                 ValidateStockType<InventoryItem>(
                     items,
                     quantitySelector: x => x.StockQuantity,
                     stockProducts: inventoryItems,
-                    messageNotFound: _inventoryLocalizer.GetString("InventoryNotFound"),
+                    messageNotFound: _inventoryLocalizer.GetString("InventoryNotFound").Value,
                     messageQuantityError: _orderLocalizer.GetString("StockQuantityError").Value);
             }
             
-            if (outletItems.Any())
+            if (outletItems.OrEmptyIfNull().Any())
             {
                 ValidateStockType<OutletItem>(
                     items,
                     quantitySelector: x => x.OutletQuantity,
                     stockProducts: outletItems,
-                    messageNotFound: _inventoryLocalizer.GetString("OutletNotFound"),
+                    messageNotFound: _inventoryLocalizer.GetString("OutletNotFound").Value,
                     messageQuantityError: _orderLocalizer.GetString("OutletQuantityError").Value);
             }
         }
@@ -63,7 +58,7 @@ namespace Seller.Web.Areas.Orders.Services.Basket
             string messageQuantityError) where T : StockItem
         {
             var filteredItems = basketItems
-                .Where(x => quantitySelector(x) > 0)
+                .Where(x => quantitySelector(x) > 0 && x.ProductId.HasValue)
                 .Select(x => new BasketValidationItem(
                     x.ProductId,
                     x.ProductName,
