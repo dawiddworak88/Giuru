@@ -180,14 +180,14 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
 
             var response = await _apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data is not null)
-            {
-                return response.Data;
-            }
-
             if (response.IsSuccessStatusCode is false)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.Data is not null)
+            {
+                return response.Data;
             }
 
             return default;
