@@ -179,7 +179,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 throw new NotFoundException(_productLocalizer.GetString("ProductAttributeNotFound"));
             }
 
-            if (await _context.ProductAttributeItems.AnyAsync(x => x.ProductAttributeId == existingProductAttribute.Id && x.IsActive))
+            if (await _context.ProductAttributeItems.AnyAsync(x => x.ProductAttributeId == existingProductAttribute.Id && x.SellerId == model.OrganisationId && x.IsActive))
             {
                 throw new ConflictException(_productLocalizer.GetString("ProductAttributeNotEmpty"));
             }
