@@ -76,9 +76,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             if (items.Any(x => x.StockQuantity > 0 || x.OutletQuantity > 0))
             {
-                if (items.Any(x => x.ProductId.HasValue is false))
+                if (items.Any(x => (x.StockQuantity > 0 || x.OutletQuantity > 0) && x.ProductId.HasValue is false))
                 {
-                    throw new CustomException(_orderLocalizer.GetString("ProductsNotFound"), (int)HttpStatusCode.NotFound);
+                    throw new CustomException(_orderLocalizer.GetString("ProductsNotFound").Value, (int)HttpStatusCode.NotFound);
                 }
 
                 var inventoriesIds = items.Where(x => x.StockQuantity > 0).Select(x => x.ProductId.Value).ToList();
