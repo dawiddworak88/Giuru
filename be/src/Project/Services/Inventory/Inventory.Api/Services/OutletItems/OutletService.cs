@@ -380,13 +380,12 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletSumServiceModel> GetOutletByProductId(GetOutletByProductIdServiceModel model)
         {
             var outletItems = await _context.Outlet
-                .Where(x => x.ProductId == model.ProductId.Value && x.IsActive)
+                .Where(x => x.ProductId == model.ProductId.Value && x.IsActive && x.Product.IsActive)
                 .Include(x => x.Product)
                 .Include(x => x.Warehouse)
                 .Include(x => x.Translations)
                 .AsSingleQuery()
-                .Where(x => x.Product.IsActive)
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.CreatedDate)
                 .ToListAsync();
 
             if (outletItems.OrEmptyIfNull().Any())
