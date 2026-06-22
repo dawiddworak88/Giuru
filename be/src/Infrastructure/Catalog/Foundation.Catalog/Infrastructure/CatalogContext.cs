@@ -31,5 +31,6 @@ namespace Foundation.Catalog.Infrastructure
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductVideo> ProductVideos { get; set; }
         public DbSet<ProductFile> ProductFiles { get; set; }
+        public DbSet<Product3DModel> Product3DModels { get; set; }
     }
 }
