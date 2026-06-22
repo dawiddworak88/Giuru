@@ -27,7 +27,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using static Foundation.ApiExtensions.Shared.Definitions.ApiConstants;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -89,8 +88,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             viewModel.ItemsPerPage = ProductConstants.ProductsCatalogPaginationPageSize;
             viewModel.SearchTerm = componentModel.SearchTerm;
             viewModel.ProductsApiUrl = _linkGenerator.GetPathByAction("Get", "SearchProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-
-
 
             var products = await _productsService.GetProductsAsync(
                 null,
