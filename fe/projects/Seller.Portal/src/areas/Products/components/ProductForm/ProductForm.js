@@ -42,6 +42,7 @@ function ProductForm(props) {
         sku: { value: props.sku ? props.sku : "", error: "" },
         primaryProduct: { value: props.primaryProduct ? props.primaryProduct : null },
         images: { value: props.images ? props.images : [] },
+        models3D: { value: props.models3D ? props.models3D : [] },
         files: { value: props.files ? props.files : [] },
         isNew: { value: props.isNew ? props.isNew : false },
         schema: { value: props.schema ? JSON.parse(props.schema) : {} },
@@ -135,6 +136,7 @@ function ProductForm(props) {
             description: convertedToRaw,
             primaryProductId: primaryProduct ? primaryProduct.id : null,
             images,
+            models3D,
             files,
             isNew,
             ean,
@@ -245,7 +247,7 @@ function ProductForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        id, category, sku, name, primaryProduct, images, files, 
+        id, category, sku, name, primaryProduct, images, models3D, files, 
         isNew, schema, uiSchema, formData, isPublished, ean, fulfillmentTime
     } = values;
 
@@ -349,6 +351,28 @@ function ProductForm(props) {
                                 accept={{
                                     'image/*': [".png", ".jpg", ".webp"],
                                     "video/*": [".mp4"]
+                                }}/>
+                        </div>
+                        <div className="field">
+                            <MediaCloud
+                                id="models3D"
+                                name="models3D"
+                                label={props.productModels3DLabel}
+                                multiple={false}
+                                fileSizeLimitErrorMessage={props.fileSizeLimitErrorMessage}
+                                generalErrorMessage={props.generalErrorMessage}
+                                deleteLabel={props.deleteLabel}
+                                dropFilesLabel={props.dropFilesLabel}
+                                dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
+                                files={models3D}
+                                setFieldValue={setFieldValue}
+                                saveMediaUrl={props.saveMediaUrl}
+                                isUploadInChunksEnabled={true}
+                                chunkSize={props.chunkSize}
+                                saveMediaChunkUrl={props.saveMediaChunkUrl}
+                                saveMediaChunkCompleteUrl={props.saveMediaChunkCompleteUrl}
+                                accept={{
+                                    "model/gltf-binary": [".glb"]
                                 }}/>
                         </div>
                         <div className="field">
