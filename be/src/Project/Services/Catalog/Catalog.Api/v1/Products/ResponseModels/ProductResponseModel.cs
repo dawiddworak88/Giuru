@@ -23,6 +23,7 @@ namespace Catalog.Api.v1.Products.ResultModels
         public IEnumerable<Guid> ProductVariants { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
+        public IEnumerable<Guid> Models3D { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public string Sku { get; set; }
         public int? FulfillmentTime { get; set; }

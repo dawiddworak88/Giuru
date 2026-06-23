@@ -20,6 +20,7 @@ namespace Catalog.Api.ServicesModels.Products
         public int? FulfillmentTime { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
+        public IEnumerable<Guid> Models3D { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
 }
