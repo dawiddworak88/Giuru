@@ -128,6 +128,17 @@ namespace Catalog.Api.Services.Products
                 await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
+            foreach (var model3DId in model.Models3D.OrEmptyIfNull())
+            {
+                var product3DModel = new Product3DModel
+                {
+                    MediaId = model3DId,
+                    ProductId = product.Id
+                };
+
+                await _context.Product3DModels.AddAsync(product3DModel.FillCommonProperties());
+            }
+
             await _context.SaveChangesAsync();
 
             await _productIndexingRepository.IndexAsync(product.Id);
@@ -270,6 +281,24 @@ namespace Catalog.Api.Services.Products
                 };
 
                 await _context.ProductFiles.AddAsync(productFile.FillCommonProperties());
+            }
+
+            var product3DModels = _context.Product3DModels.Where(x => x.ProductId == model.Id && x.IsActive);
+
+            foreach (var product3DModel in product3DModels.OrEmptyIfNull())
+            {
+                _context.Product3DModels.Remove(product3DModel);
+            }
+
+            foreach (var model3DId in model.Models3D.OrEmptyIfNull())
+            {
+                var product3DModel = new Product3DModel
+                {
+                    MediaId = model3DId,
+                    ProductId = product.Id
+                };
+
+                await _context.Product3DModels.AddAsync(product3DModel.FillCommonProperties());
             }
 
             var message = new UpdatedProductIntegrationEvent
