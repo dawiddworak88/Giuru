@@ -327,4 +327,7 @@
   <data name="ProductDeleteOutletConflict" xml:space="preserve">
     <value>The product cannot be deleted while it is on outlet.</value>
   </data>
+  <data name="ProductModels3DLabel" xml:space="preserve">
+    <value>3D model</value>
+  </data>
 </root>

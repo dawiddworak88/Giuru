@@ -327,4 +327,7 @@
   <data name="ProductDeleteOutletConflict" xml:space="preserve">
     <value>Das Produkt kann nicht gelöscht werden, solange es im Angebot ist.</value>
   </data>
+  <data name="ProductModels3DLabel" xml:space="preserve">
+    <value>3D-Modell</value>
+  </data>
 </root>

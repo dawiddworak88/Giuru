@@ -327,4 +327,7 @@
   <data name="ProductDeleteOutletConflict" xml:space="preserve">
     <value>Nie można usunąć produktu gdy jest on na wyprzedaży.</value>
   </data>
+  <data name="ProductModels3DLabel" xml:space="preserve">
+    <value>Model 3D</value>
+  </data>
 </root>
