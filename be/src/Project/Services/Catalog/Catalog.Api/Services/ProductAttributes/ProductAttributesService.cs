@@ -184,7 +184,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 throw new ConflictException(_productLocalizer.GetString("ProductAttributeNotEmpty"));
             }
 
-            await AssertCategorySchemaReference(existingProductAttribute.Id, model.Language);
+            await AssertCategorySchemaReferenceAsync(existingProductAttribute.Id, model.Language);
 
             existingProductAttribute.IsActive = false;
 
@@ -205,7 +205,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 throw new NotFoundException(_productLocalizer.GetString("ProductAttributeItemNotFound"));
             }
 
-            await AssertCategorySchemaReference(existingProductAttributeItem.ProductAttributeId, model.Language);
+            await AssertCategorySchemaReferenceAsync(existingProductAttributeItem.ProductAttributeId, model.Language);
 
             existingProductAttributeItem.IsActive = false;
 
@@ -450,12 +450,12 @@ namespace Catalog.Api.Services.ProductAttributes
             return pagedProductAttributeItemServiceModels;
         }
 
-        private async Task AssertCategorySchemaReference(Guid attributeId, string language)
+        private async Task AssertCategorySchemaReferenceAsync(Guid attributeId, string language)
         {
             var attributeRef = $"#/definitions/{attributeId}";
 
             var categories = await _context.Database.SqlQueryRaw<LocalizedCategorySchema>(
-              $@"SELECT ct.CategoryId, ct.Name, ct.Language
+              @"SELECT ct.CategoryId, ct.Name, ct.Language
                 FROM CategorySchemas cs
                 INNER JOIN CategoryTranslations ct ON cs.CategoryId = ct.CategoryId
                 INNER JOIN Categories c ON c.Id = ct.CategoryId
