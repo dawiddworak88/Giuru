@@ -84,13 +84,18 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 var inventoriesIds = items.Where(x => x.StockQuantity > 0).Select(x => x.ProductId.Value).ToList();
                 var outletsIds = items.Where(x => x.OutletQuantity > 0).Select(x => x.ProductId.Value).ToList();
 
-                var inventories = inventoriesIds.Any()
-                    ? await _inventoryRepository.GetInventoryProductByProductIdsAsync(token, language, inventoriesIds)
-                    : Enumerable.Empty<InventoryItem>();
+                var inventoriesTask = inventoriesIds.Any()
+                    ? _inventoryRepository.GetInventoryProductByProductIdsAsync(token, language, inventoriesIds)
+                    : Task.FromResult(Enumerable.Empty<InventoryItem>());
 
-                var outlets = outletsIds.Any()
-                    ? await _outletRepository.GetOutletProductsByProductsIdAsync(token, language, outletsIds)
-                    : Enumerable.Empty<OutletItem>();
+                var outletsTask = outletsIds.Any()
+                    ? _outletRepository.GetOutletProductsByProductsIdAsync(token, language, outletsIds)
+                    : Task.FromResult(Enumerable.Empty<OutletItem>());
+
+                await Task.WhenAll(inventoriesTask, outletsTask);
+
+                var inventories = inventoriesTask.Result;
+                var outlets = outletsTask.Result;
 
                 _basketService.ValidateStockOutletQuantities(items, inventories, outlets);
             }
