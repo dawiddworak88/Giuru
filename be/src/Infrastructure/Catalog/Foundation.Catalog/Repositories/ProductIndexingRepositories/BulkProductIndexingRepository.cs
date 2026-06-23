@@ -118,6 +118,12 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                     .Select(f => new { f.ProductId, f.MediaId })
                     .ToListAsync();
 
+                var models3DList = await _catalogContext.Product3DModels
+                    .AsNoTracking()
+                    .Where(m => batchIds.Contains(m.ProductId) && m.IsActive)
+                    .Select(m => new { m.ProductId, m.MediaId })
+                    .ToListAsync();
+
                 var images = imagesList
                     .GroupBy(i => i.ProductId)
                     .ToDictionary(g => g.Key, g => g.Select(i => i.MediaId).ToArray());
@@ -129,6 +135,10 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 var files = filesList
                     .GroupBy(f => f.ProductId)
                     .ToDictionary(g => g.Key, g => g.Select(f => f.MediaId).ToArray());
+
+                var models3D = models3DList
+                    .GroupBy(m => m.ProductId)
+                    .ToDictionary(m => m.Key, m => m.Select(m => m.MediaId).ToArray());
 
                 var primaryProductIds = products.Where(p => p.PrimaryProductId.HasValue).Select(p => p.PrimaryProductId.Value).Distinct().ToList();
                 var primaryProductSkus = primaryProductIds.Any() 
@@ -143,6 +153,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                     Product = p,
                     Images = images.GetValueOrDefault(p.Id, Array.Empty<Guid>()),
                     Videos = videos.GetValueOrDefault(p.Id, Array.Empty<Guid>()),
+                    Models3D = models3D.GetValueOrDefault(p.Id, Array.Empty<Guid>()),
                     Files = files.GetValueOrDefault(p.Id, Array.Empty<Guid>()),
                     PrimaryProductSku = p.PrimaryProductId.HasValue && primaryProductSkus.TryGetValue(p.PrimaryProductId.Value, out var sku) ? sku : null
                 }).ToArray();
@@ -261,6 +272,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 IsProtected = product.IsProtected,
                 Images = batchItem.Images,
                 Videos = batchItem.Videos,
+                Models3D = batchItem.Models3D,
                 Files = batchItem.Files,
                 IsActive = product.IsActive,
                 Sku = product.Sku,
@@ -393,6 +405,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         public Infrastructure.Products.Entities.Product Product { get; init; }
         public Guid[] Images { get; init; }
         public Guid[] Videos { get; init; }
+        public Guid[] Models3D { get; init; }
         public Guid[] Files { get; init; }
         public string PrimaryProductSku { get; init; }
     }
