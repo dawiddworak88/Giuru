@@ -30,7 +30,8 @@ const MediaForm = (props) => {
                                 saveMediaUrl={props.saveMediaUrl} 
                                 accept={{
                                     "image/*": [".png", ".jpg", ".webp"],
-                                    "application/*": [".pdf", ".docx", ".doc", ".zip"]
+                                    "application/*": [".pdf", ".docx", ".doc", ".zip"],
+                                    "model/gltf-binary": [".glb"]
                                 }}/>
                         </div>
                         <div className="field">
