@@ -15,6 +15,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public IEnumerable<FileViewModel> Images { get; set; }
+        public IEnumerable<FileViewModel> Models3D { get; set; }
         public IEnumerable<FileViewModel> Files  { get; set; }
         public string Schema { get; set; }
         public string UiSchema { get; set; }
@@ -25,6 +26,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string SelectPrimaryProductLabel { get; set; }
         public string ProductFilesLabel { get; set; }
         public string ProductPicturesLabel { get; set; }
+        public string ProductModels3DLabel { get; set; }
         public string SkuLabel { get; set; }
         public string FulfillmentTimeLabel { get; set; }
         public string NameLabel { get; set; }
