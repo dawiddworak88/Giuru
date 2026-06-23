@@ -26,6 +26,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             Guid? primaryProductId, 
             Guid? categoryId, 
             IEnumerable<Guid> images,
+            IEnumerable<Guid> models3D,
             IEnumerable<Guid> files,
             string ean,
             int? fulfillmentTime,

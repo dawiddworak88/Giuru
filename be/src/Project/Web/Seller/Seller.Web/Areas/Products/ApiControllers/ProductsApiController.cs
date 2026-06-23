@@ -33,7 +33,6 @@ using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Repositories.LeadTime;
 using Seller.Web.Shared.Services.DeliveryDates;
-using Seller.Web.Areas.Clients.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -130,6 +129,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.PrimaryProductId,
                 model.CategoryId,
                 model.Images.OrEmptyIfNull().Select(x => x.Id),
+                model.Models3D.OrEmptyIfNull().Select(x => x.Id),
                 model.Files.OrEmptyIfNull().Select(x => x.Id),
                 model.Ean,
                 model.FulfillmentTime,

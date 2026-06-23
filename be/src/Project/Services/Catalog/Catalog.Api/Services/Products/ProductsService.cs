@@ -535,6 +535,7 @@ namespace Catalog.Api.Services.Products
                 PrimaryProductId = searchResultItem.PrimaryProductId,
                 PrimaryProductSku = searchResultItem.PrimaryProductSku,
                 Images = searchResultItem.Images,
+                Models3D = searchResultItem.Models3D,
                 Files = searchResultItem.Files,
                 Videos = searchResultItem.Videos,
                 SellerId = searchResultItem.SellerId,
