@@ -1,6 +1,7 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +68,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var basket = await _basketRepository.GetBasketByIdAsync(token, language, model.BasketId);
 
-            if (basket is null || basket.Items.Any() is false)
+            if (basket is null || basket.Items.OrEmptyIfNull().Any() is false)
             {
                 throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
             }
