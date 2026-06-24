@@ -366,4 +366,7 @@
   <data name="ExpectedLeadTime" xml:space="preserve">
     <value>Expected date of lead time:</value>
   </data>
+  <data name="BasketNotFound" xml:space="preserve">
+    <value>Basket not found.</value>
+  </data>
 </root>

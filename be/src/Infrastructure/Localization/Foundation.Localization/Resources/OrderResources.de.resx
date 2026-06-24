@@ -366,4 +366,7 @@
   <data name="ExpectedLeadTime" xml:space="preserve">
     <value>Voraussichtlicher Liefertermin:</value>
   </data>
+  <data name="BasketNotFound" xml:space="preserve">
+    <value>Warenkorb wurde nicht gefunden.</value>
+  </data>
 </root>

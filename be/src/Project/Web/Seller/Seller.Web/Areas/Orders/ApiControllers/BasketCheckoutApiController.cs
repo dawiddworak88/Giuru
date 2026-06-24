@@ -1,12 +1,18 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Inventory.DomainModels;
+using Seller.Web.Areas.Inventory.Repositories;
+using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Orders.Services.Basket;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.DomainModels.UserApproval;
 using Seller.Web.Shared.Repositories.Clients;
@@ -28,6 +34,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly IBasketService _basketService;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IOutletRepository _outletRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -35,7 +44,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
             IClientsRepository clientsRepository,
-            IIdentityRepository identityRepository)
+            IIdentityRepository identityRepository,
+            IBasketService basketService,
+            IInventoryRepository inventoryRepository,
+            IOutletRepository outletRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
@@ -43,6 +55,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _userApprovalsRepository = userApprovalsRepository;
             _clientsRepository = clientsRepository;
             _identityRepository = identityRepository;
+            _basketService = basketService;
+            _inventoryRepository = inventoryRepository;
+            _outletRepository = outletRepository;
         }
 
         [HttpPost]
@@ -50,6 +65,41 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+
+            var basket = await _basketRepository.GetBasketByIdAsync(token, language, model.BasketId);
+
+            if (basket is null || basket.Items.OrEmptyIfNull().Any() is false)
+            {
+                throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
+            }
+
+            var items = basket.Items.ToList();
+
+            if (items.Any(x => x.StockQuantity > 0 || x.OutletQuantity > 0))
+            {
+                if (items.Any(x => (x.StockQuantity > 0 || x.OutletQuantity > 0) && x.ProductId.HasValue is false))
+                {
+                    throw new CustomException(_orderLocalizer.GetString("ProductsNotFound").Value, (int)HttpStatusCode.NotFound);
+                }
+
+                var inventoriesIds = items.Where(x => x.StockQuantity > 0).Select(x => x.ProductId.Value).ToList();
+                var outletsIds = items.Where(x => x.OutletQuantity > 0).Select(x => x.ProductId.Value).ToList();
+
+                var inventoriesTask = inventoriesIds.Any()
+                    ? _inventoryRepository.GetInventoryProductByProductIdsAsync(token, language, inventoriesIds)
+                    : Task.FromResult(Enumerable.Empty<InventoryItem>());
+
+                var outletsTask = outletsIds.Any()
+                    ? _outletRepository.GetOutletProductsByProductsIdAsync(token, language, outletsIds)
+                    : Task.FromResult(Enumerable.Empty<OutletItem>());
+
+                await Task.WhenAll(inventoriesTask, outletsTask);
+
+                var inventories = inventoriesTask.Result;
+                var outlets = outletsTask.Result;
+
+                _basketService.ValidateStockOutletQuantities(items, inventories, outlets);
+            }
 
             var userApprovals = Enumerable.Empty<UserApproval>();
 
