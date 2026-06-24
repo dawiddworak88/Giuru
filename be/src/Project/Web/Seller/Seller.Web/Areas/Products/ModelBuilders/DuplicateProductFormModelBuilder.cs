@@ -78,6 +78,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SaveText = _globalLocalizer.GetString("SaveText"),
                 SaveUrl = _linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductPicturesLabel = _productLocalizer.GetString("ProductPicturesLabel"),
+                ProductModels3DLabel = _productLocalizer.GetString("ProductModels3DLabel"),
                 ProductFilesLabel = _productLocalizer.GetString("ProductFilesLabel"),
                 SelectCategoryLabel = _productLocalizer.GetString("SelectCategory"),
                 SelectPrimaryProductLabel = _productLocalizer.GetString("SelectPrimaryProduct"),
@@ -201,6 +202,33 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         }
 
                         viewModel.Files = files;
+                    }
+
+                    if (product.Models3D != null && product.Models3D.Any())
+                    {
+                        var modelMediaItems = await _mediaItemsRepository.GetAllMediaItemsAsync(
+                            componentModel.Token,
+                            componentModel.Language,
+                            product.Models3D.Distinct().ToEndpointParameterString(),
+                            PaginationConstants.DefaultPageIndex,
+                            PaginationConstants.DefaultPageSize);
+
+                        var models3D = new List<FileViewModel>();
+
+                        foreach (var model3D in modelMediaItems)
+                        {
+                            models3D.Add(new FileViewModel
+                            {
+                                Id = model3D.Id,
+                                Url = _mediaService.GetMediaUrl(model3D.Id, Constants.PreviewMaxWidth),
+                                Name = model3D.Name,
+                                MimeType = model3D.MimeType,
+                                Filename = model3D.Filename,
+                                Extension = model3D.Extension
+                            });
+                        }
+
+                        viewModel.Models3D = models3D;
                     }
                 }
             }
