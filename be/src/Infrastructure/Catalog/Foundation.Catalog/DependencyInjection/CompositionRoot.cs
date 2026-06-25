@@ -53,10 +53,6 @@ namespace Foundation.Catalog.DependencyInjection
                                     .Category(ctgr => ctgr.Name("isActive"))
                                     .Category(ctgr => ctgr.Name("language")))))));
             }
-            else
-            {
-                client.Indices.PutMapping<ProductSearchModel>(m => m.AutoMap());
-            }
 
             services.AddSingleton<IElasticClient>(client);
         }
