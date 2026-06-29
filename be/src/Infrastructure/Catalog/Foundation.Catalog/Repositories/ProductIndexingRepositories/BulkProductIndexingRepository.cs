@@ -334,6 +334,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             };
 
             var token = formProperty.Value;
+            var schemaType = schemaProperty["type"]?.Value<string>();
 
             if (token.Type == JTokenType.Array)
             {
@@ -372,6 +373,13 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                     var s = token.Value<string>();
                     if (string.IsNullOrWhiteSpace(s))
                         return null;
+
+                    if (schemaType == "boolean" && bool.TryParse(s, out var boolVal))
+                    {
+                        attribute.ValueBoolean = boolVal;
+                        attribute.ValueKeywords = new[] { boolVal ? "true" : "false" };
+                        return attribute;
+                    }
 
                     if (Guid.TryParse(s, out _))
                     {
