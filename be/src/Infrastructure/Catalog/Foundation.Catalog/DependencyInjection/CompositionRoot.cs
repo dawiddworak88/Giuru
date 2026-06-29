@@ -35,6 +35,7 @@ namespace Foundation.Catalog.DependencyInjection
             {
                 client.Indices.Create(defaultIndex, c => c
                     .Map<ProductSearchModel>(m => m
+                        .Dynamic(DynamicMapping.Strict)
                         .AutoMap()
                         .Properties(p => p
                             .Completion(cmpl => cmpl
