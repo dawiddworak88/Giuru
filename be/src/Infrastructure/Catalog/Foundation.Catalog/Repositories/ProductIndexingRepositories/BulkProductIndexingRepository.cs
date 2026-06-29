@@ -1,4 +1,5 @@
 ﻿using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.SearchModels;
 using Foundation.Catalog.SearchModels.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Nest;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -68,10 +70,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 {
                     var key = (schema.CategoryId, schema.Language);
 
-                    if (!schemaCaches.ContainsKey(key))
-                    {
-                        schemaCaches[key] = JObject.Parse(schema.Schema);
-                    }
+                    schemaCaches.TryAdd(key, JObject.Parse(schema.Schema));
                 }
             }
 
@@ -83,13 +82,11 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             await _elasticClient.Indices.RefreshAsync(Indices.Index<ProductSearchModel>());
         }
 
-        private async IAsyncEnumerable<ProductBatchDto[]> GetProductBatchesAsync(IEnumerable<Guid> productIds)
-        {
-            var productIdsList = productIds.ToList();
-            
-            for (int i = 0; i < productIdsList.Count; i += BATCH_SIZE)
+        private async IAsyncEnumerable<ProductBatchDto[]> GetProductBatchesAsync(List<Guid> productIds)
+        {   
+            for (int i = 0; i < productIds.Count; i += BATCH_SIZE)
             {
-                var batchIds = productIdsList.Skip(i).Take(BATCH_SIZE).ToList();
+                var batchIds = productIds.Skip(i).Take(BATCH_SIZE).ToList();
                 
                 var products = await _catalogContext.Products
                     .AsNoTracking()
@@ -287,17 +284,16 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         }
 
         private void PopulateProductAttributes(
-            ProductSearchModel document, 
-            string formData, 
-            Guid categoryId, 
+            ProductSearchModel document,
+            string formData,
+            Guid categoryId,
             string language,
             Dictionary<(Guid categoryId, string language), JObject> schemaCaches)
         {
             if (string.IsNullOrWhiteSpace(formData))
                 return;
 
-            var schemaKey = (categoryId, language);
-            if (!schemaCaches.TryGetValue(schemaKey, out var schemaObject))
+            if (!schemaCaches.TryGetValue((categoryId, language), out var schemaObject))
             {
                 schemaObject = schemaCaches
                     .Where(kv => kv.Key.categoryId == categoryId)
@@ -309,82 +305,97 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             }
 
             var formDataObject = JObject.Parse(formData);
-            var productAttributes = new Dictionary<string, object>();
+            var schemaProperties = schemaObject["properties"] as JObject;
+            if (schemaProperties is null)
+                return;
 
-            var formDataProperties = schemaObject["properties"]
-                .Children<JProperty>()
-                .Select(p => formDataObject.Property(p.Name))
-                .Where(p => p != null);
+            var attributes = new List<ProductAttributeSearchModel>();
 
-            foreach (var formDataProperty in formDataProperties)
+            foreach (var schemaProperty in schemaProperties.Properties())
             {
-                var propertyObject = (JObject)schemaObject["properties"]?[formDataProperty.Name];
+                var formProperty = formDataObject.Property(schemaProperty.Name);
+                if (formProperty is null)
+                    continue;
 
-                if (propertyObject != null)
-                {
-                    var value = CreateAttributeValue(formDataProperty, propertyObject, schemaObject);
-                    if (value != null)
-                    {
-                        productAttributes.Add(formDataProperty.Name, value);
-                    }
-                }
+                var attribute = BuildProductAttribute(formProperty, (JObject)schemaProperty.Value, schemaObject);
+                if (attribute is not null)
+                    attributes.Add(attribute);
             }
 
-            document.ProductAttributes = productAttributes;
+            document.ProductAttributes = attributes;
         }
 
-        private object CreateAttributeValue(JProperty formDataProperty, JObject propertyObject, JObject schemaObject)
+        private ProductAttributeSearchModel BuildProductAttribute(JProperty formProperty, JObject schemaProperty, JObject schema)
         {
-            if (formDataProperty.Value.Type != JTokenType.Array)
+            var attribute = new ProductAttributeSearchModel
             {
-                if (Guid.TryParse(formDataProperty.Value.ToString(), out var id))
-                {
-                    var title = (JValue)schemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
-                    if (title != null)
-                    {
-                        return new AttributeValue
-                        {
-                            Name = propertyObject["title"]?.Value<string>(),
-                            Value = new AttributeValueItem { Id = id.ToString(), Name = title.Value<string>() }
-                        };
-                    }
-                }
-                else
-                {
-                    return CreateSimpleAttributeValue(formDataProperty, propertyObject);
-                }
-            }
-            else
-            {
-                return CreateArrayAttributeValue((JArray)formDataProperty.Value, propertyObject, schemaObject);
-            }
-
-            return null;
-        }
-
-        private object CreateSimpleAttributeValue(JProperty formDataProperty, JObject propertyObject)
-        {
-            var title = propertyObject["title"]?.Value<string>();
-            return formDataProperty.Value.Type switch
-            {
-                JTokenType.Boolean => new AttributeValue { Name = title, Value = Convert.ToBoolean(formDataProperty.Value) },
-                JTokenType.Float => new AttributeValue { Name = title, Value = (float)Convert.ToDouble(formDataProperty.Value) },
-                JTokenType.Integer => new AttributeValue { Name = title, Value = Convert.ToInt32(formDataProperty.Value) },
-                _ => new AttributeValue { Name = title, Value = Convert.ToString(formDataProperty.Value) }
+                Key = formProperty.Name,
+                Name = schemaProperty["title"]?.Value<string>()
             };
+
+            var token = formProperty.Value;
+
+            if (token.Type == JTokenType.Array)
+            {
+                var ids = new List<string>();
+                var labels = new List<string>();
+
+                foreach (var item in (JArray)token)
+                {
+                    var raw = item.ToString();
+                    ids.Add(raw);
+                    labels.Add(ResolveEnumTitle(schema, raw) ?? raw);
+                }
+
+                if (ids.Count == 0)
+                    return null;
+
+                attribute.ValueIds = ids.ToArray();
+                attribute.ValueKeywords = labels.ToArray();
+                return attribute;
+            }
+
+            switch (token.Type)
+            {
+                case JTokenType.Boolean:
+                    attribute.ValueBoolean = token.Value<bool>();
+                    attribute.ValueKeywords = new[] { token.Value<bool>() ? "true" : "false" };
+                    return attribute;
+
+                case JTokenType.Integer:
+                case JTokenType.Float:
+                    attribute.ValueNumeric = token.Value<double>();
+                    attribute.ValueKeywords = new[] { token.ToString() };
+                    return attribute;
+
+                default:
+                    var s = token.Value<string>();
+                    if (string.IsNullOrWhiteSpace(s))
+                        return null;
+
+                    if (Guid.TryParse(s, out _))
+                    {
+                        attribute.ValueIds = new[] { s };
+                        attribute.ValueKeywords = new[] { ResolveEnumTitle(schema, s) ?? s };
+                        return attribute;
+                    }
+
+                    attribute.ValueText = s;
+                    attribute.ValueKeywords = new[] { s };
+                    if (double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsed))
+                        attribute.ValueNumeric = parsed;
+
+                    return attribute;
+            }
         }
 
-        private object CreateArrayAttributeValue(JArray valueIdsArray, JObject propertyObject, JObject schemaObject)
+        private static string ResolveEnumTitle(JObject schema, string id)
         {
-            return new AttributeValue
-            {
-                Name = propertyObject["title"]?.Value<string>(),
-                Value = valueIdsArray.Select(x => new AttributeValueItem
-                {
-                    Id = x.ToString(),
-                    Name = ((JValue)schemaObject.SelectTokens($"$.definitions...anyOf[?(@.enum[0] == '{x}')].title").FirstOrDefault())?.Value<string>()
-                })
-            };
+            var title = schema
+                .SelectTokens($"$.definitions..anyOf[?(@.enum[0] == '{id}')].title")
+                .FirstOrDefault();
+
+            return (title as JValue)?.Value<string>();
         }
     }
 
@@ -395,18 +406,5 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         public Guid[] Videos { get; init; }
         public Guid[] Files { get; init; }
         public string PrimaryProductSku { get; init; }
-    }
-
-
-    internal record AttributeValue
-    {
-        public string Name { get; init; }
-        public object Value { get; init; }
-    }
-
-    internal record AttributeValueItem
-    {
-        public string Id { get; init; }
-        public string Name { get; init; }
     }
 }
