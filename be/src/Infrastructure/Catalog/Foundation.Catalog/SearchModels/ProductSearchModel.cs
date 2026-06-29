@@ -13,6 +13,7 @@ namespace Foundation.Catalog.SearchModels.Products
         public string Name { get; set; }
         public CompletionField NameSuggest { get; set; }
         public string Description { get; set; }
+        [Object(Enabled = false)]
         public string FormData { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
@@ -33,6 +34,6 @@ namespace Foundation.Catalog.SearchModels.Products
         public IEnumerable<Guid> Files { get; set; }
 
         [Nested]
-        public Dictionary<string, object> ProductAttributes { get; set; }
+        public IEnumerable<ProductAttributeSearchModel> ProductAttributes { get; set; }
     }
 }
