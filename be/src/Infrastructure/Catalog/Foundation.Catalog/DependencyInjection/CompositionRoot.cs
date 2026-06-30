@@ -27,7 +27,8 @@ namespace Foundation.Catalog.DependencyInjection
             var defaultIndex = configuration["ElasticsearchIndex"];
 
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex).DefaultDisableIdInference();
+                .DefaultIndex(defaultIndex).DefaultDisableIdInference()
+                .DisableDirectStreaming();
 
             var client = new ElasticClient(settings);
 
