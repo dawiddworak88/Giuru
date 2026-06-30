@@ -1,4 +1,5 @@
-﻿using Foundation.Search.SearchResultModels;
+﻿using Foundation.Catalog.SearchModels;
+using Foundation.Search.SearchResultModels;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,6 @@ namespace Foundation.Catalog.SearchModels.Products
         public string Name { get; set; }
         public CompletionField NameSuggest { get; set; }
         public string Description { get; set; }
-        [Text(Index = false)]
         public string FormData { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
@@ -33,7 +33,6 @@ namespace Foundation.Catalog.SearchModels.Products
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }
 
-        [Nested]
         public IEnumerable<ProductAttributeSearchModel> ProductAttributes { get; set; }
     }
 }

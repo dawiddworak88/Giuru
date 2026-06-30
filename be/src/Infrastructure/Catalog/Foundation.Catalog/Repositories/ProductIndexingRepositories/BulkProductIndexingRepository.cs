@@ -212,11 +212,6 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             if (!response.IsValid)
             {
                 _logger.LogError("Bulk indexing failed: {DebugInfo}", response.DebugInformation);
-
-                foreach (var itemWithError in response.ItemsWithErrors)
-                {
-                    _logger.LogError("Failed to index document {Id}: {Error}", itemWithError.Id, itemWithError.Error?.Reason);
-                }
             }
         }
 
