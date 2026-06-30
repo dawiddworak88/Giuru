@@ -239,14 +239,10 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
             }
 
-            var searchRequest = new SearchRequest
-            {
-                From = ProductSearchConstants.Pagination.BeginningPage,
-                Size = ProductSearchConstants.Pagination.ProductsMaxSize,
-                Query = query
-            };
-
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(searchRequest);
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s
+                .From(ProductSearchConstants.Pagination.BeginningPage)
+                .Size(ProductSearchConstants.Pagination.ProductsMaxSize)
+                .Query(q => query));
 
             if (response.IsValid && response.Hits.Any())
             {
