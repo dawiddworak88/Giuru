@@ -62,15 +62,15 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 .Where(x => categoryIds.Contains(x.CategoryId) && x.IsActive)
                 .ToListAsync();
 
-            var schemaCaches = new Dictionary<(Guid categoryId, string language), JObject>();
+            var schemaCaches = new Dictionary<(Guid categoryId, string language), SchemaCache>();
 
             foreach (var schema in categorySchemas)
             {
                 if (!string.IsNullOrWhiteSpace(schema.Schema))
                 {
                     var key = (schema.CategoryId, schema.Language);
-
-                    schemaCaches.TryAdd(key, JObject.Parse(schema.Schema));
+                    var parsed = JObject.Parse(schema.Schema);
+                    schemaCaches.TryAdd(key, new SchemaCache(parsed, BuildEnumTitleCache(parsed)));
                 }
             }
 
@@ -83,11 +83,11 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         }
 
         private async IAsyncEnumerable<ProductBatchDto[]> GetProductBatchesAsync(List<Guid> productIds)
-        {   
+        {
             for (int i = 0; i < productIds.Count; i += BATCH_SIZE)
             {
                 var batchIds = productIds.Skip(i).Take(BATCH_SIZE).ToList();
-                
+
                 var products = await _catalogContext.Products
                     .AsNoTracking()
                     .AsSplitQuery()
@@ -128,7 +128,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                     .ToDictionary(g => g.Key, g => g.Select(f => f.MediaId).ToArray());
 
                 var primaryProductIds = products.Where(p => p.PrimaryProductId.HasValue).Select(p => p.PrimaryProductId.Value).Distinct().ToList();
-                var primaryProductSkus = primaryProductIds.Any() 
+                var primaryProductSkus = primaryProductIds.Any()
                     ? await _catalogContext.Products
                         .AsNoTracking()
                         .Where(p => primaryProductIds.Contains(p.Id))
@@ -151,7 +151,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         private async Task ProcessBatchAsync(
             ProductBatchDto[] batch,
             string[] supportedCultures,
-            Dictionary<(Guid categoryId, string language), JObject> schemaCaches)
+            Dictionary<(Guid categoryId, string language), SchemaCache> schemaCaches)
         {
             var bulk = new BulkDescriptor();
             var operationCount = 0;
@@ -216,8 +216,8 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         }
 
         private ProductSearchModel CreateProductSearchModel(
-            Infrastructure.Products.Entities.Product product, 
-            Infrastructure.Products.Entities.ProductTranslation productTranslations, 
+            Infrastructure.Products.Entities.Product product,
+            Infrastructure.Products.Entities.ProductTranslation productTranslations,
             string language,
             ProductBatchDto batchItem)
         {
@@ -288,24 +288,24 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             string formData,
             Guid categoryId,
             string language,
-            Dictionary<(Guid categoryId, string language), JObject> schemaCaches)
+            Dictionary<(Guid categoryId, string language), SchemaCache> schemaCaches)
         {
             if (string.IsNullOrWhiteSpace(formData))
                 return;
 
-            if (!schemaCaches.TryGetValue((categoryId, language), out var schemaObject))
+            if (!schemaCaches.TryGetValue((categoryId, language), out var schemaCache))
             {
-                schemaObject = schemaCaches
+                schemaCache = schemaCaches
                     .Where(kv => kv.Key.categoryId == categoryId)
                     .Select(kv => kv.Value)
                     .FirstOrDefault();
 
-                if (schemaObject is null)
+                if (schemaCache is null)
                     return;
             }
 
             var formDataObject = JObject.Parse(formData);
-            var schemaProperties = schemaObject["properties"] as JObject;
+            var schemaProperties = schemaCache.Schema["properties"] as JObject;
             if (schemaProperties is null)
                 return;
 
@@ -317,7 +317,10 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 if (formProperty is null)
                     continue;
 
-                var attribute = BuildProductAttribute(formProperty, (JObject)schemaProperty.Value, schemaObject);
+                if (schemaProperty.Value is not JObject schemaPropertyObj)
+                    continue;
+
+                var attribute = BuildProductAttribute(formProperty, schemaPropertyObj, schemaCache.EnumTitles);
                 if (attribute is not null)
                     attributes.Add(attribute);
             }
@@ -325,7 +328,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             document.ProductAttributes = attributes;
         }
 
-        private ProductAttributeSearchModel BuildProductAttribute(JProperty formProperty, JObject schemaProperty, JObject schema)
+        private ProductAttributeSearchModel BuildProductAttribute(JProperty formProperty, JObject schemaProperty, Dictionary<string, string> enumTitles)
         {
             var attribute = new ProductAttributeSearchModel
             {
@@ -345,7 +348,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
                 {
                     var raw = item.ToString();
                     ids.Add(raw);
-                    labels.Add(ResolveEnumTitle(schema, raw) ?? raw);
+                    labels.Add(enumTitles.GetValueOrDefault(raw) ?? raw);
                 }
 
                 if (ids.Count == 0)
@@ -360,50 +363,60 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
             {
                 case JTokenType.Boolean:
                     attribute.ValueBoolean = token.Value<bool>();
-                    attribute.ValueKeywords = new[] { token.Value<bool>() ? "true" : "false" };
+                    attribute.ValueKeywords = [token.Value<bool>() ? "true" : "false"];
                     return attribute;
 
                 case JTokenType.Integer:
                 case JTokenType.Float:
-                    attribute.ValueNumeric = token.Value<double>();
-                    attribute.ValueKeywords = new[] { token.ToString() };
+                    attribute.ValueKeywords = [token.ToString()];
                     return attribute;
 
+                case JTokenType.Object:
+                    return null;
+
                 default:
-                    var s = token.Value<string>();
+                    var s = Convert.ToString(token);
                     if (string.IsNullOrWhiteSpace(s))
                         return null;
 
                     if (schemaType == "boolean" && bool.TryParse(s, out var boolVal))
                     {
                         attribute.ValueBoolean = boolVal;
-                        attribute.ValueKeywords = new[] { boolVal ? "true" : "false" };
+                        attribute.ValueKeywords = [boolVal ? "true" : "false"];
                         return attribute;
                     }
 
                     if (Guid.TryParse(s, out _))
                     {
-                        attribute.ValueIds = new[] { s };
-                        attribute.ValueKeywords = new[] { ResolveEnumTitle(schema, s) ?? s };
+                        attribute.ValueIds = [s];
+                        attribute.ValueKeywords = [enumTitles.GetValueOrDefault(s) ?? s];
                         return attribute;
                     }
 
                     attribute.ValueText = s;
-                    attribute.ValueKeywords = new[] { s };
-                    if (double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsed))
-                        attribute.ValueNumeric = parsed;
+                    attribute.ValueKeywords = [s];
 
                     return attribute;
             }
         }
 
-        private static string ResolveEnumTitle(JObject schema, string id)
+        private static Dictionary<string, string> BuildEnumTitleCache(JObject schema)
         {
-            var title = schema
-                .SelectTokens($"$.definitions..anyOf[?(@.enum[0] == '{id}')].title")
-                .FirstOrDefault();
+            var cache = new Dictionary<string, string>(StringComparer.Ordinal);
 
-            return (title as JValue)?.Value<string>();
+            foreach (var entry in schema.SelectTokens("$.definitions..anyOf[*]"))
+            {
+                if (entry is not JObject entryObj)
+                    continue;
+
+                var enumVal = entryObj["enum"]?[0]?.ToString();
+                var title = entryObj["title"]?.Value<string>();
+
+                if (enumVal is not null && title is not null)
+                    cache.TryAdd(enumVal, title);
+            }
+
+            return cache;
         }
     }
 
@@ -415,4 +428,6 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
         public Guid[] Files { get; init; }
         public string PrimaryProductSku { get; init; }
     }
+
+    internal sealed record SchemaCache(JObject Schema, Dictionary<string, string> EnumTitles);
 }
