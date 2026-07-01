@@ -61,12 +61,25 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query && 
+                query = query &&
                     (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm))
                         || Query<ProductSearchModel>.Prefix(x => x.Sku, searchTerm)
                         || Query<ProductSearchModel>.Prefix(x => x.Ean, searchTerm)
                         || Query<ProductSearchModel>.Match(x => x.Field(f => f.CategoryName).Query(searchTerm).Fuzziness(Fuzziness.Auto))
-                        || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
+                        || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm)
+                        || Query<ProductSearchModel>.Nested(n => n
+                            .Path(p => p.ProductAttributes)
+                            .Query(nq => nq
+                                .Match(m => m
+                                    .Field(f => f.ProductAttributes.First().ValueText)
+                                    .Query(searchTerm)
+                                    .Fuzziness(Fuzziness.Auto))))
+                        || Query<ProductSearchModel>.Nested(n => n
+                            .Path(p => p.ProductAttributes)
+                            .Query(nq => nq
+                                .Prefix(pq => pq
+                                    .Field(f => f.ProductAttributes.First().ValueKeywords)
+                                    .Value(searchTerm)))));
             }
 
             if (pageIndex.HasValue is false || itemsPerPage.HasValue is false)
