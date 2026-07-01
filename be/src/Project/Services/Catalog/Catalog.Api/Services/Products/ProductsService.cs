@@ -462,22 +462,14 @@ namespace Catalog.Api.Services.Products
                 {
                     productAttribute.Values = new string[]
                     {
-                productAttributeSearchModel.ValueBoolean.Value
-                    ? _globalLocalizer.GetString("Yes")
-                    : _globalLocalizer.GetString("No")
+                        productAttributeSearchModel.ValueBoolean.Value
+                            ? _globalLocalizer.GetString("Yes")
+                            : _globalLocalizer.GetString("No")
                     };
                 }
                 else if (productAttributeSearchModel.ValueKeywords?.Length > 0)
                 {
                     productAttribute.Values = productAttributeSearchModel.ValueKeywords;
-                }
-                else if (productAttributeSearchModel.ValueText is not null)
-                {
-                    productAttribute.Values = new string[] { productAttributeSearchModel.ValueText };
-                }
-                else if (productAttributeSearchModel.ValueNumeric.HasValue)
-                {
-                    productAttribute.Values = new string[] { productAttributeSearchModel.ValueNumeric.Value.ToString() };
                 }
 
                 productAttributes.Add(productAttribute);
