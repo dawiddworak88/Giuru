@@ -1,5 +1,4 @@
-﻿using Foundation.Catalog.SearchModels;
-using Foundation.Search.SearchResultModels;
+﻿using Foundation.Search.SearchResultModels;
 using Nest;
 using System;
 using System.Collections.Generic;
