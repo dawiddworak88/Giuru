@@ -8,7 +8,6 @@ using Nest;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -368,6 +367,7 @@ namespace Foundation.Catalog.Repositories.ProductIndexingRepositories
 
                 case JTokenType.Integer:
                 case JTokenType.Float:
+                    attribute.ValueNumeric = token.Value<double>();
                     attribute.ValueKeywords = [token.ToString()];
                     return attribute;
 
