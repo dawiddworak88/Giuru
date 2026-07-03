@@ -15,7 +15,6 @@ using Foundation.Catalog.Infrastructure.Products.Entities;
 using Foundation.Catalog.SearchModels.Products;
 using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
-using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
