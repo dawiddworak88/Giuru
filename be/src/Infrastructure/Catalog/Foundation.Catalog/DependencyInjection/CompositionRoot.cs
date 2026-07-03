@@ -35,6 +35,11 @@ namespace Foundation.Catalog.DependencyInjection
             if (!client.Indices.Exists(defaultIndex).Exists)
             {
                 client.Indices.Create(defaultIndex, c => c
+                    .Settings(s => s
+                        .Analysis(a => a
+                            .Normalizers(n => n
+                                .Custom("lowercase", cn => cn
+                                    .Filters("lowercase")))))
                     .Map<ProductSearchModel>(m => m
                         .Dynamic(DynamicMapping.Strict)
                         .AutoMap()

@@ -79,7 +79,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                             .Query(nq => nq
                                 .Prefix(pq => pq
                                     .Field(f => f.ProductAttributes.First().ValueKeywords)
-                                    .Value(searchTerm)))));
+                                    .Value(searchTerm.ToLowerInvariant())))));
             }
 
             if (pageIndex.HasValue is false || itemsPerPage.HasValue is false)
