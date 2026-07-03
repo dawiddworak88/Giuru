@@ -313,9 +313,10 @@ function OrderForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
                         toast.success(jsonResponse.message);
                         setDisableSaveButton(true);
+                    } else {
+                        toast.error(jsonResponse.message || props.generalErrorMessage);
                     }
                 });
             }).catch(() => {
@@ -537,7 +538,24 @@ function OrderForm(props) {
                                     disabled={product == null} 
                                     value={quantity} 
                                     onChange={(e) => {
-                                        setQuantity(e.target.value);
+                                        const rawValue = e.target.value;
+
+                                        if (rawValue === '') {
+                                            setQuantity('');
+                                            return;
+                                        }
+
+                                        let newValue = Number(rawValue);
+
+                                        if (isNaN(newValue)) {
+                                            return;
+                                        }
+
+                                        if (productFromOutlet && newValue > maxOutlet) {
+                                            newValue = maxOutlet;
+                                        }
+
+                                        setQuantity(newValue);
                                     }}
                                     onBlur={() => {
                                         let numericValue = Number(quantity);

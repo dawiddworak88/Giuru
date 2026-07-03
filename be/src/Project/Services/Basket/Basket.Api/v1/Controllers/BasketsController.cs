@@ -1,6 +1,10 @@
-﻿using Basket.Api.v1.RequestModels;
+using Asp.Versioning;
+using Basket.Api.Configurations;
 using Basket.Api.Services;
+using Basket.Api.ServicesModels;
 using Basket.Api.ServicesModelsValidators;
+using Basket.Api.v1.RequestModels;
+using Basket.Api.v1.ResponseModels;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
@@ -9,17 +13,13 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Basket.Api.ServicesModels;
-using Basket.Api.v1.ResponseModels;
-using IdentityModel;
-using Microsoft.Extensions.Options;
-using Basket.Api.Configurations;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -51,12 +51,12 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> Post(BasketRequestModel request)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSellerClaim = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
+            var isSeller = User.IsInRole(AccountConstants.Roles.Seller);
 
             var serviceModel = new UpdateBasketServiceModel
             {
                 Id = request.Id ?? Guid.NewGuid(),
-                IsSeller = isSellerClaim is not null,
+                IsSeller = isSeller,
                 Items = request.Items.OrEmptyIfNull().Select(x => new UpdateBasketItemServiceModel 
                 { 
                     ProductId = x.ProductId,
@@ -216,11 +216,12 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> BasketCheckoutPost(BasketCheckoutRequestModel request)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSellerClaim = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
+            var isSeller = User.IsInRole(AccountConstants.Roles.Seller);
             var serviceModel = new CheckoutBasketServiceModel
             {
                 BasketId = request.BasketId,
-                IsSeller = isSellerClaim is not null,
+                IsSeller = isSeller,
+                SellerId = isSeller ? request.SellerId : null,
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
                 ClientEmail = request.ClientEmail,

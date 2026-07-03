@@ -186,9 +186,11 @@ const ClientTeamMemberForm = (props) => {
                                                 label={approval.name} />
                                         </NoSsr>
                                         {teamMemberApprovalIds.indexOf(approval.id) !== -1 && approval.approvalDate &&
-                                            <p>
-                                                {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
-                                            </p>
+                                            <NoSsr>
+                                                <p>
+                                                    {props.expressedOnLabel}: {moment.utc(approval.approvalDate).local().format("L LT")}
+                                                </p>
+                                            </NoSsr>
                                         }
                                     </div>
                                 );

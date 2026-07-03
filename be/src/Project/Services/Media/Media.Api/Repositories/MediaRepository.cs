@@ -11,16 +11,18 @@ namespace Media.Api.Repositories
     public class MediaRepository : IMediaRepository
     {
         private readonly IOptions<AppSettings> _configuration;
+        private readonly BlobClientOptions _blobClientOptions;
 
         public MediaRepository(
             IOptions<AppSettings> configuration)
         {
             _configuration = configuration;
+            _blobClientOptions = CreateBlobClientOptions(configuration.Value.UseLegacyBlobServiceApiVersion);
         }
 
         public byte[] GetFile(string folder, string filename)
         {
-            var blobServiceClient = new BlobServiceClient(_configuration.Value.StorageConnectionString);
+            var blobServiceClient = new BlobServiceClient(_configuration.Value.StorageConnectionString, _blobClientOptions);
 
             var containerClient = blobServiceClient.GetBlobContainerClient(folder);
 
@@ -39,7 +41,7 @@ namespace Media.Api.Repositories
 
         public async Task CreateFileAsync(Guid mediaItemVersionId, string folderName, IFormFile file, string filename)
         {
-            var container = new BlobContainerClient(_configuration.Value.StorageConnectionString, folderName);
+            var container = new BlobContainerClient(_configuration.Value.StorageConnectionString, folderName, _blobClientOptions);
 
             await container.CreateIfNotExistsAsync();
 
@@ -52,6 +54,16 @@ namespace Media.Api.Repositories
                     blob.Upload(stream);
                 }
             }
+        }
+
+        private static BlobClientOptions CreateBlobClientOptions(bool useLegacyBlobServiceApiVersion)
+        {
+            if (useLegacyBlobServiceApiVersion)
+            {
+                return new BlobClientOptions(BlobClientOptions.ServiceVersion.V2024_05_04);
+            }
+
+            return new BlobClientOptions();
         }
     }
 }

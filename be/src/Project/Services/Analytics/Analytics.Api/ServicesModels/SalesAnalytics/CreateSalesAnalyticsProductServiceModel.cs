@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Analytics.Api.ServicesModels.SalesAnalytics
 {
@@ -9,6 +9,6 @@ namespace Analytics.Api.ServicesModels.SalesAnalytics
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
         public decimal? Price { get; set; }
-        public string? Currency { get; set; }
+        public string Currency { get; set; }
     }
 }

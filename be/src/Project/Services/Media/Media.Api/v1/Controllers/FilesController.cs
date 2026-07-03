@@ -1,4 +1,4 @@
-﻿using Foundation.Account.Definitions;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Helpers;
@@ -18,6 +18,7 @@ using Media.Api.v1.Areas.Media.RequestModels;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Media.Api.v1.RequestModels;
+using Asp.Versioning;
 
 namespace Media.Api.v1.Controllers
 {

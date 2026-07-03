@@ -321,4 +321,10 @@
   <data name="ExpectedDeliveryDateSuffix" xml:space="preserve">
     <value>Produkt ab Lager verfügbar: {expectedDelivery}</value>
   </data>
+  <data name="ProductDeleteInventoryConflict" xml:space="preserve">
+    <value>Das Produkt kann nicht gelöscht werden, solange es auf Lager ist.</value>
+  </data>
+  <data name="ProductDeleteOutletConflict" xml:space="preserve">
+    <value>Das Produkt kann nicht gelöscht werden, solange es im Angebot ist.</value>
+  </data>
 </root>

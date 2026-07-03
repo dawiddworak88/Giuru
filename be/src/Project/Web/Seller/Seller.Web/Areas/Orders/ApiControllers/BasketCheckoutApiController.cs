@@ -1,12 +1,18 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Inventory.DomainModels;
+using Seller.Web.Areas.Inventory.Repositories;
+using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Orders.Services.Basket;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.DomainModels.UserApproval;
 using Seller.Web.Shared.Repositories.Clients;
@@ -24,22 +30,34 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IClientsRepository _clientsRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly IBasketService _basketService;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IOutletRepository _outletRepository;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
+            IStringLocalizer<ClientResources> clientLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
             IClientsRepository clientsRepository,
-            IIdentityRepository identityRepository)
+            IIdentityRepository identityRepository,
+            IBasketService basketService,
+            IInventoryRepository inventoryRepository,
+            IOutletRepository outletRepository)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
+            _clientLocalizer = clientLocalizer;
             _userApprovalsRepository = userApprovalsRepository;
             _clientsRepository = clientsRepository;
             _identityRepository = identityRepository;
+            _basketService = basketService;
+            _inventoryRepository = inventoryRepository;
+            _outletRepository = outletRepository;
         }
 
         [HttpPost]
@@ -48,18 +66,55 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
+            var basket = await _basketRepository.GetBasketByIdAsync(token, language, model.BasketId);
+
+            if (basket is null || basket.Items.OrEmptyIfNull().Any() is false)
+            {
+                throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
+            }
+
+            var items = basket.Items.ToList();
+
+            if (items.Any(x => x.StockQuantity > 0 || x.OutletQuantity > 0))
+            {
+                if (items.Any(x => (x.StockQuantity > 0 || x.OutletQuantity > 0) && x.ProductId.HasValue is false))
+                {
+                    throw new CustomException(_orderLocalizer.GetString("ProductsNotFound").Value, (int)HttpStatusCode.NotFound);
+                }
+
+                var inventoriesIds = items.Where(x => x.StockQuantity > 0).Select(x => x.ProductId.Value).ToList();
+                var outletsIds = items.Where(x => x.OutletQuantity > 0).Select(x => x.ProductId.Value).ToList();
+
+                var inventoriesTask = inventoriesIds.Any()
+                    ? _inventoryRepository.GetInventoryProductByProductIdsAsync(token, language, inventoriesIds)
+                    : Task.FromResult(Enumerable.Empty<InventoryItem>());
+
+                var outletsTask = outletsIds.Any()
+                    ? _outletRepository.GetOutletProductsByProductsIdAsync(token, language, outletsIds)
+                    : Task.FromResult(Enumerable.Empty<OutletItem>());
+
+                await Task.WhenAll(inventoriesTask, outletsTask);
+
+                var inventories = inventoriesTask.Result;
+                var outlets = outletsTask.Result;
+
+                _basketService.ValidateStockOutletQuantities(items, inventories, outlets);
+            }
+
             var userApprovals = Enumerable.Empty<UserApproval>();
 
             var client = await _clientsRepository.GetClientAsync(token, language, model.ClientId);
 
-            if (client is not null)
+            if (client is null)
             {
-                var user = await _identityRepository.GetAsync(token, language, client.Email);
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _clientLocalizer.GetString("ClientNotFound").Value });
+            }
 
-                if (user is not null)
-                {
-                    userApprovals = await _userApprovalsRepository.GetAsync(token, language, Guid.Parse(user.Id));
-                }
+            var user = await _identityRepository.GetAsync(token, language, client.Email);
+
+            if (user is not null)
+            {
+                userApprovals = await _userApprovalsRepository.GetAsync(token, language, Guid.Parse(user.Id));
             }
 
             await _basketRepository.CheckoutBasketAsync(
@@ -90,7 +145,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingPhoneNumber,
                 model.ShippingCountryId,
                 model.MoreInfo,
-                userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId));
+                userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId),
+                client.OrganisationId);
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }

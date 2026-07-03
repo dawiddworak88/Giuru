@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
@@ -57,7 +58,7 @@ namespace Identity.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                IsSeller = User.IsInRole("Seller")
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
             };
 
             var validator = new DeleteClientTeamMemberModelValidator();
@@ -93,7 +94,7 @@ namespace Identity.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                IsSeller = User.IsInRole("Seller")
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
             };
 
             var validator = new GetClientTeamMemberModelValidator();
@@ -136,7 +137,7 @@ namespace Identity.Api.v1.Controllers
         public async Task<IActionResult> Get(string searchTerm, int? pageIndex, int? itemsPerPage, string orderBy, Guid? organisationId)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSeller = User.IsInRole("Seller");
+            var isSeller = User.IsInRole(AccountConstants.Roles.Seller);
 
             var serviceModel = new GetClientTeamMembersServiceModel
             {
@@ -190,7 +191,7 @@ namespace Identity.Api.v1.Controllers
         public async Task<IActionResult> Save([FromBody] ClientTeamMemberRequestModel request)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSeller = User.IsInRole("Seller");
+            var isSeller = User.IsInRole(AccountConstants.Roles.Seller);
 
             if (request.Id.HasValue)
             {

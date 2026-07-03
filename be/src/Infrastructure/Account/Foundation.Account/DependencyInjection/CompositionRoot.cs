@@ -36,6 +36,10 @@ namespace Foundation.Account.DependencyInjection
                     options.RequireHttpsMetadata = false;
 
                     options.Audience = AccountConstants.Audiences.All;
+
+                    options.TokenValidationParameters ??= new TokenValidationParameters();
+                    options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
+                    options.TokenValidationParameters.NameClaimType = ClaimTypes.Name;
                 });
         }
 

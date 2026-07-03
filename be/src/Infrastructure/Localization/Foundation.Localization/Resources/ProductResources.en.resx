@@ -321,4 +321,10 @@
   <data name="ExpectedDeliveryDateSuffix" xml:space="preserve">
     <value>Product available in stock from: {expectedDelivery}</value>
   </data>
+  <data name="ProductDeleteInventoryConflict" xml:space="preserve">
+    <value>The product cannot be deleted while it is in stock.</value>
+  </data>
+  <data name="ProductDeleteOutletConflict" xml:space="preserve">
+    <value>The product cannot be deleted while it is on outlet.</value>
+  </data>
 </root>

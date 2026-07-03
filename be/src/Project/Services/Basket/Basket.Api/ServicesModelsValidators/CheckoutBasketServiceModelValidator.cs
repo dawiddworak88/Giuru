@@ -13,6 +13,10 @@ namespace Basket.Api.ServicesModelsValidators
             this.RuleFor(x => x.ClientName).NotNull().NotEmpty();
             this.RuleFor(x => x.BasketId).NotNull().NotEmpty();
             this.RuleFor(x => x.Username).NotNull().NotEmpty();
+            this.When(x => x.IsSeller, () =>
+            {
+                this.RuleFor(x => x.SellerId).NotNull().NotEmpty();
+            });
         }
     }
 }

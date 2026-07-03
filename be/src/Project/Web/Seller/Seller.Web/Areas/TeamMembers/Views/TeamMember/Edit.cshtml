@@ -1,4 +1,4 @@
-﻿<div id="root" asp-prerender-module="TeamMembersPage" asp-prerender-data="@Model">
+﻿<div id="root" asp-prerender-module="TeamMemberPage" asp-prerender-data="@Model">
 </div>
 
 <script>
@@ -14,9 +14,10 @@
 }
 
 @section HeadStyles {
-    <link rel="stylesheet" href="~/dist/css/teammember.css" type="text/css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/dist/css/teammemberpage.css" type="text/css" asp-append-version="true" />
+    
 }
 
 @section BodyScripts {
-    <script src="~/dist/js/teammember.js" asp-append-version="true"></script>
+    <script src="~/dist/js/teammemberpage.js" asp-append-version="true"></script>
 }

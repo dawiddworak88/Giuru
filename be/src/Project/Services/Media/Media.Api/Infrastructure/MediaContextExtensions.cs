@@ -25,9 +25,11 @@ namespace Media.Api.Infrastructure
 
         public static void EnsureSeeded(this MediaContext context, IConfiguration configuration, IChecksumService checksumService)
         {
-            MediaSeed.SeedHeaders(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService);
-            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService);
-            MediaSeed.SeedHeroSliderItems(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService);
+            var useLegacyBlobServiceApiVersion = bool.TryParse(configuration["UseLegacyBlobServiceApiVersion"], out var parsedValue) && parsedValue;
+
+            MediaSeed.SeedHeaders(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService, useLegacyBlobServiceApiVersion);
+            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService, useLegacyBlobServiceApiVersion);
+            MediaSeed.SeedHeroSliderItems(context, configuration["StorageConnectionString"], Guid.Parse(configuration["OrganisationId"]), checksumService, useLegacyBlobServiceApiVersion);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Foundation.Account.Definitions;
+using Asp.Versioning;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -7,6 +8,11 @@ using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Ordering.Api.Services;
+using Ordering.Api.ServicesModels;
+using Ordering.Api.v1.RequestModels;
+using Ordering.Api.v1.ResponseModels;
+using Ordering.Api.Validators;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,11 +20,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Ordering.Api.Services;
-using Ordering.Api.ServicesModels;
-using Ordering.Api.Validators;
-using Ordering.Api.v1.ResponseModels;
-using Ordering.Api.v1.RequestModels;
 
 namespace Ordering.Api.v1.Controllers
 {
@@ -131,7 +132,7 @@ namespace Ordering.Api.v1.Controllers
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = CultureInfo.CurrentCulture.Name,
-                    IsSeller = User.IsInRole("Seller")
+                    IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
                 };
 
                 var validator = new GetOrdersByIdsModelValidator();
@@ -224,7 +225,7 @@ namespace Ordering.Api.v1.Controllers
                     OrderStatusId = orderStatusId,
                     Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    IsSeller = User.IsInRole("Seller")
+                    IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
                 };
 
                 var validator = new GetOrdersModelValidator();
@@ -328,7 +329,7 @@ namespace Ordering.Api.v1.Controllers
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                IsSeller = User.IsInRole("Seller")
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
             };
 
             var validator = new GetOrderModelValidator();
@@ -675,7 +676,7 @@ namespace Ordering.Api.v1.Controllers
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Username = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                IsSeller = User.IsInRole("Seller")
+                IsSeller = User.IsInRole(AccountConstants.Roles.Seller)
             };
 
             var validator = new UpdateOrderStatusModelValidator();

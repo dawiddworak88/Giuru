@@ -1,4 +1,4 @@
-﻿using Client.Api.Services.Fields;
+using Client.Api.Services.Fields;
 using Client.Api.ServicesModels.Fields;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Asp.Versioning;
 
 namespace Client.Api.v1.Controllers
 {

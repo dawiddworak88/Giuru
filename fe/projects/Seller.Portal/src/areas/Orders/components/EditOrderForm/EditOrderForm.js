@@ -201,10 +201,10 @@ function EditOrderForm(props) {
                                 fullWidth={true}
                                 multiline={true}
                                 disabled={true}
-                                InputProps={{
+                                slotProps={{ input: {
                                     disableUnderline: true,
                                     className: "p-2"
-                                }}
+                                }}}
                             />
                         </div>
                     </div>

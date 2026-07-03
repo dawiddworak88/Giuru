@@ -1,4 +1,4 @@
-﻿using Client.Api.Infrastructure;
+using Client.Api.Infrastructure;
 using Client.Api.Services.Applications;
 using Client.Api.Services.Clients;
 using Client.Api.Services.Groups;
@@ -40,7 +40,9 @@ namespace Client.Api.DependencyInjection
         {
             services.AddScoped<ClientContext>();
 
-            services.AddDbContext<ClientContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<ClientContext>(options =>
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite())
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)

@@ -1,4 +1,4 @@
-﻿using Analytics.Api.Infrastructure;
+using Analytics.Api.Infrastructure;
 using Analytics.Api.Services.Products;
 using Analytics.Api.Services.SalesAnalytics;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,9 @@ namespace Analytics.Api.DependencyInjection
         {
             services.AddScoped<AnalyticsContext>();
 
-            services.AddDbContext<AnalyticsContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<AnalyticsContext>(options => 
+                options.UseSqlServer(configuration["ConnectionString"], sqlOpt => sqlOpt.UseNetTopologySuite())
+                .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)

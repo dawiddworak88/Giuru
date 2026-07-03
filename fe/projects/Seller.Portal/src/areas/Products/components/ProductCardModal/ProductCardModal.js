@@ -86,8 +86,10 @@ const ProductCardModal = (props) => {
         <Dialog
             open={props.isOpen}
             onClose={props.handleClose}
-            PaperProps={{
-                className:"productCard-modal"
+            fullWidth
+            maxWidth="sm"
+            slotProps={{
+                paper: { className: "productCard-modal" }
             }}
         >
             <DialogTitle>{props.labels.title}</DialogTitle>
@@ -119,9 +121,9 @@ const ProductCardModal = (props) => {
                                 fullWidth={true} 
                                 helperText={nameError ? props.labels.nameErrorMessage : ""} 
                                 error={nameError && disabledButton}
-                                InputProps={{
+                                slotProps={{ input: {
                                     readOnly: productAttribute.title ? false : true
-                                }}/>
+                                }}}/>
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">

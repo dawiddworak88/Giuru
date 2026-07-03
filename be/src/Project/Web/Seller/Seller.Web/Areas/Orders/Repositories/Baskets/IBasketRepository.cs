@@ -7,6 +7,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
 {
     public interface IBasketRepository
     {
+        Task<Basket> GetBasketByIdAsync(string token, string language, Guid? id);
         Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items);
         Task CheckoutBasketAsync(
             string token,
@@ -36,6 +37,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             string shippingPhoneNumber,
             Guid? shippingCountryId,
             string moreInfo,
-            bool hasApprovalToSendEmail);
+            bool hasApprovalToSendEmail,
+            Guid? sellerId);
     }
 }
