@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Search\Foundation.Search\Foundation.Search.csproj" />
   </ItemGroup>
 
   <ItemGroup>
