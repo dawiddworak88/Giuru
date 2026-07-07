@@ -166,7 +166,7 @@ namespace Identity.Api.Services.ClientTeamMembers
                 teamMembers = teamMembers.Where(x => x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm) || x.Email.StartsWith(model.SearchTerm));
             }
 
-            teamMembers = teamMembers.ApplySort(model.OrderBy);
+            teamMembers = teamMembers.ApplySort(model.OrderBy, $"{nameof(ClientTeamMemberServiceModel.LastName)} asc");
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {

@@ -8,8 +8,17 @@ namespace Foundation.Search.Extensions
 {
     public static class StringExtensions
     {
+        private const string CreatedDatePropertyName = "CreatedDate";
+
         public static SortDescriptor<T> ToElasticSortList<T>(this string orderBy) where T : class
         {
+            if (string.IsNullOrWhiteSpace(orderBy))
+            {
+                orderBy = typeof(T).GetProperties().Any(x => x.Name == CreatedDatePropertyName)
+                    ? $"{CreatedDatePropertyName} desc"
+                    : null;
+            }
+
             if (string.IsNullOrWhiteSpace(orderBy))
             {
                 return null;

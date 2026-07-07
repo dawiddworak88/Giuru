@@ -6,11 +6,25 @@ namespace Foundation.Extensions.ExtensionMethods
 {
     public static class IQueryableExtensions
     {
+        private const string CreatedDatePropertyName = "CreatedDate";
+
         public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, string orderBy)
+        {
+            return source.ApplySort(orderBy, null);
+        }
+
+        public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, string orderBy, string defaultOrderBy)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
+            }
+
+            if (string.IsNullOrWhiteSpace(orderBy))
+            {
+                orderBy = !string.IsNullOrWhiteSpace(defaultOrderBy)
+                    ? defaultOrderBy
+                    : GetDefaultCreatedDateOrderBy<T>();
             }
 
             if (string.IsNullOrWhiteSpace(orderBy))
@@ -51,6 +65,13 @@ namespace Foundation.Extensions.ExtensionMethods
             }
 
             return source.OrderBy(orderByString);
+        }
+
+        private static string GetDefaultCreatedDateOrderBy<T>()
+        {
+            var hasCreatedDate = typeof(T).GetProperties().Any(x => x.Name == CreatedDatePropertyName);
+
+            return hasCreatedDate ? $"{CreatedDatePropertyName} desc" : null;
         }
     }
 }

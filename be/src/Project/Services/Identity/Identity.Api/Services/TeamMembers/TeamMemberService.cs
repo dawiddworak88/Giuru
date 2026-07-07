@@ -144,7 +144,7 @@ namespace Identity.Api.Services.TeamMembers
                 accounts = accounts.Where(u => u.FirstName.StartsWith(model.SearchTerm) || u.LastName.StartsWith(model.SearchTerm) || u.Email.StartsWith(model.SearchTerm) || u.Id == model.SearchTerm);
             }
 
-            accounts = accounts.ApplySort(model.OrderBy);
+            accounts = accounts.ApplySort(model.OrderBy, $"{nameof(ApplicationUser.LastName)} asc");
 
             var teamMembers = accounts.Select(u => new TeamMemberServiceModel
             {
