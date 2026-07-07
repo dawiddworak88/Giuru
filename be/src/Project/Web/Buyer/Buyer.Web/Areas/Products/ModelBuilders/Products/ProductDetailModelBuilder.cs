@@ -265,6 +265,34 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.MediaItems = mediaItems;
 
+                var modelsMediaItems = await _mediaItemsRepository.GetMediaItemsAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    product.Models3D,
+                    PaginationConstants.DefaultPageIndex,
+                    PaginationConstants.DefaultPageSize);
+
+                var model3DItems = new List<ProductMediaItemViewModel>();
+
+                foreach (var model3DId in product.Models3D.OrEmptyIfNull())
+                {
+                    var model3D = modelsMediaItems.FirstOrDefault(x => x.Id == model3DId);
+
+                    if (model3D is not null)
+                    {
+                        var model3DViewModel = new ProductMediaItemViewModel
+                        {
+                            MediaSrc = _mediaService.GetMediaUrl(model3DId),
+                            MediaAlt = model3D.Description,
+                            MimeType = model3D.MimeType,
+                        };
+
+                        model3DItems.Add(model3DViewModel);
+                    }
+                }
+
+                viewModel.Models3D = model3DItems;
+
                 var productFiles = await _productsRepository.GetProductFilesAsync(componentModel.Token, componentModel.Language, componentModel.Id, FilesConstants.DefaultPageIndex, FilesConstants.DefaultPageSize, null, $"{nameof(ProductFile.CreatedDate)} desc");
 
                 if (productFiles is not null)

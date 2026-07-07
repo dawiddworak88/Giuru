@@ -66,6 +66,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public ProductPriceViewModel Price { get; set; }
         public IEnumerable<BasketItem> OrderItems { get; set; }
         public IEnumerable<ProductMediaItemViewModel> MediaItems { get; set; }
+        public IEnumerable<ProductMediaItemViewModel> Models3D { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
     }

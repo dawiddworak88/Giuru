@@ -21,6 +21,7 @@ namespace Buyer.Web.Areas.Products.ApiResponseModels
         public string Ean { get; set; }
         public IEnumerable<Guid> ProductVariants { get; set; }
         public IEnumerable<Guid> Images { get; set; }
+        public IEnumerable<Guid> Models3D { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public IEnumerable<ProductAttributeResponseModel> ProductAttributes { get; set; }

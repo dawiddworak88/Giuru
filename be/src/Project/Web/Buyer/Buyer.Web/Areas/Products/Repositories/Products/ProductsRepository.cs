@@ -361,6 +361,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                     Ean = productResponse.Ean,
                     ProductVariants = productResponse.ProductVariants,
                     Images = productResponse.Images,
+                    Models3D = productResponse.Models3D,
                     Files = productResponse.Files,
                     Videos = productResponse.Videos,
                     ProductAttributes = productResponse.ProductAttributes?.Select(x => new ProductAttribute
