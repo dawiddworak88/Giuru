@@ -1,7 +1,6 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
-import { ThemeProvider } from "@mui/material/styles";
-import GlobalHelper from "../../../../shared/helpers/globals/GlobalHelper";
+import AppThemeProvider from "../../../../shared/components/AppThemeProvider/AppThemeProvider";
 import LocaleHelper from "../../../../shared/helpers/globals/LocaleHelper";
 import Store from "../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
@@ -16,7 +15,7 @@ function ProductPage(props) {
   LocaleHelper.setMomentLocale(props.locale);
 
   return (
-    <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
+    <AppThemeProvider locale={props.locale}>
       <ToastContainer />
       <Store>
         <div className="category-page">
@@ -30,7 +29,7 @@ function ProductPage(props) {
           <Footer {...props.footer}></Footer>
         </div>
       </Store>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }
 
