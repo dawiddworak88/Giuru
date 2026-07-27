@@ -19,10 +19,13 @@ import Availability from "../../../../shared/components/Availability/Availabilit
 import CopyButton from "../../../../shared/components/CopyButton/CopyButton";
 import GlobalHelper from "../../../../shared/helpers/globals/GlobalHelper";
 import ExpectedDeliveryTime from "../../../../shared/components/ExpectedDeliveryTime/ExpectedDeliveryTime";
+import Product3dModelModal from "../Product3dModelModal/Product3dModelModal";
+import Cube from "../../../../shared/icons/Cube";
 
 function ProductDetail(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [is3DModalOpen, setIs3DModalOpen] = useState(false);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [canActiveModal, setCanActiveModal] = useState(true);
@@ -32,6 +35,7 @@ function ProductDetail(props) {
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
     const [cleanDescription, setCleanDescription] = useState('');
     const [plainText, setPlainText] = useState('');
+    const model3D = props.models3D?.[0]
 
     const {
         orderItems,
@@ -116,12 +120,16 @@ function ProductDetail(props) {
             moreInfo: item.moreInfo,
             resetData: () => {
                 setIsModalOpen(false);
-            } 
+            }
         })
     };
 
     const handleCloseImageModal = () => {
         setIsImageModalOpen(false);
+    }
+
+    const handleClose3DModelModal = () => {
+        setIs3DModalOpen(false);
     }
 
     const handleImageModal = (index) => {
@@ -174,6 +182,16 @@ function ProductDetail(props) {
             <div className="product-detail__container">
                 <div className="product-detail__head columns is-desktop">
                     <div className="product-detail__gallery-column">
+                        {model3D &&
+                            <Button
+                                disableRipple
+                                className="product-detail__3d-modal-button"
+                                onClick={() => setIs3DModalOpen(true)}
+                            >
+                                <Cube />
+                                <span>{props.visualization3dText}</span>
+                            </Button>
+                        }
                         <div className="product-detail__desktop-gallery">
                             <div className="is-flex is-flex-wrap product-detail__product-gallery">
                                 {props.mediaItems && props.mediaItems.length > 1 ? (
@@ -283,7 +301,7 @@ function ProductDetail(props) {
                             </p>
                         }
                         <h1 className="title is-4 mt-1">
-                            {props.title} 
+                            {props.title}
                             <CopyButton
                                 copiedText={props.copiedText}
                                 copyTextError={props.copyTextError}
@@ -297,7 +315,7 @@ function ProductDetail(props) {
                             <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>
                         }
                         {props.price &&
-                            <Price 
+                            <Price
                                 {...props.price}
                             />
                         }
@@ -308,13 +326,13 @@ function ProductDetail(props) {
                                     availableQuantity={props.availableQuantity}
                                 />
                             }
-                            {props.inOutlet && 
+                            {props.inOutlet &&
                                 <div className="is-flex">
                                     <Availability
                                         label={props.inOutletLabel}
                                         availableQuantity={props.availableOutletQuantity}
                                     />
-                                    {props.outletTitle && 
+                                    {props.outletTitle &&
                                         <div className="product-details__discount ml-2">({props.outletTitleLabel} {props.outletTitle})</div>
                                     }
                                 </div>
@@ -322,7 +340,7 @@ function ProductDetail(props) {
                         </div>
                         {props.expectedLeadTime && props.leadTimeDeliveryMessage &&
                             <div className="mt-3">
-                                <ExpectedDeliveryTime 
+                                <ExpectedDeliveryTime
                                     deliveryMessage={props.leadTimeDeliveryMessage}
                                     expectedDeliveryDate={props.expectedLeadTime}
                                     locale={props.locale}
@@ -346,12 +364,12 @@ function ProductDetail(props) {
                                 )}
                             </div>
                         }
-                        {props.description && 
+                        {props.description &&
                             <div className="product-detail__product-description">
                                 <h3 className="product-detail__feature-title">
                                     {props.descriptionLabel}
                                     <CopyButton
-                                       copiedText={props.copiedText}
+                                        copiedText={props.copiedText}
                                         copyTextError={props.copyTextError}
                                         copyToClipboardText={props.copyToClipboardText}
                                         text={plainText}
@@ -401,9 +419,9 @@ function ProductDetail(props) {
                     handleOrder={handleModal}
                     labels={props.sidebar}
                 />
-                <CarouselGrid  
-                    items={props.productVariants} 
-                    className="pt-6" 
+                <CarouselGrid
+                    items={props.productVariants}
+                    className="pt-6"
                     locale={props.locale}
                     leadTimeDeliveryMessage={props.leadTimeDeliveryMessage}
                 />
@@ -416,23 +434,23 @@ function ProductDetail(props) {
                     setIsOpen={setIsModalOpen}
                     handleClose={handleCloseModal}
                     maxOutletValue={
-                        productVariant 
+                        productVariant
                             ? QuantityCalculatorService.calculateMaxQuantity(
                                 orderItems, 'outletQuantity', productVariant.availableOutletQuantity, productVariant.subtitle
-                              ) 
+                            )
                             : QuantityCalculatorService.calculateMaxQuantity(
                                 orderItems, 'outletQuantity', props.availableOutletQuantity, props.sku
                             )
-                        }
+                    }
                     outletQuantityInBasket={
-                        productVariant 
+                        productVariant
                             ? QuantityCalculatorService.getCurrentQuantity(
                                 orderItems, 'outletQuantity', productVariant.subtitle
-                              ) 
+                            )
                             : QuantityCalculatorService.getCurrentQuantity(
                                 orderItems, 'outletQuantity', props.sku
                             )
-                        }
+                    }
                     handleOrder={handleAddOrderItemClick}
                     product={productVariant ? productVariant : props}
                     labels={props.modal}
@@ -444,6 +462,14 @@ function ProductDetail(props) {
                     title={props.title}
                     index={activeMediaItemIndex}
                 />
+                {model3D &&
+                    <Product3dModelModal
+                        isOpen={is3DModalOpen}
+                        handleClose={handleClose3DModelModal}
+                        modelSrc={model3D.mediaSrc}
+                        modelAlt={model3D.mediaAlt}
+                    />
+                }
             </div>
         </section>
     );
