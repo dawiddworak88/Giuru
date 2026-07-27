@@ -31,13 +31,14 @@
             font-weight: 500;
             color: white;
             font-size: 0.8rem;
-    
-            &:hover{
+
+            &:hover {
                 color: white;
                 text-decoration: underline;
             }
         }
     }
+
     .not-found {
         font-size: 1rem;
         margin-top: 1.25rem;
@@ -52,7 +53,7 @@
     display: flex;
     flex-direction: column;
 
-    &:hover &__buttons{
+    &:hover &__buttons {
         display: flex;
     }
 
@@ -116,7 +117,7 @@
         a {
             display: inline-grid;
         }
-        
+
         .attribute {
             text-transform: capitalize;
             font-size: 0.7rem;
@@ -144,8 +145,8 @@
         .link {
             font-weight: 500;
             font-size: 0.8rem;
-    
-            &:hover{
+
+            &:hover {
                 text-decoration: underline;
             }
         }
@@ -200,7 +201,7 @@
 
             .link {
                 font-size: 0.8rem;
-                
+
                 &:hover {
                     text-decoration: underline;
                 }
@@ -234,7 +235,7 @@
         color: white;
         font-size: 0.8rem;
 
-        &:hover{
+        &:hover {
             color: white;
             text-decoration: underline;
         }
@@ -261,7 +262,9 @@
 }
 
 @media only screen and (max-width: $tablet) {
-    .sidebar-content, .sidebar-list {
+
+    .sidebar-content,
+    .sidebar-list {
         width: 350px;
     }
 
