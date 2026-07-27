@@ -119,7 +119,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
 
                     if (user is not null)
                     {
-                        await _userService.SignInAsync(user.Email, model.Password, null, null);
+                        await _userService.SignInAsync(user.Email, model.Password, null);
 
                         if (model.ClientApprovals is not null && model.ClientApprovals.Any())
                         {
