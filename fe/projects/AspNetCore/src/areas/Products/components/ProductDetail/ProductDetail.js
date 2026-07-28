@@ -35,7 +35,7 @@ function ProductDetail(props) {
     const [activeMediaItemIndex, setActiveMediaItemIndex] = useState(0);
     const [cleanDescription, setCleanDescription] = useState('');
     const [plainText, setPlainText] = useState('');
-    const model3D = props.models3D?.[0]
+    const model3D = props.models3D?.[0];
 
     const {
         orderItems,
