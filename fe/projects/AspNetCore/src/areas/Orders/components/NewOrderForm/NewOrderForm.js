@@ -38,6 +38,8 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
+    const [discountCode, setDiscountCode] = useState(props.discountCode || "");
+    const [appliedDiscountCode, setAppliedDiscountCode] = useState(props.discountCode || "");
 
     const {
         basketId,
@@ -56,7 +58,8 @@ function NewOrderForm(props) {
         generalErrorMessage: props.generalErrorMessage,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl,
-        clearBasketUrl: props.clearBasketUrl
+        clearBasketUrl: props.clearBasketUrl,
+        discountCode: appliedDiscountCode
     })
 
     const onSuggestionsFetchRequested = (args) => {
@@ -151,6 +154,64 @@ function NewOrderForm(props) {
         });
     };
 
+    const updateBasketDiscountCode = async (newDiscountCode, showSuccessMessage) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const basket = {
+            id: basketId,
+            items: orderItems,
+            discountCode: newDiscountCode
+        };
+
+        try {
+            const response = await fetch(props.updateBasketUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: JSON.stringify(basket)
+            });
+
+            AuthenticationHelper.HandleResponse(response);
+
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                const savedDiscountCode = jsonResponse.discountCode || "";
+
+                setBasketId(jsonResponse.id);
+                setGroupedOrderItems(jsonResponse.items || []);
+                setDiscountCode(savedDiscountCode);
+                setAppliedDiscountCode(savedDiscountCode);
+
+                if (showSuccessMessage) {
+                    toast.success(props.discountCodeAppliedMessage);
+                }
+            }
+            else {
+                toast.error(props.generalErrorMessage);
+            }
+        }
+        catch {
+            toast.error(props.generalErrorMessage);
+        }
+        finally {
+            dispatch({ type: "SET_IS_LOADING", payload: false });
+        }
+    };
+
+    const handleApplyDiscountCode = () => {
+        const normalizedDiscountCode = discountCode.trim();
+
+        if (normalizedDiscountCode && orderItems.length > 0) {
+            updateBasketDiscountCode(normalizedDiscountCode, true);
+        }
+    };
+
+    const handleRemoveDiscountCode = () => {
+        updateBasketDiscountCode(null, false);
+    };
+
     const handlePlaceOrder = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -200,6 +261,7 @@ function NewOrderForm(props) {
 
             formData.append("file", file);
             formData.append("basketId", basketId)
+            formData.append("discountCode", appliedDiscountCode);
 
             const requestOptions = {
                 method: "POST",
@@ -229,8 +291,7 @@ function NewOrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [appliedDiscountCode, basketId, dispatch, orderItems, props.generalErrorMessage, props.uploadOrderFileUrl, setBasketId, setGroupedOrderItems]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -476,6 +537,47 @@ function NewOrderForm(props) {
                     </div>
                 </Fragment>
                 <div className="field">
+                    <div className="columns is-vcentered">
+                        <div className="column is-4">
+                            <TextField
+                                id="discountCode"
+                                name="discountCode"
+                                type="text"
+                                label={props.discountCodeLabel}
+                                variant="standard"
+                                fullWidth={true}
+                                value={discountCode}
+                                disabled={state.isLoading || isOrdered}
+                                onChange={(e) => setDiscountCode(e.target.value)}
+                            />
+                        </div>
+                        <div className="column is-narrow">
+                            <Button
+                                type="button"
+                                variant="contained"
+                                color="primary"
+                                onClick={handleApplyDiscountCode}
+                                disabled={state.isLoading || isOrdered || orderItems.length === 0 || !discountCode.trim()}
+                            >
+                                {props.applyDiscountCodeLabel}
+                            </Button>
+                        </div>
+                        {appliedDiscountCode &&
+                            <div className="column is-narrow">
+                                <Button
+                                    type="button"
+                                    variant="text"
+                                    color="error"
+                                    onClick={handleRemoveDiscountCode}
+                                    disabled={state.isLoading || isOrdered}
+                                >
+                                    {props.removeDiscountCodeLabel}
+                                </Button>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div className="field">
                     <NoSsr>
                         <FormControlLabel
                             control={
@@ -612,6 +714,11 @@ NewOrderForm.propTypes = {
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     getProductPriceUrl: PropTypes.string.isRequired,
     outletProductLabel: PropTypes.string.isRequired,
+    discountCode: PropTypes.string,
+    discountCodeLabel: PropTypes.string.isRequired,
+    applyDiscountCodeLabel: PropTypes.string.isRequired,
+    discountCodeAppliedMessage: PropTypes.string.isRequired,
+    removeDiscountCodeLabel: PropTypes.string.isRequired,
 };
 
 export default NewOrderForm;

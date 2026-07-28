@@ -111,7 +111,8 @@ function Catalog(props) {
         generalErrorMessage: props.generalErrorMessage,
         addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
-        getPriceUrl: props.getProductPriceUrl
+        getPriceUrl: props.getProductPriceUrl,
+        discountCode: props.discountCode
     });
 
     const handleAddOrderItemClick = (item) => {
@@ -316,7 +317,8 @@ Catalog.propTypes = {
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     getProductPriceUrl: PropTypes.string,
-    isDefaultOutletOrder: PropTypes.bool
+    isDefaultOutletOrder: PropTypes.bool,
+    discountCode: PropTypes.string
 };
 
 export default Catalog;

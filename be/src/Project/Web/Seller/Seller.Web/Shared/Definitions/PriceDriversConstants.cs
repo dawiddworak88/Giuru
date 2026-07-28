@@ -28,5 +28,6 @@
         public const string LedDriver = "LED";
         public const string CurrencyDriver = "Currency";
         public const string ProductVariantSkuDriver = "Product Variant SKU";
+        public const string DiscountCodeDriver = "Discount Code";
     }
 }

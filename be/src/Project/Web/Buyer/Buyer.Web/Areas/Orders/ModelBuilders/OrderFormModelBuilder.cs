@@ -104,16 +104,21 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel"),
                 MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
-                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime"),
+                DiscountCodeLabel = _orderLocalizer.GetString("DiscountCodeLabel"),
+                ApplyDiscountCodeLabel = _orderLocalizer.GetString("ApplyDiscountCodeLabel"),
+                DiscountCodeAppliedMessage = _orderLocalizer.GetString("DiscountCodeAppliedMessage"),
+                RemoveDiscountCodeLabel = _orderLocalizer.GetString("RemoveDiscountCodeLabel")
             };
 
             if (componentModel.BasketId.HasValue)
             {
-                var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                var basket = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
 
-                if (basketItems is not null)
+                if (basket is not null)
                 {
-                    viewModel.BasketItems = basketItems;
+                    viewModel.BasketItems = basket.Items;
+                    viewModel.DiscountCode = basket.DiscountCode;
                 }
             }
 

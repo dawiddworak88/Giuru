@@ -86,6 +86,11 @@ function StatusOrder(props) {
                             <InputLabel id="delivery-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
                         </div>
                     }
+                    {props.discountCode &&
+                        <div className="field">
+                            <InputLabel id="discount-code-label">{props.discountCodeLabel}: {props.discountCode}</InputLabel>
+                        </div>
+                    }
                     {status &&
                         <div className="status-order">
                             <div className="status-ordder__details">{props.orderStatusLabel} {status.name}</div>
@@ -227,6 +232,8 @@ StatusOrder.propTypes = {
     orderStatusLabel: PropTypes.string.isRequired,
     orderStatusId: PropTypes.string.isRequired,
     customOrderLabel: PropTypes.string.isRequired,
+    discountCodeLabel: PropTypes.string.isRequired,
+    discountCode: PropTypes.string,
     ordersUrl: PropTypes.string.isRequired,
     navigateToOrders: PropTypes.string.isRequired
 };

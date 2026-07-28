@@ -122,7 +122,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductVariants(Guid? id)
+        public async Task<IActionResult> GetProductVariants(Guid? id, string discountCode = null)
         {
             var language = CultureInfo.CurrentUICulture.Name;
             var product = await _productsRepository.GetProductAsync(id, language, null);
@@ -194,7 +194,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                             Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                            DiscountCode = discountCode
                         });
                 }
 
@@ -353,7 +354,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductsQuantities(string searchTerm, int pageIndex, bool? hasPrimaryProduct, int itemsPerPage)
+        public async Task<IActionResult> GetProductsQuantities(string searchTerm, int pageIndex, bool? hasPrimaryProduct, int itemsPerPage, string discountCode = null)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
@@ -409,7 +410,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                             Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                            DiscountCode = discountCode
                         });
                 }
 
@@ -474,7 +476,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPrice(string sku)
+        public async Task<IActionResult> GetPrice(string sku, string discountCode)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
@@ -521,7 +523,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                         PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                         Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                        DiscountCode = discountCode
                     });
 
                     if (price is not null)

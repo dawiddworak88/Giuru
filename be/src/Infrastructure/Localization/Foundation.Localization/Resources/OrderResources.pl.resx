@@ -369,4 +369,19 @@
   <data name="BasketNotFound" xml:space="preserve">
     <value>Nie znaleziono koszyka.</value>
   </data>
+  <data name="DiscountCodeLabel" xml:space="preserve">
+    <value>Kod rabatowy</value>
+  </data>
+  <data name="ApplyDiscountCodeLabel" xml:space="preserve">
+    <value>Zastosuj</value>
+  </data>
+  <data name="DiscountCodeAppliedMessage" xml:space="preserve">
+    <value>Kod rabatowy został zastosowany.</value>
+  </data>
+  <data name="RemoveDiscountCodeLabel" xml:space="preserve">
+    <value>Usuń kod rabatowy</value>
+  </data>
+  <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
+    <value>Dodaj co najmniej jeden produkt do koszyka, zanim zastosujesz kod rabatowy.</value>
+  </data>
 </root>

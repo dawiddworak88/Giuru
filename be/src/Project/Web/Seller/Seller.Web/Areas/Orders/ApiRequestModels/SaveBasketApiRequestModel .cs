@@ -6,6 +6,7 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
     public class SaveBasketApiRequestModel
     {
         public Guid? Id { get; set; }
+        public string DiscountCode { get; set; }
         public IEnumerable<BasketItemApiRequestModel> Items { get; set; }
     }
 }

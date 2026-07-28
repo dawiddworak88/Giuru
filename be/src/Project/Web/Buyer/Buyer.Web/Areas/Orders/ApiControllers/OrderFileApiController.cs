@@ -16,6 +16,7 @@ using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Repositories.Inventory;
 using Buyer.Web.Shared.Repositories.Media;
+using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -99,6 +100,28 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+            var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
+
+            if (reqCookie is null)
+            {
+                reqCookie = Guid.NewGuid().ToString();
+
+                var cookieOptions = new CookieOptions
+                {
+                    MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
+                };
+                Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+            }
+
+            var id = Guid.Parse(reqCookie);
+            var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
+
+            // The upload always writes the imported lines, so it never applies a code to an
+            // empty basket and never needs the persisted code for that check.
+            var existingBasket = DiscountCodeResolver.RequiresPersistedDiscountCode(hasDiscountCode, model.DiscountCode, hasItems: true)
+                ? await _basketRepository.GetBasketById(token, language, id)
+                : null;
+            var discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
 
             var skusParam = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct();
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skusParam);
@@ -160,7 +183,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                         ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                         PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                         Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                        DiscountCode = discountCode
                     });
             }
 
@@ -217,26 +241,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 priceIndex++;
             }
 
-            var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
-
-            if (reqCookie is null)
-            {
-                reqCookie = Guid.NewGuid().ToString();
-
-                var cookieOptions = new CookieOptions
-                {
-                    MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
-                };
-                Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
-            }
-
-            var id = Guid.Parse(reqCookie);
-
-            var basket = await _basketRepository.SaveAsync(token, language, id, basketItems);
+            var basket = await _basketRepository.SaveAsync(token, language, id, basketItems, discountCode);
 
             var basketResponseModel = new BasketResponseModel
             {
-                Id = basket.Id
+                Id = basket.Id,
+                DiscountCode = basket.DiscountCode
             };
 
             if (basket.Items.OrEmptyIfNull().Any())

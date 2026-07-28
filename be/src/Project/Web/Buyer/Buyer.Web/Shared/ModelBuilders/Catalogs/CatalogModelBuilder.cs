@@ -72,11 +72,12 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {
-                var basketItems = _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
+                var basket = _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
 
-                if (basketItems is not null)
+                if (basket is not null)
                 {
-                    viewModel.BasketItems = basketItems;
+                    viewModel.BasketItems = basket.Items;
+                    viewModel.DiscountCode = basket.DiscountCode;
                 }
             }
 

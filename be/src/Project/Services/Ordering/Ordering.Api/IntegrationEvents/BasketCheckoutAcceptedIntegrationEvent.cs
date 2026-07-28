@@ -35,6 +35,7 @@ namespace Ordering.Api.IntegrationEvents
         public string ExternalReference { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
         public string MoreInfo { get; set; }
+        public string DiscountCode { get; set; }
         public BasketEventModel Basket { get; set; }
         public bool HasCustomOrder { get; set; }
         public bool HasApprovalToSendEmail { get; set; }

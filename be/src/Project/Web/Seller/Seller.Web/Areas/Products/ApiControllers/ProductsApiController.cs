@@ -155,7 +155,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             string searchTerm, 
             bool? hasPrimaryProduct, 
             int pageIndex, 
-            int itemsPerPage)
+            int itemsPerPage,
+            string discountCode = null)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
@@ -252,7 +253,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                             ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
                             PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
                             Country = clientCountryName,
-                            DeliveryZipCode = deliveryZipCode
+                            DeliveryZipCode = deliveryZipCode,
+                            DiscountCode = discountCode
                         });
                 }
 
@@ -308,7 +310,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPrice(Guid? clientId, string sku)
+        public async Task<IActionResult> GetPrice(Guid? clientId, string sku, string discountCode = null)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
@@ -386,7 +388,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                             ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
                             PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
                             Country = clientCountryName,
-                            DeliveryZipCode = deliveryZipCode
+                            DeliveryZipCode = deliveryZipCode,
+                            DiscountCode = discountCode
                         });
 
                     if (price is not null)

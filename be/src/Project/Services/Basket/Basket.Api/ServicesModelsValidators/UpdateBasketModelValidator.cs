@@ -11,6 +11,7 @@ namespace Basket.Api.ServicesModelsValidators
         public UpdateBasketModelValidator(int? maxAllowedOrderQuantity)
         {
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
+            this.RuleFor(x => x.DiscountCode).MaximumLength(64);
             this.RuleFor(x => x.Items).Custom((items, context) => {
 
                 if (items != null && items.Any())

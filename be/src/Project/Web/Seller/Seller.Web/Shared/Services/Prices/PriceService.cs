@@ -327,6 +327,15 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (client is not null)
             {
+                if (!string.IsNullOrWhiteSpace(client.DiscountCode))
+                {
+                    priceDrivers.Add(new PriceDriver
+                    {
+                        Name = PriceDriversConstants.DiscountCodeDriver,
+                        Value = client.DiscountCode
+                    });
+                }
+
                 if (!string.IsNullOrWhiteSpace(client.Name))
                 {
                     priceDrivers.Add(new PriceDriver

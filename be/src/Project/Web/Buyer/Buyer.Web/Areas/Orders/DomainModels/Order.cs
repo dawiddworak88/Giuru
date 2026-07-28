@@ -30,6 +30,7 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public string ShippingPhoneNumber { get; set; }
         public Guid? ShippingCountryId { get; set; }
         public string MoreInfo { get; set; }
+        public string DiscountCode { get; set; }
         public string OrderStatusName { get; set; }
         public Guid OrderStateId { get; set; }
         public string Reason { get; set; }

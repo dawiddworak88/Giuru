@@ -8,5 +8,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
     {
         public Guid? BasketId { get; set; }
         public IFormFile File { get; set; }
+        public string DiscountCode { get; set; }
     }
 }

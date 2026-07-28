@@ -21,11 +21,19 @@ export const useOrderManagement = ({
     addProductToBasketMessage,
     updateBasketUrl,
     clearBasketUrl,
-    getPriceUrl
+    getPriceUrl,
+    discountCode
 }) => {
     const [state, dispatch] = useContext(Context);
     const [basketId, setBasketId] = useState(initialBasketId || null);
     const [orderItems, setOrderItems] = useState(initialOrderItems || []);
+
+    // This hook only adds and removes basket lines; it never applies or clears a code.
+    // Forward the currently applied code (kept in sync with the server by the caller) so
+    // that newly added lines are repriced against it. An empty string tells the server to
+    // leave whatever is stored alone; a null would be interpreted as a removal, so it is
+    // never sent from here.
+    const basketDiscountCode = discountCode || "";
 
     const groupOrderItems = (items) => {
         const grouped = [];
@@ -129,7 +137,8 @@ export const useOrderManagement = ({
             if (isOutletOrder) {
                 const outletPrice = await ProductPricesHelper.getPriceByProductSku(
                     getPriceUrl, 
-                    product.sku
+                    product.sku,
+                    discountCode
                 );
 
                 if (outletPrice) {
@@ -143,7 +152,8 @@ export const useOrderManagement = ({
 
             const basket = { 
                 id: basketId, 
-                items: newItems 
+                items: newItems,
+                discountCode: basketDiscountCode
             };
 
             try {
@@ -179,7 +189,7 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems]
+        }, [basketId, orderItems, basketDiscountCode]
     );
 
     const clearBasket = useCallback(async () => {
@@ -239,7 +249,8 @@ export const useOrderManagement = ({
 
             const basket = { 
                 id: basketId, 
-                items: newItems 
+                items: newItems,
+                discountCode: basketDiscountCode
             };
 
             try {
@@ -275,7 +286,7 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems]
+        }, [basketId, orderItems, basketDiscountCode]
     );
 
     const setGroupedOrderItems = (items) => {

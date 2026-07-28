@@ -298,10 +298,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
-                    var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
-                    if (basketItems is not null)
+                    var basket = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                    if (basket is not null)
                     {
-                        viewModel.OrderItems = basketItems;
+                        viewModel.OrderItems = basket.Items;
+                        viewModel.DiscountCode = basket.DiscountCode;
                     }
                 }
 

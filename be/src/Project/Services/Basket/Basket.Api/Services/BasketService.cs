@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
+using Foundation.Extensions.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 
 namespace Basket.Api.Services
 {
@@ -29,6 +31,13 @@ namespace Basket.Api.Services
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
         {
             using var source = new ActivitySource(this.GetType().Name);
+
+            var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
+
+            if ((basket is null || basket.Items.OrEmptyIfNull().Any() is false) && checkoutBasketServiceModel.HasCustomOrder is false)
+            {
+                throw new CustomException("Basket not found.", (int)HttpStatusCode.NotFound);
+            }
 
             var message = new BasketCheckoutAcceptedIntegrationEvent
             {
@@ -62,20 +71,19 @@ namespace Basket.Api.Services
                 ShippingStreet = checkoutBasketServiceModel.ShippingStreet,
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
+                DiscountCode = basket?.DiscountCode,
                 HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
                 HasApprovalToSendEmail = checkoutBasketServiceModel.HasApprovalToSendEmail,
                 Attachments = checkoutBasketServiceModel.Attachments,
                 CreatedBy = checkoutBasketServiceModel.CreatedBy
             };
 
-            var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
-
             if (basket is not null)
             {
                 message.Basket = new BasketEventModel
                 {
                     Id = basket.Id,
-                    Items = basket.Items.Select(x => new BasketItemEventModel
+                    Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemEventModel
                     {
                         ProductId = x.ProductId,
                         ProductSku = x.ProductSku,
@@ -156,6 +164,7 @@ namespace Basket.Api.Services
                 var emptyBasket = new BasketServiceModel
                 {
                     Id = serviceModel.Id.Value,
+                    DiscountCode = null,
                     Items = Array.Empty<BasketItemServiceModel>()
                 };
 
@@ -165,6 +174,7 @@ namespace Basket.Api.Services
             var response = new BasketServiceModel
             {
                 Id = basket.Id.Value,
+                DiscountCode = basket.DiscountCode,
                 Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {
                     ProductId = x.ProductId,
@@ -191,6 +201,7 @@ namespace Basket.Api.Services
             var basketModel = new BasketRepositoryModel
             {
                 Id = serviceModel.Id,
+                DiscountCode = serviceModel.DiscountCode,
                 Items = serviceModel.Items.OrEmptyIfNull().Select(x => new BasketItemRepositoryModel
                 {
                     ProductId = x.ProductId,
@@ -214,6 +225,7 @@ namespace Basket.Api.Services
             return new BasketServiceModel
             {
                 Id = result.Id,
+                DiscountCode = result.DiscountCode,
                 Items = result.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {
                     ProductId = x.ProductId,

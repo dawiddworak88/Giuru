@@ -11,5 +11,6 @@ namespace Seller.Web.Shared.DomainModels.Prices
         public string CurrencyCode { get; set; }
         public string Country { get; set; }
         public string DeliveryZipCode { get; set; }
+        public string DiscountCode { get; set; }
     }
 }

@@ -369,4 +369,19 @@
   <data name="BasketNotFound" xml:space="preserve">
     <value>Basket not found.</value>
   </data>
+  <data name="DiscountCodeLabel" xml:space="preserve">
+    <value>Discount code</value>
+  </data>
+  <data name="ApplyDiscountCodeLabel" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="DiscountCodeAppliedMessage" xml:space="preserve">
+    <value>Discount code applied successfully.</value>
+  </data>
+  <data name="RemoveDiscountCodeLabel" xml:space="preserve">
+    <value>Remove discount code</value>
+  </data>
+  <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
+    <value>Add at least one product to the basket before applying a discount code.</value>
+  </data>
 </root>

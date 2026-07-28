@@ -115,6 +115,11 @@ function EditOrderForm(props) {
                                             <InputLabel id="billing-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
                                         </div>
                                     }
+                                    {props.discountCode &&
+                                        <div className="field">
+                                            <InputLabel id="discount-code-label">{props.discountCodeLabel}: {props.discountCode}</InputLabel>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -240,6 +245,8 @@ EditOrderForm.propTypes = {
     clientUrl: PropTypes.string.isRequired,
     updateOrderStatusUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
+    discountCodeLabel: PropTypes.string.isRequired,
+    discountCode: PropTypes.string,
     expectedDateOfProductOnStockLabel: PropTypes.string.isRequired,
     ordersUrl: PropTypes.string.isRequired,
     navigateToOrders: PropTypes.string.isRequired

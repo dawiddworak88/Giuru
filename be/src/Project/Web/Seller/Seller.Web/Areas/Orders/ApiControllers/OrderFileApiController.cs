@@ -28,6 +28,7 @@ using Seller.Web.Shared.DomainModels.Media;
 using Seller.Web.Shared.DomainModels.Prices;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Inventory;
+using Seller.Web.Shared.Services.Baskets;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Services.Products;
@@ -115,6 +116,15 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+            var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
+
+            // The upload always writes the imported lines, so it never applies a code to an
+            // empty basket and never needs the persisted code for that check.
+            var existingBasket = model.Id.HasValue
+                && DiscountCodeResolver.RequiresPersistedDiscountCode(hasDiscountCode, model.DiscountCode, hasItems: true)
+                ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
+                : null;
+            var discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
 
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skus);
 
@@ -208,7 +218,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                         ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
                         PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
                         Country = clientCountryName,
-                        DeliveryZipCode = deliveryZipCode
+                        DeliveryZipCode = deliveryZipCode,
+                        DiscountCode = discountCode
                     });
             }
 
@@ -266,14 +277,16 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             }
 
             var basket = await _basketRepository.SaveAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
+                token,
+                language,
                 model.Id,
-                basketItems);
+                basketItems,
+                discountCode);
 
             var basketResponseModel = new BasketResponseModel
             {
-                Id = basket.Id
+                Id = basket.Id,
+                DiscountCode = basket.DiscountCode
             };
 
             if (basket.Items.OrEmptyIfNull().Any())

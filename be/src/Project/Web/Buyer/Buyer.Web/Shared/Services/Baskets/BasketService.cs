@@ -41,16 +41,18 @@ namespace Buyer.Web.Shared.Services.Baskets
             this.globalLocalizer = globalLocalizer;
         }
 
-        public async Task<IEnumerable<BasketItem>> GetBasketAsync(Guid? basketId, string token, string language)
+        public async Task<Basket> GetBasketAsync(Guid? basketId, string token, string language)
         {
             var existingBasket = await this.basketRepository.GetBasketById(token, language, basketId);
 
             if (existingBasket is not null)
             {
-                var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                if (productIds.OrEmptyIfNull().Any())
+                return new Basket
                 {
-                    var basketItems = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItem
+                    Id = existingBasket.Id,
+                    MoreInfo = existingBasket.MoreInfo,
+                    DiscountCode = existingBasket.DiscountCode,
+                    Items = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         ProductId = x.ProductId,
                         ProductUrl = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
@@ -67,10 +69,8 @@ namespace Buyer.Web.Shared.Services.Baskets
                         ImageAlt = x.ProductName,
                         MoreInfo = x.MoreInfo,
                         ExpectedLeadTime = x.ExpectedLeadTime
-                    });
-
-                    return basketItems;
-                }
+                    })
+                };
             }
 
             return default;

@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Seller.Web.Areas.Orders.DomainModels
+namespace Buyer.Web.Shared.DomainModels.Baskets
 {
     public class Basket
     {
         public Guid? Id { get; set; }
+        public string MoreInfo { get; set; }
         public string DiscountCode { get; set; }
         public IEnumerable<BasketItem> Items { get; set; }
     }

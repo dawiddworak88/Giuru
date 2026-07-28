@@ -32,6 +32,7 @@ namespace Ordering.Api.ServicesModels
         public string ShippingPhoneNumber { get; set; }
         public Guid? ShippingCountryId { get; set; }
         public string MoreInfo { get; set; }
+        public string DiscountCode { get; set; }
         public string IpAddress { get; set; }
         public string ExternalReference { get; set; }
         public IEnumerable<CheckoutBasketItemServiceModel> Items { get; set; }

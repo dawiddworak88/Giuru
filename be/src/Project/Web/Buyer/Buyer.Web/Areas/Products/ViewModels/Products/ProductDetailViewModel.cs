@@ -12,6 +12,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
     public class ProductDetailViewModel
     {
         public Guid? BasketId { get; set; }
+        public string DiscountCode { get; set; }
         public string Title { get; set; }
         public Guid? ProductId { get; set; }
         public bool IsAuthenticated { get; set; }

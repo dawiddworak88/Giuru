@@ -62,6 +62,7 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                 ShippingStreet = @event.ShippingStreet,
                 ExternalReference = @event.ExternalReference,
                 MoreInfo = @event.MoreInfo,
+                DiscountCode = @event.DiscountCode,
                 IpAddress = @event.IpAddress,
                 HasCustomOrder = @event.HasCustomOrder,
                 HasApprovalToSendEmail = @event.HasApprovalToSendEmail,
