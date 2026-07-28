@@ -25,7 +25,7 @@ module.exports = {
         slugpage: ["./src/areas/Content/pages/SlugPage/index.js", "./src/areas/Content/pages/SlugPage/SlugPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../../../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
+        publicPath: "/dist/js/",
         path: path.resolve(__dirname, "../../../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         filename: "[name].js"
     },
@@ -38,8 +38,8 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: [
-                    { 
-                        loader: "babel-loader" 
+                    {
+                        loader: "babel-loader"
                     }
                 ]
             },
