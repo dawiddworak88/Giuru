@@ -23,12 +23,16 @@ namespace Foundation.Security.DependencyInjection
                     .UnsafeInline()
                 )
                 .ScriptSources(s => s.Self()
-                       .CustomSources("*")
+                    .CustomSources("*")
                     .UnsafeInline()
                     .UnsafeEval()
                 )
                 .ImageSources(s => s.Self()
-                    .CustomSources("data:", "https", "http:")));
+                    .CustomSources("data:", "https", "http:", "blob:"))
+                .ConnectSources(s => s.Self()
+                    .CustomSources("data:", "https:", "http:", "blob:"))
+                .WorkerSources(s => s.Self()
+                    .CustomSources("blob:")));
 
             app.Use(async (context, next) =>
             {
