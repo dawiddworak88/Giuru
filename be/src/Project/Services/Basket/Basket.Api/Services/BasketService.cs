@@ -9,6 +9,8 @@ using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
 using Foundation.Extensions.Exceptions;
+using Foundation.Localization;
+using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -19,13 +21,16 @@ namespace Basket.Api.Services
     {
         private readonly IBasketRepository basketRepository;
         private readonly IEventBus eventBus;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public BasketService(
             IBasketRepository basketRepository,
-            IEventBus eventBus)
+            IEventBus eventBus,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.basketRepository = basketRepository;
             this.eventBus = eventBus;
+            this.orderLocalizer = orderLocalizer;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
@@ -36,7 +41,7 @@ namespace Basket.Api.Services
 
             if ((basket is null || basket.Items.OrEmptyIfNull().Any() is false) && checkoutBasketServiceModel.HasCustomOrder is false)
             {
-                throw new CustomException("Basket not found.", (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
             }
 
             var message = new BasketCheckoutAcceptedIntegrationEvent

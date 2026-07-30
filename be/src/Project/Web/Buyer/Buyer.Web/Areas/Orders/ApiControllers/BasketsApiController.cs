@@ -175,12 +175,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
                 if (price is null)
                 {
-                    // Grula returned no price for this line: save it without a price,
-                    // matching the behaviour from before discount codes were introduced.
-                    basketItem.UnitPrice = null;
-                    basketItem.Price = null;
-                    basketItem.Currency = null;
-
+                    // No Grula price for this line: it has no catalog product, Grula is not
+                    // configured, or the call failed. Keep whatever price the caller sent
+                    // rather than clearing it, so an outage cannot turn a priced basket into
+                    // an unpriced order.
                     continue;
                 }
 
