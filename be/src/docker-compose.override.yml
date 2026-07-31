@@ -134,6 +134,12 @@ services:
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - EventBusRequestedHeartbeat=60
+      - SenderEmail=${SENDER_EMAIL}
+      - SenderName=${SENDER_NAME}
+      - SendGridApiKey=${SENDGRID_API_KEY}
+      - ActionSendGridProductOutOfStockTemplateId=${SENDGRID_PRODUCT_OUT_OF_STOCK_TEMPLATE_ID}
+      - RecipientEmail=office@eltap.com
+      - CatalogUrl=http://catalog-api:8080
       - OpenTelemetryTracingCollectorUrl=http://otel-collector:4317
       - OpenTelemetryMetricsCollectorUrl=http://otel-collector:4317
       - OpenTelemetryLogsCollectorUrl=http://otel-collector:4317
