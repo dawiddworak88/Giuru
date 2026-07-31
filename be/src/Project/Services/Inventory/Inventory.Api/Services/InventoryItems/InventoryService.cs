@@ -5,13 +5,18 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Mailing.Models;
+using Foundation.Mailing.Services;
+using Inventory.Api.Configurations;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.IntegrationEvents;
+using Inventory.Api.Repositories.Products;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,17 +31,33 @@ namespace Inventory.Api.Services.InventoryItems
         private readonly IStringLocalizer _inventoryLocalizer;
         private readonly ILogger<InventoryService> _logger;
         private readonly IEventBus _eventBus;
+        private readonly IMailingService _mailingService;
+        private readonly IOptions<AppSettings> _settings;
+        private readonly IProductsRepository _productsRepository;
+        private static readonly HashSet<string> FabricAttributeKeys = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "primaryFabrics",
+            "secondaryFabrics",
+            "tertiaryFabrics",
+            "quaternaryFabrics"
+        };
 
         public InventoryService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
             ILogger<InventoryService> logger,
-            IEventBus eventBus)
+            IEventBus eventBus,
+            IMailingService mailingService,
+            IOptions<AppSettings> settings,
+            IProductsRepository productsRepository)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
             _logger = logger;
             _eventBus = eventBus;
+            _mailingService = mailingService;
+            _settings = settings;
+            _productsRepository = productsRepository;
         }
 
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
@@ -543,9 +564,18 @@ namespace Inventory.Api.Services.InventoryItems
             };
         }
 
-        public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
+        public async Task<InventoryUpdateResult> UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
-            if (productId is null || bookedQuantity <= 0) return;
+            if (productId is null || bookedQuantity <= 0)
+            {
+                return new InventoryUpdateResult
+                {
+                    ProductId = productId ?? Guid.Empty,
+                    PreviousQuantity = 0,
+                    NewQuantity = 0,
+                    IsWentOutOfStock = false
+                };
+            }
 
             var inventories = await _context.Inventory
                 .Where(x => x.ProductId == productId && x.IsActive)
@@ -560,9 +590,12 @@ namespace Inventory.Api.Services.InventoryItems
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
             }
 
-            var totalAvailableQuantity = inventories.Sum(x => x.AvailableQuantity);
-            if (bookedQuantity > totalAvailableQuantity)
+            var previousQuantity = inventories.Sum(x => x.AvailableQuantity);
+
+            if (bookedQuantity > previousQuantity)
+            {
                 throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+            }
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -598,7 +631,9 @@ namespace Inventory.Api.Services.InventoryItems
                 }
 
                 if (remainingToAllocate > 0)
+                {
                     throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+                }
 
                 await transaction.CommitAsync();
             }
@@ -606,6 +641,75 @@ namespace Inventory.Api.Services.InventoryItems
             {
                 await transaction.RollbackAsync();
                 throw;
+            }
+
+            var newQuantity = await _context.Inventory
+                .Where(x => x.ProductId == productId && x.IsActive)
+                .SumAsync(x => x.AvailableQuantity);
+
+            return new InventoryUpdateResult
+            {
+                ProductId = productId.Value,
+                PreviousQuantity = previousQuantity,
+                NewQuantity = newQuantity,
+                IsWentOutOfStock = previousQuantity > 0 && newQuantity <= 0
+            };
+        }
+
+        public async Task SendOutOfStockNotificationAsync(IEnumerable<InventoryUpdateResult> outOfStockItems)
+        {
+            var outOfStockItemsList = outOfStockItems.OrEmptyIfNull().ToList();
+
+            if (outOfStockItemsList.Any() is false)
+            {
+                return;
+            }
+
+            var productIds = outOfStockItemsList
+                .Select(x => x.ProductId)
+                .Distinct()
+                .ToList();
+
+            var products = (await _productsRepository.GetByIdsAsync(productIds)).OrEmptyIfNull().ToList();
+
+            if (products.Any() is false)
+            {
+                return;
+            }
+
+            var productsForEmail = products.Select(product => new
+            {
+                name = product.Name,
+                sku = product.Sku,
+                fabrics = string.Join(", ", product.ProductAttributes
+                    .OrEmptyIfNull()
+                    .Where(attribute => FabricAttributeKeys.Contains(attribute.Key))
+                    .SelectMany(attribute => attribute.Values.OrEmptyIfNull())
+                    .Where(value => string.IsNullOrWhiteSpace(value) is false)
+                    .Distinct())
+            }).ToList();
+
+            if (productsForEmail.Any() && CanSend(_settings.Value.RecipientEmail, _settings.Value.SenderEmail, _settings.Value.SenderName, _settings.Value.ActionSendGridProductOutOfStockTemplateId))
+            {
+                try
+                {
+                    await _mailingService.SendTemplateAsync(new TemplateEmail
+                    {
+                        RecipientEmailAddress = _settings.Value.RecipientEmail,
+                        RecipientName = _settings.Value.RecipientEmail,
+                        SenderEmailAddress = _settings.Value.SenderEmail,
+                        SenderName = _settings.Value.SenderName,
+                        TemplateId = _settings.Value.ActionSendGridProductOutOfStockTemplateId,
+                        DynamicTemplateData = new
+                        {
+                            products = productsForEmail
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to send out-of-stock notification for products: {ProductIds}", string.Join(",", productIds));
+                }
             }
         }
 
@@ -625,6 +729,11 @@ namespace Inventory.Api.Services.InventoryItems
                        RestockableInDays = i.RestockableInDays,
                        ExpectedDelivery = i.ExpectedDelivery,
                    };
+        }
+
+        private static bool CanSend(params string[] values)
+        {
+            return values.Any(string.IsNullOrWhiteSpace) is false;
         }
     }
 }
