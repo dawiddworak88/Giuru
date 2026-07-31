@@ -695,8 +695,8 @@ namespace Inventory.Api.Services.InventoryItems
                 {
                     await _mailingService.SendTemplateAsync(new TemplateEmail
                     {
-                        RecipientEmailAddress = _settings.Value.RecipientEmail,
-                        RecipientName = _settings.Value.RecipientEmail,
+                        RecipientEmailAddress = "piotr.zaranek@eltap.com", //_settings.Value.RecipientEmail,
+                        RecipientName = "piotr.zaranek@eltap.com", //_settings.Value.RecipientEmail,
                         SenderEmailAddress = _settings.Value.SenderEmail,
                         SenderName = _settings.Value.SenderName,
                         TemplateId = _settings.Value.ActionSendGridProductOutOfStockTemplateId,
