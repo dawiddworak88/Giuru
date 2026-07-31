@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Foundation.Localization.Definitions;
+﻿using Foundation.Localization.Definitions;
+using Inventory.Api.Configurations;
 using Inventory.Api.Infrastructure;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Inventory.Api.DependencyInjection
@@ -26,6 +27,7 @@ namespace Inventory.Api.DependencyInjection
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<LocalizationSettings>(configuration);
+            services.Configure<AppSettings>(configuration);
         }
 
         public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
