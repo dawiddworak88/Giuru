@@ -260,8 +260,14 @@ function NewOrderForm(props) {
             const formData = new FormData();
 
             formData.append("file", file);
-            formData.append("basketId", basketId)
-            formData.append("discountCode", appliedDiscountCode);
+
+            if (basketId) {
+                formData.append("basketId", basketId);
+            }
+
+            if (appliedDiscountCode) {
+                formData.append("discountCode", appliedDiscountCode);
+            }
 
             const requestOptions = {
                 method: "POST",
@@ -279,8 +285,12 @@ function NewOrderForm(props) {
 
                     return response.json().then((jsonResponse) => {
                         if (response.ok) {
+                            const savedDiscountCode = jsonResponse.discountCode || "";
+
                             setBasketId(jsonResponse.id);
                             setGroupedOrderItems([...orderItems, ...jsonResponse.items]);
+                            setDiscountCode(savedDiscountCode);
+                            setAppliedDiscountCode(savedDiscountCode);
                         }
                         else {
                             toast.error(props.generalErrorMessage);

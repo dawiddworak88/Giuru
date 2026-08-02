@@ -480,7 +480,14 @@ function OrderForm(props) {
 
             formData.append("file", file);
             formData.append("clientId", client.id);
-            formData.append("discountCode", appliedDiscountCode);
+
+            if (basketId) {
+                formData.append("id", basketId);
+            }
+
+            if (appliedDiscountCode) {
+                formData.append("discountCode", appliedDiscountCode);
+            }
 
             const requestOptions = {
                 method: "POST",
@@ -494,11 +501,14 @@ function OrderForm(props) {
                     return response.json().then((jsonResponse) => {
 
                         if (response.ok) {
+                            const savedDiscountCode = jsonResponse.discountCode || "";
 
                             dispatch({ type: "SET_IS_LOADING", payload: false });
 
                             setBasketId(jsonResponse.id);
                             setOrderItems(OrderItemsGrouper.groupOrderItems([...orderItems, ...jsonResponse.items]));
+                            setDiscountCode(savedDiscountCode);
+                            setAppliedDiscountCode(savedDiscountCode);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -509,7 +519,7 @@ function OrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [appliedDiscountCode, client, dispatch, orderItems, props.generalErrorMessage, props.uploadOrderFileUrl]);
+    }, [appliedDiscountCode, basketId, client, dispatch, orderItems, props.generalErrorMessage, props.uploadOrderFileUrl]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
