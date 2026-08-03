@@ -39,8 +39,11 @@ function OrderForm(props) {
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [productFromOutlet, setProductFromOutlet] = useState(false);
-    const [discountCode, setDiscountCode] = useState(props.discountCode || "");
-    const [appliedDiscountCode, setAppliedDiscountCode] = useState(props.discountCode || "");
+    // The seller's order form always opens on a brand-new basket (see basketId above), so
+    // there is never a stored code to seed these from. They are filled in at runtime from
+    // the basket responses of an apply, a removal or a file upload.
+    const [discountCode, setDiscountCode] = useState("");
+    const [appliedDiscountCode, setAppliedDiscountCode] = useState("");
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -892,7 +895,6 @@ OrderForm.propTypes = {
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
     dropFilesLabel: PropTypes.string.isRequired,
-    discountCode: PropTypes.string,
     discountCodeLabel: PropTypes.string.isRequired,
     applyDiscountCodeLabel: PropTypes.string.isRequired,
     discountCodeAppliedMessage: PropTypes.string.isRequired,

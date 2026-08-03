@@ -315,7 +315,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var product = await _productsRepository.GetProductAsync(sku, language, token);
+            var product = await _productsRepository.GetProductAsync(token, language, sku);
 
             if (_options.Value.IsGrulaConfigured && clientId.HasValue)
             {

@@ -71,6 +71,10 @@ function NewOrderForm(props) {
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 
+            if (appliedDiscountCode) {
+                searchParameters.discountCode = appliedDiscountCode;
+            }
+
             const requestOptions = {
                 method: "GET",
                 headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
