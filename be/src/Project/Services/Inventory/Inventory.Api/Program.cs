@@ -25,7 +25,6 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationM
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Foundation.ApiExtensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
