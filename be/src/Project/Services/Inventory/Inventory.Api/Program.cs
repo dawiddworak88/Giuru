@@ -26,7 +26,6 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Foundation.Telemetry.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Foundation.ApiExtensions.DependencyInjection;
-using Foundation.Mailing.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,10 +92,6 @@ builder.Services.AddControllers(options =>
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters().AddCsvSerializerFormatters();
 
 builder.Services.AddLocalization();
-
-builder.Services.RegisterApiExtensionsDependencies();
-
-builder.Services.RegisterMailingDependencies(builder.Configuration);
 
 builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 

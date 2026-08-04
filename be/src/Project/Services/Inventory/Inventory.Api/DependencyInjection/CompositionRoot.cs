@@ -4,7 +4,6 @@ using Foundation.EventBusRabbitMq;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.IntegrationEvents;
 using Inventory.Api.IntegrationEventsHandlers;
-using Inventory.Api.Repositories.Products;
 using Inventory.Api.Services.InventoryItems;
 using Inventory.Api.Services.OutletItems;
 using Inventory.Api.Services.Products;
@@ -24,7 +23,6 @@ namespace Inventory.Api.DependencyInjection
         public static void RegisterInventoryApiDependencies(this IServiceCollection services)
         {
             services.AddScoped<IWarehouseService, WarehouseService>();
-            services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOutletService, OutletService>();

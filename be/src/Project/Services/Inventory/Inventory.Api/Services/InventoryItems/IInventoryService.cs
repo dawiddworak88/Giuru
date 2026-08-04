@@ -19,7 +19,6 @@ namespace Inventory.Api.Services.InventoryItems
         Task SyncProductsInventories(UpdateProductsInventoryServiceModel model);
         Task DeleteAsync(DeleteInventoryServiceModel model);
         Task<InventoryUpdateResult> UpdateInventoryQuantity(Guid? ProductId, double BookedQuantity);
-        Task SendOutOfStockNotificationAsync(IEnumerable<InventoryUpdateResult> outOfStockItems);
         PagedResults<IEnumerable<InventorySumServiceModel>> GetAvailableProductsInventories(GetInventoriesServiceModel serviceModel);
     }
 }

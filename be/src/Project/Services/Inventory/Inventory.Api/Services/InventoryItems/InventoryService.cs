@@ -31,33 +31,18 @@ namespace Inventory.Api.Services.InventoryItems
         private readonly IStringLocalizer _inventoryLocalizer;
         private readonly ILogger<InventoryService> _logger;
         private readonly IEventBus _eventBus;
-        private readonly IMailingService _mailingService;
-        private readonly IOptions<AppSettings> _settings;
-        private readonly IProductsRepository _productsRepository;
-        private static readonly HashSet<string> FabricAttributeKeys = new(StringComparer.OrdinalIgnoreCase)
-        {
-            "primaryFabrics",
-            "secondaryFabrics",
-            "tertiaryFabrics",
-            "quaternaryFabrics"
-        };
 
         public InventoryService(
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
             ILogger<InventoryService> logger,
             IEventBus eventBus,
-            IMailingService mailingService,
-            IOptions<AppSettings> settings,
-            IProductsRepository productsRepository)
+            IMailingService mailingService)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
             _logger = logger;
             _eventBus = eventBus;
-            _mailingService = mailingService;
-            _settings = settings;
-            _productsRepository = productsRepository;
         }
 
         public async Task<InventoryServiceModel> UpdateAsync(UpdateInventoryServiceModel serviceModel)
@@ -656,63 +641,6 @@ namespace Inventory.Api.Services.InventoryItems
             };
         }
 
-        public async Task SendOutOfStockNotificationAsync(IEnumerable<InventoryUpdateResult> outOfStockItems)
-        {
-            var outOfStockItemsList = outOfStockItems.OrEmptyIfNull().ToList();
-
-            if (outOfStockItemsList.Any() is false)
-            {
-                return;
-            }
-
-            var productIds = outOfStockItemsList
-                .Select(x => x.ProductId)
-                .Distinct()
-                .ToList();
-
-            var products = (await _productsRepository.GetByIdsAsync(productIds)).OrEmptyIfNull().ToList();
-
-            if (products.Any() is false)
-            {
-                return;
-            }
-
-            var productsForEmail = products.Select(product => new
-            {
-                name = product.Name,
-                sku = product.Sku,
-                fabrics = string.Join(", ", product.ProductAttributes
-                    .OrEmptyIfNull()
-                    .Where(attribute => FabricAttributeKeys.Contains(attribute.Key))
-                    .SelectMany(attribute => attribute.Values.OrEmptyIfNull())
-                    .Where(value => string.IsNullOrWhiteSpace(value) is false)
-                    .Distinct())
-            }).ToList();
-
-            if (productsForEmail.Any() && CanSend(_settings.Value.RecipientEmail, _settings.Value.SenderEmail, _settings.Value.SenderName, _settings.Value.ActionSendGridProductOutOfStockTemplateId))
-            {
-                try
-                {
-                    await _mailingService.SendTemplateAsync(new TemplateEmail
-                    {
-                        RecipientEmailAddress = _settings.Value.RecipientEmail,
-                        RecipientName = _settings.Value.RecipientEmail,
-                        SenderEmailAddress = _settings.Value.SenderEmail,
-                        SenderName = _settings.Value.SenderName,
-                        TemplateId = _settings.Value.ActionSendGridProductOutOfStockTemplateId,
-                        DynamicTemplateData = new
-                        {
-                            products = productsForEmail
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to send out-of-stock notification for products: {ProductIds}", string.Join(",", productIds));
-                }
-            }
-        }
-
         public IEnumerable<InventorySumServiceModel> GetInventoriesByProductsIds(GetInventoriesByProductsIdsServiceModel model)
         {
             return from i in _context.Inventory
@@ -729,11 +657,6 @@ namespace Inventory.Api.Services.InventoryItems
                        RestockableInDays = i.RestockableInDays,
                        ExpectedDelivery = i.ExpectedDelivery,
                    };
-        }
-
-        private static bool CanSend(params string[] values)
-        {
-            return values.Any(string.IsNullOrWhiteSpace) is false;
         }
     }
 }

@@ -34,8 +34,6 @@ namespace Inventory.Api.IntegrationEventsHandlers
 
                     inventoryUpdateResults.Add(updateResult);
                 }
-
-                await _inventoryService.SendOutOfStockNotificationAsync(inventoryUpdateResults.Where(x => x.IsWentOutOfStock));
             }
         }
     }
