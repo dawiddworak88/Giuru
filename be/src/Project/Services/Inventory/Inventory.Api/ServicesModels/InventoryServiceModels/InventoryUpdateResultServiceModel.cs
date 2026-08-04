@@ -2,11 +2,11 @@
 
 namespace Inventory.Api.ServicesModels.InventoryServiceModels
 {
-    public class InventoryUpdateResult
+    public class InventoryUpdateResultServiceModel
     {
         public Guid ProductId { get; set; }
         public double PreviousQuantity { get; set; }
         public double NewQuantity { get; set; }
-        public bool IsWentOutOfStock { get; set; }
+        public bool WentOutOfStock { get; set; }
     }
 }

@@ -5,18 +5,13 @@ using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
-using Foundation.Mailing.Models;
-using Foundation.Mailing.Services;
-using Inventory.Api.Configurations;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.IntegrationEvents;
-using Inventory.Api.Repositories.Products;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,8 +31,7 @@ namespace Inventory.Api.Services.InventoryItems
             InventoryContext context,
             IStringLocalizer<InventoryResources> inventoryLocalizer,
             ILogger<InventoryService> logger,
-            IEventBus eventBus,
-            IMailingService mailingService)
+            IEventBus eventBus)
         {
             _context = context;
             _inventoryLocalizer = inventoryLocalizer;
@@ -549,16 +543,16 @@ namespace Inventory.Api.Services.InventoryItems
             };
         }
 
-        public async Task<InventoryUpdateResult> UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
+        public async Task<InventoryUpdateResultServiceModel> UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
             if (productId is null || bookedQuantity <= 0)
             {
-                return new InventoryUpdateResult
+                return new InventoryUpdateResultServiceModel
                 {
                     ProductId = productId ?? Guid.Empty,
                     PreviousQuantity = 0,
                     NewQuantity = 0,
-                    IsWentOutOfStock = false
+                    WentOutOfStock = false
                 };
             }
 
@@ -632,12 +626,12 @@ namespace Inventory.Api.Services.InventoryItems
                 .Where(x => x.ProductId == productId && x.IsActive)
                 .SumAsync(x => x.AvailableQuantity);
 
-            return new InventoryUpdateResult
+            return new InventoryUpdateResultServiceModel
             {
                 ProductId = productId.Value,
                 PreviousQuantity = previousQuantity,
                 NewQuantity = newQuantity,
-                IsWentOutOfStock = previousQuantity > 0 && newQuantity <= 0
+                WentOutOfStock = previousQuantity > 0 && newQuantity <= 0
             };
         }
 
