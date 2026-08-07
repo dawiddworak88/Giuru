@@ -103,7 +103,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value });
             }
 
-            if (items.Any() && discount.ShouldReprice)
+            if (items.Any())
             {
                 await RepriceBasketItemsAsync(token, language, model.ClientId, items, discountCode);
             }
@@ -181,10 +181,11 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
                 if (price is null)
                 {
-                    // No Grula price for this line: it has no catalog product, Grula is not
-                    // configured, or the call failed. Keep whatever price the caller sent
-                    // rather than clearing it, so an outage cannot turn a priced basket into
-                    // an unpriced order.
+                    // Prices submitted by callers are untrusted. Any line without an
+                    // authoritative Grula result must remain explicitly unpriced.
+                    basketItem.UnitPrice = null;
+                    basketItem.Price = null;
+                    basketItem.Currency = null;
                     continue;
                 }
 
