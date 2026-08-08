@@ -91,19 +91,33 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var items = model.Items.OrEmptyIfNull().ToList();
-            var existingBasket = model.Id.HasValue
-                && DiscountCodeResolver.RequiresPersistedDiscountCode(model.HasDiscountCode, model.DiscountCode, items.Any())
-                ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
-                : null;
-            var discount = DiscountCodeResolver.Resolve(model.HasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode, items.Any());
-            var discountCode = discount.DiscountCode;
+            string discountCode;
 
-            if (discount.IsAppliedToEmptyBasket)
+            if (_options.Value.IsGrulaConfigured)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value });
+                var existingBasket = model.Id.HasValue
+                    && DiscountCodeResolver.RequiresPersistedDiscountCode(model.HasDiscountCode, model.DiscountCode, items.Any())
+                    ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
+                    : null;
+                var discount = DiscountCodeResolver.Resolve(model.HasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode, items.Any());
+                discountCode = discount.DiscountCode;
+
+                if (discount.IsAppliedToEmptyBasket)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value });
+                }
+            }
+            else
+            {
+                // Discount codes are Grula price drivers. While pricing is unavailable,
+                // ignore incoming mutations but retain any code already stored on the basket.
+                var existingBasket = model.Id.HasValue
+                    ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
+                    : null;
+                discountCode = existingBasket?.DiscountCode;
             }
 
-            if (items.Any())
+            if (_options.Value.IsGrulaConfigured && items.Any())
             {
                 await RepriceBasketItemsAsync(token, language, model.ClientId, items, discountCode);
             }

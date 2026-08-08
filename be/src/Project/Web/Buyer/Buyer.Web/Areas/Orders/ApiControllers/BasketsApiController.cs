@@ -87,18 +87,30 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
             var id = Guid.Parse(reqCookie);
-            var existingBasket = DiscountCodeResolver.RequiresPersistedDiscountCode(model.HasDiscountCode, model.DiscountCode, items.Any())
-                ? await _basketRepository.GetBasketById(token, language, id)
-                : null;
-            var discount = DiscountCodeResolver.Resolve(model.HasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode, items.Any());
-            var discountCode = discount.DiscountCode;
+            string discountCode;
 
-            if (discount.IsAppliedToEmptyBasket)
+            if (_options.Value.IsGrulaConfigured)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value });
+                var existingBasket = DiscountCodeResolver.RequiresPersistedDiscountCode(model.HasDiscountCode, model.DiscountCode, items.Any())
+                    ? await _basketRepository.GetBasketById(token, language, id)
+                    : null;
+                var discount = DiscountCodeResolver.Resolve(model.HasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode, items.Any());
+                discountCode = discount.DiscountCode;
+
+                if (discount.IsAppliedToEmptyBasket)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value });
+                }
+            }
+            else
+            {
+                // Discount codes are Grula price drivers. While pricing is unavailable,
+                // ignore incoming mutations but retain any code already stored on the basket.
+                var existingBasket = await _basketRepository.GetBasketById(token, language, id);
+                discountCode = existingBasket?.DiscountCode;
             }
 
-            if (items.Any())
+            if (_options.Value.IsGrulaConfigured && items.Any())
             {
                 await RepriceBasketItemsAsync(token, language, items, discountCode);
             }

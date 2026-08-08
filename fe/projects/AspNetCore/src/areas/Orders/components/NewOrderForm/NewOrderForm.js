@@ -38,8 +38,9 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
-    const [discountCode, setDiscountCode] = useState(props.discountCode || "");
-    const [appliedDiscountCode, setAppliedDiscountCode] = useState(props.discountCode || "");
+    const initialDiscountCode = props.isDiscountCodeEnabled ? (props.discountCode || "") : "";
+    const [discountCode, setDiscountCode] = useState(initialDiscountCode);
+    const [appliedDiscountCode, setAppliedDiscountCode] = useState(initialDiscountCode);
 
     const {
         basketId,
@@ -59,7 +60,8 @@ function NewOrderForm(props) {
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl,
         clearBasketUrl: props.clearBasketUrl,
-        discountCode: appliedDiscountCode
+        discountCode: appliedDiscountCode,
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled
     })
 
     const onSuggestionsFetchRequested = (args) => {
@@ -71,7 +73,7 @@ function NewOrderForm(props) {
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 
-            if (appliedDiscountCode) {
+            if (props.isDiscountCodeEnabled && appliedDiscountCode) {
                 searchParameters.discountCode = appliedDiscountCode;
             }
 
@@ -159,6 +161,8 @@ function NewOrderForm(props) {
     };
 
     const updateBasketDiscountCode = async (newDiscountCode, showSuccessMessage) => {
+        if (!props.isDiscountCodeEnabled) return;
+
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const basket = {
@@ -269,7 +273,7 @@ function NewOrderForm(props) {
                 formData.append("basketId", basketId);
             }
 
-            if (appliedDiscountCode) {
+            if (props.isDiscountCodeEnabled && appliedDiscountCode) {
                 formData.append("discountCode", appliedDiscountCode);
             }
 
@@ -305,7 +309,7 @@ function NewOrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [appliedDiscountCode, basketId, dispatch, orderItems, props.generalErrorMessage, props.uploadOrderFileUrl, setBasketId, setGroupedOrderItems]);
+    }, [appliedDiscountCode, basketId, dispatch, orderItems, props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl, setBasketId, setGroupedOrderItems]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -550,7 +554,7 @@ function NewOrderForm(props) {
                         )}
                     </div>
                 </Fragment>
-                <div className="field">
+                {props.isDiscountCodeEnabled && <div className="field">
                     <div className="columns is-vcentered">
                         <div className="column is-4">
                             <TextField
@@ -590,7 +594,7 @@ function NewOrderForm(props) {
                             </div>
                         }
                     </div>
-                </div>
+                </div>}
                 <div className="field">
                     <NoSsr>
                         <FormControlLabel
@@ -733,6 +737,7 @@ NewOrderForm.propTypes = {
     applyDiscountCodeLabel: PropTypes.string.isRequired,
     discountCodeAppliedMessage: PropTypes.string.isRequired,
     removeDiscountCodeLabel: PropTypes.string.isRequired,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired,
 };
 
 export default NewOrderForm;

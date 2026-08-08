@@ -22,7 +22,8 @@ export const useOrderManagement = ({
     updateBasketUrl,
     clearBasketUrl,
     getPriceUrl,
-    discountCode
+    discountCode,
+    isDiscountCodeEnabled
 }) => {
     const [state, dispatch] = useContext(Context);
     const [basketId, setBasketId] = useState(initialBasketId || null);
@@ -138,7 +139,7 @@ export const useOrderManagement = ({
                 const outletPrice = await ProductPricesHelper.getPriceByProductSku(
                     getPriceUrl, 
                     product.sku,
-                    discountCode
+                    isDiscountCodeEnabled ? discountCode : null
                 );
 
                 if (outletPrice) {
@@ -150,10 +151,10 @@ export const useOrderManagement = ({
 
             const newItems = groupOrderItems([...orderItems, orderItem]);
 
-            const basket = { 
+            const basket = {
                 id: basketId, 
                 items: newItems,
-                discountCode: basketDiscountCode
+                ...(isDiscountCodeEnabled && { discountCode: basketDiscountCode })
             };
 
             try {
@@ -189,7 +190,7 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems, basketDiscountCode]
+        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled]
     );
 
     const clearBasket = useCallback(async () => {
@@ -247,10 +248,10 @@ export const useOrderManagement = ({
                   oi.externalReference === item.externalReference)
                 );
 
-            const basket = { 
+            const basket = {
                 id: basketId, 
                 items: newItems,
-                discountCode: basketDiscountCode
+                ...(isDiscountCodeEnabled && { discountCode: basketDiscountCode })
             };
 
             try {
@@ -286,7 +287,7 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems, basketDiscountCode]
+        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled]
     );
 
     const setGroupedOrderItems = (items) => {

@@ -108,7 +108,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 DiscountCodeLabel = _orderLocalizer.GetString("DiscountCodeLabel"),
                 ApplyDiscountCodeLabel = _orderLocalizer.GetString("ApplyDiscountCodeLabel"),
                 DiscountCodeAppliedMessage = _orderLocalizer.GetString("DiscountCodeAppliedMessage"),
-                RemoveDiscountCodeLabel = _orderLocalizer.GetString("RemoveDiscountCodeLabel")
+                RemoveDiscountCodeLabel = _orderLocalizer.GetString("RemoveDiscountCodeLabel"),
+                IsDiscountCodeEnabled = _options.Value.IsGrulaConfigured
             };
 
             if (componentModel.BasketId.HasValue)
@@ -118,7 +119,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 if (basket is not null)
                 {
                     viewModel.BasketItems = basket.Items;
-                    viewModel.DiscountCode = basket.DiscountCode;
+                    viewModel.DiscountCode = _options.Value.IsGrulaConfigured
+                        ? basket.DiscountCode
+                        : null;
                 }
             }
 

@@ -114,14 +114,25 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             var id = Guid.Parse(reqCookie);
-            var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
+            string discountCode;
 
-            // The upload always writes the imported lines, so it never applies a code to an
-            // empty basket and never needs the persisted code for that check.
-            var existingBasket = DiscountCodeResolver.RequiresPersistedDiscountCode(hasDiscountCode, model.DiscountCode, hasItems: true)
-                ? await _basketRepository.GetBasketById(token, language, id)
-                : null;
-            var discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
+            if (_options.Value.IsGrulaConfigured)
+            {
+                var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
+
+                // The upload always writes the imported lines, so it never applies a code to an
+                // empty basket and never needs the persisted code for that check.
+                var existingBasket = DiscountCodeResolver.RequiresPersistedDiscountCode(hasDiscountCode, model.DiscountCode, hasItems: true)
+                    ? await _basketRepository.GetBasketById(token, language, id)
+                    : null;
+                discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
+            }
+            else
+            {
+                // Do not activate or remove a Grula discount while pricing is unavailable.
+                var existingBasket = await _basketRepository.GetBasketById(token, language, id);
+                discountCode = existingBasket?.DiscountCode;
+            }
 
             var skusParam = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct();
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skusParam);

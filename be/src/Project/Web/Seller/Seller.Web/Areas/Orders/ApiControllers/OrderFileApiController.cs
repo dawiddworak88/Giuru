@@ -116,15 +116,28 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
-            var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
+            string discountCode;
 
-            // The upload always writes the imported lines, so it never applies a code to an
-            // empty basket and never needs the persisted code for that check.
-            var existingBasket = model.Id.HasValue
-                && DiscountCodeResolver.RequiresPersistedDiscountCode(hasDiscountCode, model.DiscountCode, hasItems: true)
-                ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
-                : null;
-            var discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
+            if (_options.Value.IsGrulaConfigured)
+            {
+                var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
+
+                // The upload always writes the imported lines, so it never applies a code to an
+                // empty basket and never needs the persisted code for that check.
+                var existingBasket = model.Id.HasValue
+                    && DiscountCodeResolver.RequiresPersistedDiscountCode(hasDiscountCode, model.DiscountCode, hasItems: true)
+                    ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
+                    : null;
+                discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
+            }
+            else
+            {
+                // Do not activate or remove a Grula discount while pricing is unavailable.
+                var existingBasket = model.Id.HasValue
+                    ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
+                    : null;
+                discountCode = existingBasket?.DiscountCode;
+            }
 
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skus);
 
