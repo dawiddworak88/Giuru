@@ -363,9 +363,9 @@ function OrderForm(props) {
             });
 
             AuthenticationHelper.HandleResponse(response);
+            const jsonResponse = await response.json();
 
             if (response.ok) {
-                const jsonResponse = await response.json();
                 const savedDiscountCode = jsonResponse.discountCode || "";
 
                 setBasketId(jsonResponse.id);
@@ -378,7 +378,7 @@ function OrderForm(props) {
                 }
             }
             else {
-                toast.error(props.generalErrorMessage);
+                toast.error(jsonResponse.message || props.generalErrorMessage);
             }
         }
         catch {
