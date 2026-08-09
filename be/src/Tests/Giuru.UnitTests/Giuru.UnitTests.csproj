@@ -21,6 +21,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Search\Foundation.Search\Foundation.Search.csproj" />
+    <ProjectReference Include="..\..\Project\Web\Seller\Seller.Web\Seller.Web.csproj" />
+    <ProjectReference Include="..\..\Project\Web\Buyer\Buyer.Web\Buyer.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

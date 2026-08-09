@@ -4,6 +4,7 @@ using DotNet.Testcontainers.Networks;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -31,6 +32,7 @@ namespace Giuru.IntegrationTests
 
         public RestClient SellerWebClient { get; private set; }
         public RestClient BuyerWebClient { get; private set; }
+        public RestClient BasketApiClient { get; private set; }
 
         public async Task InitializeAsync()
         {
@@ -276,6 +278,17 @@ namespace Giuru.IntegrationTests
 
             var tokenClient = new TokenClient(new HttpClient());
             var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
+
+            var basketApiHttpClient = new HttpClient
+            {
+                BaseAddress = new Uri($"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}")
+            };
+
+            basketApiHttpClient.DefaultRequestHeaders.Accept.Clear();
+            basketApiHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            basketApiHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            BasketApiClient = new RestClient(basketApiHttpClient);
 
             var sellerWebFactpry = new WebApplicationFactory<SellerWebProgram>()
                 .WithWebHostBuilder(builder =>
