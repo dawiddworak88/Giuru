@@ -182,7 +182,11 @@ function OrderForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
+                        const savedDiscountCode = jsonResponse.discountCode || "";
+
                         setBasketId(jsonResponse.id);
+                        setDiscountCode(savedDiscountCode);
+                        setAppliedDiscountCode(savedDiscountCode);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             setProduct(null);
@@ -251,8 +255,11 @@ function OrderForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
+                        const savedDiscountCode = jsonResponse.discountCode || "";
 
                         setBasketId(jsonResponse.id);
+                        setDiscountCode(savedDiscountCode);
+                        setAppliedDiscountCode(savedDiscountCode);
                         setOpenDeleteDialog(false);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {

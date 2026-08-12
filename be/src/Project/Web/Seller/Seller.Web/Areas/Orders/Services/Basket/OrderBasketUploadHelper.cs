@@ -1,4 +1,5 @@
 using Seller.Web.Areas.Orders.DomainModels;
+using Seller.Web.Areas.Products.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,15 @@ namespace Seller.Web.Areas.Orders.Services.Basket
                 .OrEmptyIfNull()
                 .Concat(importedItems.OrEmptyIfNull())
                 .ToList();
+        }
+
+        internal static IReadOnlyDictionary<string, Product> CreateProductLookup(IEnumerable<Product> products)
+        {
+            return products
+                .OrEmptyIfNull()
+                .Where(x => !string.IsNullOrWhiteSpace(x.Sku))
+                .GroupBy(x => x.Sku)
+                .ToDictionary(x => x.Key, x => x.First());
         }
 
         internal static void DeductExistingStock(

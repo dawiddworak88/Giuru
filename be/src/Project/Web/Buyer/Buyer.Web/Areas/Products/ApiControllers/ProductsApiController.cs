@@ -10,6 +10,7 @@ using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
@@ -188,7 +189,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         await Task.WhenAll(priceProducts),
                         new PriceClient
                         {
-                            Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                            Id = User.GetClientId(),
                             Name = User.Identity?.Name,
                             CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
@@ -405,7 +406,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         await Task.WhenAll(priceProducts),
                         new PriceClient
                         {
-                            Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                            Id = User.GetClientId(),
                             Name = User.Identity?.Name,
                             CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
@@ -518,7 +519,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     },
                     new PriceClient
                     {
-                        Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                        Id = User.GetClientId(),
                         Name = User.Identity?.Name,
                         CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                         ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,

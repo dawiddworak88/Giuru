@@ -42,6 +42,10 @@ function NewOrderForm(props) {
     const initialDiscountCode = props.isDiscountCodeEnabled ? (props.discountCode || "") : "";
     const [discountCode, setDiscountCode] = useState(initialDiscountCode);
     const [appliedDiscountCode, setAppliedDiscountCode] = useState(initialDiscountCode);
+    const handleDiscountCodeChanged = useCallback((savedDiscountCode) => {
+        setDiscountCode(savedDiscountCode);
+        setAppliedDiscountCode(savedDiscountCode);
+    }, []);
 
     const {
         basketId,
@@ -62,7 +66,8 @@ function NewOrderForm(props) {
         getPriceUrl: props.getProductPriceUrl,
         clearBasketUrl: props.clearBasketUrl,
         discountCode: appliedDiscountCode,
-        isDiscountCodeEnabled: props.isDiscountCodeEnabled
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled,
+        onDiscountCodeChanged: handleDiscountCodeChanged
     })
 
     const onSuggestionsFetchRequested = (args) => {
@@ -269,10 +274,6 @@ function NewOrderForm(props) {
             const formData = new FormData();
 
             formData.append("file", file);
-
-            if (basketId) {
-                formData.append("basketId", basketId);
-            }
 
             if (props.isDiscountCodeEnabled && appliedDiscountCode) {
                 formData.append("discountCode", appliedDiscountCode);

@@ -140,7 +140,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
             }
 
-            var productLookup = products.ToDictionary(p => p.Sku);
+            var productLookup = OrderBasketUploadHelper.CreateProductLookup(products);
 
             var orderedProducts = importedOrderLines
                 .Where(x => productLookup.ContainsKey(x.Sku))
@@ -164,30 +164,12 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
 
                 var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, model.ClientId);
-
-                string clientCountryName = null;
-
-                if (client.CountryId.HasValue)
-                {
-                    clientCountryName = countries.FirstOrDefault(c => c.Id == client.CountryId)?.Name;
-                }
-
-                string deliveryZipCode = null;
-
-                if (client.DefaultDeliveryAddressId.HasValue)
-                {
-                    var clientAddress = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, client.DefaultDeliveryAddressId);
-
-                    if (clientAddress is not null)
-                    {
-                        var deliveryCountry = countries.FirstOrDefault(c => c.Id == clientAddress.CountryId);
-
-                        if (deliveryCountry is not null)
-                        {
-                            deliveryZipCode = $"{clientAddress.PostCode} ({clientAddress.City}, {deliveryCountry.Name})";
-                        }
-                    }
-                }
+                var clientCountryName = OrderFilePricingContext.GetClientCountryName(client, countries);
+                var defaultDeliveryAddressId = OrderFilePricingContext.GetDefaultDeliveryAddressId(client);
+                var clientAddress = defaultDeliveryAddressId.HasValue
+                    ? await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, defaultDeliveryAddressId)
+                    : null;
+                var deliveryZipCode = OrderFilePricingContext.GetDeliveryZipCode(clientAddress, countries);
 
                 var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, _options.Value.DefaultCulture, model.ClientId);
 
@@ -224,8 +206,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                         Id = client?.Id,
                         Name = client?.Name,
                         CurrencyCode = currency?.CurrencyCode,
-                        ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
-                        PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
+                        ExtraPacking = clientFieldValues.OrEmptyIfNull().FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
+                        PaletteLoading = clientFieldValues.OrEmptyIfNull().FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
                         Country = clientCountryName,
                         DeliveryZipCode = deliveryZipCode,
                         DiscountCode = discountCode

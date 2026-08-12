@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using BuyerBasketItem = Buyer.Web.Areas.Orders.DomainModels.BasketItem;
 using BuyerOrderBasketUploadHelper = Buyer.Web.Areas.Orders.Services.Basket.OrderBasketUploadHelper;
+using BuyerProduct = Buyer.Web.Areas.Products.DomainModels.Product;
 using SellerBasketItem = Seller.Web.Areas.Orders.DomainModels.BasketItem;
 using SellerOrderBasketUploadHelper = Seller.Web.Areas.Orders.Services.Basket.OrderBasketUploadHelper;
+using SellerProduct = Seller.Web.Areas.Products.DomainModels.Product;
 
 namespace Giuru.UnitTests.Orders.Baskets
 {
-    public abstract class OrderBasketUploadHelperTests<TBasketItem>
+    public abstract class OrderBasketUploadHelperTests<TBasketItem, TProduct>
         where TBasketItem : class
+        where TProduct : class
     {
         protected abstract TBasketItem CreateItem(
             Guid productId,
@@ -31,8 +34,74 @@ namespace Giuru.UnitTests.Orders.Baskets
             IDictionary<Guid, double> availableStockByProductId,
             IEnumerable<TBasketItem> existingItems);
 
+        protected abstract TProduct CreateProduct(string sku);
+        protected abstract IReadOnlyDictionary<string, TProduct> CreateProductLookup(IEnumerable<TProduct> products);
+
         protected abstract Guid? ProductId(TBasketItem item);
         protected abstract double TotalQuantity(TBasketItem item);
+
+        [Fact]
+        public void CreateProductLookup_DuplicateSku_RetainsTheFirstProduct()
+        {
+            var firstProduct = CreateProduct("SKU-1");
+            var duplicateProduct = CreateProduct("SKU-1");
+
+            var lookup = CreateProductLookup(new[] { firstProduct, duplicateProduct });
+
+            Assert.Single(lookup);
+            Assert.Same(firstProduct, lookup["SKU-1"]);
+        }
+
+        [Fact]
+        public void CreateProductLookup_DistinctSkus_RetainsEachProduct()
+        {
+            var firstProduct = CreateProduct("SKU-1");
+            var secondProduct = CreateProduct("SKU-2");
+
+            var lookup = CreateProductLookup(new[] { firstProduct, secondProduct });
+
+            Assert.Equal(2, lookup.Count);
+            Assert.Same(firstProduct, lookup["SKU-1"]);
+            Assert.Same(secondProduct, lookup["SKU-2"]);
+        }
+
+        [Fact]
+        public void CreateProductLookup_UnusableSkus_ExcludesThem()
+        {
+            var validProduct = CreateProduct("SKU-1");
+
+            var lookup = CreateProductLookup(new[]
+            {
+                CreateProduct(null),
+                CreateProduct(string.Empty),
+                CreateProduct("   "),
+                validProduct
+            });
+
+            Assert.Single(lookup);
+            Assert.Same(validProduct, lookup["SKU-1"]);
+        }
+
+        [Fact]
+        public void CreateProductLookup_NullCollection_ReturnsEmptyLookup()
+        {
+            var lookup = CreateProductLookup(null);
+
+            Assert.Empty(lookup);
+        }
+
+        [Fact]
+        public void CreateProductLookup_DifferentlyCasedSkus_RemainSeparate()
+        {
+            var lowerCaseProduct = CreateProduct("sku");
+            var upperCaseProduct = CreateProduct("SKU");
+
+            var lookup = CreateProductLookup(new[] { lowerCaseProduct, upperCaseProduct });
+
+            Assert.Equal(2, lookup.Count);
+            Assert.Same(lowerCaseProduct, lookup["sku"]);
+            Assert.Same(upperCaseProduct, lookup["SKU"]);
+        }
 
         [Fact]
         public void Append_RepeatedUploads_PreservesEveryPreviouslyPersistedLineAndItsMetadata()
@@ -92,7 +161,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
     }
 
-    public sealed class BuyerOrderBasketUploadHelperTests : OrderBasketUploadHelperTests<BuyerBasketItem>
+    public sealed class BuyerOrderBasketUploadHelperTests : OrderBasketUploadHelperTests<BuyerBasketItem, BuyerProduct>
     {
         protected override BuyerBasketItem CreateItem(
             Guid productId, double quantity, double stockQuantity, double outletQuantity,
@@ -122,11 +191,15 @@ namespace Giuru.UnitTests.Orders.Baskets
         protected override void DeductExistingStock(IDictionary<Guid, double> availableStockByProductId, IEnumerable<BuyerBasketItem> existingItems)
             => BuyerOrderBasketUploadHelper.DeductExistingStock(availableStockByProductId, existingItems);
 
+        protected override BuyerProduct CreateProduct(string sku) => new() { Id = Guid.NewGuid(), Sku = sku };
+        protected override IReadOnlyDictionary<string, BuyerProduct> CreateProductLookup(IEnumerable<BuyerProduct> products)
+            => BuyerOrderBasketUploadHelper.CreateProductLookup(products);
+
         protected override Guid? ProductId(BuyerBasketItem item) => item.ProductId;
         protected override double TotalQuantity(BuyerBasketItem item) => item.Quantity + item.StockQuantity + item.OutletQuantity;
     }
 
-    public sealed class SellerOrderBasketUploadHelperTests : OrderBasketUploadHelperTests<SellerBasketItem>
+    public sealed class SellerOrderBasketUploadHelperTests : OrderBasketUploadHelperTests<SellerBasketItem, SellerProduct>
     {
         protected override SellerBasketItem CreateItem(
             Guid productId, double quantity, double stockQuantity, double outletQuantity,
@@ -155,6 +228,10 @@ namespace Giuru.UnitTests.Orders.Baskets
 
         protected override void DeductExistingStock(IDictionary<Guid, double> availableStockByProductId, IEnumerable<SellerBasketItem> existingItems)
             => SellerOrderBasketUploadHelper.DeductExistingStock(availableStockByProductId, existingItems);
+
+        protected override SellerProduct CreateProduct(string sku) => new() { Id = Guid.NewGuid(), Sku = sku };
+        protected override IReadOnlyDictionary<string, SellerProduct> CreateProductLookup(IEnumerable<SellerProduct> products)
+            => SellerOrderBasketUploadHelper.CreateProductLookup(products);
 
         protected override Guid? ProductId(SellerBasketItem item) => item.ProductId;
         protected override double TotalQuantity(SellerBasketItem item) => item.Quantity + item.StockQuantity + item.OutletQuantity;

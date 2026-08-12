@@ -10,6 +10,7 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
@@ -76,7 +77,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var items = model.Items.OrEmptyIfNull().ToList();
-            var clientId = GetCurrentClientId();
+            var clientId = User.GetClientId();
 
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
             if (reqCookie is null)
@@ -298,7 +299,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 await Task.WhenAll(priceProducts),
                 new PriceClient
                 {
-                    Id = GetCurrentClientId(),
+                    Id = User.GetClientId(),
                     Name = User.Identity?.Name,
                     CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                     ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
@@ -322,13 +323,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     : HttpStatusCode.ServiceUnavailable;
                 throw new CustomException("Basket prices could not be resolved. The basket was not saved.", (int)status);
             }
-        }
-
-        private Guid? GetCurrentClientId()
-        {
-            return Guid.TryParse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value, out var clientId)
-                ? clientId
-                : null;
         }
 
         [HttpDelete]

@@ -15,6 +15,7 @@ using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Inventory;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.Services.Baskets;
@@ -137,7 +138,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
             }
 
-            var productLookup = products.ToDictionary(p => p.Sku);
+            var productLookup = OrderBasketUploadHelper.CreateProductLookup(products);
 
             var orderedProducts = importedOrderLines
                 .Where(x => productLookup.ContainsKey(x.Sku))
@@ -156,6 +157,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             if (_options.Value.IsGrulaConfigured)
             {
+                var clientId = User.GetClientId();
                 var priceProducts = orderedProducts.Select(async x => new PriceProduct
                 {
                     PrimarySku = x.PrimaryProductSku,
@@ -185,7 +187,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     await Task.WhenAll(priceProducts),
                     new PriceClient
                     {
-                        Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                        Id = clientId,
                         Name = User.Identity?.Name,
                         CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                         ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,

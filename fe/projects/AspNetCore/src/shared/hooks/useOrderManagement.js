@@ -24,7 +24,8 @@ export const useOrderManagement = ({
     clearBasketUrl,
     getPriceUrl,
     discountCode,
-    isDiscountCodeEnabled
+    isDiscountCodeEnabled,
+    onDiscountCodeChanged
 }) => {
     const [state, dispatch] = useContext(Context);
     const [basketId, setBasketId] = useState(initialBasketId || null);
@@ -173,6 +174,7 @@ export const useOrderManagement = ({
 
                 if (response.ok && jsonResponse) {
                     setBasketId(jsonResponse.id);
+                    onDiscountCodeChanged?.(jsonResponse.discountCode || "");
                     dispatch({
                         type: "SET_TOTAL_BASKET",
                         payload: parseInt(quantity + state.totalBasketItems),
@@ -194,7 +196,7 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled]
+        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled, onDiscountCodeChanged]
     );
 
     const clearBasket = useCallback(async () => {
@@ -274,6 +276,7 @@ export const useOrderManagement = ({
                 if (response.ok && jsonResponse) {
                     const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
 
+                    onDiscountCodeChanged?.(jsonResponse.discountCode || "");
                     dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
@@ -294,7 +297,7 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled]
+        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled, onDiscountCodeChanged]
     );
 
     const setGroupedOrderItems = (items) => {
