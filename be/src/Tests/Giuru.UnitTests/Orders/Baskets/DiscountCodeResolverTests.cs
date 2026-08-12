@@ -10,7 +10,7 @@ namespace Giuru.UnitTests.Orders.Baskets
     /// </summary>
     public abstract class DiscountCodeResolverTests
     {
-        protected abstract (string DiscountCode, bool ShouldReprice, bool IsAppliedToEmptyBasket) Resolve(
+        protected abstract (string DiscountCode, bool IsAppliedToEmptyBasket) Resolve(
             bool hasDiscountCode,
             string requestedDiscountCode,
             string persistedDiscountCode,
@@ -20,41 +20,38 @@ namespace Giuru.UnitTests.Orders.Baskets
 
         protected abstract bool RequiresPersistedDiscountCode(bool hasDiscountCode, string requestedDiscountCode, bool hasItems);
 
-        public static TheoryData<bool, string, string, bool, string, bool, bool> ResolutionCases => new()
+        public static TheoryData<bool, string, string, bool, string, bool> ResolutionCases => new()
         {
-            // hasDiscountCode, requested, persisted, hasItems | expected code, reprice, applied to empty basket
+            // hasDiscountCode, requested, persisted, hasItems | expected code, applied to empty basket
 
             // The request says nothing about the code, so the stored one stays authoritative.
-            // It still has to reprice while a code is active, otherwise newly added lines
-            // would be saved at undiscounted prices.
-            { false, null, "SUMMER25", true, "SUMMER25", true, false },
-            { false, null, null, true, null, false, false },
-            { false, null, "   ", true, null, false, false },
-            { false, null, "  SUMMER25  ", true, "SUMMER25", true, false },
+            { false, null, "SUMMER25", true, "SUMMER25", false },
+            { false, null, null, true, null, false },
+            { false, null, "   ", true, null, false },
+            { false, null, "  SUMMER25  ", true, "SUMMER25", false },
 
-            // An explicit null is a removal and always reprices: the persisted code was
-            // never read back, so the discounted prices have to be recalculated anyway.
-            { true, null, "SUMMER25", true, null, true, false },
-            { true, null, null, true, null, true, false },
-            { true, null, "SUMMER25", false, null, true, false },
+            // An explicit null removes the persisted code.
+            { true, null, "SUMMER25", true, null, false },
+            { true, null, null, true, null, false },
+            { true, null, "SUMMER25", false, null, false },
 
             // A blank code means "unchanged", not "remove" - it must not swallow the stored code.
-            { true, "   ", "SUMMER25", true, "SUMMER25", true, false },
-            { true, "", "SUMMER25", true, "SUMMER25", true, false },
-            { true, "   ", null, true, null, false, false },
+            { true, "   ", "SUMMER25", true, "SUMMER25", false },
+            { true, "", "SUMMER25", true, "SUMMER25", false },
+            { true, "   ", null, true, null, false },
 
             // An explicit code wins outright and is trimmed before it is priced with and stored.
-            { true, "SUMMER25", null, true, "SUMMER25", true, false },
-            { true, "  SUMMER25  ", "WINTER25", true, "SUMMER25", true, false },
+            { true, "SUMMER25", null, true, "SUMMER25", false },
+            { true, "  SUMMER25  ", "WINTER25", true, "SUMMER25", false },
 
             // Applying a *new* code to a basket with no lines is rejected by the callers.
-            { true, "SUMMER25", null, false, "SUMMER25", true, true },
-            { true, "SUMMER25", "WINTER25", false, "SUMMER25", true, true },
+            { true, "SUMMER25", null, false, "SUMMER25", true },
+            { true, "SUMMER25", "WINTER25", false, "SUMMER25", true },
 
             // Re-sending the code already on the basket is how the client empties a
             // discounted basket, so it must not be flagged.
-            { true, "SUMMER25", "SUMMER25", false, "SUMMER25", true, false },
-            { true, "  SUMMER25  ", "SUMMER25", false, "SUMMER25", true, false }
+            { true, "SUMMER25", "SUMMER25", false, "SUMMER25", false },
+            { true, "  SUMMER25  ", "SUMMER25", false, "SUMMER25", false }
         };
 
         /// <summary>The same requests as <see cref="ResolutionCases"/>, without the expectations.</summary>
@@ -85,13 +82,11 @@ namespace Giuru.UnitTests.Orders.Baskets
             string persistedDiscountCode,
             bool hasItems,
             string expectedDiscountCode,
-            bool expectedShouldReprice,
             bool expectedIsAppliedToEmptyBasket)
         {
             var resolution = Resolve(hasDiscountCode, requestedDiscountCode, persistedDiscountCode, hasItems);
 
             Assert.Equal(expectedDiscountCode, resolution.DiscountCode);
-            Assert.Equal(expectedShouldReprice, resolution.ShouldReprice);
             Assert.Equal(expectedIsAppliedToEmptyBasket, resolution.IsAppliedToEmptyBasket);
         }
 
@@ -155,7 +150,6 @@ namespace Giuru.UnitTests.Orders.Baskets
                 var withPersisted = Resolve(hasDiscountCode, requestedDiscountCode, persisted, hasItems);
 
                 Assert.Equal(withoutPersisted.DiscountCode, withPersisted.DiscountCode);
-                Assert.Equal(withoutPersisted.ShouldReprice, withPersisted.ShouldReprice);
                 Assert.Equal(withoutPersisted.IsAppliedToEmptyBasket, withPersisted.IsAppliedToEmptyBasket);
             }
         }
@@ -163,7 +157,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
     public class BuyerDiscountCodeResolverTests : DiscountCodeResolverTests
     {
-        protected override (string DiscountCode, bool ShouldReprice, bool IsAppliedToEmptyBasket) Resolve(
+        protected override (string DiscountCode, bool IsAppliedToEmptyBasket) Resolve(
             bool hasDiscountCode,
             string requestedDiscountCode,
             string persistedDiscountCode,
@@ -171,7 +165,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         {
             var resolution = BuyerDiscountCodeResolver.Resolve(hasDiscountCode, requestedDiscountCode, persistedDiscountCode, hasItems);
 
-            return (resolution.DiscountCode, resolution.ShouldReprice, resolution.IsAppliedToEmptyBasket);
+            return (resolution.DiscountCode, resolution.IsAppliedToEmptyBasket);
         }
 
         protected override string ResolveDiscountCode(bool hasDiscountCode, string requestedDiscountCode, string persistedDiscountCode)
@@ -187,7 +181,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
     public class SellerDiscountCodeResolverTests : DiscountCodeResolverTests
     {
-        protected override (string DiscountCode, bool ShouldReprice, bool IsAppliedToEmptyBasket) Resolve(
+        protected override (string DiscountCode, bool IsAppliedToEmptyBasket) Resolve(
             bool hasDiscountCode,
             string requestedDiscountCode,
             string persistedDiscountCode,
@@ -195,7 +189,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         {
             var resolution = SellerDiscountCodeResolver.Resolve(hasDiscountCode, requestedDiscountCode, persistedDiscountCode, hasItems);
 
-            return (resolution.DiscountCode, resolution.ShouldReprice, resolution.IsAppliedToEmptyBasket);
+            return (resolution.DiscountCode, resolution.IsAppliedToEmptyBasket);
         }
 
         protected override string ResolveDiscountCode(bool hasDiscountCode, string requestedDiscountCode, string persistedDiscountCode)

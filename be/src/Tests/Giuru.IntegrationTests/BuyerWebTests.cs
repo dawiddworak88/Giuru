@@ -3,6 +3,7 @@ using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Catalog.Api.v1.Products.RequestModels;
 using Foundation.ApiExtensions.Models.Response;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Giuru.IntegrationTests.Definitions;
@@ -94,6 +95,9 @@ namespace Giuru.IntegrationTests
                             Sku = Products.Lamica.Sku,
                             Name = Products.Lamica.Name,
                             Quantity = Inventories.Quantities.Quantity,
+                            UnitPrice = 0.01m,
+                            Price = 0.01m,
+                            Currency = "FAKE"
                         },
                         new BasketItemRequestModel
                         {
@@ -116,6 +120,19 @@ namespace Giuru.IntegrationTests
             Assert.NotEqual(Guid.Empty, basket.Id);
             Assert.NotNull(basket.Items);
             Assert.Equal(Products.Lamica.Id, basket.Items.FirstOrDefault().ProductId);
+            var savedBasketItem = basket.Items.Single(x => x.ProductId == Products.Lamica.Id);
+            Assert.Null(savedBasketItem.UnitPrice);
+            Assert.Null(savedBasketItem.Price);
+            Assert.Null(savedBasketItem.Currency);
+
+            // Basket API is the trusted internal boundary used by the BFF. Verify the
+            // values were removed before that boundary rather than only hidden in the response.
+            var persistedBasket = await _apiFixture.BasketApiClient.GetAsync<BasketApiResponseModel>(
+                $"{ApiConstants.Baskets.BasketsApiEndpoint}/{basket.Id}");
+            var persistedBasketItem = persistedBasket.Items.Single(x => x.ProductId == Products.Lamica.Id);
+            Assert.Null(persistedBasketItem.UnitPrice);
+            Assert.Null(persistedBasketItem.Price);
+            Assert.Null(persistedBasketItem.Currency);
 
             await _apiFixture.BuyerWebClient.PostAsync<CheckoutBasketRequestModel, BaseResponseModel>(
                 ApiEndpoints.OrderCheckoutApiEndpoint, 
@@ -134,6 +151,10 @@ namespace Giuru.IntegrationTests
             var order = orders.Data.FirstOrDefault();
 
             Assert.Equal(Products.Lamica.Id, order.OrderItems.FirstOrDefault().ProductId);
+            var orderItem = order.OrderItems.Single(x => x.ProductId == Products.Lamica.Id);
+            Assert.Null(orderItem.UnitPrice);
+            Assert.Null(orderItem.Price);
+            Assert.Null(orderItem.Currency);
 
             var stockOrderItem = order.OrderItems.FirstOrDefault(x => x.ProductId == stockProduct);
 

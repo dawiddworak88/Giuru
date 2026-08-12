@@ -46,7 +46,8 @@ function ProductDetail(props) {
         addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl,
-        discountCode: props.discountCode
+        discountCode: props.discountCode,
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled
     });
 
     const handleAddOrderItemClick = (item) => {
@@ -482,7 +483,8 @@ ProductDetail.propTypes = {
     copiedText: PropTypes.string.isRequired,
     copyToClipboardText: PropTypes.string.isRequired,
     copyTextError: PropTypes.string.isRequired,
-    discountCode: PropTypes.string
+    discountCode: PropTypes.string,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired
 };
 
 export default ProductDetail;

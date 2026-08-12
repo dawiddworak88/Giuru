@@ -19,6 +19,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
 import moment from "moment";
 
 function NewOrderForm(props) {
@@ -182,9 +183,9 @@ function NewOrderForm(props) {
             });
 
             AuthenticationHelper.HandleResponse(response);
+            const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-            if (response.ok) {
-                const jsonResponse = await response.json();
+            if (response.ok && jsonResponse) {
                 const savedDiscountCode = jsonResponse.discountCode || "";
 
                 setBasketId(jsonResponse.id);
@@ -197,7 +198,7 @@ function NewOrderForm(props) {
                 }
             }
             else {
-                toast.error(props.generalErrorMessage);
+                toast.error(message);
             }
         }
         catch {
@@ -286,30 +287,29 @@ function NewOrderForm(props) {
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
-                .then(function (response) {
+                .then(async function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     AuthenticationHelper.HandleResponse(response);
+                    const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                    return response.json().then((jsonResponse) => {
-                        if (response.ok) {
-                            const savedDiscountCode = jsonResponse.discountCode || "";
+                    if (response.ok && jsonResponse) {
+                        const savedDiscountCode = jsonResponse.discountCode || "";
 
-                            setBasketId(jsonResponse.id);
-                            setGroupedOrderItems([...orderItems, ...jsonResponse.items]);
-                            setDiscountCode(savedDiscountCode);
-                            setAppliedDiscountCode(savedDiscountCode);
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
+                        setBasketId(jsonResponse.id);
+                        setGroupedOrderItems(jsonResponse.items || []);
+                        setDiscountCode(savedDiscountCode);
+                        setAppliedDiscountCode(savedDiscountCode);
+                    }
+                    else {
+                        toast.error(message);
+                    }
                 }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [appliedDiscountCode, basketId, dispatch, orderItems, props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl, setBasketId, setGroupedOrderItems]);
+    }, [appliedDiscountCode, basketId, dispatch, props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl, setBasketId, setGroupedOrderItems]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,

@@ -67,7 +67,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
+                IsDiscountCodeEnabled = _options.Value.IsGrulaConfigured
             };
 
             if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
@@ -77,7 +78,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 if (basket is not null)
                 {
                     viewModel.BasketItems = basket.Items;
-                    viewModel.DiscountCode = basket.DiscountCode;
+                    viewModel.DiscountCode = _options.Value.IsGrulaConfigured
+                        ? basket.DiscountCode
+                        : null;
                 }
             }
 

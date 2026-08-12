@@ -18,5 +18,14 @@ namespace Buyer.Web.Shared.Services.Prices
             DateTime pricingDate,
             IEnumerable<PriceProduct> products,
             PriceClient client);
+
+        /// <summary>Returns one explicit pricing outcome per supplied product for trusted basket persistence.</summary>
+        Task<IReadOnlyList<PriceLookupResult>> GetPriceResultsForBasketAsync(
+            string token,
+            DateTime pricingDate,
+            IEnumerable<PriceProduct> products,
+            PriceClient client);
+
+        bool CanSeePrices(Guid? priceClientId);
     }
 }

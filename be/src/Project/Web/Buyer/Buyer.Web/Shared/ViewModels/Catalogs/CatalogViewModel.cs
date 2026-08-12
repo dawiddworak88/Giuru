@@ -12,6 +12,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
     {
         public Guid? BasketId { get; set; }
         public string DiscountCode { get; set; }
+        public bool IsDiscountCodeEnabled { get; set; }
         public int? ItemsPerPage { get; set; }
         public string Title { get; set; }
         public string ResultsLabel { get; set; }

@@ -10,6 +10,7 @@ import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
+import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -167,17 +168,15 @@ export const useOrderManagement = ({
                     body: JSON.stringify(basket),
                 });
 
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({
-                    type: "SET_TOTAL_BASKET",
-                    payload: parseInt(quantity + state.totalBasketItems),
-                });
-
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, generalErrorMessage);
 
-                if (response.ok) {
-                    const jsonResponse = await response.json();
+                if (response.ok && jsonResponse) {
                     setBasketId(jsonResponse.id);
+                    dispatch({
+                        type: "SET_TOTAL_BASKET",
+                        payload: parseInt(quantity + state.totalBasketItems),
+                    });
 
                     if (addProductToBasketMessage) ToastSuccessAddProductToBasket(addProductToBasketMessage)
 
@@ -186,6 +185,11 @@ export const useOrderManagement = ({
                         resetData?.()
                     }
                 }
+                else {
+                    toast.error(message);
+                }
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
             } catch {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
@@ -264,15 +268,13 @@ export const useOrderManagement = ({
                     body: JSON.stringify(basket),
                 });
 
-                const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
-
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
-
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, generalErrorMessage);
 
-                if (response.ok) {
-                    const jsonResponse = await response.json();
+                if (response.ok && jsonResponse) {
+                    const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
+
+                    dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
                         setOrderItems(groupOrderItems(jsonResponse.items));
@@ -283,6 +285,11 @@ export const useOrderManagement = ({
 
                     resetData?.();
                 }
+                else {
+                    toast.error(message);
+                }
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
             } catch {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);

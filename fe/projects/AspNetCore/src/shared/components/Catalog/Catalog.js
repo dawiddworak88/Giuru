@@ -112,7 +112,8 @@ function Catalog(props) {
         addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl,
-        discountCode: props.discountCode
+        discountCode: props.discountCode,
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled
     });
 
     const handleAddOrderItemClick = (item) => {
@@ -318,7 +319,8 @@ Catalog.propTypes = {
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     getProductPriceUrl: PropTypes.string,
     isDefaultOutletOrder: PropTypes.bool,
-    discountCode: PropTypes.string
+    discountCode: PropTypes.string,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired
 };
 
 export default Catalog;

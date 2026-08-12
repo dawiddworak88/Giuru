@@ -4,6 +4,7 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using Buyer.Web.Areas.Orders.Services.Basket;
 using Buyer.Web.Areas.Orders.Services.OrderFiles;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.ProductColors;
@@ -114,23 +115,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             var id = Guid.Parse(reqCookie);
+            var existingBasket = await _basketRepository.GetBasketById(token, language, id);
             string discountCode;
 
             if (_options.Value.IsGrulaConfigured)
             {
                 var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
-
-                // The upload always writes the imported lines, so it never applies a code to an
-                // empty basket and never needs the persisted code for that check.
-                var existingBasket = DiscountCodeResolver.RequiresPersistedDiscountCode(hasDiscountCode, model.DiscountCode, hasItems: true)
-                    ? await _basketRepository.GetBasketById(token, language, id)
-                    : null;
                 discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
             }
             else
             {
                 // Do not activate or remove a Grula discount while pricing is unavailable.
-                var existingBasket = await _basketRepository.GetBasketById(token, language, id);
                 discountCode = existingBasket?.DiscountCode;
             }
 
@@ -154,6 +149,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var stockByProductId = stockAvailableProducts
                 .OrEmptyIfNull()
                 .ToDictionary(g => g.ProductId, g => (double)g.AvailableQuantity);
+
+            OrderBasketUploadHelper.DeductExistingStock(stockByProductId, existingBasket?.Items);
 
             var prices = Enumerable.Empty<Price>();
 
@@ -252,7 +249,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 priceIndex++;
             }
 
-            var basket = await _basketRepository.SaveAsync(token, language, id, basketItems, discountCode);
+            var completeBasketItems = OrderBasketUploadHelper.Append(existingBasket?.Items, basketItems);
+
+            var basket = await _basketRepository.SaveAsync(token, language, id, completeBasketItems, discountCode);
 
             var basketResponseModel = new BasketResponseModel
             {
@@ -278,6 +277,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     UnitPrice = x.UnitPrice,
                     Price = x.Price,
                     Currency = x.Currency,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 });
             }
 

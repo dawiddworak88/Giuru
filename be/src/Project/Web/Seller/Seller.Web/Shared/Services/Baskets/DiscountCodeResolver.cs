@@ -39,32 +39,12 @@ namespace Seller.Web.Shared.Services.Baskets
             var persistedCode = Normalize(persistedDiscountCode);
             var discountCode = ResolveDiscountCode(hasDiscountCode, requestedDiscountCode, persistedDiscountCode);
 
-            // Same order as ResolveDiscountCode: an explicit null has to be recognised as a
-            // removal before the blank check, which would otherwise swallow it.
-            if (!hasDiscountCode)
-            {
-                // The request has no opinion on the code, so the persisted basket stays
-                // authoritative. Still reprice while a code is active, otherwise a stale
-                // client could add undiscounted lines to a discounted basket.
-                return new DiscountCodeResolution(discountCode, persistedCode is not null, false);
-            }
-
-            if (requestedDiscountCode is null)
-            {
-                // Explicit removal. Reprice unconditionally: the persisted code was not
-                // read back, so the discounted prices have to be recalculated regardless.
-                return new DiscountCodeResolution(null, true, false);
-            }
-
-            if (string.IsNullOrWhiteSpace(requestedDiscountCode))
-            {
-                return new DiscountCodeResolution(discountCode, persistedCode is not null, false);
-            }
-
             return new DiscountCodeResolution(
                 discountCode,
-                true,
-                !hasItems && !string.Equals(discountCode, persistedCode, StringComparison.Ordinal));
+                hasDiscountCode
+                && !string.IsNullOrWhiteSpace(requestedDiscountCode)
+                && !hasItems
+                && !string.Equals(discountCode, persistedCode, StringComparison.Ordinal));
         }
 
         /// <summary>

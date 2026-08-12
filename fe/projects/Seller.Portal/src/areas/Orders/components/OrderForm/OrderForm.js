@@ -511,7 +511,7 @@ function OrderForm(props) {
                             dispatch({ type: "SET_IS_LOADING", payload: false });
 
                             setBasketId(jsonResponse.id);
-                            setOrderItems(OrderItemsGrouper.groupOrderItems([...orderItems, ...jsonResponse.items]));
+                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items || []));
                             setDiscountCode(savedDiscountCode);
                             setAppliedDiscountCode(savedDiscountCode);
                         }
@@ -524,7 +524,7 @@ function OrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [appliedDiscountCode, basketId, client, dispatch, orderItems, props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl]);
+    }, [appliedDiscountCode, basketId, client, dispatch, props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,

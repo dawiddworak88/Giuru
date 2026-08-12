@@ -143,7 +143,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 CopyTextError = _globalLocalizer.GetString("CopyTextError"),
                 CopyToClipboardText = _globalLocalizer.GetString("CopyToClipboardText"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
+                IsDiscountCodeEnabled = _options.Value.IsGrulaConfigured
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -302,7 +303,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     if (basket is not null)
                     {
                         viewModel.OrderItems = basket.Items;
-                        viewModel.DiscountCode = basket.DiscountCode;
+                        viewModel.DiscountCode = _options.Value.IsGrulaConfigured
+                            ? basket.DiscountCode
+                            : null;
                     }
                 }
 
@@ -325,7 +328,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 PrimarySku = x.PrimaryProductSku,
                                 ProductVariantSku = x.Sku,
                                 FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                                ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                                ExtraPacking = PriceDriverValueNormalizer.NormalizeExtraPacking(
+                                    _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys)),
                                 SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                                 PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                                 Size = _productsService.GetSize(x.ProductAttributes),

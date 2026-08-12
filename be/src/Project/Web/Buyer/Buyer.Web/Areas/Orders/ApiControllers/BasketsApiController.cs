@@ -14,6 +14,7 @@ using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
@@ -75,6 +76,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var items = model.Items.OrEmptyIfNull().ToList();
+            var clientId = GetCurrentClientId();
 
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
             if (reqCookie is null)
@@ -113,6 +115,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             if (_options.Value.IsGrulaConfigured && items.Any())
             {
                 await RepriceBasketItemsAsync(token, language, items, discountCode);
+            }
+            else if (items.Any())
+            {
+                ClearUntrustedPrices(items);
             }
 
             var basket = await _basketRepository.SaveAsync(token, language, id,
@@ -156,9 +162,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
                     MoreInfo = x.MoreInfo,
-                    UnitPrice = x.UnitPrice,
-                    Price = x.Price,
-                    Currency = x.Currency,
+                    UnitPrice = _priceService.CanSeePrices(clientId) ? x.UnitPrice : null,
+                    Price = _priceService.CanSeePrices(clientId) ? x.Price : null,
+                    Currency = _priceService.CanSeePrices(clientId) ? x.Currency : null,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 });
             }
@@ -171,24 +177,45 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             return (basketItem.OutletQuantity > 0).ToYesOrNo();
         }
 
-        internal static void ApplyPrices(
-            IList<BasketItemRequestModel> basketItems,
-            IList<Price> prices)
+        internal static void ClearUntrustedPrices(IList<BasketItemRequestModel> basketItems)
         {
             if (basketItems is null)
             {
                 return;
             }
 
+            // Browser-submitted monetary values are untrusted. Without Grula there is no
+            // authoritative price source, so persist the basket explicitly unpriced.
+            foreach (var basketItem in basketItems)
+            {
+                basketItem.UnitPrice = null;
+                basketItem.Price = null;
+                basketItem.Currency = null;
+            }
+        }
+
+        internal static bool ApplyPrices(
+            IList<BasketItemRequestModel> basketItems,
+            IList<PriceLookupResult> priceResults)
+        {
+            if (basketItems is null)
+            {
+                return true;
+            }
+
+            if (priceResults is null || priceResults.Count != basketItems.Count || priceResults.Any(x => x is null ||
+                (x.Status != PriceLookupStatus.Priced && x.Status != PriceLookupStatus.AuthoritativeNoPrice)))
+            {
+                return false;
+            }
+
             for (var index = 0; index < basketItems.Count; index++)
             {
                 var basketItem = basketItems[index];
-                var price = prices is not null && index < prices.Count ? prices[index] : null;
+                var priceResult = priceResults[index];
 
-                if (price is null)
+                if (priceResult.Status == PriceLookupStatus.AuthoritativeNoPrice)
                 {
-                    // Prices submitted by callers are untrusted. Any line without an
-                    // authoritative Grula result must remain explicitly unpriced.
                     basketItem.UnitPrice = null;
                     basketItem.Price = null;
                     basketItem.Currency = null;
@@ -196,10 +223,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
 
                 var totalQuantity = basketItem.Quantity + basketItem.StockQuantity + basketItem.OutletQuantity;
-                basketItem.UnitPrice = price.CurrentPrice;
-                basketItem.Price = price.CurrentPrice * (decimal)totalQuantity;
-                basketItem.Currency = price.CurrencyCode;
+                basketItem.UnitPrice = priceResult.Price.CurrentPrice;
+                basketItem.Price = priceResult.Price.CurrentPrice * (decimal)totalQuantity;
+                basketItem.Currency = priceResult.Price.CurrencyCode;
             }
+
+            return true;
         }
 
         private async Task RepriceBasketItemsAsync(
@@ -218,6 +247,16 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 .GroupBy(x => x.Sku)
                 .ToDictionary(x => x.Key, x => x.First());
 
+            var unresolvedSkus = basketItems
+                .Select(x => x.Sku)
+                .Where(x => string.IsNullOrWhiteSpace(x) || !productLookup.ContainsKey(x))
+                .Distinct()
+                .ToList();
+            if (unresolvedSkus.Any())
+            {
+                throw new CustomException("Basket contains products that could not be resolved: " + string.Join(", ", unresolvedSkus.Select(x => x ?? "(blank)")), (int)HttpStatusCode.UnprocessableEntity);
+            }
+
             var indexedProducts = basketItems
                 .Select((item, index) => new { item, index })
                 .Where(x => !string.IsNullOrWhiteSpace(x.item.Sku) && productLookup.ContainsKey(x.item.Sku))
@@ -232,7 +271,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     PrimarySku = product.PrimaryProductSku,
                     ProductVariantSku = product.Sku,
                     FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                    ExtraPacking = PriceDriverValueNormalizer.NormalizeExtraPacking(
+                        _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys)),
                     SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
                     PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                     Size = _productsService.GetSize(product.ProductAttributes),
@@ -252,13 +292,13 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 };
             });
 
-            var prices = (await _priceService.GetPrices(
+            var prices = await _priceService.GetPriceResultsForBasketAsync(
                 _options.Value.GrulaAccessToken,
                 DateTime.UtcNow,
                 await Task.WhenAll(priceProducts),
                 new PriceClient
                 {
-                    Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
+                    Id = GetCurrentClientId(),
                     Name = User.Identity?.Name,
                     CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                     ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
@@ -266,19 +306,29 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
                     DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
                     DiscountCode = discountCode
-                })).OrEmptyIfNull().ToList();
+                });
 
-            // Align the returned prices back to their original basket line positions.
-            // Lines without a catalog product or without a Grula price stay null and
-            // are saved without a price by ApplyPrices.
-            var alignedPrices = new Price[basketItems.Count];
+            var alignedPrices = new PriceLookupResult[basketItems.Count];
 
-            for (var i = 0; i < indexedProducts.Count && i < prices.Count; i++)
+            for (var i = 0; i < indexedProducts.Count && prices is not null && i < prices.Count; i++)
             {
                 alignedPrices[indexedProducts[i].index] = prices[i];
             }
 
-            ApplyPrices(basketItems, alignedPrices);
+            if (!ApplyPrices(basketItems, alignedPrices))
+            {
+                var status = alignedPrices.Any(x => x?.Status == PriceLookupStatus.InvalidPriceDrivers)
+                    ? HttpStatusCode.UnprocessableEntity
+                    : HttpStatusCode.ServiceUnavailable;
+                throw new CustomException("Basket prices could not be resolved. The basket was not saved.", (int)status);
+            }
+        }
+
+        private Guid? GetCurrentClientId()
+        {
+            return Guid.TryParse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value, out var clientId)
+                ? clientId
+                : null;
         }
 
         [HttpDelete]
