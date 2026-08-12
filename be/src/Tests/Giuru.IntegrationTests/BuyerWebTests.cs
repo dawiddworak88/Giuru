@@ -55,7 +55,7 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact] 
-        public async Task AddToBasket_WithNormalStockAndOutletProducts_CheckoutOrder_Returns_Orders()
+        public async Task AddToBasket_WhenConfiguredGrulaIsUnavailable_CheckoutOrder_ReturnsUnpricedOrder()
         {
             var warehouseId = await EnsureWarehouseExistsAsync(_apiFixture);
 

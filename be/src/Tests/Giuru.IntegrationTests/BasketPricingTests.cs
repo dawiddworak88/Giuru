@@ -20,7 +20,7 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact]
-        public async Task SaveSellerBasket_WhenGrulaIsNotConfigured_ClearsUntrustedPricesBeforePersistence()
+        public async Task SaveSellerBasket_WhenConfiguredGrulaIsUnavailable_ClearsUntrustedPricesBeforePersistence()
         {
             var basketId = Guid.NewGuid();
 

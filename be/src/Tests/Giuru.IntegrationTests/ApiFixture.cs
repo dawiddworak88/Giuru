@@ -17,6 +17,10 @@ namespace Giuru.IntegrationTests
 {
     public class ApiFixture : IAsyncLifetime
     {
+        private const string UnreachableGrulaUrl = "http://127.0.0.1:1";
+        private const string TestGrulaAccessToken = "integration-test-token";
+        private const string TestGrulaEnvironmentId = "00000000-0000-0000-0000-000000000001";
+
         private INetwork _giuruNetwork;
         private RedisContainer _redisContainer;
         private RabbitMqContainer _rabbitMqContainer;
@@ -303,6 +307,9 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("GrulaUrl", UnreachableGrulaUrl);
+                    builder.UseSetting("GrulaAccessToken", TestGrulaAccessToken);
+                    builder.UseSetting("GrulaEnvironmentId", TestGrulaEnvironmentId);
                     builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");
@@ -329,6 +336,9 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("GrulaUrl", UnreachableGrulaUrl);
+                    builder.UseSetting("GrulaAccessToken", TestGrulaAccessToken);
+                    builder.UseSetting("GrulaEnvironmentId", TestGrulaEnvironmentId);
                     builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");

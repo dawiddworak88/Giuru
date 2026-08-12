@@ -17,7 +17,16 @@ namespace Giuru.UnitTests.Orders.Baskets
         decimal? Price,
         string Currency);
 
-    public sealed record GrulaPrice(decimal? CurrentPrice, string CurrencyCode, bool IsAuthoritative = true);
+    public enum GrulaPriceStatus
+    {
+        Priced,
+        AuthoritativeNoPrice,
+        ServiceUnavailable,
+        MissingResponse,
+        InvalidPriceDrivers
+    }
+
+    public sealed record GrulaPrice(decimal? CurrentPrice, string CurrencyCode, GrulaPriceStatus Status = GrulaPriceStatus.Priced);
 
     /// <summary>
     /// Prices arrive on the request from the browser, so the basket may only be saved with
@@ -97,7 +106,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 {
                     new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
                 },
-                new List<GrulaPrice> { new(CurrentPrice: null, CurrencyCode: null) });
+                new List<GrulaPrice> { new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.AuthoritativeNoPrice) });
 
             Assert.True(result.Applied);
             var line = result.Lines.Single();
@@ -108,7 +117,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Fact]
-        public void ApplyPrices_WhenAResultIsUnavailable_DoesNotMutateAnyLines()
+        public void ApplyPrices_WhenGrulaIsUnavailable_ClearsEverySubmittedPriceAndAllowsSaving()
         {
             var result = ApplyPrices(
                 new List<BasketLine>
@@ -119,20 +128,18 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new List<GrulaPrice>
                 {
                     new(CurrentPrice: 10m, CurrencyCode: "EUR"),
-                    new(CurrentPrice: null, CurrencyCode: null, IsAuthoritative: false)
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.ServiceUnavailable)
                 });
 
-            Assert.False(result.Applied);
-            Assert.All(result.Lines, line =>
-            {
-                Assert.Equal(999m, line.UnitPrice);
-                Assert.Equal(999m, line.Price);
-                Assert.Equal("EUR", line.Currency);
-            });
+            Assert.True(result.Applied);
+            Assert.Equal(10m, result.Lines[0].UnitPrice);
+            Assert.Equal(10m, result.Lines[0].Price);
+            Assert.Equal("EUR", result.Lines[0].Currency);
+            AssertLineIsUnpriced(result.Lines[1]);
         }
 
         [Fact]
-        public void ApplyPrices_WhenResultsAreMissing_DoesNotMutateAnyLines()
+        public void ApplyPrices_WhenGrulaResponseIsMissing_ClearsEverySubmittedPriceAndAllowsSaving()
         {
             var result = ApplyPrices(
                 new List<BasketLine>
@@ -141,13 +148,68 @@ namespace Giuru.UnitTests.Orders.Baskets
                 },
                 null);
 
+            Assert.True(result.Applied);
+            Assert.All(result.Lines, AssertLineIsUnpriced);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenGrulaResponseIsShort_ClearsEverySubmittedPriceAndAllowsSaving()
+        {
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
+                },
+                new List<GrulaPrice> { new(CurrentPrice: 10m, CurrencyCode: "EUR") });
+
+            Assert.True(result.Applied);
+            Assert.All(result.Lines, AssertLineIsUnpriced);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenAResultIsMissingOrMalformed_ClearsOnlyTheAffectedLine()
+        {
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 2, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
+                },
+                new List<GrulaPrice>
+                {
+                    new(CurrentPrice: 12m, CurrencyCode: "EUR"),
+                    new(CurrentPrice: 25m, CurrencyCode: null, GrulaPriceStatus.Priced)
+                });
+
+            Assert.True(result.Applied);
+            Assert.Equal(12m, result.Lines[0].UnitPrice);
+            Assert.Equal(24m, result.Lines[0].Price);
+            AssertLineIsUnpriced(result.Lines[1]);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenPriceDriversAreInvalid_DoesNotPartiallyMutateLines()
+        {
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 888m, Price: 888m, Currency: "USD")
+                },
+                new List<GrulaPrice>
+                {
+                    new(CurrentPrice: 10m, CurrencyCode: "EUR"),
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.InvalidPriceDrivers)
+                });
+
             Assert.False(result.Applied);
-            Assert.All(result.Lines, line =>
-            {
-                Assert.Equal(999m, line.UnitPrice);
-                Assert.Equal(999m, line.Price);
-                Assert.Equal("EUR", line.Currency);
-            });
+            Assert.Equal(999m, result.Lines[0].UnitPrice);
+            Assert.Equal(999m, result.Lines[0].Price);
+            Assert.Equal("EUR", result.Lines[0].Currency);
+            Assert.Equal(888m, result.Lines[1].UnitPrice);
+            Assert.Equal(888m, result.Lines[1].Price);
+            Assert.Equal("USD", result.Lines[1].Currency);
         }
 
         [Fact]
@@ -156,6 +218,13 @@ namespace Giuru.UnitTests.Orders.Baskets
             var result = ApplyPrices(null, new List<GrulaPrice> { new(CurrentPrice: 10m, CurrencyCode: "EUR") });
             Assert.True(result.Applied);
             Assert.Null(result.Lines);
+        }
+
+        private static void AssertLineIsUnpriced(BasketLine line)
+        {
+            Assert.Null(line.UnitPrice);
+            Assert.Null(line.Price);
+            Assert.Null(line.Currency);
         }
 
         [Theory]
@@ -186,7 +255,15 @@ namespace Giuru.UnitTests.Orders.Baskets
                 basketItems,
                 prices?.Select(x => x is null ? null : new Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult
                 {
-                    Status = x.IsAuthoritative ? (x.CurrentPrice.HasValue ? Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced : Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice) : Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
+                    Status = x.Status switch
+                    {
+                        GrulaPriceStatus.Priced => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
+                        GrulaPriceStatus.AuthoritativeNoPrice => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
+                        GrulaPriceStatus.ServiceUnavailable => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
+                        GrulaPriceStatus.MissingResponse => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
+                        GrulaPriceStatus.InvalidPriceDrivers => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
+                        _ => throw new System.ArgumentOutOfRangeException()
+                    },
                     Price = x.CurrentPrice.HasValue ? new BuyerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
                 }).ToList());
 
@@ -238,7 +315,15 @@ namespace Giuru.UnitTests.Orders.Baskets
                 basketItems,
                 prices?.Select(x => x is null ? null : new Seller.Web.Shared.DomainModels.Prices.PriceLookupResult
                 {
-                    Status = x.IsAuthoritative ? (x.CurrentPrice.HasValue ? Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced : Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice) : Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
+                    Status = x.Status switch
+                    {
+                        GrulaPriceStatus.Priced => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
+                        GrulaPriceStatus.AuthoritativeNoPrice => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
+                        GrulaPriceStatus.ServiceUnavailable => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
+                        GrulaPriceStatus.MissingResponse => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
+                        GrulaPriceStatus.InvalidPriceDrivers => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
+                        _ => throw new System.ArgumentOutOfRangeException()
+                    },
                     Price = x.CurrentPrice.HasValue ? new SellerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
                 }).ToList());
 

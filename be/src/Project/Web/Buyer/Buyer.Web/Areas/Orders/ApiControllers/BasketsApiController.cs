@@ -204,8 +204,21 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 return true;
             }
 
-            if (priceResults is null || priceResults.Count != basketItems.Count || priceResults.Any(x => x is null ||
-                (x.Status != PriceLookupStatus.Priced && x.Status != PriceLookupStatus.AuthoritativeNoPrice)))
+            // A missing or incomplete response cannot be aligned safely, so do not use any
+            // browser values (or partially returned values) as a fallback.
+            if (priceResults is null || priceResults.Count != basketItems.Count)
+            {
+                ClearUntrustedPrices(basketItems);
+                return true;
+            }
+
+            // Validate every explicit status before changing a line. This preserves the
+            // all-or-nothing behaviour for invalid price drivers and future unknown states.
+            if (priceResults.Any(x => x is not null &&
+                x.Status != PriceLookupStatus.Priced &&
+                x.Status != PriceLookupStatus.AuthoritativeNoPrice &&
+                x.Status != PriceLookupStatus.ServiceUnavailable &&
+                x.Status != PriceLookupStatus.MissingResponse))
             {
                 return false;
             }
@@ -215,7 +228,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 var basketItem = basketItems[index];
                 var priceResult = priceResults[index];
 
-                if (priceResult.Status == PriceLookupStatus.AuthoritativeNoPrice)
+                if (priceResult is null ||
+                    priceResult.Status == PriceLookupStatus.AuthoritativeNoPrice ||
+                    priceResult.Status == PriceLookupStatus.ServiceUnavailable ||
+                    priceResult.Status == PriceLookupStatus.MissingResponse ||
+                    priceResult.Price is null ||
+                    string.IsNullOrWhiteSpace(priceResult.Price.CurrencyCode))
                 {
                     basketItem.UnitPrice = null;
                     basketItem.Price = null;
@@ -318,10 +336,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             if (!ApplyPrices(basketItems, alignedPrices))
             {
-                var status = alignedPrices.Any(x => x?.Status == PriceLookupStatus.InvalidPriceDrivers)
-                    ? HttpStatusCode.UnprocessableEntity
-                    : HttpStatusCode.ServiceUnavailable;
-                throw new CustomException("Basket prices could not be resolved. The basket was not saved.", (int)status);
+                throw new CustomException("Basket prices contain invalid price drivers.", (int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
