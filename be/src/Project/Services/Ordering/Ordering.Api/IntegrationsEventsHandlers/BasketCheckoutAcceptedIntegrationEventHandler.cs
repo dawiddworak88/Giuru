@@ -1,4 +1,5 @@
 ﻿using Foundation.EventBus.Abstractions;
+using Microsoft.Extensions.Logging;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.Services;
 using Ordering.Api.ServicesModels;
@@ -12,11 +13,14 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
     public class BasketCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>
     {
         private readonly IOrdersService ordersService;
+        private readonly ILogger _logger;
 
         public BasketCheckoutAcceptedIntegrationEventHandler(
-            IOrdersService ordersService)
+            IOrdersService ordersService,
+            ILogger<BasketCheckoutAcceptedIntegrationEventHandler> logger)
         {
             this.ordersService = ordersService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -94,6 +98,10 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
             if (validationResult.IsValid)
             {
                 await this.ordersService.CheckoutAsync(serviceModel);
+            }
+            else
+            {
+                _logger.LogError("Basket checkout integration event validation failed for basket {BasketId}: {ValidationErrors}", @event.BasketId, validationResult.ToString());
             }
         }
     }
