@@ -63,6 +63,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IPriceService _priceService;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
+        private readonly IPriceProductFactory _priceProductFactory;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -78,7 +79,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IStringLocalizer<OrderResources> orderLocalizer,
             IPriceService priceService,
             IProductsService productsService,
-            IProductColorsService productColorsService)
+            IProductColorsService productColorsService,
+            IPriceProductFactory priceProductFactory)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -94,6 +96,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceService = priceService;
             _productsService = productsService;
             _productColorsService = productColorsService;
+            _priceProductFactory = priceProductFactory;
         }
 
         [HttpPost]
@@ -267,38 +270,13 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 _logger.LogWarning("Basket line SKU {Sku} could not be resolved to a product for language {Language}.", item.ProductSku, language);
             }
 
-            var priceProducts = indexedProducts.Select(async x =>
-            {
-                var product = productLookup[x.item.ProductSku];
-                return new PriceProduct
-                {
-                    PrimarySku = product.PrimaryProductSku,
-                    ProductVariantSku = product.Sku,
-                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                    SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
-                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                    Size = _productsService.GetSize(product.ProductAttributes),
-                    PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                    LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                    LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                    LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                    Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                    Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                    PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                    SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                    BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                    ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                    NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                    Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo(),
-                    IsOutlet = (x.item.OutletQuantity > 0).ToYesOrNo()
-                };
-            });
+            var priceProducts = await Task.WhenAll(indexedProducts.Select(x =>
+                _priceProductFactory.CreateAsync(productLookup[x.item.ProductSku], isOutletPurchase: x.item.OutletQuantity > 0)));
 
             var prices = await _priceService.GetPriceResultsForBasketAsync(
                 _options.Value.GrulaAccessToken,
                 DateTime.UtcNow,
-                await Task.WhenAll(priceProducts),
+                priceProducts,
                 new PriceClient
                 {
                     Id = User.GetClientId(),

@@ -54,6 +54,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<ILeadTimeRepository, LeadTimeRepository>();
 
             services.AddScoped<IPriceService, PriceService>();
+            services.AddScoped<IPriceProductFactory, PriceProductFactory>();
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductColorsService, ProductColorsService>();
             services.AddScoped<IExpectedDeliveryDateService, ExpectedDeliveryDateService>();

@@ -40,6 +40,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
+        private readonly IPriceProductFactory _priceProductFactory;
 
         public SearchProductsApiController(
             IProductsService productsService,
@@ -49,7 +50,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
             IDeliveryMessageHelper deliveryMessageHelper,
-            IExpectedDeliveryDateService expectedDeliveryDateService)
+            IExpectedDeliveryDateService expectedDeliveryDateService,
+            IPriceProductFactory priceProductFactory)
         {
             _productsService = productsService;
             _inventoryRepository = inventoryRepository;
@@ -59,6 +61,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _priceService = priceService;
             _deliveryMessageHelper = deliveryMessageHelper;
             _expectedDeliveryDateService = expectedDeliveryDateService;
+            _priceProductFactory = priceProductFactory;
         }
 
         [HttpGet]
@@ -81,28 +84,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     prices = await _priceService.GetPrices(
                         _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
-                        products.Data.Select(x => new PriceProduct
-                        {
-                            PrimarySku = x.PrimaryProductSku,
-                            ProductVariantSku = x.Sku,
-                            FabricsGroup = x.FabricsGroup,
-                            ExtraPacking = x.ExtraPacking,
-                            SleepAreaSize = x.SleepAreaSize,
-                            PaletteSize = x.PaletteSize,
-                            Size = x.Size,
-                            PointsOfLight = x.PointsOfLight,
-                            LampshadeType = x.LampshadeType,
-                            LampshadeSize = x.LampshadeSize,
-                            LinearLight = x.LinearLight,
-                            Mirror = x.Mirror,
-                            Shape = x.Shape,
-                            PrimaryColor = x.PrimaryColor,
-                            SecondaryColor = x.SecondaryColor,
-                            BodyColour = x.BodyColour,
-                            ShelfType = x.ShelfType,
-                            NumberOfMirrors = x.NumberOfMirrors,
-                            Led = x.Led
-                        }),
+                        products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false)),
                         new PriceClient
                         {
                             Id = User.GetClientId(),

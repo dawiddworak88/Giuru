@@ -10,7 +10,7 @@ import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
-import ResponseMessageHelper from "../../../../../shared/helpers/responses/ResponseMessageHelper";
+import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
 
 const groupOrderItems = (items) => {
     const grouped = [];
@@ -139,9 +139,10 @@ export const useOrderManagement = ({
 
             if (isOutletOrder) {
                 const outletPrice = await ProductPricesHelper.getPriceByProductSku(
-                    getPriceUrl, 
+                    getPriceUrl,
                     product.sku,
-                    isDiscountCodeEnabled ? discountCode : null
+                    isDiscountCodeEnabled ? discountCode : null,
+                    true
                 );
 
                 if (outletPrice) {

@@ -49,8 +49,6 @@ namespace Giuru.UnitTests.Orders.Baskets
 
         protected abstract IList<BasketLine> ClearUntrustedPrices(IList<BasketLine> lines);
 
-        protected abstract string GetOutletPriceDriver(double outletQuantity);
-
         [Fact]
         public void ClearUntrustedPrices_WhenGrulaIsNotConfigured_ClearsAMaliciousSubmittedPrice()
         {
@@ -457,14 +455,6 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Null(line.Currency);
         }
 
-        [Theory]
-        [InlineData(0, "No")]
-        [InlineData(1, "Yes")]
-        [InlineData(2.5, "Yes")]
-        public void GetOutletPriceDriver_MarksTheLineAsOutletOnlyWhenItHasOutletQuantity(double outletQuantity, string expected)
-        {
-            Assert.Equal(expected, GetOutletPriceDriver(outletQuantity));
-        }
     }
 
     public class BasketIdentityValidationTests
@@ -542,11 +532,6 @@ namespace Giuru.UnitTests.Orders.Baskets
             return basketItems?
                 .Select(x => new BasketLine(x.Quantity, x.StockQuantity, x.OutletQuantity, x.UnitPrice, x.Price, x.Currency))
                 .ToList();
-        }
-
-        protected override string GetOutletPriceDriver(double outletQuantity)
-        {
-            return BuyerBasketsApiController.GetOutletPriceDriver(new BuyerBasketItemRequestModel { OutletQuantity = outletQuantity });
         }
 
         private static Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult ToPriceLookupResult(GrulaPrice x)
@@ -640,11 +625,6 @@ namespace Giuru.UnitTests.Orders.Baskets
             return basketItems?
                 .Select(x => new BasketLine(x.Quantity, x.StockQuantity, x.OutletQuantity, x.UnitPrice, x.Price, x.Currency))
                 .ToList();
-        }
-
-        protected override string GetOutletPriceDriver(double outletQuantity)
-        {
-            return SellerBasketsApiController.GetOutletPriceDriver(new SellerBasketItemRequestModel { OutletQuantity = outletQuantity });
         }
 
         private static Seller.Web.Shared.DomainModels.Prices.PriceLookupResult ToPriceLookupResult(GrulaPrice x)

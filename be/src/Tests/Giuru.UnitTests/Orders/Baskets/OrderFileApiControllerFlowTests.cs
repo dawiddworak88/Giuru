@@ -2,6 +2,7 @@ using Buyer.Web.Areas.Orders.ApiControllers;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
+using DomainBasket = Buyer.Web.Areas.Orders.DomainModels.Basket;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Services.OrderFiles;
 using Buyer.Web.Areas.Products.DomainModels;
@@ -42,7 +43,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             var basketId = Guid.NewGuid();
             var productId = Guid.NewGuid();
             IEnumerable<BasketItem> savedItems = null;
-            var existingBasket = new Basket
+            var existingBasket = new DomainBasket
             {
                 Id = basketId,
                 Items = new[]
@@ -59,7 +60,9 @@ namespace Giuru.UnitTests.Orders.Baskets
             var productsRepository = Substitute.For<IProductsRepository>();
             var inventoryRepository = Substitute.For<IInventoryRepository>();
             var priceService = Substitute.For<IPriceService>();
+            var productsService = Substitute.For<IProductsService>();
             var productColorsService = Substitute.For<IProductColorsService>();
+            var options = Options.Create(new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() });
 
             orderFileService.ImportOrderLines(Arg.Any<IFormFile>()).Returns(new[]
             {
@@ -84,7 +87,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 .Returns(call =>
                 {
                     savedItems = call.ArgAt<IEnumerable<BasketItem>>(3).ToList();
-                    return Task.FromResult(new Basket { Id = basketId, Items = savedItems });
+                    return Task.FromResult(new DomainBasket { Id = basketId, Items = savedItems });
                 });
 
             var controller = new OrderFileApiController(
@@ -92,7 +95,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 productsRepository,
                 basketRepository,
                 Substitute.For<LinkGenerator>(),
-                Options.Create(new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() }),
+                options,
                 Substitute.For<IMediaService>(),
                 Substitute.For<IMediaItemsRepository>(),
                 Substitute.For<IOrdersRepository>(),
@@ -100,8 +103,9 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<ILogger<OrderFileApiController>>(),
                 Substitute.For<IStringLocalizer<OrderResources>>(),
                 priceService,
-                Substitute.For<IProductsService>(),
-                productColorsService)
+                productsService,
+                productColorsService,
+                new PriceProductFactory(productsService, productColorsService, options))
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext(basketId) }
             };
@@ -126,6 +130,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 .GetArguments()[2] as IEnumerable<PriceProduct>;
             var priceProduct = Assert.Single(pricedProducts);
             Assert.Equal("SKU", priceProduct.ProductVariantSku);
+            Assert.Equal("No", priceProduct.IsOutlet);
         }
 
         private static DefaultHttpContext CreateHttpContext(Guid basketId)

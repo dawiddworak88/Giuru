@@ -19,7 +19,7 @@ import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
-import ResponseMessageHelper from "../../../../../../../shared/helpers/responses/ResponseMessageHelper";
+import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -134,7 +134,8 @@ function OrderForm(props) {
                 props.getProductPriceUrl,
                 client.id,
                 product.sku,
-                props.isDiscountCodeEnabled ? appliedDiscountCode : null);
+                props.isDiscountCodeEnabled ? appliedDiscountCode : null,
+                true);
 
             if (outletPrice) {
                 orderItem.unitPrice = outletPrice.price

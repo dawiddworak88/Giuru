@@ -107,8 +107,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 DateTime.UtcNow,
                 new[]
                 {
-                    new Buyer.Web.Shared.DomainModels.Prices.PriceProduct(),
-                    new Buyer.Web.Shared.DomainModels.Prices.PriceProduct()
+                    new Buyer.Web.Shared.DomainModels.Prices.PriceProduct { IsOutlet = "No" },
+                    new Buyer.Web.Shared.DomainModels.Prices.PriceProduct { IsOutlet = "No" }
                 },
                 new Buyer.Web.Shared.DomainModels.Prices.PriceClient { Id = priceClientId });
 
@@ -147,8 +147,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 DateTime.UtcNow,
                 new[]
                 {
-                    new Seller.Web.Shared.DomainModels.Prices.PriceProduct(),
-                    new Seller.Web.Shared.DomainModels.Prices.PriceProduct()
+                    new Seller.Web.Shared.DomainModels.Prices.PriceProduct { IsOutlet = "No" },
+                    new Seller.Web.Shared.DomainModels.Prices.PriceProduct { IsOutlet = "No" }
                 },
                 new Seller.Web.Shared.DomainModels.Prices.PriceClient { Id = priceClientId });
 

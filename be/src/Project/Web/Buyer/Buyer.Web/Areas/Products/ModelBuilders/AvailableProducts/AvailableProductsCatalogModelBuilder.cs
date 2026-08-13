@@ -43,6 +43,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
+        private readonly IPriceProductFactory _priceProductFactory;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -56,7 +57,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
             IDeliveryMessageHelper deliveryMessageHelper,
-            IExpectedDeliveryDateService expectedDeliveryDateService)
+            IExpectedDeliveryDateService expectedDeliveryDateService,
+            IPriceProductFactory priceProductFactory)
         {
             this.globalLocalizer = globalLocalizer;
             this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
@@ -70,6 +72,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
             _expectedDeliveryDateService = expectedDeliveryDateService;
+            _priceProductFactory = priceProductFactory;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -104,28 +107,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         prices = await _priceService.GetPrices(
                             _options.Value.GrulaAccessToken,
                             DateTime.UtcNow,
-                            products.Data.Select(x => new PriceProduct
-                            {
-                                PrimarySku = x.PrimaryProductSku,
-                                ProductVariantSku = x.Sku,
-                                FabricsGroup = x.FabricsGroup,
-                                SleepAreaSize = x.SleepAreaSize,
-                                ExtraPacking = x.ExtraPacking,
-                                PaletteSize = x.PaletteSize,
-                                Size = x.Size,
-                                PointsOfLight = x.PointsOfLight,
-                                LampshadeType = x.LampshadeType,
-                                LampshadeSize = x.LampshadeSize,
-                                LinearLight = x.LinearLight,
-                                Mirror = x.Mirror,
-                                Shape = x.Shape,
-                                PrimaryColor = x.PrimaryColor,
-                                SecondaryColor = x.SecondaryColor,
-                                BodyColour = x.BodyColour,
-                                ShelfType = x.ShelfType,
-                                NumberOfMirrors = x.NumberOfMirrors,
-                                Led = x.Led
-                            }),
+                            products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false)),
                             new PriceClient
                             {
                                 Id = componentModel.ClientId,

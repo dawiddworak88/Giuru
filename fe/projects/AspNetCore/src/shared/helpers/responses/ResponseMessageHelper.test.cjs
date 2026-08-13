@@ -6,6 +6,9 @@ const test = require("node:test");
 const helperSource = fs
     .readFileSync(path.join(__dirname, "ResponseMessageHelper.js"), "utf8")
     .replace("export default {", "module.exports = {");
+
+assert.ok(helperSource.includes("module.exports = {"), "helper export shape changed - update this shim");
+
 const helperModule = { exports: {} };
 
 new Function("module", helperSource)(helperModule);

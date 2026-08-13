@@ -1,5 +1,6 @@
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using DomainBasket = Buyer.Web.Areas.Orders.DomainModels.Basket;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Shared.Services.Baskets;
@@ -36,7 +37,7 @@ namespace Giuru.UnitTests.Services.Baskets
             };
 
             basketRepository.GetBasketById("token", "en", basketId)
-                .Returns(Task.FromResult(new Basket { Id = basketId, Items = new[] { persistedItem } }));
+                .Returns(Task.FromResult(new DomainBasket { Id = basketId, Items = new[] { persistedItem } }));
             priceService.CanSeePrices(Arg.Any<Guid?>()).Returns(false);
             httpContextAccessor.HttpContext.Returns(context);
 

@@ -45,7 +45,7 @@ namespace Basket.Api.Services
                 throw new CustomException(this.orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
             }
 
-            foreach (var item in basket?.Items.OrEmptyIfNull())
+            foreach (var item in (basket?.Items).OrEmptyIfNull())
             {
                 if (!BasketItemQuantityValidator.TryValidate(
                     item.Quantity,

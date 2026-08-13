@@ -2,12 +2,12 @@ import AuthenticationHelper from "../globals/AuthenticationHelper";
 import QueryStringSerializer from "../serializers/QueryStringSerializer";
 
 export default class ProductPricesHelper {
-    static getPriceByProductSku = async (controllerUrl, clientId, sku, discountCode) => {
+    static getPriceByProductSku = async (controllerUrl, clientId, sku, discountCode, isOutlet = false) => {
         if (!controllerUrl || !clientId || !sku) {
             return null;
         }
 
-        const queryParameters = { clientId, sku };
+        const queryParameters = { clientId, sku, isOutlet };
 
         if (discountCode) {
             queryParameters.discountCode = discountCode;

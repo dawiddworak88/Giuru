@@ -127,10 +127,11 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact]
-        public async Task SaveBuyerBasket_WithDiscountCode_WhenGrulaIsNotConfigured_DoesNotStoreTheCode()
+        public async Task SaveBuyerBasket_WithDiscountCode_WhenConfiguredGrulaIsUnavailable_StillStoresTheCode()
         {
-            // Discount codes are Grula price drivers. Without pricing there is nothing to
-            // apply them to, so an incoming code has to be dropped rather than stored.
+            // Discount-code storage is gated purely on IsGrulaConfigured, not on Grula's
+            // reachability (see BasketsApiController.Index) - only pricing is cleared when
+            // the configured Grula instance can't be reached (see BasketPricingTests).
             var basket = await _apiFixture.BuyerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
                 ApiEndpoints.BasketApiEndpoint,
                 new SaveBasketRequestModel
@@ -149,7 +150,7 @@ namespace Giuru.IntegrationTests
                 });
 
             Assert.NotNull(basket);
-            Assert.Null(basket.DiscountCode);
+            Assert.Equal(DiscountCode, basket.DiscountCode);
         }
     }
 }

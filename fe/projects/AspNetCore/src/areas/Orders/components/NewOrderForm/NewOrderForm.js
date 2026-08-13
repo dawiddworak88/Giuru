@@ -19,7 +19,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
-import ResponseMessageHelper from "../../../../../../../shared/helpers/responses/ResponseMessageHelper";
+import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
 import moment from "moment";
 
 function NewOrderForm(props) {
