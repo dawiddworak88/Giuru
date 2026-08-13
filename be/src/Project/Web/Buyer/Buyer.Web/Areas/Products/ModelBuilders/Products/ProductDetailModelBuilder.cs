@@ -151,6 +151,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
             if (product != null)
             {
+                var basket = componentModel.IsAuthenticated && componentModel.BasketId.HasValue
+                    ? await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language)
+                    : null;
+                var discountCode = _options.Value.IsGrulaConfigured ? basket?.DiscountCode : null;
+
+                if (basket is not null)
+                {
+                    viewModel.OrderItems = basket.Items;
+                    viewModel.DiscountCode = discountCode;
+                }
+
                 viewModel.Ean = product.Ean;
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
@@ -208,7 +219,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             ExtraPacking = componentModel.ExtraPacking,
                             PaletteLoading = componentModel.PaletteLoading,
                             Country = componentModel.Country,
-                            DeliveryZipCode = componentModel.DeliveryZipCode
+                            DeliveryZipCode = componentModel.DeliveryZipCode,
+                            DiscountCode = discountCode
                         });
 
                     if (price is not null)
@@ -297,18 +309,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
 
-                if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
-                {
-                    var basket = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
-                    if (basket is not null)
-                    {
-                        viewModel.OrderItems = basket.Items;
-                        viewModel.DiscountCode = _options.Value.IsGrulaConfigured
-                            ? basket.DiscountCode
-                            : null;
-                    }
-                }
-
                 if (product.ProductVariants is not null)
                 {
                     var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
@@ -358,7 +358,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                    ExtraPacking = componentModel.ExtraPacking,
                                    PaletteLoading = componentModel.PaletteLoading,
                                    Country = componentModel.Country,
-                                   DeliveryZipCode = componentModel.DeliveryZipCode
+                                   DeliveryZipCode = componentModel.DeliveryZipCode,
+                                   DiscountCode = discountCode
                                });
                         }
 

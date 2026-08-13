@@ -58,6 +58,10 @@ function Catalog(props) {
             }
         }
 
+        if (props.isDiscountCodeEnabled && props.discountCode) {
+            searchParameters.discountCode = props.discountCode;
+        }
+
         const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
@@ -264,6 +268,7 @@ function Catalog(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
+                    discountCode={props.isDiscountCodeEnabled ? props.discountCode : null}
                 />
             }
             {props.modal &&

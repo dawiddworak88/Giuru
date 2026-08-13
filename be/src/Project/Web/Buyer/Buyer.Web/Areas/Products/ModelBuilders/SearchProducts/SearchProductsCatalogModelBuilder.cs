@@ -142,7 +142,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                             ExtraPacking = componentModel.ExtraPacking,
                             PaletteLoading = componentModel.PaletteLoading,
                             Country = componentModel.Country,
-                            DeliveryZipCode = componentModel.DeliveryZipCode
+                            DeliveryZipCode = componentModel.DeliveryZipCode,
+                            DiscountCode = viewModel.DiscountCode
                         });
                 }
 

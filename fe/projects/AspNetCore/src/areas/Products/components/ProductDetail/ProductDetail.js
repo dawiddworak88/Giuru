@@ -402,6 +402,7 @@ function ProductDetail(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
+                    discountCode={props.isDiscountCodeEnabled ? props.discountCode : null}
                 />
                 <CarouselGrid  
                     items={props.productVariants} 

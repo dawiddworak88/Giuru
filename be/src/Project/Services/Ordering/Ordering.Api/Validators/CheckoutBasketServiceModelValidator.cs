@@ -32,8 +32,10 @@ namespace Ordering.Api.Validators
                         return false;
                     }
 
-                    var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
-                    if (totalQuantity <= 0)
+                    if (!CheckoutBasketItemQuantityValidator.IsValid(
+                        item.Quantity,
+                        item.StockQuantity,
+                        item.OutletQuantity))
                     {
                         return false;
                     }

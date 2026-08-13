@@ -1,4 +1,5 @@
 ﻿using Basket.Api.ServicesModels;
+using Basket.Api.ServicesModelsValidators;
 using Basket.Api.Repositories;
 using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.ExtensionMethods;
@@ -42,6 +43,19 @@ namespace Basket.Api.Services
             if ((basket is null || basket.Items.OrEmptyIfNull().Any() is false) && checkoutBasketServiceModel.HasCustomOrder is false)
             {
                 throw new CustomException(this.orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
+            }
+
+            foreach (var item in basket?.Items.OrEmptyIfNull())
+            {
+                if (!BasketItemQuantityValidator.TryValidate(
+                    item.Quantity,
+                    item.StockQuantity,
+                    item.OutletQuantity,
+                    maxAllowedOrderQuantity: null,
+                    out var quantityError))
+                {
+                    throw new CustomException(quantityError, (int)HttpStatusCode.UnprocessableEntity);
+                }
             }
 
             var message = new BasketCheckoutAcceptedIntegrationEvent

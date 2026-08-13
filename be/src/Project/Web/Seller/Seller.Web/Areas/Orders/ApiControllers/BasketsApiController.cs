@@ -19,6 +19,7 @@ using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
@@ -242,6 +243,37 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 _logger.LogWarning("Basket line SKU {Sku} could not be resolved to a product for language {Language}.", sku, language);
             }
 
+            var inconsistentItems = basketItems
+                .Where(x => !string.IsNullOrWhiteSpace(x.Sku)
+                    && productLookup.TryGetValue(x.Sku, out var product)
+                    && !HasMatchingProductIdentity(x, product))
+                .ToList();
+
+            if (inconsistentItems.Any())
+            {
+                foreach (var item in inconsistentItems)
+                {
+                    _logger.LogWarning(
+                        "Basket line SKU {Sku} supplied product ID {SubmittedProductId}, but resolved to product ID {ResolvedProductId} for language {Language}.",
+                        item.Sku,
+                        item.ProductId,
+                        productLookup[item.Sku].Id,
+                        language);
+                }
+
+                throw new CustomException(
+                    _orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value,
+                    (int)HttpStatusCode.UnprocessableEntity);
+            }
+
+            foreach (var item in basketItems.Where(x => !string.IsNullOrWhiteSpace(x.Sku) && productLookup.ContainsKey(x.Sku)))
+            {
+                var product = productLookup[item.Sku];
+                item.ProductId = product.Id;
+                item.Sku = product.Sku;
+                item.Name = product.Name;
+            }
+
             var indexedProducts = basketItems
                 .Select((item, index) => new { item, index })
                 .Where(x => !string.IsNullOrWhiteSpace(x.item.Sku) && productLookup.ContainsKey(x.item.Sku))
@@ -330,6 +362,13 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     _orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value,
                     (int)HttpStatusCode.UnprocessableEntity);
             }
+        }
+
+        internal static bool HasMatchingProductIdentity(BasketItemRequestModel basketItem, Product product)
+        {
+            return basketItem.ProductId.HasValue
+                && basketItem.ProductId.Value != Guid.Empty
+                && basketItem.ProductId.Value == product.Id;
         }
     }
 }

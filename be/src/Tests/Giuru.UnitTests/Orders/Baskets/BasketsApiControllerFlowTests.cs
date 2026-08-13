@@ -10,6 +10,7 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Services.Prices;
+using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
@@ -45,7 +46,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             productsRepository.GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
                 .Returns(Task.FromResult<IEnumerable<Product>>(new[]
                 {
-                    new Product { Id = productId, Sku = "RESOLVED", PrimaryProductSku = "PRIMARY" }
+                    new Product { Id = productId, Sku = "RESOLVED", Name = "Canonical product name", PrimaryProductSku = "PRIMARY" }
                 }));
             productColorsService.ToEnglishAsync(Arg.Any<string>()).Returns(Task.FromResult<string>(null));
             priceService.GetPriceResultsForBasketAsync(Arg.Any<string>(), Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>())
@@ -86,9 +87,10 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var result = await controller.Index(new SaveBasketRequestModel
             {
+                DiscountCode = "SUMMER25",
                 Items = new[]
                 {
-                    new BasketItemRequestModel { ProductId = productId, Sku = "RESOLVED", Name = "Resolved", Quantity = 2, UnitPrice = 0.01m, Price = 0.02m, Currency = "FAKE" },
+                    new BasketItemRequestModel { ProductId = productId, Sku = "RESOLVED", Name = "Spoofed product name", Quantity = 2, UnitPrice = 0.01m, Price = 0.02m, Currency = "FAKE" },
                     new BasketItemRequestModel { ProductId = Guid.NewGuid(), Sku = "UNKNOWN", Name = "Unknown", Quantity = 1, UnitPrice = 999m, Price = 999m, Currency = "USD" }
                 }
             });
@@ -102,6 +104,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Equal(12m, resolved.UnitPrice);
             Assert.Equal(24m, resolved.Price);
             Assert.Equal("EUR", resolved.Currency);
+            Assert.Equal("Canonical product name", resolved.ProductName);
 
             var unresolved = savedItems.Single(item => item.ProductSku == "UNKNOWN");
             Assert.Null(unresolved.UnitPrice);
@@ -113,6 +116,76 @@ namespace Giuru.UnitTests.Orders.Baskets
                 .GetArguments()[2] as IEnumerable<PriceProduct>;
             var priceProduct = Assert.Single(pricedProducts);
             Assert.Equal("RESOLVED", priceProduct.ProductVariantSku);
+
+            var priceClient = priceService.ReceivedCalls()
+                .Single(call => call.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync))
+                .GetArguments()[3] as PriceClient;
+            Assert.Equal("SUMMER25", priceClient.DiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenResolvedSkuDoesNotMatchSubmittedProductId_RejectsBeforePricingOrSaving()
+        {
+            var basketId = Guid.NewGuid();
+            var resolvedProductId = Guid.NewGuid();
+            var basketRepository = Substitute.For<IBasketRepository>();
+            var productsRepository = Substitute.For<IProductsRepository>();
+            var priceService = Substitute.For<IPriceService>();
+            var orderLocalizer = Substitute.For<IStringLocalizer<OrderResources>>();
+
+            orderLocalizer[Arg.Any<string>()]
+                .Returns(new LocalizedString("BasketPricesCouldNotBeVerified", "Basket prices could not be verified."));
+
+            productsRepository.GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<Product>>(new[]
+                {
+                    new Product { Id = resolvedProductId, Sku = "CHEAP-SKU", Name = "Cheap product", PrimaryProductSku = "PRIMARY" }
+                }));
+
+            var controller = new BasketsApiController(
+                basketRepository,
+                Substitute.For<LinkGenerator>(),
+                Substitute.For<IMediaService>(),
+                orderLocalizer,
+                productsRepository,
+                priceService,
+                Substitute.For<IProductsService>(),
+                Substitute.For<IProductColorsService>(),
+                Options.Create(new AppSettings
+                {
+                    GrulaAccessToken = "test-token",
+                    GrulaEnvironmentId = Guid.NewGuid().ToString()
+                }),
+                Substitute.For<ILogger<BasketsApiController>>())
+            {
+                ControllerContext = new ControllerContext { HttpContext = CreateHttpContext(basketId) }
+            };
+
+            await Assert.ThrowsAsync<CustomException>(() => controller.Index(new SaveBasketRequestModel
+            {
+                Items = new[]
+                {
+                    new BasketItemRequestModel
+                    {
+                        ProductId = Guid.NewGuid(),
+                        Sku = "CHEAP-SKU",
+                        Name = "Expensive product",
+                        Quantity = 1
+                    }
+                }
+            }));
+
+            await priceService.DidNotReceive().GetPriceResultsForBasketAsync(
+                Arg.Any<string>(),
+                Arg.Any<DateTime>(),
+                Arg.Any<IEnumerable<PriceProduct>>(),
+                Arg.Any<PriceClient>());
+            await basketRepository.DidNotReceive().SaveAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<Guid?>(),
+                Arg.Any<IEnumerable<BasketItem>>(),
+                Arg.Any<string>());
         }
 
         private static DefaultHttpContext CreateHttpContext(Guid basketId)

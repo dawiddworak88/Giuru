@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using BuyerBasketItemRequestModel = Buyer.Web.Areas.Orders.ApiRequestModels.BasketItemRequestModel;
 using BuyerBasketsApiController = Buyer.Web.Areas.Orders.ApiControllers.BasketsApiController;
+using BuyerProduct = Buyer.Web.Areas.Products.DomainModels.Product;
 using BuyerPrice = Buyer.Web.Shared.DomainModels.Prices.Price;
 using SellerBasketItemRequestModel = Seller.Web.Areas.Orders.ApiRequestModels.BasketItemRequestModel;
 using SellerBasketsApiController = Seller.Web.Areas.Orders.ApiControllers.BasketsApiController;
+using SellerProduct = Seller.Web.Areas.Products.DomainModels.Product;
 using SellerPrice = Seller.Web.Shared.DomainModels.Prices.Price;
 
 namespace Giuru.UnitTests.Orders.Baskets
@@ -461,6 +464,31 @@ namespace Giuru.UnitTests.Orders.Baskets
         public void GetOutletPriceDriver_MarksTheLineAsOutletOnlyWhenItHasOutletQuantity(double outletQuantity, string expected)
         {
             Assert.Equal(expected, GetOutletPriceDriver(outletQuantity));
+        }
+    }
+
+    public class BasketIdentityValidationTests
+    {
+        [Fact]
+        public void BuyerHasMatchingProductIdentity_RequiresTheResolvedProductId()
+        {
+            var product = new BuyerProduct { Id = Guid.NewGuid(), Sku = "SKU" };
+
+            Assert.True(BuyerBasketsApiController.HasMatchingProductIdentity(
+                new BuyerBasketItemRequestModel { ProductId = product.Id, Sku = product.Sku }, product));
+            Assert.False(BuyerBasketsApiController.HasMatchingProductIdentity(
+                new BuyerBasketItemRequestModel { ProductId = Guid.NewGuid(), Sku = product.Sku }, product));
+        }
+
+        [Fact]
+        public void SellerHasMatchingProductIdentity_RequiresTheResolvedProductId()
+        {
+            var product = new SellerProduct { Id = Guid.NewGuid(), Sku = "SKU" };
+
+            Assert.True(SellerBasketsApiController.HasMatchingProductIdentity(
+                new SellerBasketItemRequestModel { ProductId = product.Id, Sku = product.Sku }, product));
+            Assert.False(SellerBasketsApiController.HasMatchingProductIdentity(
+                new SellerBasketItemRequestModel { ProductId = Guid.NewGuid(), Sku = product.Sku }, product));
         }
     }
 

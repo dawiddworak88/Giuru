@@ -61,7 +61,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(int pageIndex, int itemsPerPage, string discountCode = null)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
 
@@ -128,7 +128,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                                 ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                                 PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                                 Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                                DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                                DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
+                                DiscountCode = discountCode
                             });
                     }
 
