@@ -23,19 +23,26 @@ namespace Giuru.UnitTests.Orders.Baskets
         AuthoritativeNoPrice,
         ServiceUnavailable,
         MissingResponse,
-        InvalidPriceDrivers
+        InvalidPriceDrivers,
+        PricesHidden,
+        /// <summary>Does not map onto any production status - used to prove unrecognised statuses fail closed.</summary>
+        Unknown
     }
 
     public sealed record GrulaPrice(decimal? CurrentPrice, string CurrencyCode, GrulaPriceStatus Status = GrulaPriceStatus.Priced);
 
     /// <summary>
     /// Prices arrive on the request from the browser, so the basket may only be saved with
-    /// prices that came back from Grula for that exact line. Both the buyer and the seller
-    /// carry their own copy of this code, so both are held to the same rules here.
+    /// prices that came back from Grula for that exact line. Pricing a basket is two stages:
+    /// first align the raw Grula response onto basket lines, or refuse if it cannot be aligned
+    /// safely; then apply the aligned result (or the refusal) per line. Both the buyer and the
+    /// seller carry their own copy of this code, so both are held to the same rules here.
     /// </summary>
     public abstract class BasketPricingTests
     {
         protected abstract (bool Applied, IList<BasketLine> Lines) ApplyPrices(IList<BasketLine> lines, IList<GrulaPrice> prices);
+
+        protected abstract IList<GrulaPrice> AlignPrices(int basketItemCount, IList<int> pricedLineIndexes, IList<GrulaPrice> prices);
 
         protected abstract IList<BasketLine> ClearUntrustedPrices(IList<BasketLine> lines);
 
@@ -153,15 +160,21 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Fact]
-        public void ApplyPrices_WhenGrulaResponseIsShort_ClearsEverySubmittedPriceAndAllowsSaving()
+        public void Pricing_WhenGrulaResponseIsShort_RefusesAlignmentThenClearsEverySubmittedPrice()
         {
-            var result = ApplyPrices(
-                new List<BasketLine>
-                {
-                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
-                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
-                },
-                new List<GrulaPrice> { new(CurrentPrice: 10m, CurrencyCode: "EUR") });
+            var lines = new List<BasketLine>
+            {
+                new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
+            };
+            var alignedPrices = AlignPrices(
+                basketItemCount: lines.Count,
+                pricedLineIndexes: new List<int> { 0, 1 },
+                prices: new List<GrulaPrice> { new(CurrentPrice: 10m, CurrencyCode: "EUR") });
+
+            Assert.Null(alignedPrices);
+
+            var result = ApplyPrices(lines, alignedPrices);
 
             Assert.True(result.Applied);
             Assert.All(result.Lines, AssertLineIsUnpriced);
@@ -189,7 +202,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Fact]
-        public void ApplyPrices_WhenPriceDriversAreInvalid_DoesNotPartiallyMutateLines()
+        public void ApplyPrices_WhenPriceDriversAreInvalid_ClearsOnlyThatLineAndAllowsSaving()
         {
             var result = ApplyPrices(
                 new List<BasketLine>
@@ -203,6 +216,47 @@ namespace Giuru.UnitTests.Orders.Baskets
                     new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.InvalidPriceDrivers)
                 });
 
+            Assert.True(result.Applied);
+            Assert.Equal(10m, result.Lines[0].UnitPrice);
+            Assert.Equal(10m, result.Lines[0].Price);
+            Assert.Equal("EUR", result.Lines[0].Currency);
+            AssertLineIsUnpriced(result.Lines[1]);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenEveryLineHasInvalidPriceDrivers_ClearsAllLinesAndAllowsSaving()
+        {
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 888m, Price: 888m, Currency: "USD")
+                },
+                new List<GrulaPrice>
+                {
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.InvalidPriceDrivers),
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.InvalidPriceDrivers)
+                });
+
+            Assert.True(result.Applied);
+            Assert.All(result.Lines, AssertLineIsUnpriced);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenAStatusIsUnrecognised_FailsClosedAndDoesNotMutateAnyLine()
+        {
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 888m, Price: 888m, Currency: "USD")
+                },
+                new List<GrulaPrice>
+                {
+                    new(CurrentPrice: 10m, CurrencyCode: "EUR"),
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.Unknown)
+                });
+
             Assert.False(result.Applied);
             Assert.Equal(999m, result.Lines[0].UnitPrice);
             Assert.Equal(999m, result.Lines[0].Price);
@@ -213,11 +267,184 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Fact]
+        public void ApplyPrices_WhenPricesAreHiddenForTheClient_ClearsEveryLineAndAllowsSaving()
+        {
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 2, StockQuantity: 1, OutletQuantity: 0, UnitPrice: 10m, Price: 30m, Currency: "PLN")
+                },
+                new List<GrulaPrice>
+                {
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.PricesHidden),
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.PricesHidden)
+                });
+
+            Assert.True(result.Applied);
+            Assert.All(result.Lines, AssertLineIsUnpriced);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenPricesAreHiddenForOnlySomeLines_ClearsThoseLinesAndKeepsPricedOnesAndAllowsSaving()
+        {
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 2, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
+                },
+                new List<GrulaPrice>
+                {
+                    new(CurrentPrice: 12m, CurrencyCode: "EUR"),
+                    new(CurrentPrice: null, CurrencyCode: null, GrulaPriceStatus.PricesHidden)
+                });
+
+            Assert.True(result.Applied);
+            Assert.Equal(12m, result.Lines[0].UnitPrice);
+            Assert.Equal(24m, result.Lines[0].Price);
+            AssertLineIsUnpriced(result.Lines[1]);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenALineHasNoPriceResult_ClearsOnlyThatLineAndKeepsTheRestPriced()
+        {
+            // A missing result (rather than an explicit status) is what an unresolved SKU
+            // produces once the caller stops throwing and instead leaves that line's slot
+            // unset before calling ApplyPrices.
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 2, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
+                },
+                new List<GrulaPrice>
+                {
+                    new(CurrentPrice: 12m, CurrencyCode: "EUR"),
+                    null
+                });
+
+            Assert.True(result.Applied);
+            Assert.Equal(12m, result.Lines[0].UnitPrice);
+            Assert.Equal(24m, result.Lines[0].Price);
+            AssertLineIsUnpriced(result.Lines[1]);
+        }
+
+        [Fact]
+        public void ApplyPrices_WhenEveryLineHasNoPriceResult_ClearsAllLinesAndAllowsSaving()
+        {
+            // Covers a basket where every SKU is unresolved: it must still save (all lines
+            // unpriced, no throw) rather than needing at least one resolvable line.
+            var result = ApplyPrices(
+                new List<BasketLine>
+                {
+                    new(Quantity: 1, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR"),
+                    new(Quantity: 2, StockQuantity: 0, OutletQuantity: 0, UnitPrice: 999m, Price: 999m, Currency: "EUR")
+                },
+                new List<GrulaPrice> { null, null });
+
+            Assert.True(result.Applied);
+            Assert.All(result.Lines, AssertLineIsUnpriced);
+        }
+
+        [Fact]
         public void ApplyPrices_WhenThereAreNoLines_DoesNotThrow()
         {
             var result = ApplyPrices(null, new List<GrulaPrice> { new(CurrentPrice: 10m, CurrencyCode: "EUR") });
             Assert.True(result.Applied);
             Assert.Null(result.Lines);
+        }
+
+        [Fact]
+        public void AlignPrices_WhenEveryPricedLineHasAResult_MapsEachResultToItsOwnLine()
+        {
+            var aligned = AlignPrices(
+                basketItemCount: 3,
+                pricedLineIndexes: new List<int> { 0, 2 },
+                prices: new List<GrulaPrice>
+                {
+                    new(CurrentPrice: 10m, CurrencyCode: "EUR"),
+                    new(CurrentPrice: 20m, CurrencyCode: "EUR")
+                });
+
+            Assert.NotNull(aligned);
+            Assert.Equal(3, aligned.Count);
+            Assert.Equal(10m, aligned[0]?.CurrentPrice);
+            Assert.Null(aligned[1]);
+            Assert.Equal(20m, aligned[2]?.CurrentPrice);
+        }
+
+        [Fact]
+        public void AlignPrices_WhenTheResponseIsShort_RefusesToAlign()
+        {
+            var aligned = AlignPrices(
+                basketItemCount: 2,
+                pricedLineIndexes: new List<int> { 0, 1 },
+                prices: new List<GrulaPrice> { new(CurrentPrice: 10m, CurrencyCode: "EUR") });
+
+            Assert.Null(aligned);
+        }
+
+        [Fact]
+        public void AlignPrices_WhenTheResponseIsLong_RefusesToAlign()
+        {
+            var aligned = AlignPrices(
+                basketItemCount: 1,
+                pricedLineIndexes: new List<int> { 0 },
+                prices: new List<GrulaPrice>
+                {
+                    new(CurrentPrice: 10m, CurrencyCode: "EUR"),
+                    new(CurrentPrice: 20m, CurrencyCode: "EUR")
+                });
+
+            Assert.Null(aligned);
+        }
+
+        [Fact]
+        public void AlignPrices_WhenTheResponseIsMissing_RefusesToAlign()
+        {
+            var aligned = AlignPrices(
+                basketItemCount: 1,
+                pricedLineIndexes: new List<int> { 0 },
+                prices: null);
+
+            Assert.Null(aligned);
+        }
+
+        [Fact]
+        public void AlignPrices_WhenNoLineCouldBePriced_ReturnsAllNullSlots()
+        {
+            var aligned = AlignPrices(
+                basketItemCount: 2,
+                pricedLineIndexes: new List<int>(),
+                prices: new List<GrulaPrice>());
+
+            Assert.NotNull(aligned);
+            Assert.Equal(2, aligned.Count);
+            Assert.All(aligned, Assert.Null);
+        }
+
+        [Fact]
+        public void AlignPrices_WhenThereAreNoLines_ReturnsAnEmptyAlignment()
+        {
+            var aligned = AlignPrices(
+                basketItemCount: 0,
+                pricedLineIndexes: new List<int>(),
+                prices: new List<GrulaPrice>());
+
+            Assert.NotNull(aligned);
+            Assert.Empty(aligned);
+        }
+
+        [Fact]
+        public void AlignPrices_WhenALineIndexIsOutOfRange_RefusesToAlign()
+        {
+            var aligned = AlignPrices(
+                basketItemCount: 1,
+                pricedLineIndexes: new List<int> { 5 },
+                prices: new List<GrulaPrice> { new(CurrentPrice: 10m, CurrencyCode: "EUR") });
+
+            Assert.Null(aligned);
         }
 
         private static void AssertLineIsUnpriced(BasketLine line)
@@ -253,23 +480,21 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var applied = BuyerBasketsApiController.ApplyPrices(
                 basketItems,
-                prices?.Select(x => x is null ? null : new Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult
-                {
-                    Status = x.Status switch
-                    {
-                        GrulaPriceStatus.Priced => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
-                        GrulaPriceStatus.AuthoritativeNoPrice => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
-                        GrulaPriceStatus.ServiceUnavailable => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
-                        GrulaPriceStatus.MissingResponse => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
-                        GrulaPriceStatus.InvalidPriceDrivers => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
-                        _ => throw new System.ArgumentOutOfRangeException()
-                    },
-                    Price = x.CurrentPrice.HasValue ? new BuyerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
-                }).ToList());
+                prices?.Select(ToPriceLookupResult).ToList());
 
             return (applied, basketItems?
                 .Select(x => new BasketLine(x.Quantity, x.StockQuantity, x.OutletQuantity, x.UnitPrice, x.Price, x.Currency))
                 .ToList());
+        }
+
+        protected override IList<GrulaPrice> AlignPrices(int basketItemCount, IList<int> pricedLineIndexes, IList<GrulaPrice> prices)
+        {
+            var aligned = BuyerBasketsApiController.AlignPrices(
+                basketItemCount,
+                pricedLineIndexes,
+                prices?.Select(ToPriceLookupResult).ToList());
+
+            return aligned?.Select(ToGrulaPrice).ToList();
         }
 
         protected override IList<BasketLine> ClearUntrustedPrices(IList<BasketLine> lines)
@@ -295,6 +520,46 @@ namespace Giuru.UnitTests.Orders.Baskets
         {
             return BuyerBasketsApiController.GetOutletPriceDriver(new BuyerBasketItemRequestModel { OutletQuantity = outletQuantity });
         }
+
+        private static Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult ToPriceLookupResult(GrulaPrice x)
+        {
+            return x is null ? null : new Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult
+            {
+                Status = x.Status switch
+                {
+                    GrulaPriceStatus.Priced => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
+                    GrulaPriceStatus.AuthoritativeNoPrice => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
+                    GrulaPriceStatus.ServiceUnavailable => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
+                    GrulaPriceStatus.MissingResponse => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
+                    GrulaPriceStatus.InvalidPriceDrivers => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
+                    GrulaPriceStatus.PricesHidden => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden,
+                    GrulaPriceStatus.Unknown => (Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus)999,
+                    _ => throw new System.ArgumentOutOfRangeException()
+                },
+                Price = x.CurrentPrice.HasValue ? new BuyerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
+            };
+        }
+
+        private static GrulaPrice ToGrulaPrice(Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult x)
+        {
+            if (x is null)
+            {
+                return null;
+            }
+
+            var status = x.Status switch
+            {
+                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced => GrulaPriceStatus.Priced,
+                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice => GrulaPriceStatus.AuthoritativeNoPrice,
+                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable => GrulaPriceStatus.ServiceUnavailable,
+                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse => GrulaPriceStatus.MissingResponse,
+                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers => GrulaPriceStatus.InvalidPriceDrivers,
+                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden => GrulaPriceStatus.PricesHidden,
+                _ => GrulaPriceStatus.Unknown
+            };
+
+            return new GrulaPrice(x.Price?.CurrentPrice, x.Price?.CurrencyCode, status);
+        }
     }
 
     public class SellerBasketPricingTests : BasketPricingTests
@@ -313,23 +578,21 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var applied = SellerBasketsApiController.ApplyPrices(
                 basketItems,
-                prices?.Select(x => x is null ? null : new Seller.Web.Shared.DomainModels.Prices.PriceLookupResult
-                {
-                    Status = x.Status switch
-                    {
-                        GrulaPriceStatus.Priced => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
-                        GrulaPriceStatus.AuthoritativeNoPrice => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
-                        GrulaPriceStatus.ServiceUnavailable => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
-                        GrulaPriceStatus.MissingResponse => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
-                        GrulaPriceStatus.InvalidPriceDrivers => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
-                        _ => throw new System.ArgumentOutOfRangeException()
-                    },
-                    Price = x.CurrentPrice.HasValue ? new SellerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
-                }).ToList());
+                prices?.Select(ToPriceLookupResult).ToList());
 
             return (applied, basketItems?
                 .Select(x => new BasketLine(x.Quantity, x.StockQuantity, x.OutletQuantity, x.UnitPrice, x.Price, x.Currency))
                 .ToList());
+        }
+
+        protected override IList<GrulaPrice> AlignPrices(int basketItemCount, IList<int> pricedLineIndexes, IList<GrulaPrice> prices)
+        {
+            var aligned = SellerBasketsApiController.AlignPrices(
+                basketItemCount,
+                pricedLineIndexes,
+                prices?.Select(ToPriceLookupResult).ToList());
+
+            return aligned?.Select(ToGrulaPrice).ToList();
         }
 
         protected override IList<BasketLine> ClearUntrustedPrices(IList<BasketLine> lines)
@@ -354,6 +617,46 @@ namespace Giuru.UnitTests.Orders.Baskets
         protected override string GetOutletPriceDriver(double outletQuantity)
         {
             return SellerBasketsApiController.GetOutletPriceDriver(new SellerBasketItemRequestModel { OutletQuantity = outletQuantity });
+        }
+
+        private static Seller.Web.Shared.DomainModels.Prices.PriceLookupResult ToPriceLookupResult(GrulaPrice x)
+        {
+            return x is null ? null : new Seller.Web.Shared.DomainModels.Prices.PriceLookupResult
+            {
+                Status = x.Status switch
+                {
+                    GrulaPriceStatus.Priced => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
+                    GrulaPriceStatus.AuthoritativeNoPrice => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
+                    GrulaPriceStatus.ServiceUnavailable => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
+                    GrulaPriceStatus.MissingResponse => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
+                    GrulaPriceStatus.InvalidPriceDrivers => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
+                    GrulaPriceStatus.PricesHidden => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden,
+                    GrulaPriceStatus.Unknown => (Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus)999,
+                    _ => throw new System.ArgumentOutOfRangeException()
+                },
+                Price = x.CurrentPrice.HasValue ? new SellerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
+            };
+        }
+
+        private static GrulaPrice ToGrulaPrice(Seller.Web.Shared.DomainModels.Prices.PriceLookupResult x)
+        {
+            if (x is null)
+            {
+                return null;
+            }
+
+            var status = x.Status switch
+            {
+                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced => GrulaPriceStatus.Priced,
+                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice => GrulaPriceStatus.AuthoritativeNoPrice,
+                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable => GrulaPriceStatus.ServiceUnavailable,
+                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse => GrulaPriceStatus.MissingResponse,
+                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers => GrulaPriceStatus.InvalidPriceDrivers,
+                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden => GrulaPriceStatus.PricesHidden,
+                _ => GrulaPriceStatus.Unknown
+            };
+
+            return new GrulaPrice(x.Price?.CurrentPrice, x.Price?.CurrencyCode, status);
         }
     }
 }

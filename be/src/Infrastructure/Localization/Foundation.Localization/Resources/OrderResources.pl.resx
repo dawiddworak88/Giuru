@@ -384,4 +384,7 @@
   <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
     <value>Dodaj co najmniej jeden produkt do koszyka, zanim zastosujesz kod rabatowy.</value>
   </data>
+  <data name="BasketPricesCouldNotBeVerified" xml:space="preserve">
+    <value>Nie udało się zweryfikować cen w koszyku. Spróbuj ponownie.</value>
+  </data>
 </root>

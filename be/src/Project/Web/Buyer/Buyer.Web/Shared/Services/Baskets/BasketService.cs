@@ -2,9 +2,12 @@
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Shared.DomainModels.Baskets;
+using Buyer.Web.Shared.Extensions;
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System;
@@ -24,6 +27,8 @@ namespace Buyer.Web.Shared.Services.Baskets
         private readonly IOutletRepository outletRepository;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IPriceService priceService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public BasketService(
             LinkGenerator linkGenerator,
@@ -31,7 +36,9 @@ namespace Buyer.Web.Shared.Services.Baskets
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            IPriceService priceService,
+            IHttpContextAccessor httpContextAccessor)
         {
             this.linkGenerator = linkGenerator;
             this.basketRepository = basketRepository;
@@ -39,6 +46,8 @@ namespace Buyer.Web.Shared.Services.Baskets
             this.outletRepository = outletRepository;
             this.orderLocalizer = orderLocalizer;
             this.globalLocalizer = globalLocalizer;
+            this.priceService = priceService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Basket> GetBasketAsync(Guid? basketId, string token, string language)
@@ -47,6 +56,9 @@ namespace Buyer.Web.Shared.Services.Baskets
 
             if (existingBasket is not null)
             {
+                var canSeePrices = this.priceService.CanSeePrices(
+                    this.httpContextAccessor.HttpContext?.User.GetClientId());
+
                 return new Basket
                 {
                     Id = existingBasket.Id,
@@ -62,9 +74,9 @@ namespace Buyer.Web.Shared.Services.Baskets
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
-                        UnitPrice = x.UnitPrice,
-                        Price = x.Price,
-                        Currency = x.Currency,
+                        UnitPrice = canSeePrices ? x.UnitPrice : null,
+                        Price = canSeePrices ? x.Price : null,
+                        Currency = canSeePrices ? x.Currency : null,
                         ImageSrc = x.PictureUrl,
                         ImageAlt = x.ProductName,
                         MoreInfo = x.MoreInfo,

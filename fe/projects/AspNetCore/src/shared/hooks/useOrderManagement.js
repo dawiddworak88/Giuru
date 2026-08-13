@@ -10,7 +10,53 @@ import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
-import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
+import ResponseMessageHelper from "../../../../../shared/helpers/responses/ResponseMessageHelper";
+
+const groupOrderItems = (items) => {
+    const grouped = [];
+
+    items.forEach(item => {
+        if (item.outletQuantity > 0) {
+            const found = grouped.find(g =>
+                g.sku === item.sku &&
+                g.outletQuantity > 0 &&
+                g.moreInfo === item.moreInfo &&
+                g.externalReference === item.externalReference
+            );
+
+            if (found) {
+                found.outletQuantity += item.outletQuantity;
+                found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
+            } else {
+                grouped.push({
+                    ...item,
+                    quantity: 0,
+                    stockQuantity: 0,
+                });
+            }
+        } else {
+            const found = grouped.find(g =>
+                g.sku === item.sku &&
+                (!g.outletQuantity || g.outletQuantity === 0) &&
+                g.moreInfo === item.moreInfo &&
+                g.externalReference === item.externalReference
+            );
+
+            if (found) {
+                found.quantity += item.quantity;
+                found.stockQuantity += item.stockQuantity;
+                found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
+            } else {
+                grouped.push({
+                    ...item,
+                    outletQuantity: 0
+                });
+            }
+        }
+    });
+
+    return grouped;
+}
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -37,52 +83,6 @@ export const useOrderManagement = ({
     // leave whatever is stored alone; a null would be interpreted as a removal, so it is
     // never sent from here.
     const basketDiscountCode = discountCode || "";
-
-    const groupOrderItems = (items) => {
-        const grouped = [];
-
-        items.forEach(item => {
-            if (item.outletQuantity > 0) {
-                const found = grouped.find(g => 
-                    g.sku === item.sku && 
-                    g.outletQuantity > 0 &&
-                    g.moreInfo === item.moreInfo &&
-                    g.externalReference === item.externalReference
-                );
-
-                if (found) {
-                    found.outletQuantity += item.outletQuantity;
-                    found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
-                } else {
-                    grouped.push({
-                        ...item,
-                        quantity: 0,
-                        stockQuantity: 0,
-                    });
-                }
-            } else {
-                const found = grouped.find(g => 
-                    g.sku === item.sku && 
-                    (!g.outletQuantity || g.outletQuantity === 0) &&
-                    g.moreInfo === item.moreInfo &&
-                    g.externalReference === item.externalReference
-                );
-
-                if (found) {
-                    found.quantity += item.quantity;
-                    found.stockQuantity += item.stockQuantity;
-                    found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
-                } else {
-                    grouped.push({
-                        ...item,
-                        outletQuantity: 0
-                    });
-                }
-            }
-        });
-        
-        return grouped;
-    }
 
     const addOrderItemToBasket = useCallback(
         async ({
@@ -196,7 +196,12 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled, onDiscountCodeChanged]
+        }, [
+            addProductToBasketMessage, basketDiscountCode, basketId, discountCode, dispatch,
+            generalErrorMessage, getPriceUrl, isDiscountCodeEnabled, maxAllowedOrderQuantity,
+            maxAllowedOrderQuantityErrorMessage, minOrderQuantityErrorMessage, onDiscountCodeChanged,
+            orderItems, state.totalBasketItems, updateBasketUrl
+        ]
     );
 
     const clearBasket = useCallback(async () => {
@@ -237,7 +242,7 @@ export const useOrderManagement = ({
             dispatch({ type: "SET_IS_LOADING", payload: false });
             toast.error(generalErrorMessage);
         }
-    }, [basketId, orderItems]);
+    }, [basketId, clearBasketUrl, dispatch, generalErrorMessage]);
 
     const deleteOrderItemFromBasket = useCallback(
         async ({
@@ -297,12 +302,15 @@ export const useOrderManagement = ({
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems, basketDiscountCode, isDiscountCodeEnabled, onDiscountCodeChanged]
+        }, [
+            basketDiscountCode, basketId, dispatch, generalErrorMessage, isDiscountCodeEnabled,
+            onDiscountCodeChanged, orderItems, state.totalBasketItems, updateBasketUrl
+        ]
     );
 
-    const setGroupedOrderItems = (items) => {
+    const setGroupedOrderItems = useCallback((items) => {
         setOrderItems(groupOrderItems(items));
-    };
+    }, []);
 
     return { 
         basketId, 

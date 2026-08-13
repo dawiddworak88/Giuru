@@ -19,6 +19,7 @@ import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
+import ResponseMessageHelper from "../../../../../../../shared/helpers/responses/ResponseMessageHelper";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -175,36 +176,34 @@ function OrderForm(props) {
         };
 
         fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        const savedDiscountCode = jsonResponse.discountCode || "";
+                if (response.ok && jsonResponse) {
+                    const savedDiscountCode = jsonResponse.discountCode || "";
 
-                        setBasketId(jsonResponse.id);
-                        setDiscountCode(savedDiscountCode);
-                        setAppliedDiscountCode(savedDiscountCode);
+                    setBasketId(jsonResponse.id);
+                    setDiscountCode(savedDiscountCode);
+                    setAppliedDiscountCode(savedDiscountCode);
 
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setProduct(null);
-                            setSearchTerm("");
-                            setExternalReference("");
-                            setMoreInfo("");
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                            setQuantity(1);
-                            setProductFromOutlet(false);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
+                    if (jsonResponse.items && jsonResponse.items.length > 0) {
+                        setProduct(null);
+                        setSearchTerm("");
+                        setExternalReference("");
+                        setMoreInfo("");
+                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
+                        setQuantity(1);
+                        setProductFromOutlet(false);
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        setOrderItems([]);
                     }
-                });
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -247,34 +246,29 @@ function OrderForm(props) {
         };
 
         fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
+                if (response.ok && jsonResponse) {
+                    const savedDiscountCode = jsonResponse.discountCode || "";
 
-                    if (response.ok) {
-                        const savedDiscountCode = jsonResponse.discountCode || "";
+                    setBasketId(jsonResponse.id);
+                    setDiscountCode(savedDiscountCode);
+                    setAppliedDiscountCode(savedDiscountCode);
+                    setOpenDeleteDialog(false);
 
-                        setBasketId(jsonResponse.id);
-                        setDiscountCode(savedDiscountCode);
-                        setAppliedDiscountCode(savedDiscountCode);
-                        setOpenDeleteDialog(false);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                        }
-                        else {
-
-                            setOrderItems([]);
-                        }
+                    if (jsonResponse.items && jsonResponse.items.length > 0) {
+                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
                     }
                     else {
-                        toast.error(props.generalErrorMessage);
+                        setOrderItems([]);
                     }
-                });
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -329,20 +323,18 @@ function OrderForm(props) {
         };
 
         fetch(props.placeOrderUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setDisableSaveButton(true);
-                    } else {
-                        toast.error(jsonResponse.message || props.generalErrorMessage);
-                    }
-                });
+                if (response.ok && jsonResponse) {
+                    toast.success(message);
+                    setDisableSaveButton(true);
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -372,9 +364,9 @@ function OrderForm(props) {
             });
 
             AuthenticationHelper.HandleResponse(response);
-            const jsonResponse = await response.json();
+            const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-            if (response.ok) {
+            if (response.ok && jsonResponse) {
                 const savedDiscountCode = jsonResponse.discountCode || "";
 
                 setBasketId(jsonResponse.id);
@@ -387,7 +379,7 @@ function OrderForm(props) {
                 }
             }
             else {
-                toast.error(jsonResponse.message || props.generalErrorMessage);
+                toast.error(message);
             }
         }
         catch {
@@ -507,25 +499,23 @@ function OrderForm(props) {
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
-                .then(function (response) {
+                .then(async function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                    return response.json().then((jsonResponse) => {
+                    AuthenticationHelper.HandleResponse(response);
+                    const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                        if (response.ok) {
-                            const savedDiscountCode = jsonResponse.discountCode || "";
+                    if (response.ok && jsonResponse) {
+                        const savedDiscountCode = jsonResponse.discountCode || "";
 
-                            dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                            setBasketId(jsonResponse.id);
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items || []));
-                            setDiscountCode(savedDiscountCode);
-                            setAppliedDiscountCode(savedDiscountCode);
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
+                        setBasketId(jsonResponse.id);
+                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items || []));
+                        setDiscountCode(savedDiscountCode);
+                        setAppliedDiscountCode(savedDiscountCode);
+                    }
+                    else {
+                        toast.error(message);
+                    }
                 }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);

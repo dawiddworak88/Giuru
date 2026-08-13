@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
@@ -53,6 +54,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
+        private readonly ILogger<BasketsApiController> _logger;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
@@ -68,7 +70,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             ICountriesRepository countriesRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
             IClientAddressesRepository clientAddressesRepository,
-            ICurrenciesRepository currenciesRepository)
+            ICurrenciesRepository currenciesRepository,
+            ILogger<BasketsApiController> logger)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
@@ -84,6 +87,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _clientAddressesRepository = clientAddressesRepository;
             _currenciesRepository = currenciesRepository;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -156,6 +160,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             if (productIds.OrEmptyIfNull().Any())
             {
+                var canSeePrices = _priceService.CanSeePrices(model.ClientId);
+
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
                     ProductId = x.ProductId,
@@ -169,9 +175,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
                     MoreInfo = x.MoreInfo,
-                    UnitPrice = _priceService.CanSeePrices(model.ClientId) ? x.UnitPrice : null,
-                    Price = _priceService.CanSeePrices(model.ClientId) ? x.Price : null,
-                    Currency = _priceService.CanSeePrices(model.ClientId) ? x.Currency : null,
+                    UnitPrice = canSeePrices ? x.UnitPrice : null,
+                    Price = canSeePrices ? x.Price : null,
+                    Currency = canSeePrices ? x.Currency : null,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 });
             }
@@ -186,74 +192,26 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
         internal static void ClearUntrustedPrices(IList<BasketItemRequestModel> basketItems)
         {
-            if (basketItems is null)
-            {
-                return;
-            }
-
-            // Browser-submitted monetary values are untrusted. Without Grula there is no
-            // authoritative price source, so persist the basket explicitly unpriced.
-            foreach (var basketItem in basketItems)
-            {
-                basketItem.UnitPrice = null;
-                basketItem.Price = null;
-                basketItem.Currency = null;
-            }
+            BasketPriceApplier.ClearUntrustedPrices(basketItems);
         }
 
         internal static bool ApplyPrices(
             IList<BasketItemRequestModel> basketItems,
             IList<PriceLookupResult> priceResults)
         {
-            if (basketItems is null)
-            {
-                return true;
-            }
+            return BasketPriceApplier.ApplyPrices(basketItems, priceResults);
+        }
 
-            // A missing or incomplete response cannot be aligned safely, so do not use any
-            // browser values (or partially returned values) as a fallback.
-            if (priceResults is null || priceResults.Count != basketItems.Count)
-            {
-                ClearUntrustedPrices(basketItems);
-                return true;
-            }
-
-            // Validate every explicit status before changing a line. This preserves the
-            // all-or-nothing behaviour for invalid price drivers and future unknown states.
-            if (priceResults.Any(x => x is not null &&
-                x.Status != PriceLookupStatus.Priced &&
-                x.Status != PriceLookupStatus.AuthoritativeNoPrice &&
-                x.Status != PriceLookupStatus.ServiceUnavailable &&
-                x.Status != PriceLookupStatus.MissingResponse))
-            {
-                return false;
-            }
-
-            for (var index = 0; index < basketItems.Count; index++)
-            {
-                var basketItem = basketItems[index];
-                var priceResult = priceResults[index];
-
-                if (priceResult is null ||
-                    priceResult.Status == PriceLookupStatus.AuthoritativeNoPrice ||
-                    priceResult.Status == PriceLookupStatus.ServiceUnavailable ||
-                    priceResult.Status == PriceLookupStatus.MissingResponse ||
-                    priceResult.Price is null ||
-                    string.IsNullOrWhiteSpace(priceResult.Price.CurrencyCode))
-                {
-                    basketItem.UnitPrice = null;
-                    basketItem.Price = null;
-                    basketItem.Currency = null;
-                    continue;
-                }
-
-                var totalQuantity = basketItem.Quantity + basketItem.StockQuantity + basketItem.OutletQuantity;
-                basketItem.UnitPrice = priceResult.Price.CurrentPrice;
-                basketItem.Price = priceResult.Price.CurrentPrice * (decimal)totalQuantity;
-                basketItem.Currency = priceResult.Price.CurrencyCode;
-            }
-
-            return true;
+        // Grula returns exactly one outcome per supplied product, in the order the products were sent
+        // (IPriceService.GetPriceResultsForBasketAsync). A response that breaks that contract cannot be
+        // mapped back onto basket lines, so refuse to align it at all - the caller then persists the whole
+        // basket unpriced rather than keeping prices for the subset that happened to come back.
+        internal static IList<PriceLookupResult> AlignPrices(
+            int basketItemCount,
+            IList<int> pricedLineIndexes,
+            IList<PriceLookupResult> prices)
+        {
+            return BasketPriceApplier.AlignPrices(basketItemCount, pricedLineIndexes, prices);
         }
 
         private async Task RepriceBasketItemsAsync(
@@ -278,9 +236,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 .Where(x => string.IsNullOrWhiteSpace(x) || !productLookup.ContainsKey(x))
                 .Distinct()
                 .ToList();
-            if (unresolvedSkus.Any())
+
+            foreach (var sku in unresolvedSkus)
             {
-                throw new CustomException("Basket contains products that could not be resolved: " + string.Join(", ", unresolvedSkus.Select(x => x ?? "(blank)")), (int)HttpStatusCode.UnprocessableEntity);
+                _logger.LogWarning("Basket line SKU {Sku} could not be resolved to a product for language {Language}.", sku, language);
             }
 
             var indexedProducts = basketItems
@@ -352,16 +311,24 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     DiscountCode = discountCode
                 });
 
-            var alignedPrices = new PriceLookupResult[basketItems.Count];
+            var alignedPrices = AlignPrices(
+                basketItems.Count,
+                indexedProducts.Select(x => x.index).ToList(),
+                prices?.ToList());
 
-            for (var i = 0; i < indexedProducts.Count && prices is not null && i < prices.Count; i++)
+            if (alignedPrices is null)
             {
-                alignedPrices[indexedProducts[i].index] = prices[i];
+                _logger.LogWarning(
+                    "Grula returned {PriceResultCount} price results for {PricedLineCount} priced basket lines; the basket will be persisted unpriced.",
+                    prices?.Count,
+                    indexedProducts.Count);
             }
 
             if (!ApplyPrices(basketItems, alignedPrices))
             {
-                throw new CustomException("Basket prices contain invalid price drivers.", (int)HttpStatusCode.UnprocessableEntity);
+                throw new CustomException(
+                    _orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value,
+                    (int)HttpStatusCode.UnprocessableEntity);
             }
         }
     }

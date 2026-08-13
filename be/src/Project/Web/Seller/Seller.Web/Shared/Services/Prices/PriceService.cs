@@ -160,6 +160,13 @@ namespace Seller.Web.Shared.Services.Prices
                 return productList.Select(_ => new PriceLookupResult { Status = PriceLookupStatus.ServiceUnavailable }).ToArray();
             }
 
+            // Price visibility is a per-client rule, and it must be applied before anything is persisted -
+            // masking a response is not enough, because the basket is read back by SSR, upload and checkout.
+            if (!CanSeePrices(client?.Id))
+            {
+                return productList.Select(_ => new PriceLookupResult { Status = PriceLookupStatus.PricesHidden }).ToArray();
+            }
+
             var validIndexed = productList
                 .Select((product, index) => new { Product = product, Index = index })
                 .Where(x =>
@@ -169,6 +176,11 @@ namespace Seller.Web.Shared.Services.Prices
                                 !string.IsNullOrWhiteSpace(x.Product.FabricsGroup);
                     if (!valid)
                     {
+                        _logger.LogWarning(
+                            "Skipping Grula pricing for basket line {Index}: product {Sku} has incomplete price drivers (PrimarySku or price-group attribute missing).",
+                            x.Index,
+                            x.Product?.ProductVariantSku ?? x.Product?.PrimarySku);
+
                         results[x.Index] = new PriceLookupResult { Status = PriceLookupStatus.InvalidPriceDrivers };
                     }
 

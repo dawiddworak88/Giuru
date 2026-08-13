@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -23,6 +24,7 @@ using Seller.Web.Areas.Orders.Services.Basket;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.DomainModels.Media;
@@ -111,15 +113,14 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UploadMediaRequestModel model)
         {
-            var importedOrderLines = _orderFileService.ImportOrderLines(model.File);
-
-            var skus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct();
+            var importedOrderLines = OrderBasketUploadHelper.GroupImportedLines(_orderFileService.ImportOrderLines(model.File));
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var existingBasket = model.Id.HasValue
                 ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
                 : null;
+            var canSeePrices = _priceService.CanSeePrices(model.ClientId);
             string discountCode;
 
             if (_options.Value.IsGrulaConfigured)
@@ -133,18 +134,19 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 discountCode = existingBasket?.DiscountCode;
             }
 
+            var importedSkus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToList();
+            var skus = importedSkus
+                .Concat(existingBasket?.Items.OrEmptyIfNull().Select(x => x.ProductSku) ?? Enumerable.Empty<string>())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct();
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skus);
 
-            if (products.OrEmptyIfNull().Any() is false)
+            if (products.OrEmptyIfNull().Any(x => importedSkus.Contains(x.Sku)) is false)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound").Value });
             }
 
             var productLookup = OrderBasketUploadHelper.CreateProductLookup(products);
-
-            var orderedProducts = importedOrderLines
-                .Where(x => productLookup.ContainsKey(x.Sku))
-                .Select(x => productLookup[x.Sku]);
 
             var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct().ToList();
             var stockAvailableProducts = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(token, language, productIds);
@@ -156,65 +158,6 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             OrderBasketUploadHelper.DeductExistingStock(stockByProductId, existingBasket?.Items);
 
             var basketItems = new List<BasketItem>();
-
-            var prices = Enumerable.Empty<Price>();
-
-            if (_options.Value.IsGrulaConfigured)
-            {
-                var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
-
-                var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, model.ClientId);
-                var clientCountryName = OrderFilePricingContext.GetClientCountryName(client, countries);
-                var defaultDeliveryAddressId = OrderFilePricingContext.GetDefaultDeliveryAddressId(client);
-                var clientAddress = defaultDeliveryAddressId.HasValue
-                    ? await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, defaultDeliveryAddressId)
-                    : null;
-                var deliveryZipCode = OrderFilePricingContext.GetDeliveryZipCode(clientAddress, countries);
-
-                var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, _options.Value.DefaultCulture, model.ClientId);
-
-                var currency = await _currenciesRepository.GetAsync(token, _options.Value.DefaultCulture, client?.PreferedCurrencyId);
-
-                var priceProducts = orderedProducts.Select(async x => new PriceProduct
-                {
-                    PrimarySku = x.PrimaryProductSku,
-                    ProductVariantSku = x.Sku,
-                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                    Size = _productsService.GetSize(x.ProductAttributes),
-                    PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                    LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                    LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                    LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                    Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                    Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                    PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                    SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                    BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                    ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                    NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                    Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
-                });
-
-                prices = await _priceService.GetPrices(
-                    DateTime.UtcNow,
-                    await Task.WhenAll(priceProducts),
-                    new PriceClient
-                    {
-                        Id = client?.Id,
-                        Name = client?.Name,
-                        CurrencyCode = currency?.CurrencyCode,
-                        ExtraPacking = clientFieldValues.OrEmptyIfNull().FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
-                        PaletteLoading = clientFieldValues.OrEmptyIfNull().FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
-                        Country = clientCountryName,
-                        DeliveryZipCode = deliveryZipCode,
-                        DiscountCode = discountCode
-                    });
-            }
-
-            var priceIndex = 0;
 
             foreach (var orderLine in importedOrderLines)
             {
@@ -247,27 +190,34 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     PictureUrl = pictureUrl,
                     Quantity = quantity,
                     StockQuantity = stockQuantity,
-                    ExternalReference = orderLine.ExternalReference,
-                    MoreInfo = orderLine.MoreInfo
+                    ExternalReference = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.ExternalReference),
+                    MoreInfo = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.MoreInfo)
                 };
 
-                if (prices.Any())
-                {
-                    var price = prices.ElementAtOrDefault(priceIndex);
-
-                    if (price is not null)
-                    {
-                        basketItem.UnitPrice = price.CurrentPrice;
-                        basketItem.Price = price.CurrentPrice * (decimal)orderLine.Quantity;
-                        basketItem.Currency = price.CurrencyCode;
-                    }
-                }
-
                 basketItems.Add(basketItem);
-                priceIndex++;
             }
 
-            var completeBasketItems = OrderBasketUploadHelper.Append(existingBasket?.Items, basketItems);
+            var completeBasketItems = OrderBasketUploadHelper.Merge(existingBasket?.Items, basketItems).ToList();
+
+            if (!_options.Value.IsGrulaConfigured)
+            {
+                BasketPriceApplier.ClearUntrustedPrices(completeBasketItems);
+            }
+            else
+            {
+                await RepriceMergedBasketAsync(token, language, model.ClientId, completeBasketItems, productLookup, discountCode);
+            }
+
+            if (!canSeePrices)
+            {
+                // Defence in depth: price visibility must also be enforced immediately before saving.
+                foreach (var item in completeBasketItems.OrEmptyIfNull())
+                {
+                    item.UnitPrice = null;
+                    item.Price = null;
+                    item.Currency = null;
+                }
+            }
 
             var basket = await _basketRepository.SaveAsync(
                 token,
@@ -297,14 +247,98 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
                     MoreInfo = x.MoreInfo,
-                    UnitPrice = x.UnitPrice,
-                    Price = x.Price,
-                    Currency = x.Currency,
+                    UnitPrice = canSeePrices ? x.UnitPrice : null,
+                    Price = canSeePrices ? x.Price : null,
+                    Currency = canSeePrices ? x.Currency : null,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 });
             }
 
             return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        private async Task RepriceMergedBasketAsync(
+            string token,
+            string language,
+            Guid? clientId,
+            IList<BasketItem> basketItems,
+            IReadOnlyDictionary<string, Product> productLookup,
+            string discountCode)
+        {
+            var indexedProducts = basketItems
+                .Select((item, index) => new { item, index })
+                .Where(x => !string.IsNullOrWhiteSpace(x.item.ProductSku) && productLookup.ContainsKey(x.item.ProductSku))
+                .ToList();
+
+            foreach (var item in basketItems.Where(x => string.IsNullOrWhiteSpace(x.ProductSku) || !productLookup.ContainsKey(x.ProductSku)))
+            {
+                _logger.LogWarning("Basket line SKU {Sku} could not be resolved to a product for language {Language}.", item.ProductSku, language);
+            }
+
+            var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
+            var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
+            var clientCountryName = OrderFilePricingContext.GetClientCountryName(client, countries);
+            var defaultDeliveryAddressId = OrderFilePricingContext.GetDefaultDeliveryAddressId(client);
+            var clientAddress = defaultDeliveryAddressId.HasValue
+                ? await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, defaultDeliveryAddressId)
+                : null;
+            var deliveryZipCode = OrderFilePricingContext.GetDeliveryZipCode(clientAddress, countries);
+            var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, _options.Value.DefaultCulture, clientId);
+            var currency = await _currenciesRepository.GetAsync(token, _options.Value.DefaultCulture, client?.PreferedCurrencyId);
+
+            var priceProducts = indexedProducts.Select(async x =>
+            {
+                var product = productLookup[x.item.ProductSku];
+                return new PriceProduct
+                {
+                    PrimarySku = product.PrimaryProductSku,
+                    ProductVariantSku = product.Sku,
+                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
+                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
+                    SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
+                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
+                    Size = _productsService.GetSize(product.ProductAttributes),
+                    PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
+                    LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
+                    LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
+                    LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
+                    Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
+                    Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
+                    PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
+                    SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
+                    BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
+                    ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
+                    NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
+                    Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo(),
+                    IsOutlet = (x.item.OutletQuantity > 0).ToYesOrNo()
+                };
+            });
+
+            var prices = await _priceService.GetPriceResultsForBasketAsync(
+                DateTime.UtcNow,
+                await Task.WhenAll(priceProducts),
+                new PriceClient
+                {
+                    Id = client?.Id,
+                    Name = client?.Name,
+                    CurrencyCode = currency?.CurrencyCode,
+                    ExtraPacking = clientFieldValues.OrEmptyIfNull().FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
+                    PaletteLoading = clientFieldValues.OrEmptyIfNull().FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
+                    Country = clientCountryName,
+                    DeliveryZipCode = deliveryZipCode,
+                    DiscountCode = discountCode
+                });
+
+            var alignedPrices = BasketPriceApplier.AlignPrices(basketItems.Count, indexedProducts.Select(x => x.index).ToList(), prices?.ToList());
+            if (alignedPrices is null)
+            {
+                _logger.LogWarning("Grula returned {PriceResultCount} price results for {PricedLineCount} priced basket lines; the basket will be persisted unpriced.", prices?.Count, indexedProducts.Count);
+            }
+
+            if (!BasketPriceApplier.ApplyPrices(basketItems, alignedPrices))
+            {
+                throw new CustomException(_orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value, (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         [HttpGet]

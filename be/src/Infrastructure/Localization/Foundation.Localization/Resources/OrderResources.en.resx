@@ -384,4 +384,7 @@
   <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
     <value>Add at least one product to the basket before applying a discount code.</value>
   </data>
+  <data name="BasketPricesCouldNotBeVerified" xml:space="preserve">
+    <value>We could not verify the prices for this basket. Please try again.</value>
+  </data>
 </root>

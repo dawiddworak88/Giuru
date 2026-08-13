@@ -15,8 +15,15 @@ namespace Buyer.Web.Shared.DomainModels.Prices
     {
         Priced,
         AuthoritativeNoPrice,
+        /// <summary>
+        /// The price drivers for this line are incomplete (no primary SKU or no price-group
+        /// attribute), so Grula was never asked. The line is persisted unpriced - this is a
+        /// catalogue data-quality issue and must not fail the basket.
+        /// </summary>
         InvalidPriceDrivers,
         ServiceUnavailable,
-        MissingResponse
+        MissingResponse,
+        /// <summary>The client is outside EnablePricesForClients, so no price may be produced or stored.</summary>
+        PricesHidden
     }
 }

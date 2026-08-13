@@ -16,7 +16,6 @@ using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Media.Services.MediaServices;
 using Buyer.Web.Areas.Products.Services.ProductColors;
-using Buyer.Web.Shared.Services.Prices;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -85,8 +84,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
                         SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
                         FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
-                        ExtraPacking = PriceDriverValueNormalizer.NormalizeExtraPacking(
-                            GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys)),
+                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                         PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys),
                         Size = GetSize(product.ProductAttributes),
                         PointsOfLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePointsOfLightAttributeKeys),

@@ -1,0 +1,132 @@
+using Buyer.Web.Areas.Orders.ApiControllers;
+using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.ProductColors;
+using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.Basket;
+using Buyer.Web.Shared.DomainModels.Prices;
+using Buyer.Web.Shared.Services.Prices;
+using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NSubstitute;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+namespace Giuru.UnitTests.Orders.Baskets
+{
+    public class BasketsApiControllerFlowTests
+    {
+        [Fact]
+        public async Task Index_WhenBasketContainsAnUnresolvableSku_SavesThatLineUnpricedAndPricesResolvedLines()
+        {
+            var basketId = Guid.NewGuid();
+            var productId = Guid.NewGuid();
+            IEnumerable<BasketItem> savedItems = null;
+            var basketRepository = Substitute.For<IBasketRepository>();
+            var productsRepository = Substitute.For<IProductsRepository>();
+            var priceService = Substitute.For<IPriceService>();
+            var productColorsService = Substitute.For<IProductColorsService>();
+
+            productsRepository.GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<Product>>(new[]
+                {
+                    new Product { Id = productId, Sku = "RESOLVED", PrimaryProductSku = "PRIMARY" }
+                }));
+            productColorsService.ToEnglishAsync(Arg.Any<string>()).Returns(Task.FromResult<string>(null));
+            priceService.GetPriceResultsForBasketAsync(Arg.Any<string>(), Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>())
+                .Returns(Task.FromResult<IReadOnlyList<PriceLookupResult>>(new[]
+                {
+                    new PriceLookupResult
+                    {
+                        Status = PriceLookupStatus.Priced,
+                        Price = new Price { CurrentPrice = 12m, CurrencyCode = "EUR" }
+                    }
+                }));
+            priceService.CanSeePrices(Arg.Any<Guid?>()).Returns(true);
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<BasketItem>>(), Arg.Any<string>())
+                .Returns(call =>
+                {
+                    savedItems = call.ArgAt<IEnumerable<BasketItem>>(3).ToList();
+                    return Task.FromResult(new Basket { Id = basketId, Items = savedItems });
+                });
+
+            var controller = new BasketsApiController(
+                basketRepository,
+                Substitute.For<LinkGenerator>(),
+                Substitute.For<IMediaService>(),
+                Substitute.For<IStringLocalizer<OrderResources>>(),
+                productsRepository,
+                priceService,
+                Substitute.For<IProductsService>(),
+                productColorsService,
+                Options.Create(new AppSettings
+                {
+                    GrulaAccessToken = "test-token",
+                    GrulaEnvironmentId = Guid.NewGuid().ToString()
+                }),
+                Substitute.For<ILogger<BasketsApiController>>())
+            {
+                ControllerContext = new ControllerContext { HttpContext = CreateHttpContext(basketId) }
+            };
+
+            var result = await controller.Index(new SaveBasketRequestModel
+            {
+                Items = new[]
+                {
+                    new BasketItemRequestModel { ProductId = productId, Sku = "RESOLVED", Name = "Resolved", Quantity = 2, UnitPrice = 0.01m, Price = 0.02m, Currency = "FAKE" },
+                    new BasketItemRequestModel { ProductId = Guid.NewGuid(), Sku = "UNKNOWN", Name = "Unknown", Quantity = 1, UnitPrice = 999m, Price = 999m, Currency = "USD" }
+                }
+            });
+
+            Assert.IsType<ObjectResult>(result);
+            await productsRepository.Received(1).GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>());
+            await priceService.Received(1).GetPriceResultsForBasketAsync(Arg.Any<string>(), Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>());
+            Assert.NotNull(savedItems);
+
+            var resolved = savedItems.Single(item => item.ProductSku == "RESOLVED");
+            Assert.Equal(12m, resolved.UnitPrice);
+            Assert.Equal(24m, resolved.Price);
+            Assert.Equal("EUR", resolved.Currency);
+
+            var unresolved = savedItems.Single(item => item.ProductSku == "UNKNOWN");
+            Assert.Null(unresolved.UnitPrice);
+            Assert.Null(unresolved.Price);
+            Assert.Null(unresolved.Currency);
+
+            var pricedProducts = priceService.ReceivedCalls()
+                .Single(call => call.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync))
+                .GetArguments()[2] as IEnumerable<PriceProduct>;
+            var priceProduct = Assert.Single(pricedProducts);
+            Assert.Equal("RESOLVED", priceProduct.ProductVariantSku);
+        }
+
+        private static DefaultHttpContext CreateHttpContext(Guid basketId)
+        {
+            var context = new DefaultHttpContext();
+            context.Request.Headers.Cookie = $"{BasketConstants.BasketCookieName}={basketId}";
+            context.User = new ClaimsPrincipal(new ClaimsIdentity());
+            var authentication = Substitute.For<IAuthenticationService>();
+            var properties = new AuthenticationProperties();
+            properties.StoreTokens(new[] { new AuthenticationToken { Name = "access_token", Value = "token" } });
+            authentication.AuthenticateAsync(Arg.Any<HttpContext>(), Arg.Any<string>())
+                .Returns(Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(context.User, properties, "test"))));
+            context.RequestServices = new ServiceCollection().AddSingleton(authentication).BuildServiceProvider();
+            return context;
+        }
+    }
+}
