@@ -543,18 +543,9 @@ namespace Inventory.Api.Services.InventoryItems
             };
         }
 
-        public async Task<InventoryUpdateResultServiceModel> UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
+        public async Task<InventoryUpdateResultServiceModel> UpdateInventoryQuantity(Guid productId, double bookedQuantity)
         {
-            if (productId is null || bookedQuantity <= 0)
-            {
-                return new InventoryUpdateResultServiceModel
-                {
-                    ProductId = productId ?? Guid.Empty,
-                    PreviousQuantity = 0,
-                    NewQuantity = 0,
-                    WentOutOfStock = false
-                };
-            }
+            const double Tolerance = 0.0001;
 
             var inventories = await _context.Inventory
                 .Where(x => x.ProductId == productId && x.IsActive)
@@ -599,7 +590,7 @@ namespace Inventory.Api.Services.InventoryItems
                     var affected = await _context.Database.ExecuteSqlRawAsync(
                         @"UPDATE Inventory 
                           SET AvailableQuantity = AvailableQuantity - {0},
-                              LastModifiedDate = {1}
+                            LastModifiedDate = {1}
                           WHERE Id = {2} 
                             AND AvailableQuantity >= {0}",
                         toDeduct, DateTime.UtcNow, item.Id);
@@ -628,10 +619,10 @@ namespace Inventory.Api.Services.InventoryItems
 
             return new InventoryUpdateResultServiceModel
             {
-                ProductId = productId.Value,
+                ProductId = productId,
                 PreviousQuantity = previousQuantity,
                 NewQuantity = newQuantity,
-                WentOutOfStock = previousQuantity > 0 && newQuantity <= 0
+                WentOutOfStock = previousQuantity > Tolerance && newQuantity <= Tolerance
             };
         }
 
