@@ -547,83 +547,87 @@ namespace Inventory.Api.Services.InventoryItems
         {
             const double Tolerance = 0.0001;
 
-            var inventories = await _context.Inventory
-                .Where(x => x.ProductId == productId && x.IsActive)
-                .OrderBy(x => x.CreatedDate)
-                .AsNoTracking()
-                .ToListAsync();
-
-            if (inventories.Any() is false)
-            {
-                _logger.LogError($"UpdateInventoryQuantity: no active inventory rows found for ProductId {productId}");
-
-                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
-            }
-
-            var previousQuantity = inventories.Sum(x => x.AvailableQuantity);
-
-            if (bookedQuantity > previousQuantity)
-            {
-                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
-            }
-
             await using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                var remainingToAllocate = bookedQuantity;
+                var inventories = await _context.Inventory
+                    .Where(x => x.ProductId == productId && x.IsActive)
+                    .OrderBy(x => x.CreatedDate)
+                    .AsNoTracking()
+                    .ToListAsync();
 
-                foreach (var item in inventories)
+                if (inventories.Any() is false)
                 {
-                    if (remainingToAllocate <= 0) break;
-
-                    var liveQuantity = await _context.Inventory
-                        .Where(x => x.Id == item.Id && x.IsActive)
-                        .AsNoTracking()
-                        .Select(x => x.AvailableQuantity)
-                        .FirstOrDefaultAsync();
-
-                    if (liveQuantity <= 0) continue;
-
-                    var toDeduct = Math.Min(liveQuantity, remainingToAllocate);
-
-                    var affected = await _context.Database.ExecuteSqlRawAsync(
-                        @"UPDATE Inventory 
-                          SET AvailableQuantity = AvailableQuantity - {0},
-                            LastModifiedDate = {1}
-                          WHERE Id = {2} 
-                            AND AvailableQuantity >= {0}",
-                        toDeduct, DateTime.UtcNow, item.Id);
-
-                    if (affected == 0) continue;
-
-                    remainingToAllocate -= toDeduct;
+                    _logger.LogError($"UpdateInventoryQuantity: no active inventory rows found for ProductId {productId}");
+                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
                 }
 
-                if (remainingToAllocate > 0)
+                var previousQuantity = inventories.Sum(x => x.AvailableQuantity);
+
+                if (bookedQuantity - previousQuantity > Tolerance)
                 {
                     throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
                 }
 
+                var remainingToAllocate = bookedQuantity;
+                var deductedTotal = 0d;
+                var now = DateTime.UtcNow;
+
+                foreach (var item in inventories)
+                {
+                    if (remainingToAllocate <= Tolerance)
+                    {
+                        break;
+                    }
+
+                    var toDeduct = Math.Min(item.AvailableQuantity, remainingToAllocate);
+
+                    if (toDeduct <= Tolerance)
+                    {
+                        continue;
+                    }
+
+                    var affected = await _context.Database.ExecuteSqlRawAsync(
+                        @"UPDATE Inventory
+                          SET AvailableQuantity = AvailableQuantity - {0},
+                              LastModifiedDate = {1}
+                          WHERE Id = {2}
+                            AND IsActive = 1
+                            AND AvailableQuantity >= {0}",
+                        toDeduct, now, item.Id);
+
+                    if (affected == 0)
+                    {
+                        continue;
+                    }
+
+                    remainingToAllocate -= toDeduct;
+                    deductedTotal += toDeduct;
+                }
+
+                if (remainingToAllocate > Tolerance)
+                {
+                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
+                }
+
+                var newQuantity = previousQuantity - deductedTotal;
+
                 await transaction.CommitAsync();
+
+                return new InventoryUpdateResultServiceModel
+                {
+                    ProductId = productId,
+                    PreviousQuantity = previousQuantity,
+                    NewQuantity = newQuantity,
+                    WentOutOfStock = previousQuantity > Tolerance && newQuantity <= Tolerance
+                };
             }
             catch
             {
                 await transaction.RollbackAsync();
                 throw;
             }
-
-            var newQuantity = await _context.Inventory
-                .Where(x => x.ProductId == productId && x.IsActive)
-                .SumAsync(x => x.AvailableQuantity);
-
-            return new InventoryUpdateResultServiceModel
-            {
-                ProductId = productId,
-                PreviousQuantity = previousQuantity,
-                NewQuantity = newQuantity,
-                WentOutOfStock = previousQuantity > Tolerance && newQuantity <= Tolerance
-            };
         }
 
         public IEnumerable<InventorySumServiceModel> GetInventoriesByProductsIds(GetInventoriesByProductsIdsServiceModel model)
