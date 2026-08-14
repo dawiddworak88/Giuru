@@ -2,6 +2,8 @@
 using Inventory.Api.IntegrationEvents;
 using Inventory.Api.Services.InventoryItems;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,13 +14,16 @@ namespace Inventory.Api.IntegrationEventsHandlers
     public class UpdatedInventoryIntegrationEventHandler : IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>
     {
         private readonly IInventoryService _inventoryService;
+        private ILogger<UpdatedInventoryIntegrationEventHandler> _logger;
         private readonly IEventBus _eventBus;
 
         public UpdatedInventoryIntegrationEventHandler(
             IInventoryService inventoryService,
+            ILogger<UpdatedInventoryIntegrationEventHandler> logger,
             IEventBus eventBus)
         {
             _inventoryService = inventoryService;
+            _logger = logger;
             _eventBus = eventBus;
         }
 
@@ -33,7 +38,16 @@ namespace Inventory.Api.IntegrationEventsHandlers
 
                 foreach (var item in @event.Items)
                 {
-                    var updateResult = await _inventoryService.UpdateInventoryQuantity(item.ProductId, item.BookedQuantity);
+                    if (item.ProductId is null || item.BookedQuantity <= 0)
+                    {
+                        _logger.LogWarning(
+                            "Skipping inventory update. Invalid item: ProductId={ProductId}, BookedQuantity={BookedQuantity}",
+                            item.ProductId, item.BookedQuantity);
+
+                        continue;
+                    }
+
+                    var updateResult = await _inventoryService.UpdateInventoryQuantity(item.ProductId.Value, item.BookedQuantity);
 
                     inventoryUpdateResults.Add(updateResult);
                 }
@@ -47,7 +61,15 @@ namespace Inventory.Api.IntegrationEventsHandlers
                             .Select(x => x.ProductId)
                     };
 
-                    _eventBus.Publish(productsSoldOut);
+                    try
+                    {
+                        _eventBus.Publish(productsSoldOut);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to publish ProductsSoldOutIntegrationEvent for products: {ProductIds}",
+                            string.Join(",", productsSoldOut.SoldOutProductIds));
+                    }
                 }
             }
         }
