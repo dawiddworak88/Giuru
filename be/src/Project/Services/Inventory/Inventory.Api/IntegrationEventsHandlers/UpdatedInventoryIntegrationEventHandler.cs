@@ -14,7 +14,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
     public class UpdatedInventoryIntegrationEventHandler : IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>
     {
         private readonly IInventoryService _inventoryService;
-        private ILogger<UpdatedInventoryIntegrationEventHandler> _logger;
+        private readonly ILogger<UpdatedInventoryIntegrationEventHandler> _logger;
         private readonly IEventBus _eventBus;
 
         public UpdatedInventoryIntegrationEventHandler(
