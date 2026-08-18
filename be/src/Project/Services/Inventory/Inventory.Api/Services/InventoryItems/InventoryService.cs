@@ -611,7 +611,10 @@ namespace Inventory.Api.Services.InventoryItems
                     throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletQuantityConflict"));
                 }
 
-                var newQuantity = previousQuantity - deductedTotal;
+                var newQuantity = await _context.Inventory
+                    .Where(x => x.ProductId == productId && x.IsActive)
+                    .AsNoTracking()
+                    .SumAsync(x => x.AvailableQuantity);
 
                 await transaction.CommitAsync();
 
