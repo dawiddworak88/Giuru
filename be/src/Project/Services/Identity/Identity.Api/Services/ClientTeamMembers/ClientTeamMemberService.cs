@@ -150,32 +150,42 @@ namespace Identity.Api.Services.ClientTeamMembers
 
         public async Task<PagedResults<IEnumerable<ClientTeamMemberServiceModel>>> GetAsync(GetClientTeamMembersServiceModel model)
         {
-            var teamMembers = from u in _context.Accounts
-                              where u.OrganisationId == model.OrganisationId
-                              select new ClientTeamMemberServiceModel
-                              {
-                                  Id = Guid.Parse(u.Id),
-                                  FirstName = u.FirstName,
-                                  LastName = u.LastName,
-                                  Email = u.Email,
-                                  IsDisabled = u.IsDisabled
-                              };
+            var query = from u in _context.Accounts
+                        where u.OrganisationId == model.OrganisationId
+                        select new
+                        {
+                            u.Id,
+                            u.FirstName,
+                            u.LastName,
+                            u.Email,
+                            u.IsDisabled
+                        };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                teamMembers = teamMembers.Where(x => x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm) || x.Email.StartsWith(model.SearchTerm));
+                query = query.Where(x => x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm) || x.Email.StartsWith(model.SearchTerm));
             }
 
-            teamMembers = teamMembers.ApplySort(model.OrderBy, $"{nameof(ClientTeamMemberServiceModel.LastName)} asc");
+            query = query.ApplySort(model.OrderBy, $"{nameof(ClientTeamMemberServiceModel.LastName)} asc");
 
-            if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
-            {
-                teamMembers = teamMembers.Take(Constants.MaxItemsPerPageLimit);
+            var pagination = model.PageIndex.HasValue && model.ItemsPerPage.HasValue
+                ? new Pagination(query.Count(), model.ItemsPerPage.Value)
+                : new Pagination(query.Count(), Constants.MaxItemsPerPageLimit);
 
-                return teamMembers.PagedIndex(new Pagination(teamMembers.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
-            }
+            var pageIndex = model.PageIndex ?? Constants.DefaultPageIndex;
 
-            return teamMembers.PagedIndex(new Pagination(teamMembers.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            var teamMembers = query
+                .AsEnumerable()
+                .Select(u => new ClientTeamMemberServiceModel
+                {
+                    Id = Guid.Parse(u.Id),
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    IsDisabled = u.IsDisabled
+                });
+
+            return PaginationExtensions.PagedIndex<ClientTeamMemberServiceModel>(teamMembers.AsQueryable(), pagination, pageIndex);
         }
 
         public async Task<ClientTeamMemberServiceModel> GetAsync(GetClientTeamMemberServiceModel model)
