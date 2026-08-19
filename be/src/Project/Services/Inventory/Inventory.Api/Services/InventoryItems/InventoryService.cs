@@ -547,8 +547,6 @@ namespace Inventory.Api.Services.InventoryItems
         {
             const double Tolerance = 0.0001;
 
-            await using var transaction = await _context.Database.BeginTransactionAsync();
-
             try
             {
                 var inventories = await _context.Inventory
@@ -563,6 +561,8 @@ namespace Inventory.Api.Services.InventoryItems
                     throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
                 }
 
+                await using var transaction = await _context.Database.BeginTransactionAsync();
+
                 var previousQuantity = inventories.Sum(x => x.AvailableQuantity);
 
                 if (bookedQuantity - previousQuantity > Tolerance)
@@ -571,7 +571,6 @@ namespace Inventory.Api.Services.InventoryItems
                 }
 
                 var remainingToAllocate = bookedQuantity;
-                var deductedTotal = 0d;
                 var now = DateTime.UtcNow;
 
                 foreach (var item in inventories)
@@ -603,7 +602,6 @@ namespace Inventory.Api.Services.InventoryItems
                     }
 
                     remainingToAllocate -= toDeduct;
-                    deductedTotal += toDeduct;
                 }
 
                 if (remainingToAllocate > Tolerance)
