@@ -171,6 +171,9 @@
     <Project Path="Tests/Giuru.MockAuth/Giuru.MockAuth.csproj">
       <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
+    <Project Path="Tests/Giuru.UnitTests/Giuru.UnitTests.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
   </Folder>
   <Project Path="docker-compose.dcproj">
     <BuildDependency Project="Project/Services/Analytics/Analytics.Api/Analytics.Api.csproj" />
