@@ -547,22 +547,22 @@ namespace Inventory.Api.Services.InventoryItems
         {
             const double Tolerance = 0.0001;
 
-            try
-            {
-                var inventories = await _context.Inventory
+            var inventories = await _context.Inventory
                     .Where(x => x.ProductId == productId && x.IsActive)
                     .OrderBy(x => x.CreatedDate)
                     .AsNoTracking()
                     .ToListAsync();
 
-                if (inventories.Any() is false)
-                {
-                    _logger.LogError($"UpdateInventoryQuantity: no active inventory rows found for ProductId {productId}");
-                    throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
-                }
+            if (inventories.Any() is false)
+            {
+                _logger.LogError($"UpdateInventoryQuantity: no active inventory rows found for ProductId {productId}");
+                throw new ConflictException(_inventoryLocalizer.GetString("InventoryOutletNotFound"));
+            }
 
-                await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
 
+            try
+            {
                 var previousQuantity = inventories.Sum(x => x.AvailableQuantity);
 
                 if (bookedQuantity - previousQuantity > Tolerance)
