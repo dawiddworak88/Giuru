@@ -369,4 +369,22 @@
   <data name="BasketNotFound" xml:space="preserve">
     <value>Warenkorb wurde nicht gefunden.</value>
   </data>
+  <data name="DiscountCodeLabel" xml:space="preserve">
+    <value>Rabattcode</value>
+  </data>
+  <data name="ApplyDiscountCodeLabel" xml:space="preserve">
+    <value>Anwenden</value>
+  </data>
+  <data name="DiscountCodeAppliedMessage" xml:space="preserve">
+    <value>Der Rabattcode wurde erfolgreich angewendet.</value>
+  </data>
+  <data name="RemoveDiscountCodeLabel" xml:space="preserve">
+    <value>Rabattcode entfernen</value>
+  </data>
+  <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
+    <value>Fügen Sie mindestens ein Produkt zum Warenkorb hinzu, bevor Sie einen Rabattcode anwenden.</value>
+  </data>
+  <data name="BasketPricesCouldNotBeVerified" xml:space="preserve">
+    <value>Die Preise für diesen Warenkorb konnten nicht überprüft werden. Bitte versuchen Sie es erneut.</value>
+  </data>
 </root>

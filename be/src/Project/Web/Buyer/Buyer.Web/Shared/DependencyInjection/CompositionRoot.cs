@@ -96,6 +96,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<ICacheService, CacheService>();
             
             services.AddScoped<IPriceService, PriceService>();
+            services.AddScoped<IPriceProductFactory, PriceProductFactory>();
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();

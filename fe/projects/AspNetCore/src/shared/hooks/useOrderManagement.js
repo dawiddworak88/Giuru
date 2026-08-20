@@ -10,6 +10,53 @@ import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
+import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
+
+const groupOrderItems = (items) => {
+    const grouped = [];
+
+    items.forEach(item => {
+        if (item.outletQuantity > 0) {
+            const found = grouped.find(g =>
+                g.sku === item.sku &&
+                g.outletQuantity > 0 &&
+                g.moreInfo === item.moreInfo &&
+                g.externalReference === item.externalReference
+            );
+
+            if (found) {
+                found.outletQuantity += item.outletQuantity;
+                found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
+            } else {
+                grouped.push({
+                    ...item,
+                    quantity: 0,
+                    stockQuantity: 0,
+                });
+            }
+        } else {
+            const found = grouped.find(g =>
+                g.sku === item.sku &&
+                (!g.outletQuantity || g.outletQuantity === 0) &&
+                g.moreInfo === item.moreInfo &&
+                g.externalReference === item.externalReference
+            );
+
+            if (found) {
+                found.quantity += item.quantity;
+                found.stockQuantity += item.stockQuantity;
+                found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
+            } else {
+                grouped.push({
+                    ...item,
+                    outletQuantity: 0
+                });
+            }
+        }
+    });
+
+    return grouped;
+}
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -21,57 +68,21 @@ export const useOrderManagement = ({
     addProductToBasketMessage,
     updateBasketUrl,
     clearBasketUrl,
-    getPriceUrl
+    getPriceUrl,
+    discountCode,
+    isDiscountCodeEnabled,
+    onDiscountCodeChanged
 }) => {
     const [state, dispatch] = useContext(Context);
     const [basketId, setBasketId] = useState(initialBasketId || null);
     const [orderItems, setOrderItems] = useState(initialOrderItems || []);
 
-    const groupOrderItems = (items) => {
-        const grouped = [];
-
-        items.forEach(item => {
-            if (item.outletQuantity > 0) {
-                const found = grouped.find(g => 
-                    g.sku === item.sku && 
-                    g.outletQuantity > 0 &&
-                    g.moreInfo === item.moreInfo &&
-                    g.externalReference === item.externalReference
-                );
-
-                if (found) {
-                    found.outletQuantity += item.outletQuantity;
-                    found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
-                } else {
-                    grouped.push({
-                        ...item,
-                        quantity: 0,
-                        stockQuantity: 0,
-                    });
-                }
-            } else {
-                const found = grouped.find(g => 
-                    g.sku === item.sku && 
-                    (!g.outletQuantity || g.outletQuantity === 0) &&
-                    g.moreInfo === item.moreInfo &&
-                    g.externalReference === item.externalReference
-                );
-
-                if (found) {
-                    found.quantity += item.quantity;
-                    found.stockQuantity += item.stockQuantity;
-                    found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
-                } else {
-                    grouped.push({
-                        ...item,
-                        outletQuantity: 0
-                    });
-                }
-            }
-        });
-        
-        return grouped;
-    }
+    // This hook only adds and removes basket lines; it never applies or clears a code.
+    // Forward the currently applied code (kept in sync with the server by the caller) so
+    // that newly added lines are repriced against it. An empty string tells the server to
+    // leave whatever is stored alone; a null would be interpreted as a removal, so it is
+    // never sent from here.
+    const basketDiscountCode = discountCode || "";
 
     const addOrderItemToBasket = useCallback(
         async ({
@@ -128,8 +139,10 @@ export const useOrderManagement = ({
 
             if (isOutletOrder) {
                 const outletPrice = await ProductPricesHelper.getPriceByProductSku(
-                    getPriceUrl, 
-                    product.sku
+                    getPriceUrl,
+                    product.sku,
+                    isDiscountCodeEnabled ? discountCode : null,
+                    true
                 );
 
                 if (outletPrice) {
@@ -141,9 +154,10 @@ export const useOrderManagement = ({
 
             const newItems = groupOrderItems([...orderItems, orderItem]);
 
-            const basket = { 
+            const basket = {
                 id: basketId, 
-                items: newItems 
+                items: newItems,
+                ...(isDiscountCodeEnabled && { discountCode: basketDiscountCode })
             };
 
             try {
@@ -156,17 +170,16 @@ export const useOrderManagement = ({
                     body: JSON.stringify(basket),
                 });
 
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({
-                    type: "SET_TOTAL_BASKET",
-                    payload: parseInt(quantity + state.totalBasketItems),
-                });
-
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, generalErrorMessage);
 
-                if (response.ok) {
-                    const jsonResponse = await response.json();
+                if (response.ok && jsonResponse) {
                     setBasketId(jsonResponse.id);
+                    onDiscountCodeChanged?.(jsonResponse.discountCode || "");
+                    dispatch({
+                        type: "SET_TOTAL_BASKET",
+                        payload: parseInt(quantity + state.totalBasketItems),
+                    });
 
                     if (addProductToBasketMessage) ToastSuccessAddProductToBasket(addProductToBasketMessage)
 
@@ -175,11 +188,21 @@ export const useOrderManagement = ({
                         resetData?.()
                     }
                 }
+                else {
+                    toast.error(message);
+                }
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
             } catch {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems]
+        }, [
+            addProductToBasketMessage, basketDiscountCode, basketId, discountCode, dispatch,
+            generalErrorMessage, getPriceUrl, isDiscountCodeEnabled, maxAllowedOrderQuantity,
+            maxAllowedOrderQuantityErrorMessage, minOrderQuantityErrorMessage, onDiscountCodeChanged,
+            orderItems, state.totalBasketItems, updateBasketUrl
+        ]
     );
 
     const clearBasket = useCallback(async () => {
@@ -220,7 +243,7 @@ export const useOrderManagement = ({
             dispatch({ type: "SET_IS_LOADING", payload: false });
             toast.error(generalErrorMessage);
         }
-    }, [basketId, orderItems]);
+    }, [basketId, clearBasketUrl, dispatch, generalErrorMessage]);
 
     const deleteOrderItemFromBasket = useCallback(
         async ({
@@ -237,9 +260,10 @@ export const useOrderManagement = ({
                   oi.externalReference === item.externalReference)
                 );
 
-            const basket = { 
+            const basket = {
                 id: basketId, 
-                items: newItems 
+                items: newItems,
+                ...(isDiscountCodeEnabled && { discountCode: basketDiscountCode })
             };
 
             try {
@@ -252,15 +276,14 @@ export const useOrderManagement = ({
                     body: JSON.stringify(basket),
                 });
 
-                const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
-
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
-
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, generalErrorMessage);
 
-                if (response.ok) {
-                    const jsonResponse = await response.json();
+                if (response.ok && jsonResponse) {
+                    const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
+
+                    onDiscountCodeChanged?.(jsonResponse.discountCode || "");
+                    dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
                         setOrderItems(groupOrderItems(jsonResponse.items));
@@ -271,16 +294,24 @@ export const useOrderManagement = ({
 
                     resetData?.();
                 }
+                else {
+                    toast.error(message);
+                }
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
             } catch {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             }
-        }, [basketId, orderItems]
+        }, [
+            basketDiscountCode, basketId, dispatch, generalErrorMessage, isDiscountCodeEnabled,
+            onDiscountCodeChanged, orderItems, state.totalBasketItems, updateBasketUrl
+        ]
     );
 
-    const setGroupedOrderItems = (items) => {
+    const setGroupedOrderItems = useCallback((items) => {
         setOrderItems(groupOrderItems(items));
-    };
+    }, []);
 
     return { 
         basketId, 

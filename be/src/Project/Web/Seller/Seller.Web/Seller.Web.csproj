@@ -49,5 +49,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<InternalsVisibleTo Include="Giuru.IntegrationTests" />
+		<InternalsVisibleTo Include="Giuru.UnitTests" />
 	</ItemGroup>
 </Project>

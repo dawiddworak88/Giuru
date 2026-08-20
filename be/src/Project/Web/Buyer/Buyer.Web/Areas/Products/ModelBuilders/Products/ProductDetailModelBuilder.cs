@@ -63,6 +63,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
+        private readonly IPriceProductFactory _priceProductFactory;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -85,7 +86,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
             IDeliveryMessageHelper deliveryMessageHelper,
-            IExpectedDeliveryDateService expectedDeliveryDateService)
+            IExpectedDeliveryDateService expectedDeliveryDateService,
+            IPriceProductFactory priceProductFactory)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -108,6 +110,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
             _expectedDeliveryDateService = expectedDeliveryDateService;
+            _priceProductFactory = priceProductFactory;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -143,13 +146,25 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 CopyTextError = _globalLocalizer.GetString("CopyTextError"),
                 CopyToClipboardText = _globalLocalizer.GetString("CopyToClipboardText"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity")
+                MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
+                IsDiscountCodeEnabled = _options.Value.IsGrulaConfigured
             };
 
             var product = await _productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 
             if (product != null)
             {
+                var basket = componentModel.IsAuthenticated && componentModel.BasketId.HasValue
+                    ? await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language)
+                    : null;
+                var discountCode = _options.Value.IsGrulaConfigured ? basket?.DiscountCode : null;
+
+                if (basket is not null)
+                {
+                    viewModel.OrderItems = basket.Items;
+                    viewModel.DiscountCode = discountCode;
+                }
+
                 viewModel.Ean = product.Ean;
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
@@ -174,31 +189,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (product.PrimaryProductId.HasValue &&
                     _options.Value.IsGrulaConfigured)
                 {
+                    var priceProduct = await _priceProductFactory.CreateAsync(product, isOutletPurchase: false);
+
                     var price = await _priceService.GetPrice(
                         _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
-                        new PriceProduct
-                        {
-                            PrimarySku = product.PrimaryProductSku,
-                            ProductVariantSku = product.Sku,
-                            FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                            ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                            SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
-                            PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                            Size = _productsService.GetSize(product.ProductAttributes),
-                            PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                            LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                            LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                            LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                            Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                            Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                            PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                            SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                            BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                            ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                            NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                            Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
-                        },
+                        priceProduct,
                         new PriceClient
                         {
                             Id = componentModel.ClientId,
@@ -207,7 +203,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             ExtraPacking = componentModel.ExtraPacking,
                             PaletteLoading = componentModel.PaletteLoading,
                             Country = componentModel.Country,
-                            DeliveryZipCode = componentModel.DeliveryZipCode
+                            DeliveryZipCode = componentModel.DeliveryZipCode,
+                            DiscountCode = discountCode
                         });
 
                     if (price is not null)
@@ -296,15 +293,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.LeadTimeDeliveryMessage = _deliveryMessageHelper.GetDeliveryMessage(componentModel.DeliveryType, viewModel.InStock, viewModel.ExpectedDelivery ?? viewModel.ExpectedOutletDelivery);
 
-                if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
-                {
-                    var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
-                    if (basketItems is not null)
-                    {
-                        viewModel.OrderItems = basketItems;
-                    }
-                }
-
                 if (product.ProductVariants is not null)
                 {
                     var productVariants = await _productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, false, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
@@ -319,33 +307,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         if (_options.Value.IsGrulaConfigured)
                         {
-                            var priceProducts = productVariants.Data.Select(async x => new PriceProduct
-                            {
-                                PrimarySku = x.PrimaryProductSku,
-                                ProductVariantSku = x.Sku,
-                                FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                                ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
-                                SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                                PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                                Size = _productsService.GetSize(x.ProductAttributes),
-                                PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                                LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                                LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                                LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                                Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                                Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                                PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                                SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                                BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                                ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                                NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                                Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
-                            });
+                            var priceProducts = await _priceProductFactory.CreateAsync(productVariants.Data, isOutletPurchase: false);
 
                             prices = await _priceService.GetPrices(
                                _options.Value.GrulaAccessToken,
                                DateTime.UtcNow,
-                               await Task.WhenAll(priceProducts),
+                               priceProducts,
                                new PriceClient
                                {
                                    Id = componentModel.ClientId,
@@ -354,7 +321,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                    ExtraPacking = componentModel.ExtraPacking,
                                    PaletteLoading = componentModel.PaletteLoading,
                                    Country = componentModel.Country,
-                                   DeliveryZipCode = componentModel.DeliveryZipCode
+                                   DeliveryZipCode = componentModel.DeliveryZipCode,
+                                   DiscountCode = discountCode
                                });
                         }
 

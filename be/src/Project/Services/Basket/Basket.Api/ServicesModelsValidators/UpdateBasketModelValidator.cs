@@ -11,6 +11,7 @@ namespace Basket.Api.ServicesModelsValidators
         public UpdateBasketModelValidator(int? maxAllowedOrderQuantity)
         {
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
+            this.RuleFor(x => x.DiscountCode).MaximumLength(64);
             this.RuleFor(x => x.Items).Custom((items, context) => {
 
                 if (items != null && items.Any())
@@ -32,16 +33,14 @@ namespace Basket.Api.ServicesModelsValidators
                             context.AddFailure("Product name cannot be null or empty");
                         }
 
-                        var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
-
-                        if (totalQuantity <= 0)
+                        if (!BasketItemQuantityValidator.TryValidate(
+                            item.Quantity,
+                            item.StockQuantity,
+                            item.OutletQuantity,
+                            maxAllowedOrderQuantity,
+                            out var quantityError))
                         {
-                            context.AddFailure("Total quantity must be greater than 0");
-                        }
-
-                        if (maxAllowedOrderQuantity.HasValue && totalQuantity > maxAllowedOrderQuantity.Value)
-                        {
-                            context.AddFailure($"Total quantity cannot exceed {maxAllowedOrderQuantity.Value}");
+                            context.AddFailure(quantityError);
                         }
                     }
                 }

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Buyer.Web.Shared.Services.Prices;
+using System;
 
 namespace Buyer.Web.Areas.Orders.ApiRequestModels
 {
-    public class BasketItemRequestModel
+    public class BasketItemRequestModel : IPriceableBasketLine
     {
         public Guid? ProductId { get; set; }
         public string Sku { get; set; }

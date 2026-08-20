@@ -1,12 +1,10 @@
-﻿using Foundation.ApiExtensions.Models.Request;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Buyer.Web.Areas.Orders.ApiRequestModels
 {
     public class UploadMediaRequestModel
     {
-        public Guid? BasketId { get; set; }
         public IFormFile File { get; set; }
+        public string DiscountCode { get; set; }
     }
 }

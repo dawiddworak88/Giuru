@@ -8,7 +8,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
     public interface IBasketRepository
     {
         Task<Basket> GetBasketByIdAsync(string token, string language, Guid? id);
-        Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items);
+        Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null);
         Task CheckoutBasketAsync(
             string token,
             string language,

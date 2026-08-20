@@ -44,6 +44,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string PriceLabel { get; set; }
         public string CurrencyLabel { get; set; }
         public string ExpectedLeadTimeLabel { get; set; }
+        public string DiscountCodeLabel { get; set; }
+        public string DiscountCode { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
         public FilesViewModel Attachments { get; set; }

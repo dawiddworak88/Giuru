@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Buyer.Web.Shared.Services.Prices;
+using System;
 
 namespace Buyer.Web.Areas.Orders.DomainModels
 {
-    public class BasketItem
+    public class BasketItem : IPriceableBasketLine
     {
         public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }

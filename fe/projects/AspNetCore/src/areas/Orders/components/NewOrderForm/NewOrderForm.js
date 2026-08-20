@@ -19,6 +19,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
 import moment from "moment";
 
 function NewOrderForm(props) {
@@ -38,6 +39,13 @@ function NewOrderForm(props) {
     const [attachments, setAttachments] = useState([]);
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
+    const initialDiscountCode = props.isDiscountCodeEnabled ? (props.discountCode || "") : "";
+    const [discountCode, setDiscountCode] = useState(initialDiscountCode);
+    const [appliedDiscountCode, setAppliedDiscountCode] = useState(initialDiscountCode);
+    const handleDiscountCodeChanged = useCallback((savedDiscountCode) => {
+        setDiscountCode(savedDiscountCode);
+        setAppliedDiscountCode(savedDiscountCode);
+    }, []);
 
     const {
         basketId,
@@ -56,7 +64,10 @@ function NewOrderForm(props) {
         generalErrorMessage: props.generalErrorMessage,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl,
-        clearBasketUrl: props.clearBasketUrl
+        clearBasketUrl: props.clearBasketUrl,
+        discountCode: appliedDiscountCode,
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled,
+        onDiscountCodeChanged: handleDiscountCodeChanged
     })
 
     const onSuggestionsFetchRequested = (args) => {
@@ -67,6 +78,10 @@ function NewOrderForm(props) {
                 hasPrimaryProduct: true,
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
+
+            if (props.isDiscountCodeEnabled && appliedDiscountCode) {
+                searchParameters.discountCode = appliedDiscountCode;
+            }
 
             const requestOptions = {
                 method: "GET",
@@ -151,6 +166,66 @@ function NewOrderForm(props) {
         });
     };
 
+    const updateBasketDiscountCode = async (newDiscountCode, showSuccessMessage) => {
+        if (!props.isDiscountCodeEnabled) return;
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const basket = {
+            id: basketId,
+            items: orderItems,
+            discountCode: newDiscountCode
+        };
+
+        try {
+            const response = await fetch(props.updateBasketUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: JSON.stringify(basket)
+            });
+
+            AuthenticationHelper.HandleResponse(response);
+            const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
+
+            if (response.ok && jsonResponse) {
+                const savedDiscountCode = jsonResponse.discountCode || "";
+
+                setBasketId(jsonResponse.id);
+                setGroupedOrderItems(jsonResponse.items || []);
+                setDiscountCode(savedDiscountCode);
+                setAppliedDiscountCode(savedDiscountCode);
+
+                if (showSuccessMessage) {
+                    toast.success(props.discountCodeAppliedMessage);
+                }
+            }
+            else {
+                toast.error(message);
+            }
+        }
+        catch {
+            toast.error(props.generalErrorMessage);
+        }
+        finally {
+            dispatch({ type: "SET_IS_LOADING", payload: false });
+        }
+    };
+
+    const handleApplyDiscountCode = () => {
+        const normalizedDiscountCode = discountCode.trim();
+
+        if (normalizedDiscountCode && orderItems.length > 0) {
+            updateBasketDiscountCode(normalizedDiscountCode, true);
+        }
+    };
+
+    const handleRemoveDiscountCode = () => {
+        updateBasketDiscountCode(null, false);
+    };
+
     const handlePlaceOrder = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -172,20 +247,19 @@ function NewOrderForm(props) {
         };
 
         fetch(props.placeOrderUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 dispatch({ type: "SET_TOTAL_BASKET", payload: null })
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setIsOrdered(true);
-                    } else {
-                        toast.error(jsonResponse.message);
-                    }
-                });
+                if (response.ok && jsonResponse) {
+                    toast.success(message);
+                    setIsOrdered(true);
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -199,7 +273,10 @@ function NewOrderForm(props) {
             const formData = new FormData();
 
             formData.append("file", file);
-            formData.append("basketId", basketId)
+
+            if (props.isDiscountCodeEnabled && appliedDiscountCode) {
+                formData.append("discountCode", appliedDiscountCode);
+            }
 
             const requestOptions = {
                 method: "POST",
@@ -210,27 +287,29 @@ function NewOrderForm(props) {
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
-                .then(function (response) {
+                .then(async function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     AuthenticationHelper.HandleResponse(response);
+                    const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                    return response.json().then((jsonResponse) => {
-                        if (response.ok) {
-                            setBasketId(jsonResponse.id);
-                            setGroupedOrderItems([...orderItems, ...jsonResponse.items]);
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
+                    if (response.ok && jsonResponse) {
+                        const savedDiscountCode = jsonResponse.discountCode || "";
+
+                        setBasketId(jsonResponse.id);
+                        setGroupedOrderItems(jsonResponse.items || []);
+                        setDiscountCode(savedDiscountCode);
+                        setAppliedDiscountCode(savedDiscountCode);
+                    }
+                    else {
+                        toast.error(message);
+                    }
                 }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [appliedDiscountCode, dispatch, props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl, setBasketId, setGroupedOrderItems]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -475,6 +554,47 @@ function NewOrderForm(props) {
                         )}
                     </div>
                 </Fragment>
+                {props.isDiscountCodeEnabled && <div className="field">
+                    <div className="columns is-vcentered">
+                        <div className="column is-4">
+                            <TextField
+                                id="discountCode"
+                                name="discountCode"
+                                type="text"
+                                label={props.discountCodeLabel}
+                                variant="standard"
+                                fullWidth={true}
+                                value={discountCode}
+                                disabled={state.isLoading || isOrdered}
+                                onChange={(e) => setDiscountCode(e.target.value)}
+                            />
+                        </div>
+                        <div className="column is-narrow">
+                            <Button
+                                type="button"
+                                variant="contained"
+                                color="primary"
+                                onClick={handleApplyDiscountCode}
+                                disabled={state.isLoading || isOrdered || orderItems.length === 0 || !discountCode.trim()}
+                            >
+                                {props.applyDiscountCodeLabel}
+                            </Button>
+                        </div>
+                        {appliedDiscountCode &&
+                            <div className="column is-narrow">
+                                <Button
+                                    type="button"
+                                    variant="text"
+                                    color="error"
+                                    onClick={handleRemoveDiscountCode}
+                                    disabled={state.isLoading || isOrdered}
+                                >
+                                    {props.removeDiscountCodeLabel}
+                                </Button>
+                            </div>
+                        }
+                    </div>
+                </div>}
                 <div className="field">
                     <NoSsr>
                         <FormControlLabel
@@ -612,6 +732,12 @@ NewOrderForm.propTypes = {
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     getProductPriceUrl: PropTypes.string.isRequired,
     outletProductLabel: PropTypes.string.isRequired,
+    discountCode: PropTypes.string,
+    discountCodeLabel: PropTypes.string.isRequired,
+    applyDiscountCodeLabel: PropTypes.string.isRequired,
+    discountCodeAppliedMessage: PropTypes.string.isRequired,
+    removeDiscountCodeLabel: PropTypes.string.isRequired,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired,
 };
 
 export default NewOrderForm;

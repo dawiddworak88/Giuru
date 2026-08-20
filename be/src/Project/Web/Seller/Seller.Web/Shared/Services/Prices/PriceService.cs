@@ -37,7 +37,7 @@ namespace Seller.Web.Shared.Services.Prices
             if (!_options.Value.IsGrulaConfigured ||
                 string.IsNullOrWhiteSpace(product.PrimarySku) ||
                 string.IsNullOrWhiteSpace(product.FabricsGroup) ||
-                !CanSeePrice(client?.Id))
+                !CanSeePrices(client?.Id))
             {
                 return null;
             }
@@ -78,7 +78,7 @@ namespace Seller.Web.Shared.Services.Prices
             IEnumerable<PriceProduct> products,
             PriceClient client)
         {
-            if (!_options.Value.IsGrulaConfigured || !CanSeePrice(client?.Id))
+            if (!_options.Value.IsGrulaConfigured || !CanSeePrices(client?.Id))
             {
                 return Enumerable.Empty<Price>();
             }
@@ -145,6 +145,94 @@ namespace Seller.Web.Shared.Services.Prices
             }
 
             return result;
+        }
+
+        public async Task<IReadOnlyList<PriceLookupResult>> GetPriceResultsForBasketAsync(
+            DateTime pricingDate,
+            IEnumerable<PriceProduct> products,
+            PriceClient client)
+        {
+            var productList = (products ?? Enumerable.Empty<PriceProduct>()).ToList();
+            var results = new PriceLookupResult[productList.Count];
+
+            if (!_options.Value.IsGrulaConfigured)
+            {
+                return productList.Select(_ => new PriceLookupResult { Status = PriceLookupStatus.ServiceUnavailable }).ToArray();
+            }
+
+            // Price visibility is a per-client rule, and it must be applied before anything is persisted -
+            // masking a response is not enough, because the basket is read back by SSR, upload and checkout.
+            if (!CanSeePrices(client?.Id))
+            {
+                return productList.Select(_ => new PriceLookupResult { Status = PriceLookupStatus.PricesHidden }).ToArray();
+            }
+
+            var validIndexed = productList
+                .Select((product, index) => new { Product = product, Index = index })
+                .Where(x =>
+                {
+                    var valid = x.Product is not null &&
+                                !string.IsNullOrWhiteSpace(x.Product.PrimarySku) &&
+                                !string.IsNullOrWhiteSpace(x.Product.FabricsGroup);
+                    if (!valid)
+                    {
+                        _logger.LogWarning(
+                            "Skipping Grula pricing for basket line {Index}: product {Sku} has incomplete price drivers (PrimarySku or price-group attribute missing).",
+                            x.Index,
+                            x.Product?.ProductVariantSku ?? x.Product?.PrimarySku);
+
+                        results[x.Index] = new PriceLookupResult { Status = PriceLookupStatus.InvalidPriceDrivers };
+                    }
+
+                    return valid;
+                })
+                .ToList();
+
+            foreach (var batch in validIndexed.Chunk(MaxBatchSize))
+            {
+                try
+                {
+                    var query = new GetPricesByPriceDriversQuery
+                    {
+                        EnvironmentId = Guid.Parse(_options.Value.GrulaEnvironmentId),
+                        PriceRequests = batch.Select(x => new PriceRequest
+                        {
+                            PriceDrivers = CreatePriceDrivers(x.Product, client),
+                            CurrencyThreeLetterCode = client?.CurrencyCode ?? _options.Value.DefaultCurrency,
+                            PricingDate = pricingDate
+                        }).ToList()
+                    };
+                    var grulaPrices = await _grulaApiClient.GetPricesByPriceDriversAsync(query);
+
+                    for (var i = 0; i < batch.Length; i++)
+                    {
+                        var grulaPrice = grulaPrices?.ElementAtOrDefault(i);
+                        results[batch[i].Index] = grulaPrices is null || i >= grulaPrices.Count
+                            ? new PriceLookupResult { Status = PriceLookupStatus.MissingResponse }
+                            : grulaPrice?.Amount is null
+                                ? new PriceLookupResult { Status = PriceLookupStatus.AuthoritativeNoPrice }
+                                : new PriceLookupResult
+                                {
+                                    Status = PriceLookupStatus.Priced,
+                                    Price = new Price
+                                    {
+                                        CurrentPrice = (decimal)grulaPrice.Amount.Amount,
+                                        CurrencyCode = grulaPrice.Amount.CurrencyThreeLetterCode
+                                    }
+                                };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error while fetching trusted basket prices from the Grula API for a batch of size {BatchSize}.", batch.Length);
+                    foreach (var item in batch)
+                    {
+                        results[item.Index] = new PriceLookupResult { Status = PriceLookupStatus.ServiceUnavailable };
+                    }
+                }
+            }
+
+            return results;
         }
 
         private List<PriceDriver> CreatePriceDrivers(PriceProduct product, PriceClient client)
@@ -327,6 +415,15 @@ namespace Seller.Web.Shared.Services.Prices
 
             if (client is not null)
             {
+                if (!string.IsNullOrWhiteSpace(client.DiscountCode))
+                {
+                    priceDrivers.Add(new PriceDriver
+                    {
+                        Name = PriceDriversConstants.DiscountCodeDriver,
+                        Value = client.DiscountCode
+                    });
+                }
+
                 if (!string.IsNullOrWhiteSpace(client.Name))
                 {
                     priceDrivers.Add(new PriceDriver
@@ -393,7 +490,7 @@ namespace Seller.Web.Shared.Services.Prices
             _ => null
         };
 
-        private bool CanSeePrice(Guid? priceClientId)
+        public bool CanSeePrices(Guid? priceClientId)
         {
             if (string.IsNullOrWhiteSpace(_options.Value.EnablePricesForClients))
             {

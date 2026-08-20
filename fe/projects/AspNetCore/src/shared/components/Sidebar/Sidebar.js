@@ -46,6 +46,10 @@ const Sidebar = (props) => {
                 id: productId
             }
 
+            if (props.discountCode) {
+                requestQuery.discountCode = props.discountCode;
+            }
+
             const url = labels.productsApiUrl + "?" + QueryStringSerializer.serialize(requestQuery);
             return fetch(url, requestOptions)
                 .then(function (response) {
@@ -183,7 +187,8 @@ Sidebar.propTypes = {
     labels: PropTypes.object.isRequired,
     setIsOpen: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    handleOrder: PropTypes.func.isRequired
+    handleOrder: PropTypes.func.isRequired,
+    discountCode: PropTypes.string
 }
 
 export default Sidebar;

@@ -12,6 +12,10 @@
         public const string PaletteLoadingDriver = "Palette Loading";
         public const string PaletteSizeDriver = "Palette Size";
         public const string DeliveryAddressDriver = "Delivery Address";
+
+        // Purchase intent for the quoted line - always built via IPriceProductFactory, never
+        // product/stock outlet-availability. See Issues.md #4 for why an omitted or state-derived
+        // value here made catalog and basket prices disagree.
         public const string OutletDriver = "Outlet";
         public const string MirrorDriver = "Mirror";
         public const string SizeDriver = "Size";
@@ -28,5 +32,6 @@
         public const string LedDriver = "LED";
         public const string CurrencyDriver = "Currency";
         public const string ProductVariantSkuDriver = "Product Variant SKU";
+        public const string DiscountCodeDriver = "Discount Code";
     }
 }

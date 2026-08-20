@@ -104,15 +104,20 @@ function EditOrderForm(props) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="column">
+                                <div className="edit-order__summary">
                                     {props.deliveryAddress &&
-                                        <div className="field">
+                                        <div className="edit-order__summary-row">
                                             <InputLabel id="delivery-address-label">{props.deliveryAddressLabel}: {props.deliveryAddress}</InputLabel>
                                         </div>
                                     }
                                     {props.billingAddress &&
-                                        <div className="field">
+                                        <div className="edit-order__summary-row">
                                             <InputLabel id="billing-address-label">{props.billingAddressLabel}: {props.billingAddress}</InputLabel>
+                                        </div>
+                                    }
+                                    {props.discountCode &&
+                                        <div className="edit-order__summary-row">
+                                            <InputLabel id="discount-code-label">{props.discountCodeLabel}: {props.discountCode}</InputLabel>
                                         </div>
                                     }
                                 </div>
@@ -240,6 +245,8 @@ EditOrderForm.propTypes = {
     clientUrl: PropTypes.string.isRequired,
     updateOrderStatusUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
+    discountCodeLabel: PropTypes.string.isRequired,
+    discountCode: PropTypes.string,
     expectedDateOfProductOnStockLabel: PropTypes.string.isRequired,
     ordersUrl: PropTypes.string.isRequired,
     navigateToOrders: PropTypes.string.isRequired

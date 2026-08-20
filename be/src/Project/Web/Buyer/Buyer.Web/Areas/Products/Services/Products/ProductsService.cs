@@ -84,7 +84,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes),
                         SleepAreaSize = GetSleepAreaSize(product.ProductAttributes),
                         FabricsGroup = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePriceGroupAttributeKeys),
-                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys),
+                        ExtraPacking = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                         PaletteSize = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePaletteSizeAttributeKeys),
                         Size = GetSize(product.ProductAttributes),
                         PointsOfLight = GetFirstAvailableAttributeValue(product.ProductAttributes, this.options.Value.PossiblePointsOfLightAttributeKeys),

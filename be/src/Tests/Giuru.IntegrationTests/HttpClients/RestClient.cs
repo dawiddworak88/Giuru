@@ -16,13 +16,18 @@ namespace Giuru.IntegrationTests.HttpClients
             _client = client;
         } 
 
-        public async Task<T> PostAsync<S, T>(string requestUrl, S request) where S : class
+        public async Task<HttpResponseMessage> PostForResponseAsync<S>(string requestUrl, S request) where S : class
         {
-            var response = await _client.PostAsync(
+            return await _client.PostAsync(
                     requestUrl,
                     new StringContent(JsonConvert.SerializeObject(request, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
                     Encoding.UTF8,
                     "application/json"));
+        }
+
+        public async Task<T> PostAsync<S, T>(string requestUrl, S request) where S : class
+        {
+            var response = await PostForResponseAsync(requestUrl, request);
 
             var result = await response.Content.ReadAsStringAsync();
 

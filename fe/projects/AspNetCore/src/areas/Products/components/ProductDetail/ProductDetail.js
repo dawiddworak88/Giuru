@@ -45,7 +45,9 @@ function ProductDetail(props) {
         generalErrorMessage: props.generalErrorMessage,
         addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
-        getPriceUrl: props.getProductPriceUrl
+        getPriceUrl: props.getProductPriceUrl,
+        discountCode: props.discountCode,
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled
     });
 
     const handleAddOrderItemClick = (item) => {
@@ -400,6 +402,7 @@ function ProductDetail(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
+                    discountCode={props.isDiscountCodeEnabled ? props.discountCode : null}
                 />
                 <CarouselGrid  
                     items={props.productVariants} 
@@ -480,7 +483,9 @@ ProductDetail.propTypes = {
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     copiedText: PropTypes.string.isRequired,
     copyToClipboardText: PropTypes.string.isRequired,
-    copyTextError: PropTypes.string.isRequired
+    copyTextError: PropTypes.string.isRequired,
+    discountCode: PropTypes.string,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired
 };
 
 export default ProductDetail;
