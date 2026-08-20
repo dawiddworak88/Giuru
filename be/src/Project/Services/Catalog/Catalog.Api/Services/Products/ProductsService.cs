@@ -15,7 +15,6 @@ using Foundation.Catalog.Infrastructure.Products.Entities;
 using Foundation.Catalog.SearchModels.Products;
 using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
-using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
 using System.Diagnostics;
 using Foundation.GenericRepository.Definitions;
@@ -452,52 +451,27 @@ namespace Catalog.Api.Services.Products
 
             foreach (var productAttributeSearchModel in searchResultItem.ProductAttributes.OrEmptyIfNull())
             {
-                var productAttributeObject = JObject.FromObject(productAttributeSearchModel.Value);
-
-                if (productAttributeObject is not null)
+                var productAttribute = new ProductAttributeServiceModel
                 {
-                    var productAttribute = new ProductAttributeServiceModel
-                    { 
-                        Key = productAttributeSearchModel.Key,
-                        Name = productAttributeObject["name"].Value<string>()
+                    Key = productAttributeSearchModel.Key,
+                    Name = productAttributeSearchModel.Name
+                };
+
+                if (productAttributeSearchModel.ValueBoolean.HasValue)
+                {
+                    productAttribute.Values = new string[]
+                    {
+                        productAttributeSearchModel.ValueBoolean.Value
+                            ? _globalLocalizer.GetString("Yes")
+                            : _globalLocalizer.GetString("No")
                     };
-
-                    if (productAttributeObject["value"].Type == JTokenType.Array)
-                    {
-                        var valuesArray = (JArray)productAttributeObject["value"];
-
-                        if (valuesArray is not null)
-                        {
-                            productAttribute.Values = valuesArray.Children().OfType<JObject>().Select(o => o["name"]?.Value<string>()).Where(name => name != null);
-                        }
-                    }
-                    else if (productAttributeObject["value"].Type == JTokenType.Object)
-                    {
-                        var valueObject = (JObject)productAttributeObject["value"];
-
-                        if (valueObject is not null)
-                        {
-                            productAttribute.Values = new string[] { valueObject["name"].Value<string>() };
-                        }
-                    }
-                    else if (productAttributeObject["value"].Type == JTokenType.Boolean)
-                    {
-                        if (productAttributeObject["value"].Value<bool>())
-                        {
-                            productAttribute.Values = new string[] { _globalLocalizer.GetString("Yes") };
-                        }
-                        else
-                        {
-                            productAttribute.Values = new string[] { _globalLocalizer.GetString("No") };
-                        }
-                    }
-                    else
-                    {
-                        productAttribute.Values = new string[] { productAttributeObject["value"].Value<string>() };
-                    }
-
-                    productAttributes.Add(productAttribute);
                 }
+                else if (productAttributeSearchModel.ValueKeywords?.Length > 0)
+                {
+                    productAttribute.Values = productAttributeSearchModel.ValueKeywords;
+                }
+
+                productAttributes.Add(productAttribute);
             }
 
             return new ProductServiceModel

@@ -1,5 +1,6 @@
 ﻿using Foundation.Catalog.Repositories.ProductIndexingRepositories;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
+using Foundation.Catalog.SearchModels;
 using Foundation.Catalog.SearchModels.Products;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,9 +35,26 @@ namespace Foundation.Catalog.DependencyInjection
             if (!client.Indices.Exists(defaultIndex).Exists)
             {
                 client.Indices.Create(defaultIndex, c => c
+                    .Settings(s => s
+                        .Analysis(a => a
+                            .Normalizers(n => n
+                                .Custom("lowercase", cn => cn
+                                    .Filters("lowercase")))))
                     .Map<ProductSearchModel>(m => m
+                        .Dynamic(DynamicMapping.Strict)
                         .AutoMap()
                         .Properties(p => p
+                            .Text(t => t.Name(n => n.FormData).Index(false))
+                            .Nested<ProductAttributeSearchModel>(n => n
+                                .Name(nn => nn.ProductAttributes)
+                                .Properties(np => np
+                                    .Keyword(k => k.Name(a => a.Key))
+                                    .Keyword(k => k.Name(a => a.Name))
+                                    .Keyword(k => k.Name(a => a.ValueIds))
+                                    .Keyword(k => k.Name(a => a.ValueKeywords))
+                                    .Text(t => t.Name(a => a.ValueText))
+                                    .Number(nb => nb.Name(a => a.ValueNumeric).Type(NumberType.Double))
+                                    .Boolean(b => b.Name(a => a.ValueBoolean))))
                             .Completion(cmpl => cmpl
                                 .Name(n => n.NameSuggest)
                                 .Contexts(ctxs => ctxs
