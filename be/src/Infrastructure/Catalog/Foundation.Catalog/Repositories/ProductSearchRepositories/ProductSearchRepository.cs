@@ -35,6 +35,8 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
+            var sortDescriptor = orderBy.ToElasticSortList<ProductSearchModel>();
+
             if (categoryId.HasValue)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.CategoryId).Value(categoryId.Value));
@@ -67,6 +69,11 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                         || Query<ProductSearchModel>.Prefix(x => x.Ean, searchTerm)
                         || Query<ProductSearchModel>.Match(x => x.Field(f => f.CategoryName).Query(searchTerm).Fuzziness(Fuzziness.Auto))
                         || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
+                
+                if (string.IsNullOrWhiteSpace(orderBy))
+                {
+                    sortDescriptor = null;
+                }
             }
 
             if (pageIndex.HasValue is false || itemsPerPage.HasValue is false)
@@ -75,7 +82,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 itemsPerPage = Constants.MaxItemsPerPageLimit;
             }
 
-            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await _elasticClient.SearchAsync<ProductSearchModel>(s => s.TrackTotalHits().From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => sortDescriptor));
 
             if (response.IsValid)
             {
