@@ -18,8 +18,11 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
-import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
+import OrderItemsGroupHelper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
 import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
+import BasketDiscountCodeClient from "../../../../shared/helpers/baskets/BasketDiscountCodeClient";
+import { useDiscountCode } from "../../../../shared/hooks/useDiscountCode";
+import DiscountCodeField from "../../../../shared/components/DiscountCode/DiscountCodeField";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -40,11 +43,49 @@ function OrderForm(props) {
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [productFromOutlet, setProductFromOutlet] = useState(false);
+
+    const updateBasketDiscountCode = async (newDiscountCode, showSuccessMessage) => {
+        if (!props.isDiscountCodeEnabled) return;
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const basket = {
+            id: basketId,
+            clientId: client.id,
+            items: orderItems,
+            discountCode: newDiscountCode
+        };
+
+        const { ok, jsonResponse, message } = await BasketDiscountCodeClient.save({
+            updateBasketUrl: props.updateBasketUrl,
+            basket,
+            generalErrorMessage: props.generalErrorMessage
+        });
+
+        if (ok) {
+            setBasketId(jsonResponse.id);
+            setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items || []));
+            discountCodeState.syncFromResponse(jsonResponse);
+
+            if (showSuccessMessage) {
+                toast.success(props.discountCodeAppliedMessage);
+            }
+        }
+        else {
+            toast.error(message);
+        }
+
+        dispatch({ type: "SET_IS_LOADING", payload: false });
+    };
+
     // The seller's order form always opens on a brand-new basket (see basketId above), so
-    // there is never a stored code to seed these from. They are filled in at runtime from
-    // the basket responses of an apply, a removal or a file upload.
-    const [discountCode, setDiscountCode] = useState("");
-    const [appliedDiscountCode, setAppliedDiscountCode] = useState("");
+    // there is never a stored code to seed this from. It is filled in at runtime from the
+    // basket responses of an apply, a removal or a file upload.
+    const discountCodeState = useDiscountCode({
+        initialCode: "",
+        isEnabled: props.isDiscountCodeEnabled,
+        onSave: updateBasketDiscountCode
+    });
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -58,8 +99,8 @@ function OrderForm(props) {
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 
-            if (props.isDiscountCodeEnabled && appliedDiscountCode) {
-                searchParameters.discountCode = appliedDiscountCode;
+            if (props.isDiscountCodeEnabled && discountCodeState.appliedDiscountCode) {
+                searchParameters.discountCode = discountCodeState.appliedDiscountCode;
             }
 
             const requestOptions = {
@@ -132,10 +173,12 @@ function OrderForm(props) {
 
             const outletPrice = await ProductPricesHelper.getPriceByProductSku(
                 props.getProductPriceUrl,
-                client.id,
-                product.sku,
-                props.isDiscountCodeEnabled ? appliedDiscountCode : null,
-                true);
+                {
+                    clientId: client.id,
+                    sku: product.sku,
+                    discountCode: props.isDiscountCodeEnabled ? discountCodeState.appliedDiscountCode : null,
+                    isOutlet: true
+                });
 
             if (outletPrice) {
                 orderItem.unitPrice = outletPrice.price
@@ -164,7 +207,7 @@ function OrderForm(props) {
             id: basketId,
             clientId: client.id,
             items: [...orderItems, orderItem],
-            ...(props.isDiscountCodeEnabled && { discountCode: appliedDiscountCode })
+            ...(props.isDiscountCodeEnabled && { discountCode: discountCodeState.appliedDiscountCode })
         };
 
         const requestOptions = {
@@ -184,18 +227,15 @@ function OrderForm(props) {
                 const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
                 if (response.ok && jsonResponse) {
-                    const savedDiscountCode = jsonResponse.discountCode || "";
-
                     setBasketId(jsonResponse.id);
-                    setDiscountCode(savedDiscountCode);
-                    setAppliedDiscountCode(savedDiscountCode);
+                    discountCodeState.syncFromResponse(jsonResponse);
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
                         setProduct(null);
                         setSearchTerm("");
                         setExternalReference("");
                         setMoreInfo("");
-                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
+                        setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items));
                         setQuantity(1);
                         setProductFromOutlet(false);
                     }
@@ -237,7 +277,7 @@ function OrderForm(props) {
             id: basketId,
             clientId: client.id,
             items: orderItems.filter((orderItem) => orderItem !== entityToDelete),
-            ...(props.isDiscountCodeEnabled && { discountCode: appliedDiscountCode })
+            ...(props.isDiscountCodeEnabled && { discountCode: discountCodeState.appliedDiscountCode })
         };
 
         const requestOptions = {
@@ -254,15 +294,12 @@ function OrderForm(props) {
                 const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
                 if (response.ok && jsonResponse) {
-                    const savedDiscountCode = jsonResponse.discountCode || "";
-
                     setBasketId(jsonResponse.id);
-                    setDiscountCode(savedDiscountCode);
-                    setAppliedDiscountCode(savedDiscountCode);
+                    discountCodeState.syncFromResponse(jsonResponse);
                     setOpenDeleteDialog(false);
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
-                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
+                        setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items));
                     }
                     else {
                         setOrderItems([]);
@@ -342,67 +379,6 @@ function OrderForm(props) {
             });
     };
 
-    const updateBasketDiscountCode = async (newDiscountCode, showSuccessMessage) => {
-        if (!props.isDiscountCodeEnabled) return;
-
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const basket = {
-            id: basketId,
-            clientId: client.id,
-            items: orderItems,
-            discountCode: newDiscountCode
-        };
-
-        try {
-            const response = await fetch(props.updateBasketUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: JSON.stringify(basket)
-            });
-
-            AuthenticationHelper.HandleResponse(response);
-            const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
-
-            if (response.ok && jsonResponse) {
-                const savedDiscountCode = jsonResponse.discountCode || "";
-
-                setBasketId(jsonResponse.id);
-                setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items || []));
-                setDiscountCode(savedDiscountCode);
-                setAppliedDiscountCode(savedDiscountCode);
-
-                if (showSuccessMessage) {
-                    toast.success(props.discountCodeAppliedMessage);
-                }
-            }
-            else {
-                toast.error(message);
-            }
-        }
-        catch {
-            toast.error(props.generalErrorMessage);
-        }
-        finally {
-            dispatch({ type: "SET_IS_LOADING", payload: false });
-        }
-    };
-
-    const handleApplyDiscountCode = () => {
-        const normalizedDiscountCode = discountCode.trim();
-
-        if (normalizedDiscountCode && orderItems.length > 0) {
-            updateBasketDiscountCode(normalizedDiscountCode, true);
-        }
-    };
-
-    const handleRemoveDiscountCode = () => {
-        updateBasketDiscountCode(null, false);
-    };
-
     const handleChangeClient = (value) => {
         const clientChanged = client?.id !== value?.id;
 
@@ -414,8 +390,7 @@ function OrderForm(props) {
         if (clientChanged) {
             setBasketId(null);
             setOrderItems([]);
-            setDiscountCode("");
-            setAppliedDiscountCode("");
+            discountCodeState.reset();
             setSearchTerm("");
             setProduct(null);
             setSuggestions([]);
@@ -490,8 +465,8 @@ function OrderForm(props) {
                 formData.append("id", basketId);
             }
 
-            if (props.isDiscountCodeEnabled && appliedDiscountCode) {
-                formData.append("discountCode", appliedDiscountCode);
+            if (props.isDiscountCodeEnabled && discountCodeState.appliedDiscountCode) {
+                formData.append("discountCode", discountCodeState.appliedDiscountCode);
             }
 
             const requestOptions = {
@@ -507,12 +482,9 @@ function OrderForm(props) {
                     const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
                     if (response.ok && jsonResponse) {
-                        const savedDiscountCode = jsonResponse.discountCode || "";
-
                         setBasketId(jsonResponse.id);
-                        setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items || []));
-                        setDiscountCode(savedDiscountCode);
-                        setAppliedDiscountCode(savedDiscountCode);
+                        setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items || []));
+                        discountCodeState.syncFromResponse(jsonResponse);
                     }
                     else {
                         toast.error(message);
@@ -522,7 +494,9 @@ function OrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [appliedDiscountCode, basketId, client, dispatch, props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl]);
+    }, [discountCodeState.appliedDiscountCode, discountCodeState.syncFromResponse, basketId,
+        client, dispatch, props.generalErrorMessage, props.isDiscountCodeEnabled,
+        props.uploadOrderFileUrl]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -793,47 +767,18 @@ function OrderForm(props) {
                     </Fragment>
                 }
                 {client && props.isDiscountCodeEnabled &&
-                    <div className="field">
-                        <div className="columns is-vcentered">
-                            <div className="column is-4">
-                                <TextField
-                                    id="discountCode"
-                                    name="discountCode"
-                                    type="text"
-                                    label={props.discountCodeLabel}
-                                    variant="standard"
-                                    fullWidth={true}
-                                    value={discountCode}
-                                    disabled={state.isLoading || disableSaveButton}
-                                    onChange={(e) => setDiscountCode(e.target.value)}
-                                />
-                            </div>
-                            <div className="column is-narrow">
-                                <Button
-                                    type="button"
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleApplyDiscountCode}
-                                    disabled={state.isLoading || disableSaveButton || orderItems.length === 0 || !discountCode.trim()}
-                                >
-                                    {props.applyDiscountCodeLabel}
-                                </Button>
-                            </div>
-                            {appliedDiscountCode &&
-                                <div className="column is-narrow">
-                                    <Button
-                                        type="button"
-                                        variant="text"
-                                        color="error"
-                                        onClick={handleRemoveDiscountCode}
-                                        disabled={state.isLoading || disableSaveButton}
-                                    >
-                                        {props.removeDiscountCodeLabel}
-                                    </Button>
-                                </div>
-                            }
-                        </div>
-                    </div>
+                    <DiscountCodeField
+                        value={discountCodeState.discountCode}
+                        onChange={discountCodeState.setDiscountCode}
+                        onApply={() => discountCodeState.apply(orderItems.length > 0)}
+                        onRemove={discountCodeState.remove}
+                        appliedCode={discountCodeState.appliedDiscountCode}
+                        disabled={state.isLoading || disableSaveButton}
+                        canApply={orderItems.length > 0}
+                        discountCodeLabel={props.discountCodeLabel}
+                        applyDiscountCodeLabel={props.applyDiscountCodeLabel}
+                        removeDiscountCodeLabel={props.removeDiscountCodeLabel}
+                    />
                 }
                 <div className="field">
                     <Button

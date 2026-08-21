@@ -18,22 +18,17 @@ using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Products.ApiResponseModels;
-using Seller.Web.Shared.DomainModels.Prices;
+using Foundation.Pricing.DomainModels;
+using Foundation.Pricing.Services;
 using Microsoft.Extensions.Options;
 using Seller.Web.Shared.Configurations;
-using Seller.Web.Shared.Repositories.Clients;
-using Seller.Web.Areas.Global.Repositories;
-using Seller.Web.Areas.Clients.Repositories.FieldValues;
-using Seller.Web.Areas.Global.DomainModels;
-using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
+using Seller.Web.Shared.Services.Clients;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.Products;
 using System.Collections.Generic;
-using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Repositories.LeadTime;
 using Seller.Web.Shared.Services.DeliveryDates;
-using Seller.Web.Areas.Clients.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -45,11 +40,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IOutletRepository _outletRepository;
         private readonly IPriceService _priceService;
-        private readonly IClientsRepository _clientsRepository;
-        private readonly ICountriesRepository _countriesRepository;
-        private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
-        private readonly IClientAddressesRepository _clientAddressesRepository;
-        private readonly ICurrenciesRepository _currenciesRepository;
+        private readonly IClientLookupService _clientLookupService;
+        private readonly IPriceClientResolver _priceClientResolver;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
         private readonly ILeadTimeRepository _leadTimeRepository;
@@ -63,11 +55,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
             IPriceService priceService,
-            IClientsRepository clientsRepository,
-            ICountriesRepository countriesRepository,
-            IClientFieldValuesRepository clientFieldValuesRepository,
-            IClientAddressesRepository clientAddressesRepository,
-            ICurrenciesRepository currenciesRepository,
+            IClientLookupService clientLookupService,
+            IPriceClientResolver priceClientResolver,
             IProductsService productsService,
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
@@ -80,12 +69,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
             _priceService = priceService;
-            _clientsRepository = clientsRepository;
+            _clientLookupService = clientLookupService;
+            _priceClientResolver = priceClientResolver;
             _options = options;
-            _countriesRepository = countriesRepository;
-            _clientFieldValuesRepository = clientFieldValuesRepository;
-            _clientAddressesRepository = clientAddressesRepository;
-            _currenciesRepository = currenciesRepository;
             _productsService = productsService;
             _productColorsService = productColorsService;
             _leadTimeRepository = leadTimeRepository;
@@ -188,56 +174,17 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                 var prices = Enumerable.Empty<Price>();
 
-                var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
+                var client = await _clientLookupService.GetAsync(token, clientId);
 
                 if (_options.Value.IsGrulaConfigured)
                 {
-                    var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
-
-                    string clientCountryName = null;
-
-                    if (client.CountryId.HasValue)
-                    {
-                        clientCountryName = countries.FirstOrDefault(c => c.Id == client.CountryId)?.Name;
-                    }
-
-                    string deliveryZipCode = null;
-
-                    if (client.DefaultDeliveryAddressId.HasValue)
-                    {
-                        var clientAddress = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, client.DefaultDeliveryAddressId);
-
-                        if (clientAddress is not null)
-                        {
-                            var deliveryCountry = countries.FirstOrDefault(c => c.Id == clientAddress.CountryId);
-
-                            if (deliveryCountry is not null)
-                            {
-                                deliveryZipCode = $"{clientAddress.PostCode} ({clientAddress.City}, {deliveryCountry.Name})";
-                            }
-                        }
-                    }
-
-                    var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, _options.Value.DefaultCulture, clientId);
-
-                    var currency = await _currenciesRepository.GetAsync(token, _options.Value.DefaultCulture, client?.PreferedCurrencyId);
-
                     var priceProducts = await _priceProductFactory.CreateAsync(products.Data, isOutletPurchase: false);
+                    var priceClient = await _priceClientResolver.ResolveAsync(clientId, discountCode, token);
 
                     prices = await _priceService.GetPrices(
                         DateTime.UtcNow,
                         priceProducts,
-                        new PriceClient
-                        {
-                            Id = client?.Id,
-                            Name = client?.Name,
-                            CurrencyCode = currency?.CurrencyCode,
-                            ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
-                            PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
-                            Country = clientCountryName,
-                            DeliveryZipCode = deliveryZipCode,
-                            DiscountCode = discountCode
-                        });
+                        priceClient);
                 }
 
                 var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
@@ -303,54 +250,13 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             {
                 try
                 {
-                    var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, clientId);
-
-                    var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
-
-                    string clientCountryName = null;
-
-                    if (client.CountryId.HasValue)
-                    {
-                        clientCountryName = countries.FirstOrDefault(c => c.Id == client.CountryId)?.Name;
-                    }
-
-                    string deliveryZipCode = null;
-
-                    if (client.DefaultDeliveryAddressId.HasValue)
-                    {
-                        var clientAddress = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, client.DefaultDeliveryAddressId);
-
-                        if (clientAddress is not null)
-                        {
-                            var deliveryCountry = countries.FirstOrDefault(c => c.Id == clientAddress.CountryId);
-
-                            if (deliveryCountry is not null)
-                            {
-                                deliveryZipCode = $"{clientAddress.PostCode} ({clientAddress.City}, {deliveryCountry.Name})";
-                            }
-                        }
-                    }
-
-                    var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, _options.Value.DefaultCulture, clientId);
-
-                    var currency = await _currenciesRepository.GetAsync(token, _options.Value.DefaultCulture, client?.PreferedCurrencyId);
-
                     var priceProduct = await _priceProductFactory.CreateAsync(product, isOutletPurchase: isOutlet);
+                    var priceClient = await _priceClientResolver.ResolveAsync(clientId, discountCode, token);
 
                     var price = await _priceService.GetPrice(
                         DateTime.UtcNow,
                         priceProduct,
-                        new PriceClient
-                        {
-                            Id = client?.Id,
-                            Name = client?.Name,
-                            CurrencyCode = currency?.CurrencyCode,
-                            ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
-                            PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
-                            Country = clientCountryName,
-                            DeliveryZipCode = deliveryZipCode,
-                            DiscountCode = discountCode
-                        });
+                        priceClient);
 
                     if (price is not null)
                     {

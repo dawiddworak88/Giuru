@@ -1,4 +1,4 @@
-﻿using Seller.Web.Shared.Services.Prices;
+﻿using Foundation.Pricing.Services;
 using System;
 
 namespace Seller.Web.Areas.Orders.ApiRequestModels

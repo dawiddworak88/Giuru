@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SellerClient = Seller.Web.Areas.Clients.DomainModels.Client;
 using SellerClientAddress = Seller.Web.Areas.Clients.DomainModels.ClientAddress;
 using SellerCountry = Seller.Web.Areas.Global.DomainModels.Country;
-using SellerOrderFilePricingContext = Seller.Web.Areas.Orders.Services.Basket.OrderFilePricingContext;
+using SellerPriceClientContext = Seller.Web.Shared.Services.Prices.PriceClientContext;
 
 namespace Giuru.UnitTests.Orders.Baskets
 {
@@ -12,8 +12,8 @@ namespace Giuru.UnitTests.Orders.Baskets
         [Fact]
         public void MissingClient_ReturnsNoCountryOrDefaultAddressId()
         {
-            var countryName = SellerOrderFilePricingContext.GetClientCountryName(null, null);
-            var addressId = SellerOrderFilePricingContext.GetDefaultDeliveryAddressId(null);
+            var countryName = SellerPriceClientContext.GetClientCountryName(null, null);
+            var addressId = SellerPriceClientContext.GetDefaultDeliveryAddressId(null);
 
             Assert.Null(countryName);
             Assert.Null(addressId);
@@ -24,8 +24,8 @@ namespace Giuru.UnitTests.Orders.Baskets
         {
             var client = new SellerClient();
 
-            var countryName = SellerOrderFilePricingContext.GetClientCountryName(client, Array.Empty<SellerCountry>());
-            var addressId = SellerOrderFilePricingContext.GetDefaultDeliveryAddressId(client);
+            var countryName = SellerPriceClientContext.GetClientCountryName(client, Array.Empty<SellerCountry>());
+            var addressId = SellerPriceClientContext.GetDefaultDeliveryAddressId(client);
 
             Assert.Null(countryName);
             Assert.Null(addressId);
@@ -38,16 +38,16 @@ namespace Giuru.UnitTests.Orders.Baskets
             var client = new SellerClient { CountryId = countryId };
             var address = new SellerClientAddress { CountryId = countryId };
 
-            Assert.Null(SellerOrderFilePricingContext.GetClientCountryName(client, null));
-            Assert.Null(SellerOrderFilePricingContext.GetClientCountryName(client, Array.Empty<SellerCountry>()));
-            Assert.Null(SellerOrderFilePricingContext.GetDeliveryZipCode(address, null));
-            Assert.Null(SellerOrderFilePricingContext.GetDeliveryZipCode(address, Array.Empty<SellerCountry>()));
+            Assert.Null(SellerPriceClientContext.GetClientCountryName(client, null));
+            Assert.Null(SellerPriceClientContext.GetClientCountryName(client, Array.Empty<SellerCountry>()));
+            Assert.Null(SellerPriceClientContext.GetDeliveryZipCode(address, null));
+            Assert.Null(SellerPriceClientContext.GetDeliveryZipCode(address, Array.Empty<SellerCountry>()));
         }
 
         [Fact]
         public void NullDeliveryAddress_ReturnsNoDeliveryZipCode()
         {
-            var deliveryZipCode = SellerOrderFilePricingContext.GetDeliveryZipCode(null, new List<SellerCountry>());
+            var deliveryZipCode = SellerPriceClientContext.GetDeliveryZipCode(null, new List<SellerCountry>());
 
             Assert.Null(deliveryZipCode);
         }
@@ -75,9 +75,9 @@ namespace Giuru.UnitTests.Orders.Baskets
                 City = "Berlin"
             };
 
-            var countryName = SellerOrderFilePricingContext.GetClientCountryName(client, countries);
-            var addressId = SellerOrderFilePricingContext.GetDefaultDeliveryAddressId(client);
-            var deliveryZipCode = SellerOrderFilePricingContext.GetDeliveryZipCode(address, countries);
+            var countryName = SellerPriceClientContext.GetClientCountryName(client, countries);
+            var addressId = SellerPriceClientContext.GetDefaultDeliveryAddressId(client);
+            var deliveryZipCode = SellerPriceClientContext.GetDeliveryZipCode(address, countries);
 
             Assert.Equal("Poland", countryName);
             Assert.Equal(defaultDeliveryAddressId, addressId);

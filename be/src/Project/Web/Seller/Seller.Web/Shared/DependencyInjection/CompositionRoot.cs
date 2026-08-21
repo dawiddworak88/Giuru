@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Seller.Web.Shared.Configurations;
+using Foundation.Pricing.Configurations;
+using Microsoft.Extensions.Options;
 using Seller.Web.Shared.ModelBuilders.Headers;
 using Foundation.Extensions.ModelBuilders;
 using Seller.Web.Shared.ModelBuilders.Footers;
@@ -23,19 +26,19 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ModelBuilders.OrderItemStatusChanges;
 using Seller.Web.Shared.ModelBuilders.Dialogs;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
+using Seller.Web.Shared.Services.Clients;
 using Seller.Web.Shared.Services.Prices;
+using Foundation.Pricing.Services;
 using Seller.Web.Shared.Services.Products;
 using Foundation.Extensions.Services.Claims;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Repositories.ProductAttributeItems;
-using System.Net.Http.Headers;
-using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Configuration;
 using Foundation.Extensions.Services.Cache;
 using Seller.Web.Shared.Repositories.Inventory;
-using System;
 using Seller.Web.Shared.Repositories.LeadTime;
 using Seller.Web.Shared.Services.DeliveryDates;
+using Foundation.Pricing.DependencyInjection;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -53,8 +56,10 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<ILeadTimeRepository, LeadTimeRepository>();
 
-            services.AddScoped<IPriceService, PriceService>();
+            services.AddScoped<IClientLookupService, ClientLookupService>();
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
+            services.AddScoped<IPriceClientResolver, ClientRepositoryPriceClientResolver>();
+            services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductColorsService, ProductColorsService>();
             services.AddScoped<IExpectedDeliveryDateService, ExpectedDeliveryDateService>();
@@ -71,20 +76,7 @@ namespace Seller.Web.Shared.DependencyInjection
 
             services.AddScoped<IClaimsCacheInvalidatorService, ClaimsCacheInvalidatorService>();
 
-            //Grula HttpClient
-            services.AddHttpClient("GrulaApi")
-                .AddTypedClient(httpClient =>
-                {
-                    httpClient.Timeout = TimeSpan.FromSeconds(10);
-
-                    var token = configuration["GrulaAccessToken"];
-                    if (!string.IsNullOrWhiteSpace(token))
-                    {
-                        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                    }
-
-                    return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
-                });
+            services.RegisterPricingDependencies(configuration);
             services.AddScoped<ICacheService, CacheService>();
         }
     }

@@ -9,10 +9,9 @@ using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
-using Buyer.Web.Shared.Definitions.Middlewares;
-using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Extensions;
-using Buyer.Web.Shared.Services.Baskets;
+using Foundation.Pricing.Baskets;
+using Foundation.Pricing.Services;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -53,6 +52,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly ILogger<BasketsApiController> _logger;
 
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IPriceClientResolver _priceClientResolver;
+        private readonly IBasketRepricingService _basketRepricingService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
@@ -65,7 +66,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IProductColorsService productColorsService,
             IOptions<AppSettings> options,
             ILogger<BasketsApiController> logger,
-            IPriceProductFactory priceProductFactory)
+            IPriceProductFactory priceProductFactory,
+            IPriceClientResolver priceClientResolver,
+            IBasketRepricingService basketRepricingService)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
@@ -78,6 +81,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _options = options;
             _logger = logger;
             _priceProductFactory = priceProductFactory;
+            _priceClientResolver = priceClientResolver;
+            _basketRepricingService = basketRepricingService;
         }
 
         [HttpPost]
@@ -99,28 +104,21 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
             var id = Guid.Parse(reqCookie);
-            string discountCode;
 
-            if (_options.Value.IsGrulaConfigured)
-            {
-                var existingBasket = DiscountCodeResolver.RequiresPersistedDiscountCode(model.HasDiscountCode, model.DiscountCode, items.Any())
-                    ? await _basketRepository.GetBasketById(token, language, id)
-                    : null;
-                var discount = DiscountCodeResolver.Resolve(model.HasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode, items.Any());
-                discountCode = discount.DiscountCode;
+            var discountOutcome = await BasketDiscountCodeCoordinator.ResolveAsync(
+                _options.Value.IsGrulaConfigured,
+                model.HasDiscountCode,
+                model.DiscountCode,
+                items.Any(),
+                async () => (await _basketRepository.GetBasketById(token, language, id))?.DiscountCode,
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
 
-                if (discount.IsAppliedToEmptyBasket)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value });
-                }
-            }
-            else
+            if (discountOutcome.IsRejected)
             {
-                // Discount codes are Grula price drivers. While pricing is unavailable,
-                // ignore incoming mutations but retain any code already stored on the basket.
-                var existingBasket = await _basketRepository.GetBasketById(token, language, id);
-                discountCode = existingBasket?.DiscountCode;
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = discountOutcome.RejectionMessage });
             }
+
+            var discountCode = discountOutcome.DiscountCode;
 
             if (_options.Value.IsGrulaConfigured && items.Any())
             {
@@ -128,7 +126,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
             else if (items.Any())
             {
-                ClearUntrustedPrices(items);
+                BasketPriceApplier.ClearUntrustedPrices(items);
             }
 
             var basket = await _basketRepository.SaveAsync(token, language, id,
@@ -182,30 +180,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
-        }
-
-        internal static void ClearUntrustedPrices(IList<BasketItemRequestModel> basketItems)
-        {
-            BasketPriceApplier.ClearUntrustedPrices(basketItems);
-        }
-
-        internal static bool ApplyPrices(
-            IList<BasketItemRequestModel> basketItems,
-            IList<PriceLookupResult> priceResults)
-        {
-            return BasketPriceApplier.ApplyPrices(basketItems, priceResults);
-        }
-
-        // Grula returns exactly one outcome per supplied product, in the order the products were sent
-        // (IPriceService.GetPriceResultsForBasketAsync). A response that breaks that contract cannot be
-        // mapped back onto basket lines, so refuse to align it at all - the caller then persists the whole
-        // basket unpriced rather than keeping prices for the subset that happened to come back.
-        internal static IList<PriceLookupResult> AlignPrices(
-            int basketItemCount,
-            IList<int> pricedLineIndexes,
-            IList<PriceLookupResult> prices)
-        {
-            return BasketPriceApplier.AlignPrices(basketItemCount, pricedLineIndexes, prices);
         }
 
         private async Task RepriceBasketItemsAsync(
@@ -266,44 +240,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 item.Name = product.Name;
             }
 
-            var indexedProducts = basketItems
-                .Select((item, index) => new { item, index })
-                .Where(x => !string.IsNullOrWhiteSpace(x.item.Sku) && productLookup.ContainsKey(x.item.Sku))
-                .ToList();
+            var priceClient = await _priceClientResolver.ResolveAsync(null, discountCode, token);
 
-            var priceProducts = await Task.WhenAll(indexedProducts.Select(x =>
-                _priceProductFactory.CreateAsync(productLookup[x.item.Sku], isOutletPurchase: x.item.OutletQuantity > 0)));
+            var outcome = await _basketRepricingService.RepriceAsync(
+                basketItems,
+                x => x.Sku,
+                x => x.OutletQuantity > 0,
+                productLookup,
+                (product, isOutletPurchase) => _priceProductFactory.CreateAsync(product, isOutletPurchase),
+                priceClient,
+                DateTime.UtcNow);
 
-            var prices = await _priceService.GetPriceResultsForBasketAsync(
-                _options.Value.GrulaAccessToken,
-                DateTime.UtcNow,
-                priceProducts,
-                new PriceClient
-                {
-                    Id = User.GetClientId(),
-                    Name = User.Identity?.Name,
-                    CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                    ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                    PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                    Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                    DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
-                    DiscountCode = discountCode
-                });
-
-            var alignedPrices = AlignPrices(
-                basketItems.Count,
-                indexedProducts.Select(x => x.index).ToList(),
-                prices?.ToList());
-
-            if (alignedPrices is null)
-            {
-                _logger.LogWarning(
-                    "Grula returned {PriceResultCount} price results for {PricedLineCount} priced basket lines; the basket will be persisted unpriced.",
-                    prices?.Count,
-                    indexedProducts.Count);
-            }
-
-            if (!ApplyPrices(basketItems, alignedPrices))
+            if (!outcome.Succeeded)
             {
                 throw new CustomException(
                     _orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value,

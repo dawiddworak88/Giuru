@@ -5,6 +5,7 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.Services.Prices;
+using Foundation.Pricing.Services;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;

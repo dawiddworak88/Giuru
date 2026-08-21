@@ -1,4 +1,4 @@
-using Buyer.Web.Areas.Products.Repositories.Products;
+﻿using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -26,7 +26,8 @@ using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.Services.Prices;
 using System;
-using Buyer.Web.Shared.DomainModels.Prices;
+using Foundation.Pricing.DomainModels;
+using Foundation.Pricing.Services;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Areas.Products.ComponentModels;
@@ -192,20 +193,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     var priceProduct = await _priceProductFactory.CreateAsync(product, isOutletPurchase: false);
 
                     var price = await _priceService.GetPrice(
-                        _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
                         priceProduct,
-                        new PriceClient
-                        {
-                            Id = componentModel.ClientId,
-                            Name = componentModel.Name,
-                            CurrencyCode = componentModel.CurrencyCode,
-                            ExtraPacking = componentModel.ExtraPacking,
-                            PaletteLoading = componentModel.PaletteLoading,
-                            Country = componentModel.Country,
-                            DeliveryZipCode = componentModel.DeliveryZipCode,
-                            DiscountCode = discountCode
-                        });
+                        componentModel.ToPriceClient(discountCode));
 
                     if (price is not null)
                     {
@@ -310,20 +300,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             var priceProducts = await _priceProductFactory.CreateAsync(productVariants.Data, isOutletPurchase: false);
 
                             prices = await _priceService.GetPrices(
-                               _options.Value.GrulaAccessToken,
                                DateTime.UtcNow,
                                priceProducts,
-                               new PriceClient
-                               {
-                                   Id = componentModel.ClientId,
-                                   Name = componentModel.Name,
-                                   CurrencyCode = componentModel.CurrencyCode,
-                                   ExtraPacking = componentModel.ExtraPacking,
-                                   PaletteLoading = componentModel.PaletteLoading,
-                                   Country = componentModel.Country,
-                                   DeliveryZipCode = componentModel.DeliveryZipCode,
-                                   DiscountCode = discountCode
-                               });
+                               componentModel.ToPriceClient(discountCode));
                         }
 
                         var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(

@@ -7,10 +7,9 @@ using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Files;
-using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
-using Buyer.Web.Shared.DomainModels.Prices;
-using Buyer.Web.Shared.Extensions;
+using Foundation.Pricing.DomainModels;
+using Foundation.Pricing.Services;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
@@ -56,6 +55,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IPriceClientResolver _priceClientResolver;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -71,7 +71,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
             IExpectedDeliveryDateService expectedDeliveryDateService,
-            IPriceProductFactory priceProductFactory)
+            IPriceProductFactory priceProductFactory,
+            IPriceClientResolver priceClientResolver)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
@@ -88,6 +89,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _productColorsService = productColorsService;
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
+            _priceClientResolver = priceClientResolver;
         }
 
         [HttpGet]
@@ -165,21 +167,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 {
                     var priceProducts = await _priceProductFactory.CreateAsync(productVariants.Data, isOutletPurchase: false);
 
+                    var priceClient = await _priceClientResolver.ResolveAsync(null, discountCode, token);
+
                     prices = await _priceService.GetPrices(
-                        _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
                         priceProducts,
-                        new PriceClient
-                        {
-                            Id = User.GetClientId(),
-                            Name = User.Identity?.Name,
-                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
-                            DiscountCode = discountCode
-                        });
+                        priceClient);
                 }
 
                 var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
@@ -360,21 +353,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 {
                     var priceProducts = await _priceProductFactory.CreateAsync(products.Data, isOutletPurchase: false);
 
+                    var priceClient = await _priceClientResolver.ResolveAsync(null, discountCode, token);
+
                     prices = await _priceService.GetPrices(
-                        _options.Value.GrulaAccessToken,
                         DateTime.UtcNow,
                         priceProducts,
-                        new PriceClient
-                        {
-                            Id = User.GetClientId(),
-                            Name = User.Identity?.Name,
-                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
-                            DiscountCode = discountCode
-                        });
+                        priceClient);
                 }
 
                 var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
@@ -451,21 +435,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 {
                     var priceProduct = await _priceProductFactory.CreateAsync(product, isOutletPurchase: isOutlet);
 
+                    var priceClient = await _priceClientResolver.ResolveAsync(null, discountCode, token);
+
                     var price = await _priceService.GetPrice(
-                    _options.Value.GrulaAccessToken,
                     DateTime.UtcNow,
                     priceProduct,
-                    new PriceClient
-                    {
-                        Id = User.GetClientId(),
-                        Name = User.Identity?.Name,
-                        CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                        ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                        PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                        Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
-                        DiscountCode = discountCode
-                    });
+                    priceClient);
 
                     if (price is not null)
                     {

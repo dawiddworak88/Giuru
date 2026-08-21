@@ -1,4 +1,4 @@
-using Buyer.Web.Areas.Shared.Definitions.Products;
+﻿using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
@@ -16,7 +16,8 @@ using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories;
-using Buyer.Web.Shared.DomainModels.Prices;
+using Foundation.Pricing.DomainModels;
+using Foundation.Pricing.Services;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Prices;
@@ -105,20 +106,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                     if (_options.Value.IsGrulaConfigured)
                     {
                         prices = await _priceService.GetPrices(
-                            _options.Value.GrulaAccessToken,
                             DateTime.UtcNow,
                             products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false)),
-                            new PriceClient
-                            {
-                                Id = componentModel.ClientId,
-                                Name = componentModel.Name,
-                                CurrencyCode = componentModel.CurrencyCode,
-                                ExtraPacking = componentModel.ExtraPacking,
-                                PaletteLoading = componentModel.PaletteLoading,
-                                Country = componentModel.Country,
-                                DeliveryZipCode = componentModel.DeliveryZipCode,
-                                DiscountCode = viewModel.DiscountCode
-                            });
+                            componentModel.ToPriceClient(viewModel.DiscountCode));
                     }
 
                     var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(

@@ -4,6 +4,7 @@ using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Shared.DomainModels.Baskets;
 using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Services.Prices;
+using Foundation.Pricing.Services;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;

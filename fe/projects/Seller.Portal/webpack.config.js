@@ -1,4 +1,5 @@
 ﻿const path = require("path");
+const sharedBabelPresets = require("../../shared/build/babelPresets.cjs");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
@@ -71,16 +72,28 @@ module.exports = {
         filename: "[name].js"
     },
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx"],
+        modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
+                include: [
+                    path.resolve(__dirname, "src"),
+                    path.resolve(__dirname, "../../shared")
+                ],
                 exclude: /node_modules/,
                 use: [
-                    { 
-                        loader: "babel-loader"
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            // fe/shared sits outside this package, so a .babelrc here cannot reach
+                            // it - the presets are passed explicitly and shared with the SSR
+                            // bootstrap so the two builds cannot drift.
+                            babelrc: false,
+                            presets: sharedBabelPresets
+                        }
                     },
                 ]
             },
