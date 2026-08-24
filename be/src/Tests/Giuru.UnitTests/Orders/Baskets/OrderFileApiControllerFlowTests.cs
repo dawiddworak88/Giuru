@@ -154,6 +154,163 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Equal("No", priceProduct.IsOutlet);
         }
 
+        // These pin the same resolution matrix as BasketsApiControllerFlowTests, so the multipart
+        // upload path cannot drift from the JSON path now that both go through
+        // BasketDiscountCodeCoordinator.
+        [Fact]
+        public async Task Index_WhenTheUploadCarriesADiscountCode_SavesTheTrimmedCode()
+        {
+            var (result, savedDiscountCode, priceService) = await RunDiscountCodeScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "WINTER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "  SUMMER25  ");
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("SUMMER25", savedDiscountCode);
+            await priceService.Received(1).GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>());
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadOmitsTheDiscountCode_KeepsThePersistedOne()
+        {
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: false,
+                requestedDiscountCode: null);
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("SUMMER25", savedDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadSendsABlankDiscountCode_KeepsThePersistedOne()
+        {
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "   ");
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("SUMMER25", savedDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenGrulaIsNotConfigured_IgnoresTheUploadedCodeAndKeepsThePersistedOne()
+        {
+            var (result, savedDiscountCode, priceService) = await RunDiscountCodeScenarioAsync(
+                new AppSettings(),
+                persistedDiscountCode: "WINTER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "SUMMER25");
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("WINTER25", savedDiscountCode);
+            await priceService.DidNotReceive().GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>());
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadRemovesTheDiscountCode_ClearsThePersistedOne()
+        {
+            // ASP.NET Core's ConvertEmptyStringToNull binds an empty form field to a null
+            // model property while the key itself is still present on the request.
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: null);
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Null(savedDiscountCode);
+        }
+
+        private static async Task<(IActionResult Result, string SavedDiscountCode, IPriceService PriceService)> RunDiscountCodeScenarioAsync(
+            AppSettings appSettings,
+            string persistedDiscountCode,
+            bool formHasDiscountCode,
+            string requestedDiscountCode)
+        {
+            var basketId = Guid.NewGuid();
+            var productId = Guid.NewGuid();
+            string savedDiscountCode = null;
+            var existingBasket = new DomainBasket
+            {
+                Id = basketId,
+                DiscountCode = persistedDiscountCode,
+                Items = new[]
+                {
+                    new BasketItem { ProductId = productId, ProductSku = "SKU", ProductName = "Product", Quantity = 2 }
+                }
+            };
+            var orderFileService = Substitute.For<IOrderFileService>();
+            var basketRepository = Substitute.For<IBasketRepository>();
+            var productsRepository = Substitute.For<IProductsRepository>();
+            var inventoryRepository = Substitute.For<IInventoryRepository>();
+            var priceService = Substitute.For<IPriceService>();
+            var productsService = Substitute.For<IProductsService>();
+            var productColorsService = Substitute.For<IProductColorsService>();
+            var options = Options.Create(appSettings);
+
+            orderFileService.ImportOrderLines(Arg.Any<IFormFile>()).Returns(new[]
+            {
+                new OrderFileLine { Sku = "SKU", Quantity = 1 }
+            });
+            basketRepository.GetBasketById("token", Arg.Any<string>(), basketId).Returns(Task.FromResult(existingBasket));
+            productsRepository.GetProductsBySkusAsync("token", Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<Product>>(new[]
+                {
+                    new Product { Id = productId, Sku = "SKU", PrimaryProductSku = "PRIMARY" }
+                }));
+            inventoryRepository.GetStockAvailbleProductsByProductIdsAsync("token", Arg.Any<string>(), Arg.Any<IEnumerable<Guid>>())
+                .Returns(Task.FromResult<IEnumerable<Buyer.Web.Shared.DomainModels.Inventory.InventoryItem>>(Array.Empty<Buyer.Web.Shared.DomainModels.Inventory.InventoryItem>()));
+            productColorsService.ToEnglishAsync(Arg.Any<string>()).Returns(Task.FromResult<string>(null));
+            priceService.CanSeePrices(Arg.Any<Guid?>()).Returns(true);
+            priceService.GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>())
+                .Returns(Task.FromResult<IReadOnlyList<PriceLookupResult>>(new[]
+                {
+                    new PriceLookupResult { Status = PriceLookupStatus.Priced, Price = new Price { CurrentPrice = 10m, CurrencyCode = "EUR" } }
+                }));
+            basketRepository.SaveAsync("token", Arg.Any<string>(), basketId, Arg.Any<IEnumerable<BasketItem>>(), Arg.Any<string>())
+                .Returns(call =>
+                {
+                    savedDiscountCode = call.ArgAt<string>(4);
+                    return Task.FromResult(new DomainBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<BasketItem>>(3).ToList() });
+                });
+
+            var formFields = formHasDiscountCode
+                ? new Dictionary<string, Microsoft.Extensions.Primitives.StringValues> { ["DiscountCode"] = requestedDiscountCode ?? string.Empty }
+                : new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
+            var httpContext = CreateHttpContext(basketId, formFields);
+
+            var controller = new OrderFileApiController(
+                orderFileService,
+                productsRepository,
+                basketRepository,
+                Substitute.For<LinkGenerator>(),
+                options,
+                Substitute.For<IMediaService>(),
+                Substitute.For<IMediaItemsRepository>(),
+                Substitute.For<IOrdersRepository>(),
+                inventoryRepository,
+                Substitute.For<ILogger<OrderFileApiController>>(),
+                Substitute.For<IStringLocalizer<OrderResources>>(),
+                priceService,
+                productsService,
+                productColorsService,
+                new PriceProductFactory(productsService, productColorsService, options),
+                CreatePriceClientResolver(httpContext),
+                CreateBasketRepricingService(priceService))
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            var result = await controller.Index(new UploadMediaRequestModel { File = Substitute.For<IFormFile>(), DiscountCode = requestedDiscountCode });
+
+            return (result, savedDiscountCode, priceService);
+        }
+
         // The controllers delegate the align/apply spine to BasketRepricingService, so these flow
         // tests drive the real one over a substituted IPriceService rather than stubbing it out.
         private static IBasketRepricingService CreateBasketRepricingService(IPriceService priceService)
@@ -168,11 +325,11 @@ namespace Giuru.UnitTests.Orders.Baskets
             return new ClaimsPriceClientResolver(httpContextAccessor);
         }
 
-        private static DefaultHttpContext CreateHttpContext(Guid basketId)
+        private static DefaultHttpContext CreateHttpContext(Guid basketId, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formFields = null)
         {
             var context = new DefaultHttpContext();
             context.Request.Headers.Cookie = $"{BasketConstants.BasketCookieName}={basketId}";
-            context.Features.Set<IFormFeature>(new FormFeature(new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>())));
+            context.Features.Set<IFormFeature>(new FormFeature(new FormCollection(formFields ?? new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>())));
             context.User = new ClaimsPrincipal(new ClaimsIdentity());
             var authentication = Substitute.For<IAuthenticationService>();
             var properties = new AuthenticationProperties();
@@ -291,6 +448,166 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Equal("No", priceProduct.IsOutlet);
         }
 
+        // These pin the same resolution matrix as BasketsApiControllerFlowTests, so the multipart
+        // upload path cannot drift from the JSON path now that both go through
+        // BasketDiscountCodeCoordinator.
+        [Fact]
+        public async Task Index_WhenTheUploadCarriesADiscountCode_SavesTheTrimmedCode()
+        {
+            var (result, savedDiscountCode, priceService) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "WINTER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "  SUMMER25  ");
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("SUMMER25", savedDiscountCode);
+            await priceService.Received(1).GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>());
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadOmitsTheDiscountCode_KeepsThePersistedOne()
+        {
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: false,
+                requestedDiscountCode: null);
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("SUMMER25", savedDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadSendsABlankDiscountCode_KeepsThePersistedOne()
+        {
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "   ");
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("SUMMER25", savedDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenGrulaIsNotConfigured_IgnoresTheUploadedCodeAndKeepsThePersistedOne()
+        {
+            var (result, savedDiscountCode, priceService) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings(),
+                persistedDiscountCode: "WINTER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "SUMMER25");
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Equal("WINTER25", savedDiscountCode);
+            await priceService.DidNotReceive().GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>());
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadRemovesTheDiscountCode_ClearsThePersistedOne()
+        {
+            // ASP.NET Core's ConvertEmptyStringToNull binds an empty form field to a null
+            // model property while the key itself is still present on the request.
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: null);
+
+            Assert.IsType<ObjectResult>(result);
+            Assert.Null(savedDiscountCode);
+        }
+
+        private static async Task<(IActionResult Result, string SavedDiscountCode, IPriceService PriceService)> RunDiscountCodeScenarioAsync(
+            SellerAppSettings appSettings,
+            string persistedDiscountCode,
+            bool formHasDiscountCode,
+            string requestedDiscountCode)
+        {
+            var basketId = Guid.NewGuid();
+            var clientId = Guid.NewGuid();
+            var productId = Guid.NewGuid();
+            string savedDiscountCode = null;
+            var existingBasket = new SellerBasket
+            {
+                Id = basketId,
+                DiscountCode = persistedDiscountCode,
+                Items = new[]
+                {
+                    new SellerBasketItem { ProductId = productId, ProductSku = "SKU", ProductName = "Product", Quantity = 2 }
+                }
+            };
+            var orderFileService = Substitute.For<SellerIOrderFileService>();
+            var basketRepository = Substitute.For<SellerIBasketRepository>();
+            var productsRepository = Substitute.For<SellerIProductsRepository>();
+            var inventoryRepository = Substitute.For<SellerIInventoryRepository>();
+            var priceService = Substitute.For<IPriceService>();
+            var productsService = Substitute.For<SellerIProductsService>();
+            var productColorsService = Substitute.For<SellerIProductColorsService>();
+            var priceClientResolver = Substitute.For<IPriceClientResolver>();
+            var options = Options.Create(appSettings);
+
+            orderFileService.ImportOrderLines(Arg.Any<IFormFile>()).Returns(new[]
+            {
+                new SellerOrderFileLine { Sku = "SKU", Quantity = 1 }
+            });
+            basketRepository.GetBasketByIdAsync(Arg.Any<string>(), Arg.Any<string>(), basketId).Returns(Task.FromResult(existingBasket));
+            productsRepository.GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<SellerProduct>>(new[]
+                {
+                    new SellerProduct { Id = productId, Sku = "SKU", PrimaryProductSku = "PRIMARY" }
+                }));
+            inventoryRepository.GetAvailbleProductsByProductIdsAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<Guid>>())
+                .Returns(Task.FromResult<IEnumerable<SellerInventoryItem>>(Array.Empty<SellerInventoryItem>()));
+            productColorsService.ToEnglishAsync(Arg.Any<string>()).Returns(Task.FromResult<string>(null));
+            priceService.CanSeePrices(Arg.Any<Guid?>()).Returns(true);
+            priceService.GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>())
+                .Returns(Task.FromResult<IReadOnlyList<PriceLookupResult>>(new[]
+                {
+                    new PriceLookupResult { Status = PriceLookupStatus.Priced, Price = new Price { CurrentPrice = 10m, CurrencyCode = "EUR" } }
+                }));
+            priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
+                .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0) }));
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+                .Returns(call =>
+                {
+                    savedDiscountCode = call.ArgAt<string>(4);
+                    return Task.FromResult(new SellerBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList() });
+                });
+
+            var formFields = formHasDiscountCode
+                ? new Dictionary<string, Microsoft.Extensions.Primitives.StringValues> { ["DiscountCode"] = requestedDiscountCode ?? string.Empty }
+                : new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
+
+            var controller = new SellerOrderFileApiController(
+                orderFileService,
+                productsRepository,
+                basketRepository,
+                Substitute.For<LinkGenerator>(),
+                Substitute.For<IMediaService>(),
+                Substitute.For<SellerIMediaItemsRepository>(),
+                Substitute.For<SellerIOrdersRepository>(),
+                inventoryRepository,
+                Substitute.For<ILogger<SellerOrderFileApiController>>(),
+                Substitute.For<IStringLocalizer<OrderResources>>(),
+                priceService,
+                productsService,
+                productColorsService,
+                options,
+                priceClientResolver,
+                new SellerPriceProductFactory(productsService, productColorsService, options),
+                CreateBasketRepricingService(priceService))
+            {
+                ControllerContext = new ControllerContext { HttpContext = CreateHttpContext(formFields) }
+            };
+
+            var result = await controller.Index(new SellerUploadMediaRequestModel { Id = basketId, ClientId = clientId, File = Substitute.For<IFormFile>(), DiscountCode = requestedDiscountCode });
+
+            return (result, savedDiscountCode, priceService);
+        }
+
         // The controllers delegate the align/apply spine to BasketRepricingService, so these flow
         // tests drive the real one over a substituted IPriceService rather than stubbing it out.
         private static IBasketRepricingService CreateBasketRepricingService(IPriceService priceService)
@@ -298,13 +615,13 @@ namespace Giuru.UnitTests.Orders.Baskets
             return new BasketRepricingService(priceService, Substitute.For<ILogger<BasketRepricingService>>());
         }
 
-        private static DefaultHttpContext CreateHttpContext()
+        private static DefaultHttpContext CreateHttpContext(Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formFields = null)
         {
             var context = new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity())
             };
-            context.Features.Set<IFormFeature>(new FormFeature(new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>())));
+            context.Features.Set<IFormFeature>(new FormFeature(new FormCollection(formFields ?? new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>())));
             var authentication = Substitute.For<IAuthenticationService>();
             var properties = new AuthenticationProperties();
             properties.StoreTokens(new[] { new AuthenticationToken { Name = "access_token", Value = "token" } });

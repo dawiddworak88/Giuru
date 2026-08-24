@@ -2,8 +2,12 @@ import AuthenticationHelper from "../globals/AuthenticationHelper";
 import QueryStringSerializer from "../serializers/QueryStringSerializer";
 
 export default class ProductPricesHelper {
-    static getPriceByProductSku = async (controllerUrl, { sku, clientId = null, discountCode = null, isOutlet = false } = {}) => {
-        if (!controllerUrl || !sku) {
+    // requiresClientId mirrors the two IPriceClientResolver kinds on the server: the buyer app
+    // prices for the authenticated principal and sends no client id, while the seller app prices
+    // on behalf of a client it picks and cannot produce a price without one. Asking anyway just
+    // spends a round trip on a response that is known in advance to be empty.
+    static getPriceByProductSku = async (controllerUrl, { sku, clientId = null, discountCode = null, isOutlet = false, requiresClientId = false } = {}) => {
+        if (!controllerUrl || !sku || (requiresClientId && !clientId)) {
             return null;
         }
 

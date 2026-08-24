@@ -17,10 +17,7 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
-using Microsoft.Extensions.Options;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Prices;
-using Foundation.Pricing.DomainModels;
 using Foundation.Pricing.Services;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
@@ -41,12 +38,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IOutletRepository outletRepository;
         private readonly IInventoryRepository inventoryRepository;
-        private readonly IOptions<AppSettings> _options;
-        private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IProductPricingService _productPricingService;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -57,12 +53,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             IOutletRepository outletRepository,
             LinkGenerator linkGenerator,
             IInventoryRepository inventoryRepository,
-            IOptions<AppSettings> options,
-            IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
             IDeliveryMessageHelper deliveryMessageHelper,
             IExpectedDeliveryDateService expectedDeliveryDateService,
-            IPriceProductFactory priceProductFactory)
+            IPriceProductFactory priceProductFactory,
+            IProductPricingService productPricingService)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
@@ -71,12 +66,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.outletRepository = outletRepository;
             this.modalModelBuilder = modalModelBuilder;
             this.inventoryRepository = inventoryRepository;
-            _options = options;
-            _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
+            _productPricingService = productPricingService;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -104,15 +98,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
 
                 if (products is not null)
                 {
-                    var prices = Enumerable.Empty<Price>();
-
-                    if (_options.Value.IsGrulaConfigured)
-                    {
-                        prices = await _priceService.GetPrices(
-                            DateTime.UtcNow,
-                            products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: true)),
-                            componentModel.ToPriceClient(viewModel.DiscountCode));
-                    }
+                    var prices = await _productPricingService.GetPricesAsync(
+                        () => Task.FromResult(products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: true))),
+                        () => Task.FromResult(componentModel.ToPriceClient(viewModel.DiscountCode)));
 
                     var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                         accessToken: componentModel.Token,

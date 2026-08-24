@@ -18,10 +18,7 @@ using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Products.ApiResponseModels;
-using Foundation.Pricing.DomainModels;
 using Foundation.Pricing.Services;
-using Microsoft.Extensions.Options;
-using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Services.Clients;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.Products;
@@ -39,44 +36,41 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IStringLocalizer _productLocalizer;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IOutletRepository _outletRepository;
-        private readonly IPriceService _priceService;
         private readonly IClientLookupService _clientLookupService;
         private readonly IPriceClientResolver _priceClientResolver;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
-        private readonly IOptions<AppSettings> _options;
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IProductPricingService _productPricingService;
 
         public ProductsApiController(
             IProductsRepository productsRepository,
             IStringLocalizer<ProductResources> productLocalizer,
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
-            IPriceService priceService,
             IClientLookupService clientLookupService,
             IPriceClientResolver priceClientResolver,
             IProductsService productsService,
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
             IExpectedDeliveryDateService expectedDeliveryDateService,
-            IOptions<AppSettings> options,
-            IPriceProductFactory priceProductFactory)
+            IPriceProductFactory priceProductFactory,
+            IProductPricingService productPricingService)
         {
             _productsRepository = productsRepository;
             _productLocalizer = productLocalizer;
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
-            _priceService = priceService;
             _clientLookupService = clientLookupService;
             _priceClientResolver = priceClientResolver;
-            _options = options;
             _productsService = productsService;
             _productColorsService = productColorsService;
             _leadTimeRepository = leadTimeRepository;
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
+            _productPricingService = productPricingService;
         }
 
         [HttpGet]
@@ -172,20 +166,13 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                     language,
                     products.Data.Select(x => x.Id));
 
-                var prices = Enumerable.Empty<Price>();
-
                 var client = await _clientLookupService.GetAsync(token, clientId);
 
-                if (_options.Value.IsGrulaConfigured)
-                {
-                    var priceProducts = await _priceProductFactory.CreateAsync(products.Data, isOutletPurchase: false);
-                    var priceClient = await _priceClientResolver.ResolveAsync(clientId, discountCode, token);
-
-                    prices = await _priceService.GetPrices(
-                        DateTime.UtcNow,
-                        priceProducts,
-                        priceClient);
-                }
+                var prices = clientId.HasValue
+                    ? await _productPricingService.GetPricesAsync(
+                        () => _priceProductFactory.CreateAsync(products.Data, isOutletPurchase: false),
+                        () => _priceClientResolver.ResolveAsync(clientId, discountCode, token))
+                    : PricedProducts.Empty;
 
                 var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                     accessToken: token,
@@ -218,15 +205,12 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                         ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
                         : null;
 
-                    if (prices.Any())
-                    {
-                        var price = prices.ElementAtOrDefault(i);
+                    var price = prices.ElementAtOrDefault(i);
 
-                        if (price is not null)
-                        {
-                            productQuantity.Price = price.CurrentPrice;
-                            productQuantity.Currency = price.CurrencyCode;
-                        }
+                    if (price is not null)
+                    {
+                        productQuantity.Price = price.CurrentPrice;
+                        productQuantity.Currency = price.CurrencyCode;
                     }
 
                     productsQuantities.Add(productQuantity);
@@ -246,17 +230,13 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             var product = await _productsRepository.GetProductAsync(token, language, sku);
 
-            if (_options.Value.IsGrulaConfigured && clientId.HasValue)
+            if (clientId.HasValue)
             {
                 try
                 {
-                    var priceProduct = await _priceProductFactory.CreateAsync(product, isOutletPurchase: isOutlet);
-                    var priceClient = await _priceClientResolver.ResolveAsync(clientId, discountCode, token);
-
-                    var price = await _priceService.GetPrice(
-                        DateTime.UtcNow,
-                        priceProduct,
-                        priceClient);
+                    var price = await _productPricingService.GetPriceAsync(
+                        () => _priceProductFactory.CreateAsync(product, isOutletPurchase: isOutlet),
+                        () => _priceClientResolver.ResolveAsync(clientId, discountCode, token));
 
                     if (price is not null)
                     {

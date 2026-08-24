@@ -110,18 +110,6 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
                 : null;
             var canSeePrices = _priceService.CanSeePrices(model.ClientId);
-            string discountCode;
-
-            if (_options.Value.IsGrulaConfigured)
-            {
-                var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
-                discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
-            }
-            else
-            {
-                // Do not activate or remove a Grula discount while pricing is unavailable.
-                discountCode = existingBasket?.DiscountCode;
-            }
 
             var importedSkus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToList();
             var skus = importedSkus
@@ -136,6 +124,27 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             }
 
             var productLookup = OrderBasketUploadHelper.CreateProductLookup(products);
+
+            // One shared prologue with BasketsApiController: the same request must resolve to the same
+            // code whichever entry point writes the basket. Past the ProductsNotFound guard at least one
+            // imported line resolved to a product, so the merged basket always has lines - hasItems is
+            // an invariant here, not a test, which makes the rejection below unreachable from this
+            // entry point. It is kept rather than dropped so that weakening that guard cannot silently
+            // start persisting a discount code against a basket with no lines.
+            var discountOutcome = await BasketDiscountCodeCoordinator.ResolveAsync(
+                _options.Value.IsGrulaConfigured,
+                Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode)),
+                model.DiscountCode,
+                hasItems: true,
+                () => Task.FromResult(existingBasket?.DiscountCode),
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+
+            if (discountOutcome.IsRejected)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = discountOutcome.RejectionMessage });
+            }
+
+            var discountCode = discountOutcome.DiscountCode;
 
             var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct().ToList();
             var stockAvailableProducts = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(token, language, productIds);

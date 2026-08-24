@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, Fragment } from "react";
+import React, { useContext, useCallback, useRef, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
@@ -20,8 +20,8 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGroupHelper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
 import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
-import BasketDiscountCodeClient from "../../../../shared/helpers/baskets/BasketDiscountCodeClient";
 import { useDiscountCode } from "../../../../shared/hooks/useDiscountCode";
+import { useBasketDiscountCode } from "../../../../shared/hooks/useBasketDiscountCode";
 import DiscountCodeField from "../../../../shared/components/DiscountCode/DiscountCodeField";
 
 function OrderForm(props) {
@@ -44,39 +44,14 @@ function OrderForm(props) {
     const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [productFromOutlet, setProductFromOutlet] = useState(false);
 
-    const updateBasketDiscountCode = async (newDiscountCode, showSuccessMessage) => {
-        if (!props.isDiscountCodeEnabled) return;
-
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const basket = {
-            id: basketId,
-            clientId: client.id,
-            items: orderItems,
-            discountCode: newDiscountCode
-        };
-
-        const { ok, jsonResponse, message } = await BasketDiscountCodeClient.save({
-            updateBasketUrl: props.updateBasketUrl,
-            basket,
-            generalErrorMessage: props.generalErrorMessage
-        });
-
-        if (ok) {
-            setBasketId(jsonResponse.id);
-            setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items || []));
-            discountCodeState.syncFromResponse(jsonResponse);
-
-            if (showSuccessMessage) {
-                toast.success(props.discountCodeAppliedMessage);
-            }
-        }
-        else {
-            toast.error(message);
-        }
-
-        dispatch({ type: "SET_IS_LOADING", payload: false });
-    };
+    // The two discount-code hooks are mutually dependent - useDiscountCode needs the save from
+    // useBasketDiscountCode, which needs the sync callback from useDiscountCode - so one of them
+    // has to be wired through a ref. Going via the ref rather than straight at the binding below
+    // also keeps this callback stable, which is what lets useDiscountCode memoise apply/remove.
+    const basketDiscountCodeRef = useRef(null);
+    const saveDiscountCode = useCallback(
+        (newDiscountCode, showSuccessMessage) =>
+            basketDiscountCodeRef.current?.save(newDiscountCode, showSuccessMessage), []);
 
     // The seller's order form always opens on a brand-new basket (see basketId above), so
     // there is never a stored code to seed this from. It is filled in at runtime from the
@@ -84,8 +59,30 @@ function OrderForm(props) {
     const discountCodeState = useDiscountCode({
         initialCode: "",
         isEnabled: props.isDiscountCodeEnabled,
-        onSave: updateBasketDiscountCode
+        onSave: saveDiscountCode
     });
+
+    const setGroupedOrderItems = useCallback(
+        (items) => setOrderItems(OrderItemsGroupHelper.groupOrderItems(items)), []);
+
+    const basketDiscountCode = useBasketDiscountCode({
+        isEnabled: props.isDiscountCodeEnabled,
+        updateBasketUrl: props.updateBasketUrl,
+        generalErrorMessage: props.generalErrorMessage,
+        discountCodeAppliedMessage: props.discountCodeAppliedMessage,
+        dispatch,
+        buildBasket: (discountCode) => ({
+            id: basketId,
+            clientId: client.id,
+            items: orderItems,
+            discountCode
+        }),
+        setBasketId,
+        setGroupedOrderItems,
+        syncFromResponse: discountCodeState.syncFromResponse
+    });
+
+    basketDiscountCodeRef.current = basketDiscountCode;
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -177,7 +174,8 @@ function OrderForm(props) {
                     clientId: client.id,
                     sku: product.sku,
                     discountCode: props.isDiscountCodeEnabled ? discountCodeState.appliedDiscountCode : null,
-                    isOutlet: true
+                    isOutlet: true,
+                    requiresClientId: true
                 });
 
             if (outletPrice) {
@@ -227,20 +225,15 @@ function OrderForm(props) {
                 const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
                 if (response.ok && jsonResponse) {
-                    setBasketId(jsonResponse.id);
-                    discountCodeState.syncFromResponse(jsonResponse);
+                    basketDiscountCode.applyBasketResponse(jsonResponse);
 
-                    if (jsonResponse.items && jsonResponse.items.length > 0) {
+                    if (jsonResponse.items?.length) {
                         setProduct(null);
                         setSearchTerm("");
                         setExternalReference("");
                         setMoreInfo("");
-                        setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items));
                         setQuantity(1);
                         setProductFromOutlet(false);
-                    }
-                    else {
-                        setOrderItems([]);
                     }
                 } else {
                     toast.error(message);
@@ -294,16 +287,8 @@ function OrderForm(props) {
                 const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
                 if (response.ok && jsonResponse) {
-                    setBasketId(jsonResponse.id);
-                    discountCodeState.syncFromResponse(jsonResponse);
+                    basketDiscountCode.applyBasketResponse(jsonResponse);
                     setOpenDeleteDialog(false);
-
-                    if (jsonResponse.items && jsonResponse.items.length > 0) {
-                        setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items));
-                    }
-                    else {
-                        setOrderItems([]);
-                    }
                 } else {
                     toast.error(message);
                 }
@@ -482,9 +467,7 @@ function OrderForm(props) {
                     const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
                     if (response.ok && jsonResponse) {
-                        setBasketId(jsonResponse.id);
-                        setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items || []));
-                        discountCodeState.syncFromResponse(jsonResponse);
+                        basketDiscountCode.applyBasketResponse(jsonResponse);
                     }
                     else {
                         toast.error(message);
@@ -494,7 +477,7 @@ function OrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [discountCodeState.appliedDiscountCode, discountCodeState.syncFromResponse, basketId,
+    }, [basketDiscountCode.applyBasketResponse, discountCodeState.appliedDiscountCode, basketId,
         client, dispatch, props.generalErrorMessage, props.isDiscountCodeEnabled,
         props.uploadOrderFileUrl]);
 

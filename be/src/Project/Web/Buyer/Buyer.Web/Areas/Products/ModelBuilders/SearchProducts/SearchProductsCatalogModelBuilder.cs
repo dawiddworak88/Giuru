@@ -6,8 +6,6 @@ using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
 using Buyer.Web.Areas.Shared.Definitions.Products;
-using Buyer.Web.Shared.Configurations;
-using Foundation.Pricing.DomainModels;
 using Foundation.Pricing.Services;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Buyer.Web.Shared.Repositories.LeadTime;
@@ -22,7 +20,6 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -41,12 +38,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IOutletRepository _outletRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IOptions<AppSettings> _options;
-        private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IProductPricingService _productPricingService;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -57,12 +53,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IOutletRepository outletRepository,
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options,
-            IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
             IDeliveryMessageHelper deliveryMessageHelper,
             IExpectedDeliveryDateService expectedDeliveryDateService,
-            IPriceProductFactory priceProductFactory
+            IPriceProductFactory priceProductFactory,
+            IProductPricingService productPricingService
             )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
@@ -73,12 +68,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _inventoryRepository = inventoryRepository;
             _globalLocalizer = globalLocalizer;
             _linkGenerator = linkGenerator;
-            _options = options;
-            _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
+            _productPricingService = productPricingService;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -109,15 +103,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 var outletItems = await _outletRepository.GetOutletProductsByIdsAsync(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
                 var inventoryItems = await _inventoryRepository.GetAvailbleProductsInventoryByIds(componentModel.Token, componentModel.Language, products.Data.Select(x => x.Id));
 
-                var prices = Enumerable.Empty<Price>();
-
-                if (_options.Value.IsGrulaConfigured)
-                {
-                    prices = await _priceService.GetPrices(
-                        DateTime.UtcNow,
-                        products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false)),
-                        componentModel.ToPriceClient(viewModel.DiscountCode));
-                }
+                var prices = await _productPricingService.GetPricesAsync(
+                    () => Task.FromResult(products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false))),
+                    () => Task.FromResult(componentModel.ToPriceClient(viewModel.DiscountCode)));
 
                 var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                     accessToken: componentModel.Token,
@@ -150,18 +138,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         product.ExpectedDelivery = inventoryItem.ExpectedDelivery;
                     }
 
-                    if (prices.Any())
-                    {
-                        var price = prices.ElementAtOrDefault(i);
+                    var price = prices.ElementAtOrDefault(i);
 
-                        if (price is not null)
+                    if (price is not null)
+                    {
+                        product.Price = new ProductPriceViewModel
                         {
-                            product.Price = new ProductPriceViewModel
-                            {
-                                Current = price.CurrentPrice,
-                                Currency = price.CurrencyCode
-                            };
-                        }
+                            Current = price.CurrentPrice,
+                            Currency = price.CurrencyCode
+                        };
                     }
 
                     var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;

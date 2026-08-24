@@ -80,21 +80,6 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Theory]
-        [MemberData(nameof(RequestCases))]
-        public void ResolveDiscountCode_AgreesWithResolve(
-            bool hasDiscountCode,
-            string requestedDiscountCode,
-            string persistedDiscountCode,
-            bool hasItems)
-        {
-            // The multipart upload path resolves the code without the full resolution, so
-            // both entry points have to produce the same code for the same request.
-            var discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, requestedDiscountCode, persistedDiscountCode);
-
-            Assert.Equal(DiscountCodeResolver.Resolve(hasDiscountCode, requestedDiscountCode, persistedDiscountCode, hasItems).DiscountCode, discountCode);
-        }
-
-        [Theory]
         // An omitted code can only be resolved against what is stored.
         [InlineData(false, null, true, true)]
         [InlineData(false, null, false, true)]

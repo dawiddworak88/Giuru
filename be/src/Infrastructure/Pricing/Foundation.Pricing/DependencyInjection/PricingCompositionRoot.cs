@@ -13,6 +13,7 @@ namespace Foundation.Pricing.DependencyInjection
         {
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IBasketRepricingService, BasketRepricingService>();
+            services.AddScoped<IProductPricingService, ProductPricingService>();
 
             services.AddHttpClient("GrulaApi")
                 .AddTypedClient(httpClient =>

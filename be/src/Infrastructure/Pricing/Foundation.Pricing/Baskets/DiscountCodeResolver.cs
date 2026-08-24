@@ -10,7 +10,7 @@ namespace Foundation.Pricing.Baskets
     /// </summary>
     public static class DiscountCodeResolver
     {
-        public static string ResolveDiscountCode(bool hasDiscountCode, string requestedDiscountCode, string persistedDiscountCode)
+        private static string ResolveDiscountCode(bool hasDiscountCode, string requestedDiscountCode, string persistedDiscountCode)
         {
             if (!hasDiscountCode)
             {
