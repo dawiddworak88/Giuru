@@ -19,7 +19,7 @@ variables:
 - name: b2bAccountWebSsrDockerfile
   value: 'fe/projects/Account/Dockerfile-ssr'
 - name: dockerfileSsrBuildContext
-  value: 'fe/projects/Account'
+  value: 'fe'
 - name: chartPath
   value: 'misc/deployment/IdentityApi/helm-chart'
 

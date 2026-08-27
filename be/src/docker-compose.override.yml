@@ -39,6 +39,7 @@ services:
     volumes:
       - ../../fe/projects/Seller.Portal/server:/home/node/seller-web-react-ssr/server
       - ../../fe/projects/Seller.Portal/src:/home/node/seller-web-react-ssr/src
+      - ../../fe/shared:/home/shared
 
   buyer-web-react-ssr:
     environment: 
@@ -46,6 +47,7 @@ services:
     volumes:
       - ../../fe/projects/AspNetCore/server:/home/node/buyer-web-react-ssr/server
       - ../../fe/projects/AspNetCore/src:/home/node/buyer-web-react-ssr/src
+      - ../../fe/shared:/home/shared
 
   account-web-react-ssr:
     environment: 
@@ -53,6 +55,7 @@ services:
     volumes:
       - ../../fe/projects/Account/server:/home/node/account-web-react-ssr/server
       - ../../fe/projects/Account/src:/home/node/account-web-react-ssr/src
+      - ../../fe/shared:/home/shared
 
   sqldata:
     environment:

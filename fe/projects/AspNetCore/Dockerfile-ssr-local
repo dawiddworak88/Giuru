@@ -6,7 +6,7 @@ RUN mkdir -p /home/node/buyer-web-react-ssr/node_modules && chown -R node:node /
 
 WORKDIR /home/node/buyer-web-react-ssr
 
-COPY package*.json ./
+COPY projects/AspNetCore/package*.json ./
 
 USER root
 
@@ -14,7 +14,15 @@ RUN npm install --legacy-peer-deps
 
 USER node
 
-COPY --chown=node:node . .
+# fe/shared is referenced from the sources by paths that climb out of the project directory
+# (server/bootstrap.js resolves "../../../shared"). Landing it two levels above the project root
+# reproduces the repo layout, where fe/projects/<Project> and fe/shared are siblings under fe.
+COPY --chown=node:node shared /home/shared
+
+COPY --chown=node:node projects/AspNetCore .
+
+# Fail the build here rather than at container start if that layout ever drifts.
+RUN node -e "require(require('path').resolve('server', '../../../shared/build/registerSharedModuleResolution.cjs'))"
 
 ENV NODE_ENV=development
 

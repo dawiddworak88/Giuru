@@ -19,7 +19,7 @@ variables:
 - name: b2bSellerWebSsrDockerfile
   value: 'fe/projects/Seller.Portal/Dockerfile-ssr'
 - name: dockerfileSsrBuildContext
-  value: 'fe/projects/Seller.Portal'
+  value: 'fe'
 - name: chartPath
   value: 'misc/deployment/SellerWeb/helm-chart'
 
