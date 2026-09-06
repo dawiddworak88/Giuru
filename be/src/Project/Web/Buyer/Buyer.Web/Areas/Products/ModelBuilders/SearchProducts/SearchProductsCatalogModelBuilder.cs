@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Services.Products;
@@ -43,6 +43,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IProductPricingService _productPricingService;
+        private readonly IPriceClientResolver _priceClientResolver;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
@@ -57,7 +58,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             IDeliveryMessageHelper deliveryMessageHelper,
             IExpectedDeliveryDateService expectedDeliveryDateService,
             IPriceProductFactory priceProductFactory,
-            IProductPricingService productPricingService
+            IProductPricingService productPricingService,
+            IPriceClientResolver priceClientResolver
             )
         {
             _searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
@@ -73,6 +75,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
             _productPricingService = productPricingService;
+            _priceClientResolver = priceClientResolver;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -105,7 +108,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 
                 var prices = await _productPricingService.GetPricesAsync(
                     () => Task.FromResult(products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false))),
-                    () => Task.FromResult(componentModel.ToPriceClient(viewModel.DiscountCode)));
+                    () => _priceClientResolver.ResolveAsync(null, viewModel.DiscountCode, componentModel.Token));
 
                 var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                     accessToken: componentModel.Token,

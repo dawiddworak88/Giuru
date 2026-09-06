@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
@@ -64,6 +64,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IProductPricingService _productPricingService;
+        private readonly IPriceClientResolver _priceClientResolver;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -87,7 +88,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IDeliveryMessageHelper deliveryMessageHelper,
             IExpectedDeliveryDateService expectedDeliveryDateService,
             IPriceProductFactory priceProductFactory,
-            IProductPricingService productPricingService)
+            IProductPricingService productPricingService,
+            IPriceClientResolver priceClientResolver)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -111,6 +113,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
             _productPricingService = productPricingService;
+            _priceClientResolver = priceClientResolver;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -191,7 +194,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 {
                     var price = await _productPricingService.GetPriceAsync(
                         () => _priceProductFactory.CreateAsync(product, isOutletPurchase: false),
-                        () => Task.FromResult(componentModel.ToPriceClient(discountCode)));
+                        () => _priceClientResolver.ResolveAsync(null, discountCode, componentModel.Token));
 
                     if (price is not null)
                     {
@@ -291,7 +294,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         var prices = await _productPricingService.GetPricesAsync(
                             () => _priceProductFactory.CreateAsync(productVariants.Data, isOutletPurchase: false),
-                            () => Task.FromResult(componentModel.ToPriceClient(discountCode)));
+                            () => _priceClientResolver.ResolveAsync(null, discountCode, componentModel.Token));
 
                         var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                            accessToken: componentModel.Token,

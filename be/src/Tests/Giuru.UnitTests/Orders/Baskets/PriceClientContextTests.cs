@@ -7,7 +7,7 @@ using SellerPriceClientContext = Seller.Web.Shared.Services.Prices.PriceClientCo
 
 namespace Giuru.UnitTests.Orders.Baskets
 {
-    public sealed class OrderFilePricingContextTests
+    public sealed class PriceClientContextTests
     {
         [Fact]
         public void MissingClient_ReturnsNoCountryOrDefaultAddressId()
