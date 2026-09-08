@@ -13,13 +13,12 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Files;
-using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
-using Buyer.Web.Shared.DomainModels.Prices;
 using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Inventory;
 using Buyer.Web.Shared.Repositories.Media;
-using Buyer.Web.Shared.Services.Baskets;
+using Foundation.Pricing.Baskets;
+using Foundation.Pricing.Services;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -64,6 +63,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IPriceClientResolver _priceClientResolver;
+        private readonly IBasketRepricingService _basketRepricingService;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -80,7 +81,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IPriceService priceService,
             IProductsService productsService,
             IProductColorsService productColorsService,
-            IPriceProductFactory priceProductFactory)
+            IPriceProductFactory priceProductFactory,
+            IPriceClientResolver priceClientResolver,
+            IBasketRepricingService basketRepricingService)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -97,6 +100,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _productsService = productsService;
             _productColorsService = productColorsService;
             _priceProductFactory = priceProductFactory;
+            _priceClientResolver = priceClientResolver;
+            _basketRepricingService = basketRepricingService;
         }
 
         [HttpPost]
@@ -123,18 +128,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var id = Guid.Parse(reqCookie);
             var existingBasket = await _basketRepository.GetBasketById(token, language, id);
             var canSeePrices = _priceService.CanSeePrices(User.GetClientId());
-            string discountCode;
-
-            if (_options.Value.IsGrulaConfigured)
-            {
-                var hasDiscountCode = Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode));
-                discountCode = DiscountCodeResolver.ResolveDiscountCode(hasDiscountCode, model.DiscountCode, existingBasket?.DiscountCode);
-            }
-            else
-            {
-                // Do not activate or remove a Grula discount while pricing is unavailable.
-                discountCode = existingBasket?.DiscountCode;
-            }
 
             var importedSkus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToList();
             var skusParam = importedSkus
@@ -149,6 +142,27 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             var productLookup = OrderBasketUploadHelper.CreateProductLookup(products);
+
+            // One shared prologue with BasketsApiController: the same request must resolve to the same
+            // code whichever entry point writes the basket. Past the ProductsNotFound guard at least one
+            // imported line resolved to a product, so the merged basket always has lines - hasItems is
+            // an invariant here, not a test, which makes the rejection below unreachable from this
+            // entry point. It is kept rather than dropped so that weakening that guard cannot silently
+            // start persisting a discount code against a basket with no lines.
+            var discountOutcome = await BasketDiscountCodeCoordinator.ResolveAsync(
+                _options.Value.IsGrulaConfigured,
+                Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode)),
+                model.DiscountCode,
+                hasItems: true,
+                () => Task.FromResult(existingBasket?.DiscountCode),
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+
+            if (discountOutcome.IsRejected)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = discountOutcome.RejectionMessage });
+            }
+
+            var discountCode = discountOutcome.DiscountCode;
 
             var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct();
             var stockAvailableProducts = await _inventoryRepository.GetStockAvailbleProductsByProductIdsAsync(token, language, productIds);
@@ -260,42 +274,23 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IReadOnlyDictionary<string, Product> productLookup,
             string discountCode)
         {
-            var indexedProducts = basketItems
-                .Select((item, index) => new { item, index })
-                .Where(x => !string.IsNullOrWhiteSpace(x.item.ProductSku) && productLookup.ContainsKey(x.item.ProductSku))
-                .ToList();
-
             foreach (var item in basketItems.Where(x => string.IsNullOrWhiteSpace(x.ProductSku) || !productLookup.ContainsKey(x.ProductSku)))
             {
                 _logger.LogWarning("Basket line SKU {Sku} could not be resolved to a product for language {Language}.", item.ProductSku, language);
             }
 
-            var priceProducts = await Task.WhenAll(indexedProducts.Select(x =>
-                _priceProductFactory.CreateAsync(productLookup[x.item.ProductSku], isOutletPurchase: x.item.OutletQuantity > 0)));
+            var priceClient = await _priceClientResolver.ResolveAsync(null, discountCode, token);
 
-            var prices = await _priceService.GetPriceResultsForBasketAsync(
-                _options.Value.GrulaAccessToken,
-                DateTime.UtcNow,
-                priceProducts,
-                new PriceClient
-                {
-                    Id = User.GetClientId(),
-                    Name = User.Identity?.Name,
-                    CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                    ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                    PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                    Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                    DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
-                    DiscountCode = discountCode
-                });
+            var outcome = await _basketRepricingService.RepriceAsync(
+                basketItems,
+                x => x.ProductSku,
+                x => x.OutletQuantity > 0,
+                productLookup,
+                (product, isOutletPurchase) => _priceProductFactory.CreateAsync(product, isOutletPurchase),
+                priceClient,
+                DateTime.UtcNow);
 
-            var alignedPrices = BasketPriceApplier.AlignPrices(basketItems.Count, indexedProducts.Select(x => x.index).ToList(), prices?.ToList());
-            if (alignedPrices is null)
-            {
-                _logger.LogWarning("Grula returned {PriceResultCount} price results for {PricedLineCount} priced basket lines; the basket will be persisted unpriced.", prices?.Count, indexedProducts.Count);
-            }
-
-            if (!BasketPriceApplier.ApplyPrices(basketItems, alignedPrices))
+            if (!outcome.Succeeded)
             {
                 throw new CustomException(_orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value, (int)HttpStatusCode.UnprocessableEntity);
             }

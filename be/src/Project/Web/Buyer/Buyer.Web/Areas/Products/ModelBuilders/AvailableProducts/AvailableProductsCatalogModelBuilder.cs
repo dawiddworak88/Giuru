@@ -16,9 +16,7 @@ using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Areas.Products.Repositories;
-using Buyer.Web.Shared.DomainModels.Prices;
-using Microsoft.Extensions.Options;
-using Buyer.Web.Shared.Configurations;
+using Foundation.Pricing.Services;
 using Buyer.Web.Shared.Services.Prices;
 using System;
 using Buyer.Web.Areas.Products.ViewModels.Products;
@@ -38,12 +36,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IOutletRepository outletRepository;
-        private readonly IOptions<AppSettings> _options;
-        private readonly IPriceService _priceService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IProductPricingService _productPricingService;
+        private readonly IPriceClientResolver _priceClientResolver;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -53,12 +51,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator,
             IOutletRepository outletRepository,
-            IOptions<AppSettings> options,
-            IPriceService priceService,
             ILeadTimeRepository leadTimeRepository,
             IDeliveryMessageHelper deliveryMessageHelper,
             IExpectedDeliveryDateService expectedDeliveryDateService,
-            IPriceProductFactory priceProductFactory)
+            IPriceProductFactory priceProductFactory,
+            IProductPricingService productPricingService,
+            IPriceClientResolver priceClientResolver)
         {
             this.globalLocalizer = globalLocalizer;
             this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
@@ -67,12 +65,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.linkGenerator = linkGenerator;
             this.modalModelBuilder = modalModelBuilder;
             this.outletRepository = outletRepository;
-            _options = options;
-            _priceService = priceService;
             _leadTimeRepository = leadTimeRepository;
             _deliveryMessageHelper = deliveryMessageHelper;
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
+            _productPricingService = productPricingService;
+            _priceClientResolver = priceClientResolver;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -100,26 +98,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 
                 if (products is not null)
                 {
-                    var prices = Enumerable.Empty<Price>();
-
-                    if (_options.Value.IsGrulaConfigured)
-                    {
-                        prices = await _priceService.GetPrices(
-                            _options.Value.GrulaAccessToken,
-                            DateTime.UtcNow,
-                            products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false)),
-                            new PriceClient
-                            {
-                                Id = componentModel.ClientId,
-                                Name = componentModel.Name,
-                                CurrencyCode = componentModel.CurrencyCode,
-                                ExtraPacking = componentModel.ExtraPacking,
-                                PaletteLoading = componentModel.PaletteLoading,
-                                Country = componentModel.Country,
-                                DeliveryZipCode = componentModel.DeliveryZipCode,
-                                DiscountCode = viewModel.DiscountCode
-                            });
-                    }
+                    var prices = await _productPricingService.GetPricesAsync(
+                        () => Task.FromResult(products.Data.Select(x => _priceProductFactory.Create(x, isOutletPurchase: false))),
+                        () => _priceClientResolver.ResolveAsync(null, viewModel.DiscountCode, componentModel.Token));
 
                     var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                         accessToken: componentModel.Token,
@@ -152,18 +133,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                             product.InOutlet = true;
                         }
 
-                        if (prices.Any())
-                        {
-                            var price = prices.ElementAtOrDefault(i);
+                        var price = prices.ElementAtOrDefault(i);
 
-                            if (price is not null)
+                        if (price is not null)
+                        {
+                            product.Price = new ProductPriceViewModel
                             {
-                                product.Price = new ProductPriceViewModel
-                                {
-                                    Current = price.CurrentPrice,
-                                    Currency = price.CurrencyCode
-                                };
-                            }
+                                Current = price.CurrentPrice,
+                                Currency = price.CurrencyCode
+                            };
                         }
 
                         var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == product.Sku)?.LeadTimeDays ?? 0;

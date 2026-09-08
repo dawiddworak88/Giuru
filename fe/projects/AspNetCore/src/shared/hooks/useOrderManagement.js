@@ -6,57 +6,12 @@ import {
 import QuantityCalculatorService from '../services/QuantityCalculatorService';
 import { toast } from 'react-toastify';
 import ProductPricesHelper from '../helpers/prices/ProductPricesHelper';
+import OrderItemsGroupHelper from '../helpers/orders/OrderItemsGroupHelper';
 import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
 import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
-
-const groupOrderItems = (items) => {
-    const grouped = [];
-
-    items.forEach(item => {
-        if (item.outletQuantity > 0) {
-            const found = grouped.find(g =>
-                g.sku === item.sku &&
-                g.outletQuantity > 0 &&
-                g.moreInfo === item.moreInfo &&
-                g.externalReference === item.externalReference
-            );
-
-            if (found) {
-                found.outletQuantity += item.outletQuantity;
-                found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
-            } else {
-                grouped.push({
-                    ...item,
-                    quantity: 0,
-                    stockQuantity: 0,
-                });
-            }
-        } else {
-            const found = grouped.find(g =>
-                g.sku === item.sku &&
-                (!g.outletQuantity || g.outletQuantity === 0) &&
-                g.moreInfo === item.moreInfo &&
-                g.externalReference === item.externalReference
-            );
-
-            if (found) {
-                found.quantity += item.quantity;
-                found.stockQuantity += item.stockQuantity;
-                found.price = found.price ? (parseFloat(found.price) + parseFloat(item.price)).toFixed(2) : null;
-            } else {
-                grouped.push({
-                    ...item,
-                    outletQuantity: 0
-                });
-            }
-        }
-    });
-
-    return grouped;
-}
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -140,9 +95,11 @@ export const useOrderManagement = ({
             if (isOutletOrder) {
                 const outletPrice = await ProductPricesHelper.getPriceByProductSku(
                     getPriceUrl,
-                    product.sku,
-                    isDiscountCodeEnabled ? discountCode : null,
-                    true
+                    {
+                        sku: product.sku,
+                        discountCode: isDiscountCodeEnabled ? discountCode : null,
+                        isOutlet: true
+                    }
                 );
 
                 if (outletPrice) {
@@ -152,7 +109,7 @@ export const useOrderManagement = ({
                 }
             }
 
-            const newItems = groupOrderItems([...orderItems, orderItem]);
+            const newItems = OrderItemsGroupHelper.groupOrderItems([...orderItems, orderItem]);
 
             const basket = {
                 id: basketId, 
@@ -286,7 +243,7 @@ export const useOrderManagement = ({
                     dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
-                        setOrderItems(groupOrderItems(jsonResponse.items));
+                        setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items));
                     }
                     else {
                         setOrderItems([]);
@@ -310,7 +267,7 @@ export const useOrderManagement = ({
     );
 
     const setGroupedOrderItems = useCallback((items) => {
-        setOrderItems(groupOrderItems(items));
+        setOrderItems(OrderItemsGroupHelper.groupOrderItems(items));
     }, []);
 
     return { 

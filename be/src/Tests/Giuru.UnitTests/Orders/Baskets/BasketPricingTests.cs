@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Foundation.Pricing.Services;
 using BuyerBasketItemRequestModel = Buyer.Web.Areas.Orders.ApiRequestModels.BasketItemRequestModel;
 using BuyerBasketsApiController = Buyer.Web.Areas.Orders.ApiControllers.BasketsApiController;
 using BuyerProduct = Buyer.Web.Areas.Products.DomainModels.Product;
-using BuyerPrice = Buyer.Web.Shared.DomainModels.Prices.Price;
+using BuyerPrice = Foundation.Pricing.DomainModels.Price;
 using SellerBasketItemRequestModel = Seller.Web.Areas.Orders.ApiRequestModels.BasketItemRequestModel;
 using SellerBasketsApiController = Seller.Web.Areas.Orders.ApiControllers.BasketsApiController;
 using SellerProduct = Seller.Web.Areas.Products.DomainModels.Product;
-using SellerPrice = Seller.Web.Shared.DomainModels.Prices.Price;
+using SellerPrice = Foundation.Pricing.DomainModels.Price;
 
 namespace Giuru.UnitTests.Orders.Baskets
 {
@@ -496,7 +497,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Currency = x.Currency
             }).ToList();
 
-            var applied = BuyerBasketsApiController.ApplyPrices(
+            var applied = BasketPriceApplier.ApplyPrices(
                 basketItems,
                 prices?.Select(ToPriceLookupResult).ToList());
 
@@ -507,7 +508,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
         protected override IList<GrulaPrice> AlignPrices(int basketItemCount, IList<int> pricedLineIndexes, IList<GrulaPrice> prices)
         {
-            var aligned = BuyerBasketsApiController.AlignPrices(
+            var aligned = BasketPriceApplier.AlignPrices(
                 basketItemCount,
                 pricedLineIndexes,
                 prices?.Select(ToPriceLookupResult).ToList());
@@ -527,33 +528,33 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Currency = x.Currency
             }).ToList();
 
-            BuyerBasketsApiController.ClearUntrustedPrices(basketItems);
+            BasketPriceApplier.ClearUntrustedPrices(basketItems);
 
             return basketItems?
                 .Select(x => new BasketLine(x.Quantity, x.StockQuantity, x.OutletQuantity, x.UnitPrice, x.Price, x.Currency))
                 .ToList();
         }
 
-        private static Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult ToPriceLookupResult(GrulaPrice x)
+        private static Foundation.Pricing.DomainModels.PriceLookupResult ToPriceLookupResult(GrulaPrice x)
         {
-            return x is null ? null : new Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult
+            return x is null ? null : new Foundation.Pricing.DomainModels.PriceLookupResult
             {
                 Status = x.Status switch
                 {
-                    GrulaPriceStatus.Priced => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
-                    GrulaPriceStatus.AuthoritativeNoPrice => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
-                    GrulaPriceStatus.ServiceUnavailable => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
-                    GrulaPriceStatus.MissingResponse => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
-                    GrulaPriceStatus.InvalidPriceDrivers => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
-                    GrulaPriceStatus.PricesHidden => Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden,
-                    GrulaPriceStatus.Unknown => (Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus)999,
+                    GrulaPriceStatus.Priced => Foundation.Pricing.DomainModels.PriceLookupStatus.Priced,
+                    GrulaPriceStatus.AuthoritativeNoPrice => Foundation.Pricing.DomainModels.PriceLookupStatus.AuthoritativeNoPrice,
+                    GrulaPriceStatus.ServiceUnavailable => Foundation.Pricing.DomainModels.PriceLookupStatus.ServiceUnavailable,
+                    GrulaPriceStatus.MissingResponse => Foundation.Pricing.DomainModels.PriceLookupStatus.MissingResponse,
+                    GrulaPriceStatus.InvalidPriceDrivers => Foundation.Pricing.DomainModels.PriceLookupStatus.InvalidPriceDrivers,
+                    GrulaPriceStatus.PricesHidden => Foundation.Pricing.DomainModels.PriceLookupStatus.PricesHidden,
+                    GrulaPriceStatus.Unknown => (Foundation.Pricing.DomainModels.PriceLookupStatus)999,
                     _ => throw new System.ArgumentOutOfRangeException()
                 },
                 Price = x.CurrentPrice.HasValue ? new BuyerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
             };
         }
 
-        private static GrulaPrice ToGrulaPrice(Buyer.Web.Shared.DomainModels.Prices.PriceLookupResult x)
+        private static GrulaPrice ToGrulaPrice(Foundation.Pricing.DomainModels.PriceLookupResult x)
         {
             if (x is null)
             {
@@ -562,12 +563,12 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var status = x.Status switch
             {
-                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced => GrulaPriceStatus.Priced,
-                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice => GrulaPriceStatus.AuthoritativeNoPrice,
-                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable => GrulaPriceStatus.ServiceUnavailable,
-                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse => GrulaPriceStatus.MissingResponse,
-                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers => GrulaPriceStatus.InvalidPriceDrivers,
-                Buyer.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden => GrulaPriceStatus.PricesHidden,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.Priced => GrulaPriceStatus.Priced,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.AuthoritativeNoPrice => GrulaPriceStatus.AuthoritativeNoPrice,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.ServiceUnavailable => GrulaPriceStatus.ServiceUnavailable,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.MissingResponse => GrulaPriceStatus.MissingResponse,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.InvalidPriceDrivers => GrulaPriceStatus.InvalidPriceDrivers,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.PricesHidden => GrulaPriceStatus.PricesHidden,
                 _ => GrulaPriceStatus.Unknown
             };
 
@@ -589,7 +590,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Currency = x.Currency
             }).ToList();
 
-            var applied = SellerBasketsApiController.ApplyPrices(
+            var applied = BasketPriceApplier.ApplyPrices(
                 basketItems,
                 prices?.Select(ToPriceLookupResult).ToList());
 
@@ -600,7 +601,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
         protected override IList<GrulaPrice> AlignPrices(int basketItemCount, IList<int> pricedLineIndexes, IList<GrulaPrice> prices)
         {
-            var aligned = SellerBasketsApiController.AlignPrices(
+            var aligned = BasketPriceApplier.AlignPrices(
                 basketItemCount,
                 pricedLineIndexes,
                 prices?.Select(ToPriceLookupResult).ToList());
@@ -620,33 +621,33 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Currency = x.Currency
             }).ToList();
 
-            SellerBasketsApiController.ClearUntrustedPrices(basketItems);
+            BasketPriceApplier.ClearUntrustedPrices(basketItems);
 
             return basketItems?
                 .Select(x => new BasketLine(x.Quantity, x.StockQuantity, x.OutletQuantity, x.UnitPrice, x.Price, x.Currency))
                 .ToList();
         }
 
-        private static Seller.Web.Shared.DomainModels.Prices.PriceLookupResult ToPriceLookupResult(GrulaPrice x)
+        private static Foundation.Pricing.DomainModels.PriceLookupResult ToPriceLookupResult(GrulaPrice x)
         {
-            return x is null ? null : new Seller.Web.Shared.DomainModels.Prices.PriceLookupResult
+            return x is null ? null : new Foundation.Pricing.DomainModels.PriceLookupResult
             {
                 Status = x.Status switch
                 {
-                    GrulaPriceStatus.Priced => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced,
-                    GrulaPriceStatus.AuthoritativeNoPrice => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice,
-                    GrulaPriceStatus.ServiceUnavailable => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable,
-                    GrulaPriceStatus.MissingResponse => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse,
-                    GrulaPriceStatus.InvalidPriceDrivers => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers,
-                    GrulaPriceStatus.PricesHidden => Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden,
-                    GrulaPriceStatus.Unknown => (Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus)999,
+                    GrulaPriceStatus.Priced => Foundation.Pricing.DomainModels.PriceLookupStatus.Priced,
+                    GrulaPriceStatus.AuthoritativeNoPrice => Foundation.Pricing.DomainModels.PriceLookupStatus.AuthoritativeNoPrice,
+                    GrulaPriceStatus.ServiceUnavailable => Foundation.Pricing.DomainModels.PriceLookupStatus.ServiceUnavailable,
+                    GrulaPriceStatus.MissingResponse => Foundation.Pricing.DomainModels.PriceLookupStatus.MissingResponse,
+                    GrulaPriceStatus.InvalidPriceDrivers => Foundation.Pricing.DomainModels.PriceLookupStatus.InvalidPriceDrivers,
+                    GrulaPriceStatus.PricesHidden => Foundation.Pricing.DomainModels.PriceLookupStatus.PricesHidden,
+                    GrulaPriceStatus.Unknown => (Foundation.Pricing.DomainModels.PriceLookupStatus)999,
                     _ => throw new System.ArgumentOutOfRangeException()
                 },
                 Price = x.CurrentPrice.HasValue ? new SellerPrice { CurrentPrice = x.CurrentPrice.Value, CurrencyCode = x.CurrencyCode } : null
             };
         }
 
-        private static GrulaPrice ToGrulaPrice(Seller.Web.Shared.DomainModels.Prices.PriceLookupResult x)
+        private static GrulaPrice ToGrulaPrice(Foundation.Pricing.DomainModels.PriceLookupResult x)
         {
             if (x is null)
             {
@@ -655,12 +656,12 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var status = x.Status switch
             {
-                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.Priced => GrulaPriceStatus.Priced,
-                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.AuthoritativeNoPrice => GrulaPriceStatus.AuthoritativeNoPrice,
-                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.ServiceUnavailable => GrulaPriceStatus.ServiceUnavailable,
-                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.MissingResponse => GrulaPriceStatus.MissingResponse,
-                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.InvalidPriceDrivers => GrulaPriceStatus.InvalidPriceDrivers,
-                Seller.Web.Shared.DomainModels.Prices.PriceLookupStatus.PricesHidden => GrulaPriceStatus.PricesHidden,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.Priced => GrulaPriceStatus.Priced,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.AuthoritativeNoPrice => GrulaPriceStatus.AuthoritativeNoPrice,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.ServiceUnavailable => GrulaPriceStatus.ServiceUnavailable,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.MissingResponse => GrulaPriceStatus.MissingResponse,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.InvalidPriceDrivers => GrulaPriceStatus.InvalidPriceDrivers,
+                Foundation.Pricing.DomainModels.PriceLookupStatus.PricesHidden => GrulaPriceStatus.PricesHidden,
                 _ => GrulaPriceStatus.Unknown
             };
 

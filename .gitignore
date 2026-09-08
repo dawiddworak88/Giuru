@@ -21,6 +21,10 @@ build/
 bld/
 [Oo]bj/
 
+# fe/shared/build holds the shared Babel presets and SSR module resolution required by both
+# webpack configs and both SSR bootstraps - it is source, not a build result.
+!fe/shared/build/
+
 # Visual Studio 2015 cache/options directory
 .vs/
 

@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           file: ./fe/projects/Account/Dockerfile-ssr
-          context: ./fe/projects/Account
+          context: ./fe
           push: true
           tags: ${{ secrets.ACR_PROD_NAME }}/account-web-react-ssr:latest, ${{ secrets.ACR_PROD_NAME }}/account-web-react-ssr:${{ github.run_number }}
 

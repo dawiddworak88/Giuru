@@ -1,5 +1,5 @@
 using Seller.Web.Areas.Products.DomainModels;
-using Seller.Web.Shared.DomainModels.Prices;
+using Foundation.Pricing.DomainModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

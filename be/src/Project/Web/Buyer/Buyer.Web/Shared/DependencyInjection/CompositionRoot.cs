@@ -2,6 +2,8 @@
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using Buyer.Web.Shared.Configurations;
+using Foundation.Pricing.Configurations;
+using Microsoft.Extensions.Options;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Buyer.Web.Shared.ViewModels.Headers;
@@ -38,17 +40,16 @@ using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Prices;
+using Foundation.Pricing.Services;
 using Buyer.Web.Shared.Middlewares;
 using Buyer.Web.Shared.Repositories.Global;
-using Grula.PricingIntelligencePlatform.Sdk;
-using System.Net.Http.Headers;
 using Foundation.Extensions.Services.Cache;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Buyer.Web.Shared.ModelBuilders.Toasts;
 using Buyer.Web.Shared.Repositories.Inventory;
-using System;
 using Buyer.Web.Shared.Repositories.LeadTime;
 using Buyer.Web.Shared.Services.DeliveryDates;
+using Foundation.Pricing.DependencyInjection;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -95,8 +96,10 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<ICacheService, CacheService>();
             
-            services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
+            services.AddScoped<IPriceClientResolver, ClaimsPriceClientResolver>();
+            services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
+            services.RegisterPricingDependencies(configuration);
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
@@ -104,21 +107,6 @@ namespace Buyer.Web.Shared.DependencyInjection
 
             //Middlewares
             services.AddScoped<ClaimsEnrichmentMiddleware>();
-
-            //Grula HttpClient
-            services.AddHttpClient("GrulaApi")
-                .AddTypedClient(httpClient =>
-                {
-                    httpClient.Timeout = TimeSpan.FromSeconds(10);
-
-                    var token = configuration["GrulaAccessToken"];
-                    if (!string.IsNullOrWhiteSpace(token))
-                    {
-                        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                    }
-
-                    return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
-                });
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)

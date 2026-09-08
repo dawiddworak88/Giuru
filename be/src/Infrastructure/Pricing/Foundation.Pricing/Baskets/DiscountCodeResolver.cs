@@ -1,0 +1,82 @@
+using System;
+
+namespace Foundation.Pricing.Baskets
+{
+    /// <summary>
+    /// Single source of truth for how an incoming discount code is reconciled with the
+    /// one already persisted on the basket. Every entry point that writes a basket
+    /// (JSON body or multipart upload) must go through here so that the same request
+    /// always produces the same code.
+    /// </summary>
+    public static class DiscountCodeResolver
+    {
+        private static string ResolveDiscountCode(bool hasDiscountCode, string requestedDiscountCode, string persistedDiscountCode)
+        {
+            if (!hasDiscountCode)
+            {
+                return Normalize(persistedDiscountCode);
+            }
+
+            if (requestedDiscountCode is null)
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(requestedDiscountCode))
+            {
+                return Normalize(persistedDiscountCode);
+            }
+
+            return requestedDiscountCode.Trim();
+        }
+
+        public static DiscountCodeResolution Resolve(
+            bool hasDiscountCode,
+            string requestedDiscountCode,
+            string persistedDiscountCode,
+            bool hasItems)
+        {
+            var persistedCode = Normalize(persistedDiscountCode);
+            var discountCode = ResolveDiscountCode(hasDiscountCode, requestedDiscountCode, persistedDiscountCode);
+
+            return new DiscountCodeResolution(
+                discountCode,
+                hasDiscountCode
+                && !string.IsNullOrWhiteSpace(requestedDiscountCode)
+                && !hasItems
+                && !string.Equals(discountCode, persistedCode, StringComparison.Ordinal));
+        }
+
+        /// <summary>
+        /// Whether the caller has to read the basket back before resolving. An explicit
+        /// code or an explicit removal is self-contained; an omitted or blank code means
+        /// "unchanged" and can only be resolved against what is stored.
+        /// </summary>
+        public static bool RequiresPersistedDiscountCode(bool hasDiscountCode, string requestedDiscountCode, bool hasItems)
+        {
+            if (!hasDiscountCode)
+            {
+                return true;
+            }
+
+            if (requestedDiscountCode is null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(requestedDiscountCode))
+            {
+                return true;
+            }
+
+            // An explicit code resolves on its own. The persisted code is still needed to
+            // tell "applying a code to an empty basket" from "emptying a discounted one".
+            return !hasItems;
+        }
+
+        private static string Normalize(string discountCode)
+        {
+            return string.IsNullOrWhiteSpace(discountCode) ? null : discountCode.Trim();
+        }
+    }
+}

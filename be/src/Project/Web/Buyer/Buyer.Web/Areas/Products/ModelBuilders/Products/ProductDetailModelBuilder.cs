@@ -26,7 +26,7 @@ using Buyer.Web.Shared.Definitions.Files;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.Services.Prices;
 using System;
-using Buyer.Web.Shared.DomainModels.Prices;
+using Foundation.Pricing.Services;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Areas.Products.ComponentModels;
@@ -56,7 +56,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IMediaItemsRepository _mediaItemsRepository;
-        private readonly IPriceService _priceService;
         private readonly IOptions<AppSettings> _options;
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
@@ -64,6 +63,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IDeliveryMessageHelper _deliveryMessageHelper;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
         private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IProductPricingService _productPricingService;
+        private readonly IPriceClientResolver _priceClientResolver;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -80,14 +81,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IBasketService basketService,
             LinkGenerator linkGenerator,
             IMediaItemsRepository mediaItemsRepository,
-            IPriceService priceService,
             IOptions<AppSettings> options,
             IProductsService productsService,
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
             IDeliveryMessageHelper deliveryMessageHelper,
             IExpectedDeliveryDateService expectedDeliveryDateService,
-            IPriceProductFactory priceProductFactory)
+            IPriceProductFactory priceProductFactory,
+            IProductPricingService productPricingService,
+            IPriceClientResolver priceClientResolver)
         {
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
@@ -103,7 +105,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _modalModelBuilder = modalModelBuilder;
             _toastSuccessAddProductToBasket = toastSuccessAddProductToBasket;
             _mediaItemsRepository = mediaItemsRepository;
-            _priceService = priceService;
             _options = options;
             _productsService = productsService;
             _productColorsService = productColorsService;
@@ -111,6 +112,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _deliveryMessageHelper = deliveryMessageHelper;
             _expectedDeliveryDateService = expectedDeliveryDateService;
             _priceProductFactory = priceProductFactory;
+            _productPricingService = productPricingService;
+            _priceClientResolver = priceClientResolver;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -189,23 +192,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (product.PrimaryProductId.HasValue &&
                     _options.Value.IsGrulaConfigured)
                 {
-                    var priceProduct = await _priceProductFactory.CreateAsync(product, isOutletPurchase: false);
-
-                    var price = await _priceService.GetPrice(
-                        _options.Value.GrulaAccessToken,
-                        DateTime.UtcNow,
-                        priceProduct,
-                        new PriceClient
-                        {
-                            Id = componentModel.ClientId,
-                            Name = componentModel.Name,
-                            CurrencyCode = componentModel.CurrencyCode,
-                            ExtraPacking = componentModel.ExtraPacking,
-                            PaletteLoading = componentModel.PaletteLoading,
-                            Country = componentModel.Country,
-                            DeliveryZipCode = componentModel.DeliveryZipCode,
-                            DiscountCode = discountCode
-                        });
+                    var price = await _productPricingService.GetPriceAsync(
+                        () => _priceProductFactory.CreateAsync(product, isOutletPurchase: false),
+                        () => _priceClientResolver.ResolveAsync(null, discountCode, componentModel.Token));
 
                     if (price is not null)
                     {
@@ -303,28 +292,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
-                        var prices = Enumerable.Empty<Price>();
-
-                        if (_options.Value.IsGrulaConfigured)
-                        {
-                            var priceProducts = await _priceProductFactory.CreateAsync(productVariants.Data, isOutletPurchase: false);
-
-                            prices = await _priceService.GetPrices(
-                               _options.Value.GrulaAccessToken,
-                               DateTime.UtcNow,
-                               priceProducts,
-                               new PriceClient
-                               {
-                                   Id = componentModel.ClientId,
-                                   Name = componentModel.Name,
-                                   CurrencyCode = componentModel.CurrencyCode,
-                                   ExtraPacking = componentModel.ExtraPacking,
-                                   PaletteLoading = componentModel.PaletteLoading,
-                                   Country = componentModel.Country,
-                                   DeliveryZipCode = componentModel.DeliveryZipCode,
-                                   DiscountCode = discountCode
-                               });
-                        }
+                        var prices = await _productPricingService.GetPricesAsync(
+                            () => _priceProductFactory.CreateAsync(productVariants.Data, isOutletPurchase: false),
+                            () => _priceClientResolver.ResolveAsync(null, discountCode, componentModel.Token));
 
                         var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                            accessToken: componentModel.Token,
