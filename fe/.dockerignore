@@ -1,0 +1,6 @@
+**/node_modules
+**/obj
+npm-debug.log
+**/Dockerfile-ssr
+**/Dockerfile-ssr-local
+.dockerignore
