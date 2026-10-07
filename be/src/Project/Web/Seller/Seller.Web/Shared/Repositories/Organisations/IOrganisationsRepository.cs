@@ -9,5 +9,6 @@ namespace Seller.Web.Shared.Repositories.Organisations
         Task<Organisation> GetAsync(string token, string language, string email);
         Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage);
         Task UpdateAsync(string token, string language, Guid id, string name);
+        Task UpdateStatusAsync(string token, string language, Guid id, bool isDisabled);
     }
 }
