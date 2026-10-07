@@ -303,6 +303,9 @@
   <data name="OrganisationExistsAlready" xml:space="preserve">
     <value>Die Organisation existiert schon.</value>
   </data>
+  <data name="OrganisationNotFound" xml:space="preserve">
+    <value>Organisation nicht gefunden.</value>
+  </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Eltern-Kategorie</value>
   </data>

@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Identity.Api.Repositories.AppSecrets;
 using Identity.Api.Services.Organisations;
+using Feature.Account;
+using Foundation.Extensions.Exceptions;
+using Microsoft.Extensions.Localization;
 
 namespace Identity.Api.Services.Tokens
 {
@@ -18,48 +21,56 @@ namespace Identity.Api.Services.Tokens
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IdentityServerTools tools;
         private readonly IOrganisationService organisationService;
+        private readonly IStringLocalizer<AccountResources> accountLocalizer;
 
         public TokenService(
-            IAppSecretRepository appSecretRepository, 
-            UserManager<ApplicationUser> userManager, 
+            IAppSecretRepository appSecretRepository,
+            UserManager<ApplicationUser> userManager,
             IdentityServerTools tools,
-            IOrganisationService organisationService)
+            IOrganisationService organisationService,
+            IStringLocalizer<AccountResources> accountLocalizer)
         {
             this.appSecretRepository = appSecretRepository;
             this.userManager = userManager;
             this.tools = tools;
             this.organisationService = organisationService;
+            this.accountLocalizer = accountLocalizer;
         }
 
         public async Task<string> GetTokenAsync(string email, Guid organisationId, string appSecret)
         {
             var organisationAppSecret = await this.appSecretRepository.GetOrganisationAppSecretAsync(organisationId, appSecret);
 
-            if (organisationAppSecret != null)
+            if (organisationAppSecret is null)
             {
-                var user = await this.userManager.FindByEmailAsync(email);
-
-                if (user != null)
-                {
-                    var claims = new HashSet<Claim>(new ClaimComparer())
-                    {
-                        new Claim(AccountConstants.Claims.OrganisationIdClaim, user.OrganisationId.ToString()),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(JwtClaimTypes.Audience, AccountConstants.Audiences.All)
-                    };
-
-                    if (await this.organisationService.IsSellerAsync(user.OrganisationId))
-                    {
-                        claims.Add(new Claim(JwtClaimTypes.Role, AccountConstants.Roles.Seller));
-                    }
-
-                    var token = await this.tools.IssueJwtAsync(AccountConstants.TokenLifetimes.DefaultTokenLifetimeInSeconds, claims);
-
-                    return token;
-                }
+                return default;
             }
 
-            return default;
+            var user = await this.userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                return default;
+            }
+
+            if (user.IsDisabled || await this.organisationService.IsDisabledAsync(user.OrganisationId))
+            {
+                throw new ConflictException(this.accountLocalizer.GetString("AccountIsInactive"));
+            }
+
+            var claims = new HashSet<Claim>(new ClaimComparer())
+            {
+                new Claim(AccountConstants.Claims.OrganisationIdClaim, user.OrganisationId.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(JwtClaimTypes.Audience, AccountConstants.Audiences.All)
+            };
+
+            if (await this.organisationService.IsSellerAsync(user.OrganisationId))
+            {
+                claims.Add(new Claim(JwtClaimTypes.Role, AccountConstants.Roles.Seller));
+            }
+
+            return await this.tools.IssueJwtAsync(AccountConstants.TokenLifetimes.DefaultTokenLifetimeInSeconds, claims);
         }
     }
 }

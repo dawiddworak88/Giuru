@@ -22,5 +22,7 @@ namespace Identity.Api.Infrastructure.Organisations.Entities
 
         [Required]
         public string Language { get; set; }
+
+        public bool IsDisabled { get; set; }
     }
 }
