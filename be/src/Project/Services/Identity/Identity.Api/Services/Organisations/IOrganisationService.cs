@@ -10,5 +10,7 @@ namespace Identity.Api.Services.Organisations
         Task<OrganisationServiceModel> GetAsync(GetSellerModel serviceModel);
         Task<OrganisationServiceModel> GetAsync(GetOrganisationModel serviceModel);
         Task<OrganisationServiceModel> CreateAsync(CreateOrganisationServiceModel serviceModel);
+        Task<bool> IsDisabledAsync(Guid id);
+        Task UpdateStatusAsync(UpdateOrganisationStatusServiceModel serviceModel);
     }
 }

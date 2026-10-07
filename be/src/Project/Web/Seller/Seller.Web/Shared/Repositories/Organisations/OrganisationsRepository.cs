@@ -75,5 +75,27 @@ namespace Seller.Web.Shared.Repositories.Organisations
 
             return default;
         }
+
+        public async Task UpdateStatusAsync(string token, string language, Guid id, bool isDisabled)
+        {
+            var apiRequest = new ApiRequest<OrganisationStatusRequestModel>
+            {
+                Language = language,
+                Data = new OrganisationStatusRequestModel
+                {
+                    Id = id,
+                    IsDisabled = isDisabled
+                },
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.OrganisationsApiEndpoint}/status"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<OrganisationStatusRequestModel>, OrganisationStatusRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+        }
     }
 }

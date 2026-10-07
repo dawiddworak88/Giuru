@@ -60,6 +60,28 @@ namespace Identity.Api.Services.Organisations
             return organisation?.IsSeller is true;
         }
 
+        public async Task<bool> IsDisabledAsync(Guid id)
+        {
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
+
+            return organisation?.IsDisabled is true;
+        }
+
+        public async Task UpdateStatusAsync(UpdateOrganisationStatusServiceModel serviceModel)
+        {
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsSeller == false && x.IsActive);
+
+            if (organisation is null)
+            {
+                throw new NotFoundException(this.globalLocalizer.GetString("OrganisationNotFound"));
+            }
+
+            organisation.IsDisabled = serviceModel.IsDisabled;
+            organisation.LastModifiedDate = DateTime.UtcNow;
+
+            await this.identityContext.SaveChangesAsync();
+        }
+
         public async Task<OrganisationServiceModel> GetAsync(GetSellerModel serviceModel)
         {
             var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsSeller && x.IsActive);

@@ -138,5 +138,47 @@ namespace Identity.Api.v1.Controllers
 
             return this.StatusCode((int)HttpStatusCode.BadRequest);
         }
+
+        /// <summary>
+        /// Enables or disables a client organisation. Accounts of a disabled organisation cannot sign in.
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>OK.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("status")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> UpdateStatus([FromBody] OrganisationStatusRequestModel request)
+        {
+            if (this.User.IsInRole(AccountConstants.Roles.Seller) is false)
+            {
+                return this.StatusCode((int)HttpStatusCode.Forbidden);
+            }
+
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new UpdateOrganisationStatusServiceModel
+            {
+                Id = request.Id,
+                IsDisabled = request.IsDisabled,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new UpdateOrganisationStatusModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.organisationService.UpdateStatusAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
     }
 }
