@@ -6,6 +6,7 @@ namespace Buyer.Web.Areas.Products.ComponentModels
     public class PriceComponentModel : ComponentModelBase
     {
         public Guid? ClientId { get; set; }
+        public string ClientName { get; set; }
         public string CurrencyCode { get; set; }
         public string ExtraPacking { get; set; }
         public string PaletteLoading { get; set; }

@@ -84,14 +84,15 @@ namespace Identity.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates an organisation.
+        /// Creates an organisation or updates the name of a client organisation.
         /// </summary>
         /// <param name="request">The model.</param>
         /// <returns>The organisation id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(OrganisationResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] OrganisationRequestModel request)
         {
@@ -135,8 +136,44 @@ namespace Identity.Api.v1.Controllers
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
+            else
+            {
+                if (this.User.IsInRole(AccountConstants.Roles.Seller) is false)
+                {
+                    return this.StatusCode((int)HttpStatusCode.Forbidden);
+                }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+                var serviceModel = new UpdateOrganisationServiceModel
+                {
+                    Id = request.Id,
+                    Name = request.Name,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new UpdateOrganisationModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var organisation = await this.organisationService.UpdateAsync(serviceModel);
+
+                    var response = new OrganisationResponseModel
+                    {
+                        Id = organisation.Id,
+                        Description = organisation.Description,
+                        Name = organisation.Name,
+                        Files = organisation.Files,
+                        Images = organisation.Images,
+                        Videos = organisation.Videos
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>
