@@ -53,6 +53,23 @@ namespace Identity.Api.Services.Organisations
             return await this.GetAsync(new GetOrganisationModel { Email = serviceModel.Email, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
+        public async Task<OrganisationServiceModel> UpdateAsync(UpdateOrganisationServiceModel serviceModel)
+        {
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsSeller == false && x.IsActive);
+
+            if (organisation is null)
+            {
+                throw new NotFoundException(this.globalLocalizer.GetString("OrganisationNotFound"));
+            }
+
+            organisation.Name = serviceModel.Name;
+            organisation.LastModifiedDate = DateTime.UtcNow;
+
+            await this.identityContext.SaveChangesAsync();
+
+            return await this.GetOrganisationAsync(organisation, serviceModel.Language);
+        }
+
         public async Task<bool> IsSellerAsync(Guid id)
         {
             var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == id && x.IsActive);

@@ -10,5 +10,6 @@ namespace Identity.Api.Services.Organisations
         Task<OrganisationServiceModel> GetAsync(GetSellerModel serviceModel);
         Task<OrganisationServiceModel> GetAsync(GetOrganisationModel serviceModel);
         Task<OrganisationServiceModel> CreateAsync(CreateOrganisationServiceModel serviceModel);
+        Task<OrganisationServiceModel> UpdateAsync(UpdateOrganisationServiceModel serviceModel);
     }
 }
