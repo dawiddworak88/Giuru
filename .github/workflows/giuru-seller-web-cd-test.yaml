@@ -59,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           file: ./fe/projects/Seller.Portal/Dockerfile-ssr
-          context: ./fe/projects/Seller.Portal
+          context: ./fe
           push: true
           tags: ${{ secrets.ACR_TEST_NAME }}/seller-web-react-ssr:latest, ${{ secrets.ACR_TEST_NAME }}/seller-web-react-ssr:${{ github.run_number }}
 

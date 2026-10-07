@@ -6,7 +6,7 @@ RUN mkdir -p /home/node/account-web-react-ssr/node_modules && chown -R node:node
 
 WORKDIR /home/node/account-web-react-ssr
 
-COPY package*.json ./
+COPY projects/Account/package*.json ./
 
 USER root
 
@@ -14,7 +14,7 @@ RUN npm ci --omit=dev --legacy-peer-deps
 
 USER node
 
-COPY --chown=node:node . .
+COPY --chown=node:node projects/Account .
 
 ENV NODE_ENV=production
 
