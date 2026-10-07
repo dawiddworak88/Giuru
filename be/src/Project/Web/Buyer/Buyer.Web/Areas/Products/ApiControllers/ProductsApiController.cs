@@ -189,7 +189,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         new PriceClient
                         {
                             Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
-                            Name = User.Identity?.Name,
+                            Name = User.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
                             CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
@@ -404,7 +404,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         new PriceClient
                         {
                             Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
-                            Name = User.Identity?.Name,
+                            Name = User.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
                             CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                             ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                             PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
@@ -516,7 +516,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     new PriceClient
                     {
                         Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
-                        Name = User.Identity?.Name,
+                        Name = User.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
                         CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                         ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                         PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
