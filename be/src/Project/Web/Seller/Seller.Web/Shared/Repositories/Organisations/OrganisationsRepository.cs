@@ -75,5 +75,27 @@ namespace Seller.Web.Shared.Repositories.Organisations
 
             return default;
         }
+
+        public async Task UpdateAsync(string token, string language, Guid id, string name)
+        {
+            var apiRequest = new ApiRequest<SaveOrganisationRequestModel>
+            {
+                Language = language,
+                Data = new SaveOrganisationRequestModel
+                {
+                    Id = id,
+                    Name = name
+                },
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.OrganisationsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveOrganisationRequestModel>, SaveOrganisationRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+        }
     }
 }

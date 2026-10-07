@@ -76,6 +76,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             if (organisation is not null)
             {
                 organisationId = organisation.Id;
+
+                if (organisation.Name != model.Name)
+                {
+                    await _organisationsRepository.UpdateAsync(token, language, organisation.Id.Value, model.Name);
+                }
             }
             else
             {
