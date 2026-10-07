@@ -137,7 +137,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                         new PriceClient
                         {
                             Id = componentModel.ClientId,
-                            Name = componentModel.Name,
+                            Name = componentModel.ClientName,
                             CurrencyCode = componentModel.CurrencyCode,
                             ExtraPacking = componentModel.ExtraPacking,
                             PaletteLoading = componentModel.PaletteLoading,
