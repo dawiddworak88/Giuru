@@ -4,13 +4,10 @@ using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.Definitions;
 using Identity.Api.Areas.Accounts.ViewModels;
-using Identity.Api.Services.Tokens;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
-using Identity.Api.Configurations;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Linq;
@@ -28,8 +25,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> _globalLocalizer;
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly ITokenService _tokenService;
-        private readonly IOptions<AppSettings> _options;
         private readonly IApprovalsService _approvalsService;
         private readonly IGraphQlRepository _graphQlRepository; 
 
@@ -38,8 +33,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             IStringLocalizer<AccountResources> accountLocalizer, 
             LinkGenerator linkGenerator,
             IUsersService usersService,
-            ITokenService tokenService,
-            IOptions<AppSettings> options,
             IApprovalsService approvalsService,
             IGraphQlRepository graphQlRepository)
         {
@@ -47,8 +40,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             _accountLocalizer = accountLocalizer;
             _linkGenerator = linkGenerator;
             _usersService = usersService;
-            _tokenService = tokenService;
-            _options = options;
             _approvalsService = approvalsService;
             _graphQlRepository = graphQlRepository;
         }
@@ -111,8 +102,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 }
             }
 
-            var token = await _tokenService.GetTokenAsync(_options.Value.ApiEmail, _options.Value.ApiOrganisationId, _options.Value.ApiAppSecret);
-            
             return viewModel;
         }
     }
