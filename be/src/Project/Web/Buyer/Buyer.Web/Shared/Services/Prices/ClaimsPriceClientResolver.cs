@@ -38,7 +38,7 @@ namespace Buyer.Web.Shared.Services.Prices
             return Task.FromResult(new PriceClient
             {
                 Id = user.GetClientId(),
-                Name = user?.Identity?.Name,
+                Name = user?.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
                 CurrencyCode = user?.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
                 ExtraPacking = user?.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
                 PaletteLoading = user?.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,

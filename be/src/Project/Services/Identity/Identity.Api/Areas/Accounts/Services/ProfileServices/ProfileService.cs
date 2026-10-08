@@ -71,10 +71,16 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
             {
                 var user = await this.userManager.FindByIdAsync(sub);
 
-                if (user != null)
+                if (user is null || user.IsDisabled)
                 {
-                    context.IsActive = true;
+                    context.IsActive = false;
+
+                    return;
                 }
+
+                var isOrganisationDisabled = await this.context.Organisations.AnyAsync(x => x.Id == user.OrganisationId && x.IsDisabled && x.IsActive);
+
+                context.IsActive = isOrganisationDisabled is false;
             }
         }
     }

@@ -105,6 +105,17 @@ namespace Buyer.Web.Shared.Middlewares
                 }
             };
 
+            if (!string.IsNullOrWhiteSpace(client.Name))
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ClientNameClaimType, client.Name));
+
+                claimsToCache.Add(new CachedClaim
+                {
+                    Key = ClaimsEnrichmentConstants.ClientNameClaimType,
+                    Value = client.Name
+                });
+            }
+
             if (client.PreferedCurrencyId.HasValue)
             {
                 var currencies = await _cacheService.GetOrSetAsync(

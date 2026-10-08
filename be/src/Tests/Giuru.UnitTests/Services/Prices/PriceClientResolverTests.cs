@@ -36,6 +36,7 @@ namespace Giuru.UnitTests.Services.Prices
             {
                 new Claim(BuyerClaimsEnrichmentConstants.ClientIdClaimType, clientId.ToString()),
                 new Claim(ClaimTypes.Name, "Jane Buyer"),
+                new Claim(BuyerClaimsEnrichmentConstants.ClientNameClaimType, "Acme Client"),
                 new Claim(BuyerClaimsEnrichmentConstants.CurrencyClaimType, "EUR"),
                 new Claim(BuyerClaimsEnrichmentConstants.ExtraPackingClaimType, "Yes"),
                 new Claim(BuyerClaimsEnrichmentConstants.PaletteLoadingClaimType, "No"),
@@ -47,7 +48,8 @@ namespace Giuru.UnitTests.Services.Prices
             var priceClient = await resolver.ResolveAsync(null, "SUMMER25", "token");
 
             Assert.Equal(clientId, priceClient.Id);
-            Assert.Equal("Jane Buyer", priceClient.Name);
+            // The client name comes from Clients, not from the signed-in person's name claim.
+            Assert.Equal("Acme Client", priceClient.Name);
             Assert.Equal("EUR", priceClient.CurrencyCode);
             Assert.Equal("Yes", priceClient.ExtraPacking);
             Assert.Equal("No", priceClient.PaletteLoading);

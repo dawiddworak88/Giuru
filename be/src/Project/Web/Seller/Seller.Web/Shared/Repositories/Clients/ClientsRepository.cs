@@ -42,9 +42,9 @@ namespace Seller.Web.Shared.Repositories.Clients
 
             var response = await _apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            if (!response.IsSuccessStatusCode)
             {
-                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
 

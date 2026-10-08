@@ -52,7 +52,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
                     throw new ConflictException(_accountLocalizer.GetString("ConfirmEmail"));
                 }
 
-                if (user.IsDisabled is true)
+                if (user.IsDisabled is true || await _organisationService.IsDisabledAsync(user.OrganisationId))
                 {
                     throw new ConflictException(_accountLocalizer.GetString("AccountIsInactive"));
                 }

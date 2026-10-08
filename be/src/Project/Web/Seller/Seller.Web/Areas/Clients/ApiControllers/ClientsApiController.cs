@@ -92,6 +92,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             if (organisation is not null)
             {
                 organisationId = organisation.Id;
+
+                if (organisation.Name != model.Name)
+                {
+                    await _organisationsRepository.UpdateAsync(token, language, organisation.Id.Value, model.Name);
+                }
             }
             else
             {
@@ -99,6 +104,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             }
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId, discountCodeIds);
+
+            await _organisationsRepository.UpdateStatusAsync(token, language, organisationId.Value, model.IsDisabled);
 
             if (model.FieldsValues is not null && model.FieldsValues.Any())
             {
@@ -121,7 +128,14 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
+            var client = await _clientsRepository.GetClientAsync(token, language, id);
+
             await _clientsRepository.DeleteAsync(token, language, id);
+
+            if (client is not null)
+            {
+                await _organisationsRepository.UpdateStatusAsync(token, language, client.OrganisationId, true);
+            }
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ClientDeletedSuccessfully").Value });
         }
