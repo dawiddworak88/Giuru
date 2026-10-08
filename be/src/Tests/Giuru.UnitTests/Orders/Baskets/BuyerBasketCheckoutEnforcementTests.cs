@@ -267,7 +267,8 @@ namespace Giuru.UnitTests.Orders.Baskets
         [Fact]
         public async Task Checkout_WhenThePrincipalHasNoClient_KeepsTheRequestClientForAnOrderWithoutACode()
         {
-            // A client team member: the order form resolves the client by organisation, the principal has none of its own.
+            // No client could be resolved for the principal, by email or by organisation: the order is placed as before
+            // enforcement. A client team member is not this case - they carry the client of their organisation.
             var fixture = new Fixture(Basket(version: BasketVersion), withClient: false);
             var bodyClientId = Guid.NewGuid();
 

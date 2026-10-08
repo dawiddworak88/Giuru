@@ -27,6 +27,12 @@ namespace Giuru.MockAuth.Controllers
             });
         }
 
+        [HttpPost("status")]
+        public IActionResult UpdateStatus()
+        {
+            return StatusCode((int)HttpStatusCode.OK);
+        }
+
         [HttpGet("{email}")]
         public IActionResult Get()
         {

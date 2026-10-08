@@ -1,10 +1,12 @@
 ﻿using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
+using Buyer.Web.Shared.DomainModels.Clients;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
@@ -84,7 +86,7 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
+            var client = await GetClientAsync(token, email);
 
             if (client is null)
             {
@@ -244,6 +246,32 @@ namespace Buyer.Web.Shared.Middlewares
             });
 
             await next(context);
+        }
+
+        /// <summary>
+        /// The client the signed-in person buys for. The client's own account is found by its email. A client team member
+        /// signs in with an email of their own, so they are found through the organisation they share with the client,
+        /// which is also how the order form finds the client.
+        /// </summary>
+        private async Task<Client> GetClientAsync(string token, string email)
+        {
+            var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
+
+            if (client is not null)
+            {
+                return client;
+            }
+
+            try
+            {
+                return await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture);
+            }
+            catch (CustomException)
+            {
+                // Like a failed lookup by email: the request goes on without a client and nothing is cached, so the
+                // next request tries again.
+                return null;
+            }
         }
 
         private class CachedClaim

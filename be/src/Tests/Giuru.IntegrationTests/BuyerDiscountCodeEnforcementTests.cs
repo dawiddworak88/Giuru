@@ -15,7 +15,8 @@ namespace Giuru.IntegrationTests
 {
     /// <summary>
     /// Buyer.Web with discount code enforcement on. The buyer is identified by the token alone, so every test seeds a
-    /// client through Client.Api whose email and organisation match a buyer token, and acts as that buyer.
+    /// client through Client.Api whose email and organisation match a buyer token, and acts as that buyer - or as a
+    /// team member of that client: the same organisation with an email of their own.
     /// </summary>
     [Collection(nameof(ApiCollection))]
     public class BuyerDiscountCodeEnforcementTests
@@ -205,6 +206,39 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact]
+        public async Task SaveBasket_AsAClientTeamMember_AppliesTheClientsCodeForTheClient()
+        {
+            var seller = await DiscountSeller.CreateAsync(_apiFixture);
+            var codeId = await seller.CreateCodeAsync(Code);
+            var client = await seller.CreateClientAsync(new[] { codeId });
+            var web = await client.CreateEnforcedTeamMemberWebClientAsync();
+
+            var saved = await SaveOkAsync(web, BasketRequest("summer25"));
+
+            Assert.Equal(Code, saved.DiscountCode);
+
+            // Verified and stored for the client, although the signed-in email is not the client's.
+            var stored = await GetStoredBasketAsync(saved.Id.Value);
+            Assert.Equal(Code, stored.DiscountCode);
+            Assert.Equal(client.Id, stored.DiscountCodeClientId);
+        }
+
+        [Fact]
+        public async Task SaveBasket_AsAClientTeamMember_WithACodeTheClientIsNotAssigned_IsRejected()
+        {
+            var seller = await DiscountSeller.CreateAsync(_apiFixture);
+            var codeId = await seller.CreateCodeAsync(Code);
+            await seller.CreateClientAsync(new[] { codeId });
+            var client = await seller.CreateClientAsync();
+            var web = await client.CreateEnforcedTeamMemberWebClientAsync();
+
+            // The code exists and another client of the same seller has it, but this team member's client does not.
+            var response = await SaveAsync(web, BasketRequest(Code));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
         public async Task SaveBasket_WhenTheStoredCodeIsNoLongerAssigned_RemovesItAndReportsIt()
         {
             var seller = await DiscountSeller.CreateAsync(_apiFixture);
@@ -249,6 +283,37 @@ namespace Giuru.IntegrationTests
             var response = await CheckoutAsync(web, saved.Id);
 
             Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Checkout_AsAClientTeamMember_WithAValidCode_IsAccepted()
+        {
+            var seller = await DiscountSeller.CreateAsync(_apiFixture);
+            var codeId = await seller.CreateCodeAsync(Code);
+            var client = await seller.CreateClientAsync(new[] { codeId });
+            var web = await client.CreateEnforcedTeamMemberWebClientAsync();
+            var saved = await SaveOkAsync(web, BasketRequest(Code));
+
+            // The order form sends the client it resolved by organisation, which is the client of the principal too.
+            var response = await CheckoutAsync(web, saved.Id, clientId: client.Id);
+
+            Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Checkout_AsAClientTeamMember_WithACodeThatWasRevokedInTheMeantime_Returns409()
+        {
+            var seller = await DiscountSeller.CreateAsync(_apiFixture);
+            var codeId = await seller.CreateCodeAsync(Code);
+            var client = await seller.CreateClientAsync(new[] { codeId });
+            var web = await client.CreateEnforcedTeamMemberWebClientAsync();
+            var saved = await SaveOkAsync(web, BasketRequest(Code));
+
+            await UnassignAsync(seller, client);
+
+            var response = await CheckoutAsync(web, saved.Id);
+
+            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         }
 
         [Fact]

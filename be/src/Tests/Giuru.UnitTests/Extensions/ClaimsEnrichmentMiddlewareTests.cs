@@ -5,6 +5,7 @@ using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -108,12 +109,88 @@ namespace Giuru.UnitTests.Extensions
         {
             _clientsRepository.GetClientByEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Email)
                 .Returns(Task.FromResult<Client>(null));
+            _clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(Task.FromResult<Client>(null));
 
             var context = CreateHttpContext();
 
             await CreateMiddleware().InvokeAsync(context, _ => Task.CompletedTask);
 
             Assert.Null(context.User.GetClientId());
+        }
+
+        [Fact]
+        public async Task InvokeAsync_ForAClientTeamMember_ResolvesTheClientOfTheirOrganisation()
+        {
+            // A team member signs in with an email of their own, so no client is found by it. Their prices and discount
+            // codes are still the client's, which is found through the organisation of the token.
+            var clientId = Guid.NewGuid();
+            _clientsRepository.GetClientByEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Email)
+                .Returns(Task.FromResult<Client>(null));
+            _clientsRepository.GetClientAsync("token", Arg.Any<string>())
+                .Returns(Task.FromResult(new Client { Id = clientId, Email = "client@test.com", Name = "Acme Client" }));
+
+            var middleware = CreateMiddleware();
+            var context = CreateHttpContext();
+
+            await middleware.InvokeAsync(context, _ => Task.CompletedTask);
+
+            Assert.Equal(clientId, context.User.GetClientId());
+            Assert.Equal("Acme Client", context.User.FindFirst(Buyer.Web.Shared.Definitions.Middlewares.ClaimsEnrichmentConstants.ClientNameClaimType)?.Value);
+
+            // Cached under the team member's own email like any other buyer.
+            var laterContext = CreateHttpContext();
+            await middleware.InvokeAsync(laterContext, _ => Task.CompletedTask);
+
+            Assert.Equal(clientId, laterContext.User.GetClientId());
+            await _clientsRepository.Received(1).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task InvokeAsync_ForTheClientsOwnAccount_DoesNotLookTheOrganisationUp()
+        {
+            var clientId = Guid.NewGuid();
+            _clientsRepository.GetClientByEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Email)
+                .Returns(Task.FromResult(new Client { Id = clientId, Email = Email }));
+
+            var context = CreateHttpContext();
+
+            await CreateMiddleware().InvokeAsync(context, _ => Task.CompletedTask);
+
+            Assert.Equal(clientId, context.User.GetClientId());
+            await _clientsRepository.DidNotReceiveWithAnyArgs().GetClientAsync(default, default);
+        }
+
+        [Fact]
+        public async Task InvokeAsync_WhenTheOrganisationLookupFails_GoesOnWithoutAClientAndCachesNothing()
+        {
+            var clientId = Guid.NewGuid();
+            _clientsRepository.GetClientByEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Email)
+                .Returns(Task.FromResult<Client>(null));
+            _clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(
+                    _ => Task.FromException<Client>(new CustomException("Client.Api failed", 500)),
+                    _ => Task.FromResult(new Client { Id = clientId }));
+
+            var middleware = CreateMiddleware();
+            var context = CreateHttpContext();
+            var wasNextCalled = false;
+
+            await middleware.InvokeAsync(context, _ =>
+            {
+                wasNextCalled = true;
+
+                return Task.CompletedTask;
+            });
+
+            Assert.True(wasNextCalled);
+            Assert.Null(context.User.GetClientId());
+
+            // Nothing was cached for the failure, so the next request finds the client.
+            var laterContext = CreateHttpContext();
+            await middleware.InvokeAsync(laterContext, _ => Task.CompletedTask);
+
+            Assert.Equal(clientId, laterContext.User.GetClientId());
         }
     }
 }

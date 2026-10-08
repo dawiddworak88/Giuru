@@ -463,7 +463,7 @@ namespace Giuru.IntegrationTests
             var client = await seller.CreateClientAsync(new[] { codeId });
             var neighbour = await seller.CreateClientAsync(new[] { codeId });
 
-            // The same organisation is not enough: the buyer is identified by organisation and email together.
+            // The neighbour is a client of another organisation, even though it has the same seller and the same code.
             var buyerApi = await client.CreateBuyerClientApiAsync();
             var response = await buyerApi.GetForResponseAsync(DiscountSeller.ValidationUrl(Code, neighbour.Id));
 
@@ -472,6 +472,32 @@ namespace Giuru.IntegrationTests
             var answer = await ValidationAnswer.ReadAsync(response);
             Assert.Equal("NotApplicable", answer.Status);
             Assert.Null(answer.DiscountCode);
+        }
+
+        [Fact]
+        public async Task Validate_AsAClientTeamMember_IsAnsweredForTheClient()
+        {
+            var seller = await DiscountSeller.CreateAsync(_apiFixture);
+            var assigned = await seller.CreateCodeAsync("ASSIGNED");
+            await seller.CreateCodeAsync("UNASSIGNED");
+            var client = await seller.CreateClientAsync(new[] { assigned });
+            var neighbour = await seller.CreateClientAsync(new[] { assigned });
+
+            // The client's organisation with an email of their own: the codes are the client's, not the person's.
+            var memberApi = _apiFixture.CreateClientApiClient(await client.GetTeamMemberTokenAsync());
+
+            var valid = await ValidationAnswer.ReadAsync(await memberApi.GetForResponseAsync(DiscountSeller.ValidationUrl("assigned", client.Id)));
+            Assert.Equal("Valid", valid.Status);
+            Assert.Equal("ASSIGNED", valid.DiscountCode);
+
+            var unassigned = await ValidationAnswer.ReadAsync(await memberApi.GetForResponseAsync(DiscountSeller.ValidationUrl("UNASSIGNED", client.Id)));
+            Assert.Equal("NotApplicable", unassigned.Status);
+            Assert.Null(unassigned.DiscountCode);
+
+            // A team member of one client is nobody for another client.
+            var foreign = await ValidationAnswer.ReadAsync(await memberApi.GetForResponseAsync(DiscountSeller.ValidationUrl("ASSIGNED", neighbour.Id)));
+            Assert.Equal("NotApplicable", foreign.Status);
+            Assert.Null(foreign.DiscountCode);
         }
 
         [Fact]

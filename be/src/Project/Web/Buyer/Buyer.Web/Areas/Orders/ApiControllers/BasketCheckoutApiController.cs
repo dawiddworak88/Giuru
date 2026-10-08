@@ -99,11 +99,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             if (isDiscountCodeEnforced)
             {
-                // Every discount code check below is made for the principal's client, whatever the request says. A principal
-                // without a client of its own - a client team member, whose client the order form resolves by organisation
-                // rather than by email - keeps the client of the request for the order, as before enforcement: rejecting it
-                // would stop those users from ordering at all. No code can be verified for such a principal, so a basket
-                // that holds one is refused below and the order never carries a discount.
+                // Every discount code check below is made for the principal's client, whatever the request says. A client
+                // team member has the client of their organisation, so their code is checked against that client exactly
+                // like the code of the client's own account. A principal for whom no client could be resolved keeps the
+                // client of the request for the order, as before enforcement. No code can be verified for such a
+                // principal, so a basket that holds one is refused below and the order never carries a discount.
                 var principalClientId = User.GetClientId();
 
                 if (principalClientId.HasValue)

@@ -149,6 +149,11 @@ namespace Giuru.IntegrationTests.Helpers
 
         public async Task<RestClient> CreateEnforcedBuyerWebClientAsync() => _fixture.CreateEnforcedBuyerWebClient(await GetBuyerTokenAsync());
 
+        /// <summary>The token of a team member of this client: its organisation, an email of their own, and no Seller role.</summary>
+        public Task<string> GetTeamMemberTokenAsync() => _fixture.GetTokenAsync($"member-{Guid.NewGuid():N}@tests.com", "none", OrganisationId);
+
+        public async Task<RestClient> CreateEnforcedTeamMemberWebClientAsync() => _fixture.CreateEnforcedBuyerWebClient(await GetTeamMemberTokenAsync());
+
         public async Task<ValidationAnswer> ValidateAsSellerAsync(string code)
         {
             var response = await Seller.ValidateAsync(code, Id);

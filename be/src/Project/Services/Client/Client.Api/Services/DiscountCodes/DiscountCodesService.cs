@@ -180,14 +180,12 @@ namespace Client.Api.Services.DiscountCodes
                 return Invalid(DiscountCodeValidationStatus.ClientUnknown);
             }
 
-            // A seller may ask about any client of their own. Anyone else may ask only about the client that is
-            // themselves, which the buyer middleware identifies by organisation and email together: the
-            // organisation alone does not single out one client.
+            // A seller may ask about any client of their own. Anyone else may ask only about the client of their own
+            // organisation, which is what the client's own account and its team members have in common. The email is
+            // not compared: a team member signs in with an email of their own.
             var isAuthorisedForClient = model.IsSeller
                 ? client.SellerId == model.OrganisationId.Value
-                : client.OrganisationId == model.OrganisationId.Value
-                    && string.IsNullOrWhiteSpace(model.Username) is false
-                    && string.Equals(client.Email, model.Username, StringComparison.OrdinalIgnoreCase);
+                : client.OrganisationId == model.OrganisationId.Value;
 
             if (isAuthorisedForClient is false)
             {
