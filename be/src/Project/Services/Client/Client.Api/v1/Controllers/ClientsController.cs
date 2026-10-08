@@ -10,8 +10,10 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,10 +32,14 @@ namespace Client.Api.v1.Controllers
     public class ClientsController : BaseApiController
     {
         private readonly IClientsService _clientsService;
+        private readonly IStringLocalizer<ClientResources> _clientLocalizer;
 
-        public ClientsController(IClientsService clientsService)
+        public ClientsController(
+            IClientsService clientsService,
+            IStringLocalizer<ClientResources> clientLocalizer)
         {
             _clientsService = clientsService;
+            _clientLocalizer = clientLocalizer;
         }
 
         /// <summary>
@@ -92,6 +98,7 @@ namespace Client.Api.v1.Controllers
                                 IsDisabled = x.IsDisabled,
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
+                                DiscountCodeIds = x.DiscountCodeIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
@@ -142,6 +149,7 @@ namespace Client.Api.v1.Controllers
                                 IsDisabled = x.IsDisabled,
                                 ClientGroupIds = x.ClientGroupIds,
                                 ClientManagerIds = x.ClientManagerIds,
+                                DiscountCodeIds = x.DiscountCodeIds,
                                 DefaultDeliveryAddressId = x.DefaultDeliveryAddressId,
                                 DefaultBillingAddressId = x.DefaultBillingAddressId,
                                 LastModifiedDate = x.LastModifiedDate,
@@ -201,6 +209,7 @@ namespace Client.Api.v1.Controllers
                         IsDisabled = client.IsDisabled,
                         ClientGroupIds = client.ClientGroupIds,
                         ClientManagerIds = client.ClientManagerIds,
+                        DiscountCodeIds = client.DiscountCodeIds,
                         DefaultDeliveryAddressId = client.DefaultDeliveryAddressId,
                         DefaultBillingAddressId = client.DefaultBillingAddressId,
                         LastModifiedDate = client.LastModifiedDate,
@@ -353,6 +362,14 @@ namespace Client.Api.v1.Controllers
         public async Task<IActionResult> Save(ClientRequestModel request)
         {
             var sellerClaim = User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var isSeller = User.IsInRole(AccountConstants.Roles.Seller);
+
+            // Assignments decide who gets a discount, so any request that touches them - including an empty list,
+            // which clears them - is for sellers only. Rejected before anything is mapped or saved.
+            if (request.DiscountCodeIds is not null && isSeller is false)
+            {
+                throw new CustomException(_clientLocalizer.GetString("DiscountCodeAssignmentForbidden"), (int)HttpStatusCode.Forbidden);
+            }
 
             if (request.Id.HasValue)
             {
@@ -369,6 +386,8 @@ namespace Client.Api.v1.Controllers
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
+                    DiscountCodeIds = request.DiscountCodeIds,
+                    IsSeller = isSeller,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
                     DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,
@@ -402,6 +421,8 @@ namespace Client.Api.v1.Controllers
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
                     ClientManagerIds = request.ClientManagerIds,
+                    DiscountCodeIds = request.DiscountCodeIds,
+                    IsSeller = isSeller,
                     DefaultDeliveryAddressId = request.DefaultDeliveryAddressId,
                     DefaultBillingAddressId = request.DefaultBillingAddressId,
                     Language = CultureInfo.CurrentCulture.Name,

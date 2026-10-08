@@ -44,6 +44,23 @@ namespace Giuru.IntegrationTests.HttpClients
             return JsonConvert.DeserializeObject<T>(result);
         }
 
+        public Task<HttpResponseMessage> GetForResponseAsync(string requestUrl)
+        {
+            return _client.GetAsync(requestUrl);
+        }
+
+        public Task<HttpResponseMessage> DeleteForResponseAsync(string requestUrl)
+        {
+            return _client.DeleteAsync(requestUrl);
+        }
+
+        public static async Task<T> ReadAsync<T>(HttpResponseMessage response)
+        {
+            var result = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(result);
+        }
+
         public async Task<T> GetAsync<T>(string requestUrl)
         {
             var response = await _client.GetAsync(requestUrl);

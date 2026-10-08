@@ -26,6 +26,7 @@ function ClientForm(props) {
         preferedCurrency: { value: props.preferedCurrencyId ? props.currencies.find((item) => item.id === props.preferedCurrencyId) : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : [] },
         clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : [] },
+        discountCodeIds: { value: props.discountCodeIds ? props.discountCodeIds : [] },
         hasAccount: { value: props.hasAccount ? props.hasAccount : false },
         isDisabled: { value: props.isDisabled ? props.isDisabled : false },
         deliveryAddress: { value: props.defaultDeliveryAddressId ? props.clientAddresses.find((item) => item.id === props.defaultDeliveryAddressId) : null },
@@ -78,6 +79,11 @@ function ClientForm(props) {
             defaultBillingAddressId: state.billingAddress ? state.billingAddress.id : null
         }
 
+        // Without Grula there is no discount code field, and omitting it tells the server to leave the assignments alone.
+        if (!props.isDiscountCodeEnabled) {
+            delete payload.discountCodeIds;
+        }
+
         if (formData != null) {
             payload = {
                 ...payload,
@@ -121,7 +127,7 @@ function ClientForm(props) {
 
     const { 
         id, name, email, country, preferedCurrency, clientGroupIds, 
-        communicationLanguage, phoneNumber, clientManagerIds,
+        communicationLanguage, phoneNumber, clientManagerIds, discountCodeIds,
         deliveryAddress, billingAddress, isDisabled
     } = values;
 
@@ -245,6 +251,30 @@ function ClientForm(props) {
                                 </Select>
                             </FormControl>
                         </div>
+                        {props.isDiscountCodeEnabled &&
+                            <div className="field">
+                                <FormControl fullWidth={true} variant="standard">
+                                    <InputLabel id="discountCodes-label">{props.discountCodesLabel}</InputLabel>
+                                    <Select
+                                        labelId="discountCodes-label"
+                                        id="discountCodeIds"
+                                        name="discountCodeIds"
+                                        value={discountCodeIds}
+                                        multiple={true}
+                                        onChange={handleOnChange}>
+                                        {props.discountCodes && props.discountCodes.length > 0 ? (
+                                            props.discountCodes.map((discountCode, index) => {
+                                                return (
+                                                    <MenuItem key={index} value={discountCode.id}>{discountCode.name}</MenuItem>
+                                                );
+                                            })
+                                        ) : (
+                                            <MenuItem disabled>{props.noDiscountCodesText}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                        }
                         <div className="field">
                             <Autocomplete
                                 id="deliveryAddress"
@@ -390,6 +420,11 @@ ClientForm.propTypes = {
     clientManagers: PropTypes.array,
     noManagersText: PropTypes.string.isRequired,
     clientManagerIds: PropTypes.array,
+    isDiscountCodeEnabled: PropTypes.bool,
+    discountCodesLabel: PropTypes.string,
+    noDiscountCodesText: PropTypes.string,
+    discountCodeIds: PropTypes.array,
+    discountCodes: PropTypes.array,
     country: PropTypes.string,
     countryLabel: PropTypes.string.isRequired
 };

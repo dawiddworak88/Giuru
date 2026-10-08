@@ -39,6 +39,8 @@ using Seller.Web.Shared.Repositories.Inventory;
 using Seller.Web.Shared.Repositories.LeadTime;
 using Seller.Web.Shared.Services.DeliveryDates;
 using Foundation.Pricing.DependencyInjection;
+using Foundation.Pricing.DiscountCodes;
+using Seller.Web.Shared.Services.DiscountCodes;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -58,8 +60,18 @@ namespace Seller.Web.Shared.DependencyInjection
 
             services.AddScoped<IClientLookupService, ClientLookupService>();
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
-            services.AddScoped<IPriceClientResolver, ClientRepositoryPriceClientResolver>();
             services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
+
+            // Every pricing path resolves its client through the verifying decorator, so a discount code is only
+            // priced when it exists and can be applied for that client. The decorator wraps the concrete resolver,
+            // never IPriceClientResolver itself.
+            services.AddScoped<ClientRepositoryPriceClientResolver>();
+            services.AddScoped<IDiscountCodeLookup, ClientApiDiscountCodeLookup>();
+            services.AddScoped<IDiscountCodeValidator, DiscountCodeValidator>();
+            services.AddScoped<IPriceClientResolver>(sp => new VerifiedDiscountCodePriceClientResolver(
+                sp.GetRequiredService<ClientRepositoryPriceClientResolver>(),
+                sp.GetRequiredService<IDiscountCodeValidator>(),
+                sp.GetRequiredService<IPricingSettings>()));
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductColorsService, ProductColorsService>();
             services.AddScoped<IExpectedDeliveryDateService, ExpectedDeliveryDateService>();

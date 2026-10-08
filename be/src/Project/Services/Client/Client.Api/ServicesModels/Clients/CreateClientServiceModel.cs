@@ -15,7 +15,11 @@ namespace Client.Api.ServicesModels.Clients
         public Guid? ClientOrganisationId { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
+        public IEnumerable<Guid> DiscountCodeIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
+
+        /// <summary>Taken from the authenticated principal, never from the request.</summary>
+        public bool IsSeller { get; set; }
     }
 }

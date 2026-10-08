@@ -7,6 +7,7 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
     {
         public Guid? Id { get; set; }
         public string DiscountCode { get; set; }
+        public Guid? DiscountCodeClientId { get; set; }
         public IEnumerable<BasketItemApiRequestModel> Items { get; set; }
     }
 }

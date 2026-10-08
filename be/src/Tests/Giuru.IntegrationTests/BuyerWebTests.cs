@@ -143,12 +143,13 @@ namespace Giuru.IntegrationTests
                     ClientName = Clients.Name
                 });
 
-            var orders = await _apiFixture.BuyerWebClient.GetAsync<PagedResults<IEnumerable<Order>>>($"{ApiEndpoints.GetOrdersApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
+            // Other tests place orders as well, and an order is created asynchronously from the checkout event, so wait
+            // for the one placed here - recognisable by the stock product this test created - instead of counting.
+            var orders = await DataHelper.GetDataAsync(
+                () => _apiFixture.BuyerWebClient.GetAsync<PagedResults<IEnumerable<Order>>>($"{ApiEndpoints.GetOrdersApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}"),
+                x => x.OrderItems is not null && x.OrderItems.Any(y => y.ProductId == stockProduct));
 
-            Assert.NotNull(orders.Data);
-            Assert.Equal(1, orders.Total);
-
-            var order = orders.Data.FirstOrDefault();
+            var order = orders.Data.Single(x => x.OrderItems is not null && x.OrderItems.Any(y => y.ProductId == stockProduct));
 
             Assert.Equal(Products.Lamica.Id, order.OrderItems.FirstOrDefault().ProductId);
             var orderItem = order.OrderItems.Single(x => x.ProductId == Products.Lamica.Id);

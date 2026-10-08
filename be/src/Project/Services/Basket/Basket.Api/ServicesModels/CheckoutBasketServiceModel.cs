@@ -35,6 +35,12 @@ namespace Basket.Api.ServicesModels
         public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
+
+        /// <summary>
+        /// The version of the basket snapshot the caller validated. Null means the caller does not guard (legacy contract),
+        /// <see cref="Guid.Empty"/> asserts that there is no basket with content, anything else must equal the stored version.
+        /// </summary>
+        public Guid? ExpectedBasketVersion { get; set; }
         public bool HasApprovalToSendEmail { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
         public string CreatedBy { get; set; }

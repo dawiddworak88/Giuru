@@ -6,6 +6,11 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Foundation.Pricing.Configurations;
+using Foundation.Pricing.DiscountCodes;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Services.DiscountCodes;
 using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
@@ -37,6 +42,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IBasketService _basketService;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IOutletRepository _outletRepository;
+        private readonly IOptions<AppSettings> _options;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -47,7 +54,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IIdentityRepository identityRepository,
             IBasketService basketService,
             IInventoryRepository inventoryRepository,
-            IOutletRepository outletRepository)
+            IOutletRepository outletRepository,
+            IOptions<AppSettings> options,
+            IDiscountCodeValidator discountCodeValidator)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
@@ -58,6 +67,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _basketService = basketService;
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
+            _options = options;
+            _discountCodeValidator = discountCodeValidator;
         }
 
         [HttpPost]
@@ -74,6 +85,45 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             }
 
             var items = basket.Items.ToList();
+
+            // Enforcement at checkout. The order is placed for model.ClientId, so that is the client the stored code must
+            // be applicable for, and the stored basket must be the snapshot that was validated for that same client.
+            Guid? expectedBasketVersion = null;
+
+            if (_options.Value.IsDiscountCodeEnforced())
+            {
+                // A basket without a version predates the snapshot guard and must be saved once. Even a basket with no
+                // code needs one: a concurrent save could add a code between this read and the checkout.
+                if (basket.BasketVersion.HasValue is false)
+                {
+                    return Conflict("DiscountCodeBasketNeedsRefresh");
+                }
+
+                expectedBasketVersion = basket.BasketVersion;
+
+                if (string.IsNullOrWhiteSpace(basket.DiscountCode) is false)
+                {
+                    var validation = await _discountCodeValidator.ValidateAsync(model.ClientId, basket.DiscountCode, token, HttpContext.RequestAborted);
+
+                    if (validation.Status is DiscountCodeValidationStatus.Unavailable)
+                    {
+                        return StatusCode((int)HttpStatusCode.ServiceUnavailable, new { Message = _orderLocalizer.GetString("DiscountCodeCouldNotBeVerified").Value });
+                    }
+
+                    if (validation.IsValid is false)
+                    {
+                        return StatusCode((int)HttpStatusCode.Conflict, new { Message = _orderLocalizer.GetString("DiscountCodeNoLongerValid", basket.DiscountCode).Value });
+                    }
+
+                    // Applicable for this client now, but the stored prices must also have been calculated for it. A code
+                    // assigned to both client A and client B would otherwise carry A's prices into B's order.
+                    if (basket.DiscountCodeClientId != model.ClientId
+                        || string.Equals(validation.DiscountCode, basket.DiscountCode, StringComparison.Ordinal) is false)
+                    {
+                        return Conflict("DiscountCodeBasketNeedsRefresh");
+                    }
+                }
+            }
 
             if (items.Any(x => x.StockQuantity > 0 || x.OutletQuantity > 0))
             {
@@ -146,9 +196,15 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.ShippingCountryId,
                 model.MoreInfo,
                 userApprovals.Any(x => x.ApprovalId == ApprovalsConstants.SendOrderConfirmationEmailId),
-                client.OrganisationId);
+                client.OrganisationId,
+                expectedBasketVersion);
 
             return StatusCode((int)HttpStatusCode.Accepted, new { Message = _orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
+        }
+
+        private IActionResult Conflict(string resourceKey)
+        {
+            return StatusCode((int)HttpStatusCode.Conflict, new { Message = _orderLocalizer.GetString(resourceKey).Value });
         }
     }
 }

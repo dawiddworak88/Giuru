@@ -1,4 +1,5 @@
 ﻿using Client.Api.Infrastructure;
+using Client.Api.Infrastructure.DiscountCodes.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.IntegrationEvents;
@@ -38,7 +39,7 @@ namespace Client.Api.Services.Clients
 
         public PagedResults<IEnumerable<ClientServiceModel>> Get(GetClientsServiceModel model)
         {
-            var clients = _context.Clients.Where(x => x.IsActive);
+            var clients = _context.Clients.Where(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -63,8 +64,10 @@ namespace Client.Api.Services.Clients
             var pagedClientServiceModel = new PagedResults<IEnumerable<ClientServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
             var clientsList = new List<ClientServiceModel>();
+            var pageClients = pagedResults.Data.OrEmptyIfNull().ToList();
+            var discountCodeIds = GetDiscountCodeIds(pageClients.Select(x => x.Id));
 
-            foreach (var client in pagedResults.Data.OrEmptyIfNull().ToList())
+            foreach (var client in pageClients)
             {
                 var item = new ClientServiceModel
                 {
@@ -96,6 +99,8 @@ namespace Client.Api.Services.Clients
                 {
                     item.ClientManagerIds = clientManagers;
                 }
+
+                item.DiscountCodeIds = discountCodeIds.TryGetValue(client.Id, out var clientDiscountCodeIds) ? clientDiscountCodeIds : new List<Guid>();
 
                 clientsList.Add(item);
             }
@@ -145,6 +150,8 @@ namespace Client.Api.Services.Clients
                 client.ClientManagerIds = clientManagers;
             }
 
+            client.DiscountCodeIds = GetDiscountCodeIds(new[] { existingClient.Id }).GetValueOrDefault(existingClient.Id) ?? new List<Guid>();
+
             return client;
         }
 
@@ -177,6 +184,9 @@ namespace Client.Api.Services.Clients
             {
                 throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
+
+            // Validated before any tracked field changes, so a rejected assignment leaves the client untouched.
+            var discountCodeIds = await GetAssignableDiscountCodeIdsAsync(serviceModel.DiscountCodeIds, serviceModel.IsSeller, serviceModel.OrganisationId.Value);
 
             client.Name = serviceModel.Name;
             client.Email = serviceModel.Email;
@@ -226,6 +236,28 @@ namespace Client.Api.Services.Clients
                 await _context.ClientsAccountManagers.AddAsync(managerItem.FillCommonProperties());
             }
 
+            // Null leaves the assignments unchanged, an empty list clears them.
+            if (discountCodeIds is not null)
+            {
+                var clientDiscountCodes = await _context.ClientsDiscountCodes.Where(x => x.ClientId == client.Id && x.IsActive).ToListAsync();
+
+                foreach (var clientDiscountCode in clientDiscountCodes.Where(x => discountCodeIds.Contains(x.DiscountCodeId) is false))
+                {
+                    _context.ClientsDiscountCodes.Remove(clientDiscountCode);
+                }
+
+                foreach (var discountCodeId in discountCodeIds.Except(clientDiscountCodes.Select(x => x.DiscountCodeId)))
+                {
+                    var discountCodeItem = new ClientsDiscountCode
+                    {
+                        ClientId = client.Id,
+                        DiscountCodeId = discountCodeId
+                    };
+
+                    await _context.ClientsDiscountCodes.AddAsync(discountCodeItem.FillCommonProperties());
+                }
+            }
+
             await _context.SaveChangesAsync();
 
             var upsertedClientMessage = new UpsertedClientIntegrationEvent
@@ -246,6 +278,8 @@ namespace Client.Api.Services.Clients
             {
                 throw new ConflictException(_clientLocalizer.GetString("ClientExists"));
             }
+
+            var discountCodeIds = await GetAssignableDiscountCodeIdsAsync(serviceModel.DiscountCodeIds, serviceModel.IsSeller, serviceModel.OrganisationId.Value);
 
             var client = new Infrastructure.Clients.Entities.Client
             {
@@ -286,6 +320,17 @@ namespace Client.Api.Services.Clients
                 await _context.ClientsAccountManagers.AddAsync(clientManager.FillCommonProperties());
             }
 
+            foreach (var discountCodeId in discountCodeIds.OrEmptyIfNull())
+            {
+                var clientDiscountCode = new ClientsDiscountCode
+                {
+                    ClientId = client.Id,
+                    DiscountCodeId = discountCodeId
+                };
+
+                await _context.ClientsDiscountCodes.AddAsync(clientDiscountCode.FillCommonProperties());
+            }
+
             await _context.SaveChangesAsync();
 
             var upsertedClientMessage = new UpsertedClientIntegrationEvent
@@ -319,14 +364,31 @@ namespace Client.Api.Services.Clients
                               CreatedDate = c.CreatedDate
                           };
 
+            PagedResults<IEnumerable<ClientServiceModel>> pagedResults;
+
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
                 clients = clients.Take(Constants.MaxItemsPerPageLimit);
 
-                return clients.PagedIndex(new Pagination(clients.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = clients.PagedIndex(new Pagination(clients.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            var pageClients = pagedResults.Data.OrEmptyIfNull().ToList();
+            var discountCodeIds = GetDiscountCodeIds(pageClients.Select(x => x.Id.Value));
+
+            foreach (var pageClient in pageClients)
+            {
+                pageClient.DiscountCodeIds = discountCodeIds.TryGetValue(pageClient.Id.Value, out var clientDiscountCodeIds) ? clientDiscountCodeIds : new List<Guid>();
+            }
+
+            return new PagedResults<IEnumerable<ClientServiceModel>>(pagedResults.Total, pagedResults.PageSize)
+            {
+                Data = pageClients
+            };
         }
 
         public async Task<ClientServiceModel> GetByOrganisationAsync(GetClientByOrganisationServiceModel model)
@@ -380,6 +442,56 @@ namespace Client.Api.Services.Clients
             }
 
             return client.FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// The ids to assign, validated, or null when the request does not touch assignments.
+        /// Only active codes of the caller's own seller can be assigned, so a crafted request cannot attach another seller's code.
+        /// </summary>
+        private async Task<List<Guid>> GetAssignableDiscountCodeIdsAsync(IEnumerable<Guid> discountCodeIds, bool isSeller, Guid sellerId)
+        {
+            if (discountCodeIds is null)
+            {
+                return null;
+            }
+
+            if (isSeller is false)
+            {
+                throw new CustomException(_clientLocalizer.GetString("DiscountCodeAssignmentForbidden"), (int)HttpStatusCode.Forbidden);
+            }
+
+            var distinctIds = discountCodeIds.Distinct().ToList();
+
+            if (distinctIds.Count == 0)
+            {
+                return distinctIds;
+            }
+
+            var validCount = await _context.DiscountCodes.CountAsync(x => distinctIds.Contains(x.Id) && x.SellerId == sellerId && x.IsActive);
+
+            if (validCount != distinctIds.Count)
+            {
+                throw new UnprocessableEntityException(_clientLocalizer.GetString("DiscountCodeAssignmentInvalid"));
+            }
+
+            return distinctIds;
+        }
+
+        /// <summary>
+        /// The ids of the active discount codes assigned to each of the clients. Deleted codes never appear.
+        /// </summary>
+        private Dictionary<Guid, List<Guid>> GetDiscountCodeIds(IEnumerable<Guid> clientIds)
+        {
+            var ids = clientIds.ToList();
+
+            var assignments = (from cdc in _context.ClientsDiscountCodes
+                               join dc in _context.DiscountCodes on cdc.DiscountCodeId equals dc.Id
+                               where ids.Contains(cdc.ClientId) && cdc.IsActive && dc.IsActive
+                               select new { cdc.ClientId, cdc.DiscountCodeId }).ToList();
+
+            return assignments
+                .GroupBy(x => x.ClientId)
+                .ToDictionary(x => x.Key, x => x.Select(y => y.DiscountCodeId).ToList());
         }
     }
 }

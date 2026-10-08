@@ -387,6 +387,7 @@ services:
       - GrulaUrl=https://api.grula.net
       - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
       - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
+      - DiscountCodeEnforcementEnabled=${DISCOUNT_CODE_ENFORCEMENT_ENABLED:-false}
       - PossibleExtraPackingAttributeKeys=extraPacking
       - PossiblePaletteSizeAttributeKeys=palletDimensions,PalletDimensions
       - PossiblePriceGroupAttributeKeys=priceGroup,grupaCenowa,preisgruppe
@@ -447,6 +448,7 @@ services:
       - GrulaUrl=https://api.grula.net
       - GrulaAccessToken=${GRULA_ACCESS_TOKEN}
       - GrulaEnvironmentId=${GRULA_ENVIRONMENT_ID}
+      - DiscountCodeEnforcementEnabled=${DISCOUNT_CODE_ENFORCEMENT_ENABLED:-false}
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - PossibleExtraPackingAttributeKeys=extraPacking

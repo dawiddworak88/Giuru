@@ -127,11 +127,15 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact]
-        public async Task SaveBuyerBasket_WithDiscountCode_WhenConfiguredGrulaIsUnavailable_StillStoresTheCode()
+        public async Task SaveBuyerBasket_WithDiscountCode_WithEnforcementOff_WhenConfiguredGrulaIsUnavailable_StillStoresTheCode()
         {
             // Discount-code storage is gated purely on IsGrulaConfigured, not on Grula's
             // reachability (see BasketsApiController.Index) - only pricing is cleared when
             // the configured Grula instance can't be reached (see BasketPricingTests).
+            //
+            // This is the behaviour with DiscountCodeEnforcementEnabled off, which the default Buyer.Web of the fixture
+            // keeps. With enforcement on the same request is rejected for a code nobody registered, and a registered and
+            // assigned code is stored (see BuyerDiscountCodeEnforcementTests).
             var basket = await _apiFixture.BuyerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
                 ApiEndpoints.BasketApiEndpoint,
                 new SaveBasketRequestModel

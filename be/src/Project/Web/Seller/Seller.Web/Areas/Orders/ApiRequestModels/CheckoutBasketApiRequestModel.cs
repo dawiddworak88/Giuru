@@ -31,5 +31,6 @@ namespace Seller.Web.Areas.Orders.ApiRequestModels
         public Guid? ShippingCountryId { get; set; }
         public string MoreInfo { get; set; }
         public bool HasApprovalToSendEmail { get; set; }
+        public Guid? ExpectedBasketVersion { get; set; }
     }
 }

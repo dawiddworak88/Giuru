@@ -16,6 +16,7 @@ namespace Client.Api.v1.ResponseModels
         public Guid? OrganisationId { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
+        public IEnumerable<Guid> DiscountCodeIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
         public DateTime? LastModifiedDate { get; set; }

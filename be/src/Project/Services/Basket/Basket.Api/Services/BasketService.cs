@@ -38,7 +38,11 @@ namespace Basket.Api.Services
         {
             using var source = new ActivitySource(this.GetType().Name);
 
+            // The one read of the basket: the version check below and every event further down are built from this very
+            // snapshot, so a save that lands after this point cannot change what becomes the order.
             var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
+
+            this.EnsureExpectedBasketVersion(basket, checkoutBasketServiceModel.ExpectedBasketVersion);
 
             if ((basket is null || basket.Items.OrEmptyIfNull().Any() is false) && checkoutBasketServiceModel.HasCustomOrder is false)
             {
@@ -170,6 +174,25 @@ namespace Basket.Api.Services
             this.eventBus.Publish(message);
         }
 
+        private void EnsureExpectedBasketVersion(BasketRepositoryModel basket, Guid? expectedBasketVersion)
+        {
+            // Legacy callers that do not guard keep their contract.
+            if (expectedBasketVersion.HasValue is false)
+            {
+                return;
+            }
+
+            var isCurrent = expectedBasketVersion.Value == Guid.Empty
+                // The caller saw no basket. A basket that now has lines or a code was written since.
+                ? basket is null || (basket.Items.OrEmptyIfNull().Any() is false && string.IsNullOrWhiteSpace(basket.DiscountCode))
+                : basket is not null && basket.BasketVersion == expectedBasketVersion.Value;
+
+            if (isCurrent is false)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("DiscountCodeBasketNeedsRefresh").Value, (int)HttpStatusCode.Conflict);
+            }
+        }
+
         public async Task DeleteAsync(DeleteBasketServiceModel serviceModel)
         {
             await this.basketRepository.DeleteBasketAsync(serviceModel.Id.Value);
@@ -194,6 +217,8 @@ namespace Basket.Api.Services
             {
                 Id = basket.Id.Value,
                 DiscountCode = basket.DiscountCode,
+                DiscountCodeClientId = basket.DiscountCodeClientId,
+                BasketVersion = basket.BasketVersion,
                 Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {
                     ProductId = x.ProductId,
@@ -221,6 +246,12 @@ namespace Basket.Api.Services
             {
                 Id = serviceModel.Id,
                 DiscountCode = serviceModel.DiscountCode,
+
+                // The client is only meaningful for a stored code.
+                DiscountCodeClientId = string.IsNullOrWhiteSpace(serviceModel.DiscountCode) ? null : serviceModel.DiscountCodeClientId,
+
+                // A new version for every write, so that no earlier validation can be mistaken for the current snapshot.
+                BasketVersion = Guid.NewGuid(),
                 Items = serviceModel.Items.OrEmptyIfNull().Select(x => new BasketItemRepositoryModel
                 {
                     ProductId = x.ProductId,
@@ -245,6 +276,8 @@ namespace Basket.Api.Services
             {
                 Id = result.Id,
                 DiscountCode = result.DiscountCode,
+                DiscountCodeClientId = result.DiscountCodeClientId,
+                BasketVersion = result.BasketVersion,
                 Items = result.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {
                     ProductId = x.ProductId,

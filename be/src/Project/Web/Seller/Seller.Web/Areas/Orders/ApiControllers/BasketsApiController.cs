@@ -19,7 +19,10 @@ using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Shared.Configurations;
 using Foundation.Pricing.Baskets;
+using Foundation.Pricing.Configurations;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
+using Seller.Web.Shared.Services.DiscountCodes;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Services.Products;
@@ -48,6 +51,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly ILogger<BasketsApiController> _logger;
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
@@ -62,7 +66,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IPriceClientResolver priceClientResolver,
             ILogger<BasketsApiController> logger,
             IPriceProductFactory priceProductFactory,
-            IBasketRepricingService basketRepricingService)
+            IBasketRepricingService basketRepricingService,
+            IDiscountCodeValidator discountCodeValidator)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
@@ -77,6 +82,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _logger = logger;
             _priceProductFactory = priceProductFactory;
             _basketRepricingService = basketRepricingService;
+            _discountCodeValidator = discountCodeValidator;
         }
 
         [HttpPost]
@@ -85,6 +91,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var items = model.Items.OrEmptyIfNull().ToList();
+            var isDiscountCodeEnforced = _options.Value.IsDiscountCodeEnforced();
 
             var discountOutcome = await BasketDiscountCodeCoordinator.ResolveAsync(
                 _options.Value.IsGrulaConfigured,
@@ -94,7 +101,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 async () => model.Id.HasValue
                     ? (await _basketRepository.GetBasketByIdAsync(token, language, model.Id))?.DiscountCode
                     : null,
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
+                isDiscountCodeEnforced,
+                code => _discountCodeValidator.ValidateAsync(model.ClientId, code, token, HttpContext.RequestAborted),
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
 
             if (discountOutcome.IsRejected)
             {
@@ -129,12 +139,18 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     Currency = x.Currency,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 }),
-                discountCode);
+                discountCode,
+                // The client the stored code was verified for, so a later checkout for another client cannot reuse prices
+                // that were calculated for this one. Set only here, from the validated client - never from the browser.
+                isDiscountCodeEnforced && !string.IsNullOrWhiteSpace(discountCode) ? model.ClientId : null);
 
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id,
-                DiscountCode = basket.DiscountCode
+                DiscountCode = basket.DiscountCode,
+                DiscountCodeRemovedMessage = discountOutcome.IsRemoved
+                    ? DiscountCodeMessages.GetRemovedMessage(_orderLocalizer, discountOutcome.RemovedDiscountCode)
+                    : null
             };
 
             var productIds = basket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

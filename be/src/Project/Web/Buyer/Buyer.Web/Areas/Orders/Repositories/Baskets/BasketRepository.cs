@@ -31,12 +31,13 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             _settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null, Guid? discountCodeClientId = null)
         {
             var requestModel = new SaveBasketApiRequestModel
             {
                 Id = id,
                 DiscountCode = discountCode,
+                DiscountCodeClientId = discountCodeClientId,
                 Items = items.OrEmptyIfNull().Select(x => new BasketItemApiRequestModel
                 {
                     ProductId = x.ProductId,
@@ -71,6 +72,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 {
                     Id = response.Data.Id,
                     DiscountCode = response.Data.DiscountCode,
+                    DiscountCodeClientId = response.Data.DiscountCodeClientId,
+                    BasketVersion = response.Data.BasketVersion,
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         Id = x.Id,
@@ -107,7 +110,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             bool hasCustomOrder,
             bool hasApprovalToSendEmail,
             IEnumerable<Guid> attachments,
-            Guid? sellerId)
+            Guid? sellerId,
+            Guid? expectedBasketVersion = null)
         {
             var requestModel = new CheckoutBasketApiRequestModel
             {
@@ -120,6 +124,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 HasApprovalToSendEmail = hasApprovalToSendEmail,
                 Attachments = attachments,
                 SellerId = sellerId,
+                ExpectedBasketVersion = expectedBasketVersion
             };
 
             if (billingAddress is not null)

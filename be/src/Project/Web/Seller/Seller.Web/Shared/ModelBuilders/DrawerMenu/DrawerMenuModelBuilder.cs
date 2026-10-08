@@ -4,8 +4,11 @@ using Foundation.PageContent.Components.DrawerMenu.ViewModels;
 using Foundation.Presentation.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Seller.Web.Shared.Configurations;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
 {
@@ -16,12 +19,14 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IOptionsMonitor<AppSettings> _options;
 
         public DrawerMenuModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DashboardResources> dashboardLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
+            IOptionsMonitor<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
@@ -29,11 +34,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
             _dashboardLocalizer = dashboardLocalizer;
             _clientLocalizer = clientLocalizer;
             _teamMembersLocalizer = teamMembersLocalizer;
+            _options = options;
         }
 
         public IEnumerable<DrawerMenuViewModel> BuildModel()
         {
-            return new List<DrawerMenuViewModel>
+            var menu = new List<DrawerMenuViewModel>
             {
                 new DrawerMenuViewModel
                 {
@@ -246,6 +252,25 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                     }
                 }
             };
+
+            // Discount codes are Grula price drivers: without Grula there is nothing to manage.
+            if (_options.CurrentValue.IsGrulaConfigured)
+            {
+                var clientsMenu = menu.First(x => x.Items.Any(y => y.Title == _globalLocalizer.GetString("ClientsGroups")));
+                var clientsItems = clientsMenu.Items.ToList();
+                var groupsItemIndex = clientsItems.FindIndex(x => x.Title == _globalLocalizer.GetString("ClientsGroups"));
+
+                clientsItems.Insert(groupsItemIndex + 1, new DrawerMenuItemViewModel
+                {
+                    Icon = IconsConstants.Outlet,
+                    Title = _clientLocalizer.GetString("DiscountCodes"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                });
+
+                clientsMenu.Items = clientsItems;
+            }
+
+            return menu;
         }
     }
 }

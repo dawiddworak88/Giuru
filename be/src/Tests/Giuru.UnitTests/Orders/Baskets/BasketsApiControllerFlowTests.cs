@@ -9,6 +9,7 @@ using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.DomainModels;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.Pricing.Services;
@@ -101,7 +102,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<ILogger<BasketsApiController>>(),
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -187,7 +189,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<ILogger<BasketsApiController>>(),
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -312,7 +315,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 priceClientResolver,
                 Substitute.For<ILogger<SellerBasketsApiController>>(),
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
             };
@@ -395,7 +399,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 priceClientResolver,
                 Substitute.For<ILogger<SellerBasketsApiController>>(),
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
             };

@@ -24,6 +24,8 @@ namespace Buyer.Web.Shared.Configurations
         public string GrulaAccessToken { get; set; }
         public string GrulaEnvironmentId { get; set; }
 
+        public bool DiscountCodeEnforcementEnabled { get; set; }
+
         public bool IsGrulaConfigured =>
             !string.IsNullOrWhiteSpace(GrulaAccessToken) && Guid.TryParse(GrulaEnvironmentId, out _);
 

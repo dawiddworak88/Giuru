@@ -28,6 +28,8 @@ import OutletPage from "../../src/areas/Inventory/pages/OutletPage/OutletPage";
 import OutletsPage from "../../src/areas/Inventory/pages/OutletsPage/OutletsPage";
 import ClientGroupPage from "../../src/areas/Clients/pages/ClientGroupPage/ClientGroupPage";
 import ClientGroupsPage from "../../src/areas/Clients/pages/ClientGroupsPage/ClientGroupsPage";
+import DiscountCodePage from "../../src/areas/Clients/pages/DiscountCodePage/DiscountCodePage";
+import DiscountCodesPage from "../../src/areas/Clients/pages/DiscountCodesPage/DiscountCodesPage";
 import NewsPage from "../../src/areas/News/pages/NewsPage/NewsPage";
 import NewsItemPage from "../../src/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsCategoriesPage from "../../src/areas/News/pages/CategoriesPage/CategoriesPage";
@@ -96,6 +98,8 @@ const Components = {
 	OutletsPage,
 	ClientGroupPage,
 	ClientGroupsPage,
+	DiscountCodePage,
+	DiscountCodesPage,
 	NewsPage,
 	NewsItemPage,
 	NewsCategoriesPage,

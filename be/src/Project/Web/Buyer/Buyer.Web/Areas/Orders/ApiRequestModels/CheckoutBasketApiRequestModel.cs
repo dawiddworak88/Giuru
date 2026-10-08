@@ -32,6 +32,7 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
         public bool HasApprovalToSendEmail { get; set; }
+        public Guid? ExpectedBasketVersion { get; set; }
         public IEnumerable<Guid> Attachments { get; set; }
         public Guid? SellerId { get; set; }
     }

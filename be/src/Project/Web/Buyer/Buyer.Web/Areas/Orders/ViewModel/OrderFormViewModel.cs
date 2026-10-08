@@ -74,5 +74,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DiscountCodeAppliedMessage { get; set; }
         public string RemoveDiscountCodeLabel { get; set; }
         public bool IsDiscountCodeEnabled { get; set; }
+
+        /// <summary>Set on load when the code stored on the basket can no longer be applied, or could not be verified.</summary>
+        public string DiscountCodeWarning { get; set; }
     }
 }

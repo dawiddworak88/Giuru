@@ -16,6 +16,7 @@ namespace Seller.Web.Areas.Clients.DomainModels
         public bool IsDisabled { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
+        public IEnumerable<Guid> DiscountCodeIds { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }
         public DateTime LastModifiedDate { get; set; }

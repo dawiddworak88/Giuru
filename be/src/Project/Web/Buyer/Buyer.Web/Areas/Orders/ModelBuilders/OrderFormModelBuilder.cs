@@ -1,12 +1,16 @@
 ﻿using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
+using Foundation.Pricing.Configurations;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -26,6 +30,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IOptions<AppSettings> _options;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -35,7 +41,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IClientAddressesRepository clientAddressesRepository,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IDiscountCodeValidator discountCodeValidator,
+            IHttpContextAccessor httpContextAccessor)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
@@ -45,6 +53,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
             _options = options;
+            _discountCodeValidator = discountCodeValidator;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -122,6 +132,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.DiscountCode = _options.Value.IsGrulaConfigured
                         ? basket.DiscountCode
                         : null;
+
+                    viewModel.DiscountCodeWarning = await GetDiscountCodeWarningAsync(viewModel.DiscountCode, componentModel.Token);
                 }
             }
 
@@ -150,6 +162,31 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             }
 
             return viewModel;
+        }
+
+        /// <summary>
+        /// Explains on load why the stored code will not be used, instead of leaving the buyer to find out at checkout. It
+        /// only reads: the basket is not touched by a page load, and the code stays on screen so that the buyer can still
+        /// remove it - hiding it would leave a basket that checkout refuses with no control to fix it.
+        /// </summary>
+        private async Task<string> GetDiscountCodeWarningAsync(string discountCode, string token)
+        {
+            if (!_options.Value.IsDiscountCodeEnforced() || string.IsNullOrWhiteSpace(discountCode))
+            {
+                return null;
+            }
+
+            var clientId = _httpContextAccessor.HttpContext?.User.GetClientId();
+            var validation = await _discountCodeValidator.ValidateAsync(clientId, discountCode, token, _httpContextAccessor.HttpContext?.RequestAborted ?? default);
+
+            if (validation.IsValid)
+            {
+                return null;
+            }
+
+            return validation.Status is DiscountCodeValidationStatus.Unavailable
+                ? _orderLocalizer.GetString("DiscountCodeCouldNotBeVerified").Value
+                : _orderLocalizer.GetString("DiscountCodeNoLongerValid", discountCode).Value;
         }
     }
 }

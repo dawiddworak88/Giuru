@@ -59,6 +59,21 @@ function NewOrderForm(props) {
         onSave: saveDiscountCode
     });
 
+    // The warning supplied on page load explains why the stored code will not be used. Any successful basket save either
+    // dropped that code or revalidated it, so the warning is stale from then on and is cleared by the same sync that
+    // every save already goes through. The callbacks keep a stable identity, as the hooks they are passed to expect.
+    const [discountCodeWarning, setDiscountCodeWarning] = useState(props.discountCodeWarning || "");
+    const { syncFromDiscountCode } = discountCodeState;
+
+    const syncDiscountCodeFromSave = useCallback((savedDiscountCode) => {
+        syncFromDiscountCode(savedDiscountCode);
+        setDiscountCodeWarning("");
+    }, [syncFromDiscountCode]);
+
+    const syncDiscountCodeFromSaveResponse = useCallback(
+        (jsonResponse) => syncDiscountCodeFromSave(jsonResponse?.discountCode),
+        [syncDiscountCodeFromSave]);
+
     const {
         basketId,
         orderItems,
@@ -79,7 +94,7 @@ function NewOrderForm(props) {
         clearBasketUrl: props.clearBasketUrl,
         discountCode: discountCodeState.appliedDiscountCode,
         isDiscountCodeEnabled: props.isDiscountCodeEnabled,
-        onDiscountCodeChanged: discountCodeState.syncFromDiscountCode
+        onDiscountCodeChanged: syncDiscountCodeFromSave
     })
 
     const basketDiscountCode = useBasketDiscountCode({
@@ -91,7 +106,7 @@ function NewOrderForm(props) {
         buildBasket: (discountCode) => ({ id: basketId, items: orderItems, discountCode }),
         setBasketId,
         setGroupedOrderItems,
-        syncFromResponse: discountCodeState.syncFromResponse
+        syncFromResponse: syncDiscountCodeFromSaveResponse
     });
 
     basketDiscountCodeRef.current = basketDiscountCode;
@@ -530,6 +545,9 @@ function NewOrderForm(props) {
                         removeDiscountCodeLabel={props.removeDiscountCodeLabel}
                     />
                 }
+                {props.isDiscountCodeEnabled && discountCodeWarning &&
+                    <p className="help is-danger mb-3">{discountCodeWarning}</p>
+                }
                 <div className="field">
                     <NoSsr>
                         <FormControlLabel
@@ -668,6 +686,7 @@ NewOrderForm.propTypes = {
     getProductPriceUrl: PropTypes.string.isRequired,
     outletProductLabel: PropTypes.string.isRequired,
     discountCode: PropTypes.string,
+    discountCodeWarning: PropTypes.string,
     discountCodeLabel: PropTypes.string.isRequired,
     applyDiscountCodeLabel: PropTypes.string.isRequired,
     discountCodeAppliedMessage: PropTypes.string.isRequired,

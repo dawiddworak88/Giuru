@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { toast } from "react-toastify";
 import BasketDiscountCodeClient from "../helpers/baskets/BasketDiscountCodeClient";
+import BasketDiscountCodeNotifier from "../helpers/baskets/BasketDiscountCodeNotifier";
 
 // The discount code state itself stays with the caller: useOrderManagement takes the applied
 // code and the sync callback as arguments, so useDiscountCode has to run before it, while
@@ -21,10 +22,12 @@ export const useBasketDiscountCode = ({
 
     // Every basket response - an apply, a removal, an added or deleted line, a file upload -
     // carries the same three things back, so the handlers share this instead of repeating it.
+    // A save can also have dropped a stored code that is no longer applicable, and the user is told.
     const applyBasketResponse = useCallback((jsonResponse) => {
         setBasketId(jsonResponse.id);
         setGroupedOrderItems(jsonResponse.items || []);
         syncFromResponse(jsonResponse);
+        BasketDiscountCodeNotifier.notifyIfRemoved(jsonResponse);
     }, [setBasketId, setGroupedOrderItems, syncFromResponse]);
 
     // Deliberately not memoised: buildBasket closes over the current basket id and items and is
@@ -47,7 +50,8 @@ export const useBasketDiscountCode = ({
             if (ok) {
                 applyBasketResponse(jsonResponse);
 
-                if (showSuccessMessage) {
+                // A save that actually removed the code must not also claim that a code was applied.
+                if (showSuccessMessage && !jsonResponse.discountCodeRemovedMessage) {
                     toast.success(discountCodeAppliedMessage);
                 }
             }

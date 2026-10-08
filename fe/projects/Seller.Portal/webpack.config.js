@@ -36,6 +36,8 @@ module.exports = {
         outletspage: ["./src/areas/Inventory/pages/OutletsPage/index.js", "./src/areas/Inventory/pages/OutletsPage/OutletsPage.scss"],
         clientgrouppage: ["./src/areas/Clients/pages/ClientGroupPage/index.js", "./src/areas/Clients/pages/ClientGroupPage/ClientGroupPage.scss"],
         clientgroupspage: ["./src/areas/Clients/pages/ClientGroupsPage/index.js", "./src/areas/Clients/pages/ClientGroupsPage/ClientGroupsPage.scss"],
+        discountcodepage: ["./src/areas/Clients/pages/DiscountCodePage/index.js", "./src/areas/Clients/pages/DiscountCodePage/DiscountCodePage.scss"],
+        discountcodespage: ["./src/areas/Clients/pages/DiscountCodesPage/index.js", "./src/areas/Clients/pages/DiscountCodesPage/DiscountCodesPage.scss"],
         newsitempage: ["./src/areas/News/pages/NewsItemPage/index.js", "./src/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
         newspage: ["./src/areas/News/pages/NewsPage/index.js", "./src/areas/News/pages/NewsPage/NewsPage.scss"],
         newscategoriespage: ["./src/areas/News/pages/CategoriesPage/index.js", "./src/areas/News/pages/CategoriesPage/CategoriesPage.scss"],

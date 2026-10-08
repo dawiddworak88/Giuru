@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ApiControllers;
+using Giuru.UnitTests.Helpers;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories;
@@ -11,6 +12,7 @@ using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.DomainModels;
 using Buyer.Web.Shared.Repositories.Inventory;
 using Buyer.Web.Shared.Repositories.Media;
@@ -127,7 +129,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 productColorsService,
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -226,15 +229,115 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Null(savedDiscountCode);
         }
 
+        // ---- Discount code enforcement: the multipart upload must resolve a code exactly as the JSON save does ----
+
+        private static AppSettings EnforcedSettings() => new AppSettings
+        {
+            GrulaAccessToken = "test-token",
+            GrulaEnvironmentId = Guid.NewGuid().ToString(),
+            DiscountCodeEnforcementEnabled = true
+        };
+
+        private static IDiscountCodeValidator ValidatorAnswering(DiscountCodeValidation validation)
+        {
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<System.Threading.CancellationToken>())
+                .Returns(Task.FromResult(validation));
+
+            return validator;
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcement_WhenTheUploadCarriesAValidCode_StoresTheCanonicalSpellingAndTheBuyersClient()
+        {
+            var clientId = Guid.NewGuid();
+            var validator = ValidatorAnswering(DiscountCodeValidation.Valid("SUMMER25"));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), null, formHasDiscountCode: true, requestedDiscountCode: "summer25", validator, clientId);
+
+            Assert.Equal((int)System.Net.HttpStatusCode.OK, ((ObjectResult)outcome.Result).StatusCode);
+            Assert.Equal("SUMMER25", outcome.SavedDiscountCode);
+            Assert.Equal(clientId, outcome.SavedClientId);
+            await validator.Received().ValidateAsync(clientId, "summer25", "token", Arg.Any<System.Threading.CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcement_WhenTheUploadCarriesACodeThatCannotBeApplied_Returns400AndSavesNothing()
+        {
+            var validator = ValidatorAnswering(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), "STORED", formHasDiscountCode: true, requestedDiscountCode: "OTHER", validator, Guid.NewGuid());
+
+            Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, ((ObjectResult)outcome.Result).StatusCode);
+            Assert.False(outcome.WasSaved);
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcement_WhenTheStoredCodeIsNoLongerApplicable_RemovesItAndReportsIt()
+        {
+            var validator = ValidatorAnswering(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), "SUMMER25", formHasDiscountCode: false, requestedDiscountCode: null, validator, Guid.NewGuid());
+
+            var response = (Buyer.Web.Areas.Orders.ApiResponseModels.BasketResponseModel)((ObjectResult)outcome.Result).Value;
+            Assert.True(outcome.WasSaved);
+            Assert.Null(outcome.SavedDiscountCode);
+            Assert.Null(outcome.SavedClientId);
+            Assert.Null(response.DiscountCode);
+            Assert.Equal("DiscountCodeRemovedFromBasket", response.DiscountCodeRemovedMessage);
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcement_WhenTheStoredCodeCannotBeVerified_Returns400AndKeepsTheBasket()
+        {
+            var validator = ValidatorAnswering(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.Unavailable));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), "SUMMER25", formHasDiscountCode: false, requestedDiscountCode: null, validator, Guid.NewGuid());
+
+            Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, ((ObjectResult)outcome.Result).StatusCode);
+            Assert.False(outcome.WasSaved);
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcementOff_ValidatesNothingAndStoresNoClient()
+        {
+            var validator = Substitute.For<IDiscountCodeValidator>();
+
+            var outcome = await RunUploadScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                null, formHasDiscountCode: true, requestedDiscountCode: "typed", validator, Guid.NewGuid());
+
+            Assert.Equal("typed", outcome.SavedDiscountCode);
+            Assert.Null(outcome.SavedClientId);
+            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default, default);
+        }
+
         private static async Task<(IActionResult Result, string SavedDiscountCode, IPriceService PriceService)> RunDiscountCodeScenarioAsync(
             AppSettings appSettings,
             string persistedDiscountCode,
             bool formHasDiscountCode,
             string requestedDiscountCode)
         {
+            var outcome = await RunUploadScenarioAsync(appSettings, persistedDiscountCode, formHasDiscountCode, requestedDiscountCode);
+
+            return (outcome.Result, outcome.SavedDiscountCode, outcome.PriceService);
+        }
+
+        public sealed record UploadOutcome(IActionResult Result, string SavedDiscountCode, Guid? SavedClientId, IPriceService PriceService, bool WasSaved);
+
+        public static async Task<UploadOutcome> RunUploadScenarioAsync(
+            AppSettings appSettings,
+            string persistedDiscountCode,
+            bool formHasDiscountCode,
+            string requestedDiscountCode,
+            IDiscountCodeValidator validator = null,
+            Guid? principalClientId = null)
+        {
             var basketId = Guid.NewGuid();
             var productId = Guid.NewGuid();
             string savedDiscountCode = null;
+            Guid? savedClientId = null;
+            var wasSaved = false;
             var existingBasket = new DomainBasket
             {
                 Id = basketId,
@@ -272,17 +375,19 @@ namespace Giuru.UnitTests.Orders.Baskets
                 {
                     new PriceLookupResult { Status = PriceLookupStatus.Priced, Price = new Price { CurrentPrice = 10m, CurrencyCode = "EUR" } }
                 }));
-            basketRepository.SaveAsync("token", Arg.Any<string>(), basketId, Arg.Any<IEnumerable<BasketItem>>(), Arg.Any<string>())
+            basketRepository.SaveAsync("token", Arg.Any<string>(), basketId, Arg.Any<IEnumerable<BasketItem>>(), Arg.Any<string>(), Arg.Any<Guid?>())
                 .Returns(call =>
                 {
+                    wasSaved = true;
                     savedDiscountCode = call.ArgAt<string>(4);
+                    savedClientId = call.ArgAt<Guid?>(5);
                     return Task.FromResult(new DomainBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<BasketItem>>(3).ToList() });
                 });
 
             var formFields = formHasDiscountCode
                 ? new Dictionary<string, Microsoft.Extensions.Primitives.StringValues> { ["DiscountCode"] = requestedDiscountCode ?? string.Empty }
                 : new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>();
-            var httpContext = CreateHttpContext(basketId, formFields);
+            var httpContext = CreateHttpContext(basketId, formFields, principalClientId);
 
             var controller = new OrderFileApiController(
                 orderFileService,
@@ -295,20 +400,21 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<IOrdersRepository>(),
                 inventoryRepository,
                 Substitute.For<ILogger<OrderFileApiController>>(),
-                Substitute.For<IStringLocalizer<OrderResources>>(),
+                TestLocalizer.Create<OrderResources>(),
                 priceService,
                 productsService,
                 productColorsService,
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                validator ?? Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
 
             var result = await controller.Index(new UploadMediaRequestModel { File = Substitute.For<IFormFile>(), DiscountCode = requestedDiscountCode });
 
-            return (result, savedDiscountCode, priceService);
+            return new UploadOutcome(result, savedDiscountCode, savedClientId, priceService, wasSaved);
         }
 
         // The controllers delegate the align/apply spine to BasketRepricingService, so these flow
@@ -325,12 +431,14 @@ namespace Giuru.UnitTests.Orders.Baskets
             return new ClaimsPriceClientResolver(httpContextAccessor);
         }
 
-        private static DefaultHttpContext CreateHttpContext(Guid basketId, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formFields = null)
+        private static DefaultHttpContext CreateHttpContext(Guid basketId, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formFields = null, Guid? principalClientId = null)
         {
             var context = new DefaultHttpContext();
             context.Request.Headers.Cookie = $"{BasketConstants.BasketCookieName}={basketId}";
             context.Features.Set<IFormFeature>(new FormFeature(new FormCollection(formFields ?? new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>())));
-            context.User = new ClaimsPrincipal(new ClaimsIdentity());
+            context.User = principalClientId.HasValue
+                ? new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(Buyer.Web.Shared.Definitions.Middlewares.ClaimsEnrichmentConstants.ClientIdClaimType, principalClientId.Value.ToString()) }, "test"))
+                : new ClaimsPrincipal(new ClaimsIdentity());
             var authentication = Substitute.For<IAuthenticationService>();
             var properties = new AuthenticationProperties();
             properties.StoreTokens(new[] { new AuthenticationToken { Name = "access_token", Value = "token" } });
@@ -420,7 +528,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 options,
                 priceClientResolver,
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
             };
@@ -520,12 +629,115 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Null(savedDiscountCode);
         }
 
+        // ---- Discount code enforcement: the multipart upload must resolve a code exactly as the JSON save does ----
+
+        private static SellerAppSettings EnforcedSettings() => new SellerAppSettings
+        {
+            GrulaAccessToken = "test-token",
+            GrulaEnvironmentId = Guid.NewGuid().ToString(),
+            DiscountCodeEnforcementEnabled = true
+        };
+
+        private static IDiscountCodeValidator ValidatorAnswering(DiscountCodeValidation validation)
+        {
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<System.Threading.CancellationToken>())
+                .Returns(Task.FromResult(validation));
+
+            return validator;
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcement_WhenTheUploadCarriesAValidCode_StoresTheCanonicalSpellingAndTheClientTheSellerWorksFor()
+        {
+            var validator = ValidatorAnswering(DiscountCodeValidation.Valid("SUMMER25"));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), null, formHasDiscountCode: true, requestedDiscountCode: "summer25", validator);
+
+            Assert.Equal((int)System.Net.HttpStatusCode.OK, ((ObjectResult)outcome.Result).StatusCode);
+            Assert.Equal("SUMMER25", outcome.SavedDiscountCode);
+            Assert.Equal(outcome.ClientId, outcome.SavedClientId);
+            await validator.Received().ValidateAsync(outcome.ClientId, "summer25", "token", Arg.Any<System.Threading.CancellationToken>());
+        }
+
+        [Theory]
+        [InlineData(DiscountCodeValidationStatus.Disabled, "DiscountCodeDisabled")]
+        [InlineData(DiscountCodeValidationStatus.NotAssigned, "DiscountCodeNotAssignedToClient")]
+        [InlineData(DiscountCodeValidationStatus.NotFound, "DiscountCodeInvalid")]
+        public async Task Index_WithEnforcement_WhenTheUploadCarriesACodeThatCannotBeApplied_Returns400WithTheSpecificReasonAndSavesNothing(DiscountCodeValidationStatus status, string expectedMessage)
+        {
+            var validator = ValidatorAnswering(DiscountCodeValidation.Invalid(status));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), "STORED", formHasDiscountCode: true, requestedDiscountCode: "OTHER", validator);
+
+            var result = (ObjectResult)outcome.Result;
+            Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.Equal(expectedMessage, (string)result.Value.GetType().GetProperty("Message").GetValue(result.Value));
+            Assert.False(outcome.WasSaved);
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcement_WhenTheStoredCodeIsNoLongerApplicable_RemovesItAndReportsIt()
+        {
+            var validator = ValidatorAnswering(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), "SUMMER25", formHasDiscountCode: false, requestedDiscountCode: null, validator);
+
+            var response = (Seller.Web.Areas.Orders.ApiResponseModels.BasketResponseModel)((ObjectResult)outcome.Result).Value;
+            Assert.True(outcome.WasSaved);
+            Assert.Null(outcome.SavedDiscountCode);
+            Assert.Null(outcome.SavedClientId);
+            Assert.Null(response.DiscountCode);
+            Assert.Equal("DiscountCodeRemovedFromBasket", response.DiscountCodeRemovedMessage);
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcement_WhenTheStoredCodeCannotBeVerified_Returns400AndKeepsTheBasket()
+        {
+            var validator = ValidatorAnswering(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.Unavailable));
+
+            var outcome = await RunUploadScenarioAsync(EnforcedSettings(), "SUMMER25", formHasDiscountCode: false, requestedDiscountCode: null, validator);
+
+            Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, ((ObjectResult)outcome.Result).StatusCode);
+            Assert.False(outcome.WasSaved);
+        }
+
+        [Fact]
+        public async Task Index_WithEnforcementOff_ValidatesNothingAndStoresNoClient()
+        {
+            var validator = Substitute.For<IDiscountCodeValidator>();
+
+            var outcome = await RunUploadScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                null, formHasDiscountCode: true, requestedDiscountCode: "typed", validator);
+
+            Assert.Equal("typed", outcome.SavedDiscountCode);
+            Assert.Null(outcome.SavedClientId);
+            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default, default);
+        }
+
         private static async Task<(IActionResult Result, string SavedDiscountCode, IPriceService PriceService)> RunDiscountCodeScenarioAsync(
             SellerAppSettings appSettings,
             string persistedDiscountCode,
             bool formHasDiscountCode,
             string requestedDiscountCode)
         {
+            var outcome = await RunUploadScenarioAsync(appSettings, persistedDiscountCode, formHasDiscountCode, requestedDiscountCode);
+
+            return (outcome.Result, outcome.SavedDiscountCode, outcome.PriceService);
+        }
+
+        public sealed record UploadOutcome(IActionResult Result, string SavedDiscountCode, Guid? SavedClientId, IPriceService PriceService, Guid ClientId, bool WasSaved);
+
+        public static async Task<UploadOutcome> RunUploadScenarioAsync(
+            SellerAppSettings appSettings,
+            string persistedDiscountCode,
+            bool formHasDiscountCode,
+            string requestedDiscountCode,
+            IDiscountCodeValidator validator = null)
+        {
+            Guid? savedClientId = null;
+            var wasSaved = false;
             var basketId = Guid.NewGuid();
             var clientId = Guid.NewGuid();
             var productId = Guid.NewGuid();
@@ -570,10 +782,12 @@ namespace Giuru.UnitTests.Orders.Baskets
                 }));
             priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
                 .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0) }));
-            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>(), Arg.Any<Guid?>())
                 .Returns(call =>
                 {
+                    wasSaved = true;
                     savedDiscountCode = call.ArgAt<string>(4);
+                    savedClientId = call.ArgAt<Guid?>(5);
                     return Task.FromResult(new SellerBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList() });
                 });
 
@@ -591,21 +805,22 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<SellerIOrdersRepository>(),
                 inventoryRepository,
                 Substitute.For<ILogger<SellerOrderFileApiController>>(),
-                Substitute.For<IStringLocalizer<OrderResources>>(),
+                TestLocalizer.Create<OrderResources>(),
                 priceService,
                 productsService,
                 productColorsService,
                 options,
                 priceClientResolver,
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                validator ?? Substitute.For<IDiscountCodeValidator>())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext(formFields) }
             };
 
             var result = await controller.Index(new SellerUploadMediaRequestModel { Id = basketId, ClientId = clientId, File = Substitute.For<IFormFile>(), DiscountCode = requestedDiscountCode });
 
-            return (result, savedDiscountCode, priceService);
+            return new UploadOutcome(result, savedDiscountCode, savedClientId, priceService, clientId, wasSaved);
         }
 
         // The controllers delegate the align/apply spine to BasketRepricingService, so these flow

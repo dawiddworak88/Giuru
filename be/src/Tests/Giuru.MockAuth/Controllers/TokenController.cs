@@ -27,16 +27,27 @@ namespace Giuru.MockAuth.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Issues a token for the configured identity. The optional query values issue one for another identity instead,
+        /// so a test can act as a second seller or as a buyer without a role. An empty role means no role claim.
+        /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GenerateToken()
+        public async Task<IActionResult> GenerateToken(string email = null, string role = null, string organisationId = null)
         {
             var claims = new HashSet<Claim>(new ClaimComparer())
             {
-                new Claim(ClaimTypes.Email, _configuration.GetValue<string>("EmailClaim")),
+                new Claim(ClaimTypes.Email, string.IsNullOrWhiteSpace(email) ? _configuration.GetValue<string>("EmailClaim") : email),
                 new Claim(JwtClaimTypes.Audience, _configuration.GetValue<string>("Audience")),
-                new Claim(JwtClaimTypes.Role, _configuration.GetValue<string>("RolesClaim")),
-                new Claim(AuthConstants.OrganisationClaim, _configuration.GetValue<string>("OrganisationId"))
+                new Claim(AuthConstants.OrganisationClaim, string.IsNullOrWhiteSpace(organisationId) ? _configuration.GetValue<string>("OrganisationId") : organisationId)
             };
+
+            // Not specifying a role keeps the configured one; asking for "none" issues a token without any role.
+            var effectiveRole = role is null ? _configuration.GetValue<string>("RolesClaim") : role;
+
+            if (string.IsNullOrWhiteSpace(effectiveRole) is false && string.Equals(effectiveRole, "none", System.StringComparison.OrdinalIgnoreCase) is false)
+            {
+                claims.Add(new Claim(JwtClaimTypes.Role, effectiveRole));
+            }
 
             return StatusCode((int)HttpStatusCode.OK, new
             {

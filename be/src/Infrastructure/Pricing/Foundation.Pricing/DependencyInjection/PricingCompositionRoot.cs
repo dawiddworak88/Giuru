@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http.Headers;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
 using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,10 @@ namespace Foundation.Pricing.DependencyInjection
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IBasketRepricingService, BasketRepricingService>();
             services.AddScoped<IProductPricingService, ProductPricingService>();
+
+            // The driver id cache is shared. The service holds the typed HTTP client, so it stays scoped.
+            services.AddSingleton<GrulaDriverIdCache>();
+            services.AddScoped<IGrulaDiscountCodeService, GrulaDiscountCodeService>();
 
             services.AddHttpClient("GrulaApi")
                 .AddTypedClient(httpClient =>

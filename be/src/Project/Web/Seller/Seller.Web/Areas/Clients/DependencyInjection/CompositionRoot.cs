@@ -3,6 +3,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ModelBuilders;
+using Seller.Web.Areas.Clients.Repositories.DiscountCodes;
 using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Areas.Clients.Repositories.Roles;
 using Seller.Web.Areas.Clients.Repositories.Managers;
@@ -24,6 +25,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
         public static void RegisterClientsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IClientGroupsRepository, ClientGroupsRepository>();
+            services.AddScoped<IDiscountCodesRepository, DiscountCodesRepository>();
             services.AddScoped<IClientRolesRepository, ClientRolesRepository>();
             services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
             services.AddScoped<IClientApplicationsRepository, ClientApplicationsRepository>();
@@ -43,6 +45,11 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupsPageViewModel>, ClientGroupsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupPageViewModel>, ClientGroupPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupFormViewModel>, ClientGroupFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<DiscountCode>>, DiscountCodesPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DiscountCodesPageViewModel>, DiscountCodesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DiscountCodePageViewModel>, DiscountCodePageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DiscountCodeFormViewModel>, DiscountCodeFormModelBuilder>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientRole>>, ClientRolesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientRolesPageViewModel>, ClientRolesPageModelBuilder>();

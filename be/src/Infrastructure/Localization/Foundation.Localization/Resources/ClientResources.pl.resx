@@ -384,4 +384,58 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto zgodę.</value>
   </data>
+  <data name="DiscountCodes" xml:space="preserve">
+    <value>Kody rabatowe</value>
+  </data>
+  <data name="NewDiscountCode" xml:space="preserve">
+    <value>Nowy kod rabatowy</value>
+  </data>
+  <data name="EditDiscountCode" xml:space="preserve">
+    <value>Edytuj kod rabatowy</value>
+  </data>
+  <data name="DiscountCodeDescriptionLabel" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="NavigateToDiscountCodesText" xml:space="preserve">
+    <value>Wróć do kodów rabatowych</value>
+  </data>
+  <data name="NoDiscountCodesText" xml:space="preserve">
+    <value>Brak kodów rabatowych</value>
+  </data>
+  <data name="DiscountCodeRequiredErrorMessage" xml:space="preserve">
+    <value>Wpisz kod rabatowy</value>
+  </data>
+  <data name="DiscountCodeMaxLengthErrorMessage" xml:space="preserve">
+    <value>Kod rabatowy może mieć najwyżej 64 znaki</value>
+  </data>
+  <data name="DiscountCodeDescriptionMaxLengthErrorMessage" xml:space="preserve">
+    <value>Opis może mieć najwyżej 256 znaków</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Zapisano kod rabatowy</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Usunięto kod rabatowy</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Nie znaleziono kodu rabatowego</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>Kod rabatowy o tej wartości już istnieje</value>
+  </data>
+  <data name="DiscountCodeNotFoundInGrula" xml:space="preserve">
+    <value>Ten kod nie jest zdefiniowany w Grula. Najpierw dodaj go do sterownika "Discount Code" w Grula</value>
+  </data>
+  <data name="DiscountCodeGrulaUnavailable" xml:space="preserve">
+    <value>Nie udało się sprawdzić kodu w Grula. Spróbuj ponownie</value>
+  </data>
+  <data name="DiscountCodeAssignmentForbidden" xml:space="preserve">
+    <value>Tylko sprzedawcy mogą przypisywać kody rabatowe klientom</value>
+  </data>
+  <data name="DiscountCodeAssignmentInvalid" xml:space="preserve">
+    <value>Nie można przypisać jednego lub więcej wybranych kodów rabatowych</value>
+  </data>
+  <data name="DiscountCodeInactiveLabel" xml:space="preserve">
+    <value>nieaktywny</value>
+  </data>
 </root>

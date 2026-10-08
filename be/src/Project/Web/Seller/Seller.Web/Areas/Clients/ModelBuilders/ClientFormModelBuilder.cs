@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Areas.Clients.Repositories.Groups;
+using Seller.Web.Areas.Clients.Repositories.DiscountCodes;
+using Seller.Web.Shared.Configurations;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Seller.Web.Areas.Clients.Repositories.Managers;
@@ -44,7 +46,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientFieldsRepository _clientFieldsRepository;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
-        
+        private readonly IDiscountCodesRepository _discountCodesRepository;
+        private readonly IOptions<AppSettings> _appSettings;
+
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -61,7 +65,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             LinkGenerator linkGenerator,
             ICurrenciesRepository currenciesRepository,
             IApprovalsRepository approvalsRepository,
-            IUserApprovalsRepository userApprovalsRepository)
+            IUserApprovalsRepository userApprovalsRepository,
+            IDiscountCodesRepository discountCodesRepository,
+            IOptions<AppSettings> appSettings)
         {
             _clientsRepository = clientsRepository;
             _globalLocalizer = globalLocalizer;
@@ -76,6 +82,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             _clientFieldsRepository = clientFieldsRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _currenciesRepository = currenciesRepository;
+            _discountCodesRepository = discountCodesRepository;
+            _appSettings = appSettings;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -124,7 +132,10 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 BillingAddressLabel = _clientLocalizer.GetString("BillingAddress"),
                 ExpressedOnLabel = _clientLocalizer.GetString("ExpressedOnLabel"),
                 ActiveLabel = _globalLocalizer.GetString("Active"),
-                InActiveLabel = _globalLocalizer.GetString("InActive")
+                InActiveLabel = _globalLocalizer.GetString("InActive"),
+                IsDiscountCodeEnabled = _appSettings.Value.IsGrulaConfigured,
+                DiscountCodesLabel = _clientLocalizer.GetString("DiscountCodes"),
+                NoDiscountCodesText = _clientLocalizer.GetString("NoDiscountCodesText")
             };
 
             if (componentModel.Id.HasValue)
@@ -140,6 +151,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.PhoneNumber = client.PhoneNumber;
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
                     viewModel.ClientManagersIds = client.ClientManagerIds;
+                    viewModel.DiscountCodeIds = client.DiscountCodeIds;
                     viewModel.CountryId = client.CountryId;
                     viewModel.IsDisabled = client.IsDisabled;
                     viewModel.PreferedCurrencyId = client.PreferedCurrencyId;
@@ -156,6 +168,20 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     Id = x.Id,
                     Name = x.Name,
+                });
+            }
+
+            if (viewModel.IsDiscountCodeEnabled)
+            {
+                // A failure throws and fails the form load: an unavailable list must never become an empty selection,
+                // because saving that would clear the client's assignments.
+                var discountCodes = await _discountCodesRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+                // Disabled codes stay in the list, marked inactive, so an existing assignment stays visible.
+                viewModel.DiscountCodes = discountCodes.OrEmptyIfNull().Select(x => new ListItemViewModel
+                {
+                    Id = x.Id,
+                    Name = x.IsDisabled ? $"{x.Code} ({_clientLocalizer.GetString("DiscountCodeInactiveLabel")})" : x.Code
                 });
             }
 

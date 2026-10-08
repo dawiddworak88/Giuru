@@ -7,6 +7,9 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Foundation.Account.Definitions;
+using Seller.Web.Shared.Configurations;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
@@ -33,6 +36,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
         private readonly IClaimsCacheInvalidatorService _cacheInvalidatorService;
+        private readonly IOptions<AppSettings> _options;
 
         public ClientsApiController(
             IOrganisationsRepository organisationsRepository,
@@ -40,13 +44,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             IStringLocalizer<ClientResources> clientLocalizer,
             IClientGroupsRepository clientGroupsRepository,
             IClientFieldValuesRepository clientFieldValuesRepository,
-            IClaimsCacheInvalidatorService cacheInvalidatorService)
+            IClaimsCacheInvalidatorService cacheInvalidatorService,
+            IOptions<AppSettings> options)
         {
             _organisationsRepository = organisationsRepository;
             _clientsRepository = clientsRepository;
             _clientLocalizer = clientLocalizer;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _cacheInvalidatorService = cacheInvalidatorService;
+            _options = options;
         }
 
         [HttpGet]
@@ -66,6 +72,16 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveClientRequestModel model)
         {
+            // Without Grula the client form does not send the field, and a crafted request must not change assignments
+            // either: null means "leave unchanged". Anything that does change them is for sellers only, and is refused
+            // before any organisation or client side effect.
+            var discountCodeIds = _options.Value.IsGrulaConfigured ? model.DiscountCodeIds : null;
+
+            if (discountCodeIds is not null && User.IsInRole(AccountConstants.Roles.Seller) is false)
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden);
+            }
+
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
@@ -82,7 +98,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 organisationId = await _organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
             }
 
-            var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+            var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId, discountCodeIds);
 
             if (model.FieldsValues is not null && model.FieldsValues.Any())
             {

@@ -384,4 +384,58 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Zustimmung erfolgreich gelöscht.</value>
   </data>
+  <data name="DiscountCodes" xml:space="preserve">
+    <value>Rabattcodes</value>
+  </data>
+  <data name="NewDiscountCode" xml:space="preserve">
+    <value>Neuer Rabattcode</value>
+  </data>
+  <data name="EditDiscountCode" xml:space="preserve">
+    <value>Rabattcode bearbeiten</value>
+  </data>
+  <data name="DiscountCodeDescriptionLabel" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="NavigateToDiscountCodesText" xml:space="preserve">
+    <value>Zurück zu den Rabattcodes</value>
+  </data>
+  <data name="NoDiscountCodesText" xml:space="preserve">
+    <value>Keine Rabattcodes</value>
+  </data>
+  <data name="DiscountCodeRequiredErrorMessage" xml:space="preserve">
+    <value>Geben Sie einen Rabattcode ein</value>
+  </data>
+  <data name="DiscountCodeMaxLengthErrorMessage" xml:space="preserve">
+    <value>Der Rabattcode darf höchstens 64 Zeichen lang sein</value>
+  </data>
+  <data name="DiscountCodeDescriptionMaxLengthErrorMessage" xml:space="preserve">
+    <value>Die Beschreibung darf höchstens 256 Zeichen lang sein</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Rabattcode gespeichert</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Rabattcode gelöscht</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Rabattcode nicht gefunden</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>Ein Rabattcode mit diesem Wert existiert bereits</value>
+  </data>
+  <data name="DiscountCodeNotFoundInGrula" xml:space="preserve">
+    <value>Dieser Code ist in Grula nicht definiert. Fügen Sie ihn zuerst dem Treiber "Discount Code" in Grula hinzu</value>
+  </data>
+  <data name="DiscountCodeGrulaUnavailable" xml:space="preserve">
+    <value>Der Code konnte in Grula nicht geprüft werden. Versuchen Sie es erneut</value>
+  </data>
+  <data name="DiscountCodeAssignmentForbidden" xml:space="preserve">
+    <value>Nur Verkäufer können Kunden Rabattcodes zuweisen</value>
+  </data>
+  <data name="DiscountCodeAssignmentInvalid" xml:space="preserve">
+    <value>Einer oder mehrere der ausgewählten Rabattcodes können nicht zugewiesen werden</value>
+  </data>
+  <data name="DiscountCodeInactiveLabel" xml:space="preserve">
+    <value>inaktiv</value>
+  </data>
 </root>

@@ -30,12 +30,13 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             _settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null, Guid? discountCodeClientId = null)
         {
             var requestModel = new SaveBasketApiRequestModel
             {
                 Id = id,
                 DiscountCode = discountCode,
+                DiscountCodeClientId = discountCodeClientId,
                 Items = items.OrEmptyIfNull().Select(x => new BasketItemApiRequestModel
                 {
                     ProductId = x.ProductId,
@@ -70,6 +71,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 { 
                     Id = response.Data.Id,
                     DiscountCode = response.Data.DiscountCode,
+                    DiscountCodeClientId = response.Data.DiscountCodeClientId,
+                    BasketVersion = response.Data.BasketVersion,
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         ProductId = x.ProductId,
@@ -121,7 +124,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             Guid? shippingCountryId,
             string moreInfo,
             bool hasApprovalToSendEmail,
-            Guid? sellerId)
+            Guid? sellerId,
+            Guid? expectedBasketVersion = null)
         {
             var requestModel = new CheckoutBasketApiRequestModel
             {
@@ -151,7 +155,8 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 ShippingPhoneNumber = shippingPhoneNumber,
                 ShippingCountryId = shippingCountryId,
                 MoreInfo = moreInfo,
-                HasApprovalToSendEmail = hasApprovalToSendEmail
+                HasApprovalToSendEmail = hasApprovalToSendEmail,
+                ExpectedBasketVersion = expectedBasketVersion
             };
 
             var apiRequest = new ApiRequest<CheckoutBasketApiRequestModel>

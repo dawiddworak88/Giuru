@@ -51,6 +51,11 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public Guid? DefaultBillingAddressId { get; set; }
         public IEnumerable<Guid> ClientGroupsIds { get; set; }
         public IEnumerable<Guid> ClientManagersIds { get; set; }
+        public bool IsDiscountCodeEnabled { get; set; }
+        public string DiscountCodesLabel { get; set; }
+        public string NoDiscountCodesText { get; set; }
+        public IEnumerable<Guid> DiscountCodeIds { get; set; }
+        public IEnumerable<ListItemViewModel> DiscountCodes { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
         public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
         public IEnumerable<ListItemViewModel> Countries { get; set; }

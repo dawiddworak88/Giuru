@@ -27,7 +27,10 @@ using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.DomainModels.Media;
 using Seller.Web.Shared.Repositories.Inventory;
 using Foundation.Pricing.Baskets;
+using Foundation.Pricing.Configurations;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
+using Seller.Web.Shared.Services.DiscountCodes;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Services.Products;
@@ -60,6 +63,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IPriceClientResolver _priceClientResolver;
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -78,7 +82,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IOptions<AppSettings> options,
             IPriceClientResolver priceClientResolver,
             IPriceProductFactory priceProductFactory,
-            IBasketRepricingService basketRepricingService)
+            IBasketRepricingService basketRepricingService,
+            IDiscountCodeValidator discountCodeValidator)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -97,6 +102,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _priceClientResolver = priceClientResolver;
             _priceProductFactory = priceProductFactory;
             _basketRepricingService = basketRepricingService;
+            _discountCodeValidator = discountCodeValidator;
         }
 
         [HttpPost]
@@ -110,6 +116,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
                 : null;
             var canSeePrices = _priceService.CanSeePrices(model.ClientId);
+            var isDiscountCodeEnforced = _options.Value.IsDiscountCodeEnforced();
 
             var importedSkus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToList();
             var skus = importedSkus
@@ -137,7 +144,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 hasItems: true,
                 () => Task.FromResult(existingBasket?.DiscountCode),
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
+                isDiscountCodeEnforced,
+                code => _discountCodeValidator.ValidateAsync(model.ClientId, code, token, HttpContext.RequestAborted),
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
 
             if (discountOutcome.IsRejected)
             {
@@ -222,12 +232,16 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 language,
                 model.Id,
                 completeBasketItems,
-                discountCode);
+                discountCode,
+                isDiscountCodeEnforced && !string.IsNullOrWhiteSpace(discountCode) ? model.ClientId : null);
 
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id,
-                DiscountCode = basket.DiscountCode
+                DiscountCode = basket.DiscountCode,
+                DiscountCodeRemovedMessage = discountOutcome.IsRemoved
+                    ? DiscountCodeMessages.GetRemovedMessage(_orderLocalizer, discountOutcome.RemovedDiscountCode)
+                    : null
             };
 
             if (basket.Items.OrEmptyIfNull().Any())

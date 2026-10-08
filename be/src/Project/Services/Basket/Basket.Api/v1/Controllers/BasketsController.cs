@@ -58,6 +58,7 @@ namespace Basket.Api.v1.Controllers
                 Id = request.Id ?? Guid.NewGuid(),
                 IsSeller = isSeller,
                 DiscountCode = request.DiscountCode,
+                DiscountCodeClientId = request.DiscountCodeClientId,
                 Items = request.Items.OrEmptyIfNull().Select(x => new UpdateBasketItemServiceModel 
                 { 
                     ProductId = x.ProductId,
@@ -92,6 +93,8 @@ namespace Basket.Api.v1.Controllers
                     {
                         Id = basket.Id,
                         DiscountCode = basket.DiscountCode,
+                        DiscountCodeClientId = basket.DiscountCodeClientId,
+                        BasketVersion = basket.BasketVersion,
                         Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                         {
                             ProductId = x.ProductId,
@@ -182,6 +185,8 @@ namespace Basket.Api.v1.Controllers
                     {
                         Id = basket.Id,
                         DiscountCode = basket.DiscountCode,
+                        DiscountCodeClientId = basket.DiscountCodeClientId,
+                        BasketVersion = basket.BasketVersion,
                         Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                         {
                             ProductId = x.ProductId,
@@ -250,6 +255,7 @@ namespace Basket.Api.v1.Controllers
                 ShippingStreet = request.ShippingStreet,
                 MoreInfo = request.MoreInfo,
                 HasCustomOrder = request.HasCustomOrder,
+                ExpectedBasketVersion = request.ExpectedBasketVersion,
                 HasApprovalToSendEmail = request.HasApprovalToSendEmail,
                 Attachments = request.Attachments,
                 Language = CultureInfo.CurrentCulture.Name,

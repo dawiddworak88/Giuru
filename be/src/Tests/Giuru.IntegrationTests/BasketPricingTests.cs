@@ -1,5 +1,6 @@
 using Foundation.ApiExtensions.Shared.Definitions;
 using Giuru.IntegrationTests.Definitions;
+using Giuru.IntegrationTests.Helpers;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
 using System;
@@ -24,12 +25,16 @@ namespace Giuru.IntegrationTests
         {
             var basketId = Guid.NewGuid();
 
-            var savedBasket = await _apiFixture.SellerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
+            // Pricing resolves the client the basket is priced for, so it has to exist and belong to the calling seller.
+            var seller = await DiscountSeller.CreateAsync(_apiFixture);
+            var client = await seller.CreateClientAsync();
+
+            var savedBasket = await _apiFixture.CreateSellerWebClient(seller.Token).PostAsync<SaveBasketRequestModel, BasketResponseModel>(
                 ApiEndpoints.BasketApiEndpoint,
                 new SaveBasketRequestModel
                 {
                     Id = basketId,
-                    ClientId = Clients.Id,
+                    ClientId = client.Id,
                     Items = new List<BasketItemRequestModel>
                     {
                         new()

@@ -17,6 +17,9 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
         public bool IsDisabled { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
         public IEnumerable<Guid> ClientManagerIds { get; set; }
+
+        /// <summary>Null leaves the client's discount code assignments unchanged, an empty list clears them.</summary>
+        public IEnumerable<Guid> DiscountCodeIds { get; set; }
         public IEnumerable<ClientFieldValueRequestModel> FieldsValues { get; set; }
         public Guid? DefaultDeliveryAddressId { get; set; }
         public Guid? DefaultBillingAddressId { get; set; }

@@ -4,6 +4,8 @@
     {
         public const string ClientsApiEndpoint = "Clients/ClientsApi";
         public const string GetClientsApiEndpoint = "Clients/ClientsApi/Get";
+        public const string DiscountCodesApiEndpoint = "Clients/DiscountCodesApi";
+        public const string GetDiscountCodesApiEndpoint = "Clients/DiscountCodesApi/Get";
         public const string ProductsApiEndpoint = "Products/ProductsApi";
         public const string GetProductsApiEndpoint = "Products/ProductsApi/Get";
         public const string BasketApiEndpoint = "Orders/BasketsApi";

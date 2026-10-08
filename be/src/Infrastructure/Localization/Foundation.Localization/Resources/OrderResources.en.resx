@@ -387,4 +387,25 @@
   <data name="BasketPricesCouldNotBeVerified" xml:space="preserve">
     <value>We could not verify the prices for this basket. Please try again.</value>
   </data>
+  <data name="DiscountCodeInvalid" xml:space="preserve">
+    <value>This discount code cannot be applied</value>
+  </data>
+  <data name="DiscountCodeDisabled" xml:space="preserve">
+    <value>This discount code is inactive</value>
+  </data>
+  <data name="DiscountCodeNotAssignedToClient" xml:space="preserve">
+    <value>This discount code is not assigned to the selected client</value>
+  </data>
+  <data name="DiscountCodeCouldNotBeVerified" xml:space="preserve">
+    <value>The discount code could not be verified. Try again</value>
+  </data>
+  <data name="DiscountCodeRemovedFromBasket" xml:space="preserve">
+    <value>Discount code {0} is no longer available and was removed</value>
+  </data>
+  <data name="DiscountCodeNoLongerValid" xml:space="preserve">
+    <value>Discount code {0} can no longer be applied. Remove it to continue</value>
+  </data>
+  <data name="DiscountCodeBasketNeedsRefresh" xml:space="preserve">
+    <value>Save the basket for the selected client before placing the order</value>
+  </data>
 </root>

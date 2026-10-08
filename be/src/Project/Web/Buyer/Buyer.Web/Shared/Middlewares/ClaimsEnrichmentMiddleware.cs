@@ -92,6 +92,10 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
+            // The request that fills the cache needs the client id as much as the ones served from it: without it this
+            // request has no client, so its prices are not the client's and a discount code cannot be verified for it.
+            claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ClientIdClaimType, client.Id.ToString()));
+
             var claimsToCache = new List<CachedClaim>()
             {
                 new CachedClaim

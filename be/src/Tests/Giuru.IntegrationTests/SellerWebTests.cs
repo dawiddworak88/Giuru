@@ -63,21 +63,21 @@ namespace Giuru.IntegrationTests
         {
             var newProductId = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
-                Name = Products.Lamica.Name,
-                Sku = Products.Lamica.Sku,
-                CategoryId = Products.Lamica.CategoryId,
-                IsPublished = Products.Lamica.IsPublished,
-                Ean = Products.Lamica.Ean
+                Name = Products.Nela.Name,
+                Sku = Products.Nela.Sku,
+                CategoryId = Products.Nela.CategoryId,
+                IsPublished = Products.Nela.IsPublished,
+                Ean = Products.Nela.Ean
             });
 
             var updateProductId = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture, new ProductRequestModel
             {
                 Id = newProductId,
-                Name = Products.Lamica.UpdatedName,
-                Sku = Products.Lamica.Sku,
-                CategoryId = Products.Lamica.CategoryId,
-                IsPublished = Products.Lamica.IsPublished,
-                Ean = Products.Lamica.Ean
+                Name = Products.Nela.UpdatedName,
+                Sku = Products.Nela.Sku,
+                CategoryId = Products.Nela.CategoryId,
+                IsPublished = Products.Nela.IsPublished,
+                Ean = Products.Nela.Ean
             });
 
             Assert.Equal(newProductId, updateProductId);

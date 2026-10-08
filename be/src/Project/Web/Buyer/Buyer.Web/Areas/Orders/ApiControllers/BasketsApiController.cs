@@ -11,7 +11,10 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Extensions;
 using Foundation.Pricing.Baskets;
+using Foundation.Pricing.Configurations;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
+using Buyer.Web.Shared.Services.DiscountCodes;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -54,6 +57,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IPriceClientResolver _priceClientResolver;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
@@ -68,7 +72,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             ILogger<BasketsApiController> logger,
             IPriceProductFactory priceProductFactory,
             IPriceClientResolver priceClientResolver,
-            IBasketRepricingService basketRepricingService)
+            IBasketRepricingService basketRepricingService,
+            IDiscountCodeValidator discountCodeValidator)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
@@ -83,6 +88,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceProductFactory = priceProductFactory;
             _priceClientResolver = priceClientResolver;
             _basketRepricingService = basketRepricingService;
+            _discountCodeValidator = discountCodeValidator;
         }
 
         [HttpPost]
@@ -92,6 +98,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
             var items = model.Items.OrEmptyIfNull().ToList();
             var clientId = User.GetClientId();
+            var isDiscountCodeEnforced = _options.Value.IsDiscountCodeEnforced();
 
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
             if (reqCookie is null)
@@ -111,7 +118,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 items.Any(),
                 async () => (await _basketRepository.GetBasketById(token, language, id))?.DiscountCode,
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
+                isDiscountCodeEnforced,
+                code => _discountCodeValidator.ValidateAsync(clientId, code, token, HttpContext.RequestAborted),
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
 
             if (discountOutcome.IsRejected)
             {
@@ -146,12 +156,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     Currency = x.Currency,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 }),
-                discountCode);
+                discountCode,
+                // The client the stored code was verified for, so a later checkout cannot reuse prices that were
+                // calculated for another one. Set only here, from the validated client - never from the browser.
+                isDiscountCodeEnforced && !string.IsNullOrWhiteSpace(discountCode) ? clientId : null);
 
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id,
-                DiscountCode = basket.DiscountCode
+                DiscountCode = basket.DiscountCode,
+                DiscountCodeRemovedMessage = discountOutcome.IsRemoved
+                    ? DiscountCodeMessages.GetRemovedMessage(_orderLocalizer, discountOutcome.RemovedDiscountCode)
+                    : null
             };
 
             var productIds = basket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

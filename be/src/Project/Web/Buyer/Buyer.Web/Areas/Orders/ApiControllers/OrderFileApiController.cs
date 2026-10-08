@@ -18,7 +18,10 @@ using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Inventory;
 using Buyer.Web.Shared.Repositories.Media;
 using Foundation.Pricing.Baskets;
+using Foundation.Pricing.Configurations;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
+using Buyer.Web.Shared.Services.DiscountCodes;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -65,6 +68,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IPriceClientResolver _priceClientResolver;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -83,7 +87,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IProductColorsService productColorsService,
             IPriceProductFactory priceProductFactory,
             IPriceClientResolver priceClientResolver,
-            IBasketRepricingService basketRepricingService)
+            IBasketRepricingService basketRepricingService,
+            IDiscountCodeValidator discountCodeValidator)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -102,6 +107,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceProductFactory = priceProductFactory;
             _priceClientResolver = priceClientResolver;
             _basketRepricingService = basketRepricingService;
+            _discountCodeValidator = discountCodeValidator;
         }
 
         [HttpPost]
@@ -127,7 +133,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             var id = Guid.Parse(reqCookie);
             var existingBasket = await _basketRepository.GetBasketById(token, language, id);
-            var canSeePrices = _priceService.CanSeePrices(User.GetClientId());
+            var clientId = User.GetClientId();
+            var canSeePrices = _priceService.CanSeePrices(clientId);
+            var isDiscountCodeEnforced = _options.Value.IsDiscountCodeEnforced();
 
             var importedSkus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToList();
             var skusParam = importedSkus
@@ -155,7 +163,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 hasItems: true,
                 () => Task.FromResult(existingBasket?.DiscountCode),
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
+                isDiscountCodeEnforced,
+                code => _discountCodeValidator.ValidateAsync(clientId, code, token, HttpContext.RequestAborted),
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
 
             if (discountOutcome.IsRejected)
             {
@@ -234,12 +245,21 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
             }
 
-            var basket = await _basketRepository.SaveAsync(token, language, id, completeBasketItems, discountCode);
+            var basket = await _basketRepository.SaveAsync(
+                token,
+                language,
+                id,
+                completeBasketItems,
+                discountCode,
+                isDiscountCodeEnforced && !string.IsNullOrWhiteSpace(discountCode) ? clientId : null);
 
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id,
-                DiscountCode = basket.DiscountCode
+                DiscountCode = basket.DiscountCode,
+                DiscountCodeRemovedMessage = discountOutcome.IsRemoved
+                    ? DiscountCodeMessages.GetRemovedMessage(_orderLocalizer, discountOutcome.RemovedDiscountCode)
+                    : null
             };
 
             if (basket.Items.OrEmptyIfNull().Any())

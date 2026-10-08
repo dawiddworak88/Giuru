@@ -12,6 +12,7 @@ import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
 import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
+import BasketDiscountCodeNotifier from "../../../../../shared/helpers/baskets/BasketDiscountCodeNotifier";
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -133,6 +134,7 @@ export const useOrderManagement = ({
                 if (response.ok && jsonResponse) {
                     setBasketId(jsonResponse.id);
                     onDiscountCodeChanged?.(jsonResponse.discountCode || "");
+                    BasketDiscountCodeNotifier.notifyIfRemoved(jsonResponse);
                     dispatch({
                         type: "SET_TOTAL_BASKET",
                         payload: parseInt(quantity + state.totalBasketItems),
@@ -240,6 +242,7 @@ export const useOrderManagement = ({
                     const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
 
                     onDiscountCodeChanged?.(jsonResponse.discountCode || "");
+                    BasketDiscountCodeNotifier.notifyIfRemoved(jsonResponse);
                     dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {

@@ -7,6 +7,8 @@ namespace Basket.Api.ServicesModels
     {
         public Guid? Id { get; set; }
         public string DiscountCode { get; set; }
+        public Guid? DiscountCodeClientId { get; set; }
+        public Guid? BasketVersion { get; set; }
         public IEnumerable<BasketItemServiceModel> Items { get; set; }
     }
 }

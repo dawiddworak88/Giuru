@@ -384,4 +384,58 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Approval deleted successfully.</value>
   </data>
+  <data name="DiscountCodes" xml:space="preserve">
+    <value>Discount codes</value>
+  </data>
+  <data name="NewDiscountCode" xml:space="preserve">
+    <value>New discount code</value>
+  </data>
+  <data name="EditDiscountCode" xml:space="preserve">
+    <value>Edit discount code</value>
+  </data>
+  <data name="DiscountCodeDescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="NavigateToDiscountCodesText" xml:space="preserve">
+    <value>Back to discount codes</value>
+  </data>
+  <data name="NoDiscountCodesText" xml:space="preserve">
+    <value>No discount codes</value>
+  </data>
+  <data name="DiscountCodeRequiredErrorMessage" xml:space="preserve">
+    <value>Enter a discount code</value>
+  </data>
+  <data name="DiscountCodeMaxLengthErrorMessage" xml:space="preserve">
+    <value>The discount code can have at most 64 characters</value>
+  </data>
+  <data name="DiscountCodeDescriptionMaxLengthErrorMessage" xml:space="preserve">
+    <value>The description can have at most 256 characters</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Discount code saved</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Discount code deleted</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Discount code not found</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>A discount code with this value already exists</value>
+  </data>
+  <data name="DiscountCodeNotFoundInGrula" xml:space="preserve">
+    <value>This code is not defined in Grula. Add it to the "Discount Code" driver in Grula first</value>
+  </data>
+  <data name="DiscountCodeGrulaUnavailable" xml:space="preserve">
+    <value>The code could not be checked in Grula. Try again</value>
+  </data>
+  <data name="DiscountCodeAssignmentForbidden" xml:space="preserve">
+    <value>Only sellers can assign discount codes to clients</value>
+  </data>
+  <data name="DiscountCodeAssignmentInvalid" xml:space="preserve">
+    <value>One or more of the selected discount codes cannot be assigned</value>
+  </data>
+  <data name="DiscountCodeInactiveLabel" xml:space="preserve">
+    <value>inactive</value>
+  </data>
 </root>

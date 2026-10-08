@@ -39,9 +39,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 
         public MenuTilesViewModel BuildModel()
         {
-            return new MenuTilesViewModel
-            {
-                Tiles = new List<MenuTileViewModel>
+            var tiles = new List<MenuTileViewModel>
                 {
                     new MenuTileViewModel
                     {
@@ -212,7 +210,24 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Title = _globalLocalizer.GetString("Settings"),
                         Url = _linkGenerator.GetPathByAction("Index", "Settings", new { Area = "Settings", culture = CultureInfo.CurrentUICulture.Name })
                     }
-                }
+                };
+
+            // Discount codes are Grula price drivers: without Grula there is nothing to manage.
+            if (_options.CurrentValue.IsGrulaConfigured)
+            {
+                var groupsTileIndex = tiles.FindIndex(x => x.Title == _globalLocalizer.GetString("ClientsGroups"));
+
+                tiles.Insert(groupsTileIndex + 1, new MenuTileViewModel
+                {
+                    Icon = IconsConstants.Outlet,
+                    Title = _clientLocalizer.GetString("DiscountCodes"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                });
+            }
+
+            return new MenuTilesViewModel
+            {
+                Tiles = tiles
             };
         }
     }

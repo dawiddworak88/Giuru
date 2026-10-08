@@ -98,6 +98,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             public string GrulaEnvironmentId { get; set; }
             public string DefaultCurrency { get; set; }
             public string EnablePricesForClients { get; set; }
+            public bool DiscountCodeEnforcementEnabled { get; set; }
 
             public bool IsGrulaConfigured =>
                 !string.IsNullOrWhiteSpace(GrulaAccessToken) && Guid.TryParse(GrulaEnvironmentId, out _);

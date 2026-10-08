@@ -9,6 +9,7 @@ namespace Basket.Api.ServicesModels
         public Guid? Id { get; set; }
         public bool IsSeller { get; set; }
         public string DiscountCode { get; set; }
+        public Guid? DiscountCodeClientId { get; set; }
         public IEnumerable<UpdateBasketItemServiceModel> Items { get; set; }
     }
 }

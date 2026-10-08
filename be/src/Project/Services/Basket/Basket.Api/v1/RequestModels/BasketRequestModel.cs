@@ -6,6 +6,7 @@ namespace Basket.Api.v1.RequestModels
     public class BasketRequestModel : RequestModelBase
     {
         public string DiscountCode { get; set; }
+        public System.Guid? DiscountCodeClientId { get; set; }
         public IEnumerable<BasketItemRequestModel> Items { get; set; }
     }
 }

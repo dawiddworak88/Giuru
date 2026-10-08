@@ -24,6 +24,7 @@ namespace Giuru.UnitTests.Services.Prices
             public string DefaultCurrency { get; set; }
             public string EnablePricesForClients { get; set; }
             public bool IsGrulaConfigured { get; set; }
+            public bool DiscountCodeEnforcementEnabled { get; set; }
         }
 
         private static ProductPricingService CreateService(IPriceService priceService, bool isGrulaConfigured)
