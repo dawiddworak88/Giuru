@@ -6,7 +6,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
     public interface IUserService
     {
         string GeneratePasswordHash(ApplicationUser user, string password);
-        Task SignInAsync(string email, string password, string redirectUrl, string clientId);
+        Task SignInAsync(string email, string password, string clientId);
         Task SignOutAsync();
     }
 }
