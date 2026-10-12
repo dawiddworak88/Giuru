@@ -439,7 +439,7 @@ namespace Catalog.Api.Services.Products
 
                         if (valuesArray is not null)
                         {
-                            productAttribute.Values = valuesArray.Children().Select(x => ((JObject)x)["name"].Value<string>());
+                            productAttribute.Values = valuesArray.Children().OfType<JObject>().Select(o => o["name"]?.Value<string>()).Where(name => name != null).ToList();
                         }
                     }
                     else if (productAttributeObject["value"].Type == JTokenType.Object)

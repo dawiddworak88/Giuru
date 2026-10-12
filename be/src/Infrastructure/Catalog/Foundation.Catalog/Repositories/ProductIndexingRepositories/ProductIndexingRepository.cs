@@ -42,8 +42,6 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 
             if (product != null)
             {
-                await this.elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, product.Id)));
-
                 var descriptor = new BulkDescriptor();
 
                 foreach (var language in this.configuration["SupportedCultures"].Split(","))
