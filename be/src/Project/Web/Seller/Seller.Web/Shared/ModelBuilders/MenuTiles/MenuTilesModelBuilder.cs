@@ -9,6 +9,7 @@ using System.Globalization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Shared.Configurations;
 using System;
+using System.Linq;
 
 namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 {
@@ -39,7 +40,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 
         public MenuTilesViewModel BuildModel()
         {
-            return new MenuTilesViewModel
+            var viewModel = new MenuTilesViewModel
             {
                 Tiles = new List<MenuTileViewModel>
                 {
@@ -214,6 +215,18 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     }
                 }
             };
+
+            if (_options.CurrentValue.IsGrulaConfigured)
+            {
+                viewModel.Tiles = viewModel.Tiles.Append(new MenuTileViewModel
+                {
+                    Icon = IconsConstants.Percent,
+                    Title = _clientLocalizer.GetString("DiscountCodes"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                }).ToList();
+            }
+
+            return viewModel;
         }
     }
 }

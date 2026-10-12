@@ -387,4 +387,19 @@
   <data name="BasketPricesCouldNotBeVerified" xml:space="preserve">
     <value>Nie udało się zweryfikować cen w koszyku. Spróbuj ponownie.</value>
   </data>
+  <data name="DiscountCodeInvalid" xml:space="preserve">
+    <value>Ten kod rabatowy nie może zostać zastosowany</value>
+  </data>
+  <data name="DiscountCodeDisabled" xml:space="preserve">
+    <value>Ten kod rabatowy jest nieaktywny</value>
+  </data>
+  <data name="DiscountCodeNotAssignedToClient" xml:space="preserve">
+    <value>Ten kod rabatowy nie jest przypisany do wybranego klienta</value>
+  </data>
+  <data name="DiscountCodeClientRequired" xml:space="preserve">
+    <value>Wybierz klienta przed zastosowaniem kodu rabatowego</value>
+  </data>
+  <data name="DiscountCodeCouldNotBeVerified" xml:space="preserve">
+    <value>Nie udało się zweryfikować kodu rabatowego. Spróbuj ponownie</value>
+  </data>
 </root>

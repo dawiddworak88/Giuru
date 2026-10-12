@@ -15,6 +15,7 @@ import KeyConstants from "../../../shared/constants/KeyConstants";
 import CatalogConstants from "../../constants/CatalogConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../../shared/helpers/serializers/QueryStringSerializer";
+import CatalogDeleteHelper from "../../helpers/catalog/CatalogDeleteHelper";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../../shared/helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../../shared/helpers/globals/AuthenticationHelper";
@@ -144,9 +145,7 @@ function Catalog(props) {
     const handleDeleteEntity = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const deleteParameters = {
-            id: entityToDelete.id
-        };
+        const deleteParameters = CatalogDeleteHelper.getDeleteParameters(entityToDelete, props.getDeleteParameters);
 
         const requestOptions = {
             method: "DELETE",
@@ -539,6 +538,7 @@ Catalog.propTypes = {
     searchApiUrl: PropTypes.string.isRequired,
     editLabel: PropTypes.string,
     deleteLabel: PropTypes.string,
+    getDeleteParameters: PropTypes.func,
     duplicateLabel: PropTypes.string,
     displayedRowsLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,

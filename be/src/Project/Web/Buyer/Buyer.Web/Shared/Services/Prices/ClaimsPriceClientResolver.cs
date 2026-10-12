@@ -13,7 +13,7 @@ namespace Buyer.Web.Shared.Services.Prices
     /// principal. <paramref name="token"/> is unused here for the same reason - nothing is
     /// looked up over the API.
     /// </summary>
-    public class ClaimsPriceClientResolver : IPriceClientResolver
+    public class ClaimsPriceClientResolver : IBasketPriceClientResolver
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

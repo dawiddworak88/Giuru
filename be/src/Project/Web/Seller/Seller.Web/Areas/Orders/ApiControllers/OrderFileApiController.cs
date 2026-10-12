@@ -27,7 +27,9 @@ using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.DomainModels.Media;
 using Seller.Web.Shared.Repositories.Inventory;
 using Foundation.Pricing.Baskets;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
+using Seller.Web.Shared.Services.DiscountCodes;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Services.Products;
@@ -57,9 +59,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
         private readonly IOptions<AppSettings> _options;
-        private readonly IPriceClientResolver _priceClientResolver;
+        private readonly IBasketPriceClientResolver _priceClientResolver;
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -76,9 +79,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IProductsService productsService,
             IProductColorsService productColorsService,
             IOptions<AppSettings> options,
-            IPriceClientResolver priceClientResolver,
+            IBasketPriceClientResolver priceClientResolver,
             IPriceProductFactory priceProductFactory,
-            IBasketRepricingService basketRepricingService)
+            IBasketRepricingService basketRepricingService,
+            IDiscountCodeValidator discountCodeValidator)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -97,6 +101,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _priceClientResolver = priceClientResolver;
             _priceProductFactory = priceProductFactory;
             _basketRepricingService = basketRepricingService;
+            _discountCodeValidator = discountCodeValidator;
         }
 
         [HttpPost]
@@ -137,7 +142,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 hasItems: true,
                 () => Task.FromResult(existingBasket?.DiscountCode),
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
+                code => _discountCodeValidator.ValidateAsync(model.ClientId, code, token),
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
 
             if (discountOutcome.IsRejected)
             {

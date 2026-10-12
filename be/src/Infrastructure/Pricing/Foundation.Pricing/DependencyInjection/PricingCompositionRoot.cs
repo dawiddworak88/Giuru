@@ -1,5 +1,7 @@
 using System;
 using System.Net.Http.Headers;
+using Foundation.Pricing.Configurations;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
 using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +16,7 @@ namespace Foundation.Pricing.DependencyInjection
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IBasketRepricingService, BasketRepricingService>();
             services.AddScoped<IProductPricingService, ProductPricingService>();
+            services.AddScoped<IDiscountCodeValidator, DiscountCodeValidator>();
 
             services.AddHttpClient("GrulaApi")
                 .AddTypedClient(httpClient =>
@@ -28,6 +31,23 @@ namespace Foundation.Pricing.DependencyInjection
 
                     return new GrulaApiClient(configuration["GrulaUrl"], httpClient);
                 });
+        }
+
+        /// <summary>
+        /// Registers the price client resolvers of an app from its one concrete resolver. Fresh product price
+        /// reads get <see cref="IPriceClientResolver"/>, which validates a supplied discount code; basket saves
+        /// get <see cref="IBasketPriceClientResolver"/>, which keeps the code the basket coordinator resolved.
+        /// The decorator wraps the concrete resolver, never the decorated interface.
+        /// </summary>
+        public static void RegisterPriceClientResolvers<TResolver>(this IServiceCollection services)
+            where TResolver : class, IBasketPriceClientResolver
+        {
+            services.AddScoped<TResolver>();
+            services.AddScoped<IBasketPriceClientResolver>(sp => sp.GetRequiredService<TResolver>());
+            services.AddScoped<IPriceClientResolver>(sp => new VerifiedDiscountCodePriceClientResolver(
+                sp.GetRequiredService<TResolver>(),
+                sp.GetRequiredService<IDiscountCodeValidator>(),
+                sp.GetRequiredService<IPricingSettings>()));
         }
     }
 }

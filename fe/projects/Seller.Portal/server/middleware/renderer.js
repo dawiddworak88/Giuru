@@ -17,6 +17,8 @@ import DownloadCenterCategoryPage from "../../src/areas/DownloadCenter/pages/Dow
 import DownloadCenterCategoriesPage from "../../src/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/DownloadCenterCategoriesPage";
 import ClientRolePage from "../../src/areas/Clients/pages/ClientRolePage/ClientRolePage";
 import ClientRolesPage from "../../src/areas/Clients/pages/ClientRolesPage/ClientRolesPage";
+import DiscountCodePage from "../../src/areas/Clients/pages/DiscountCodePage/DiscountCodePage";
+import DiscountCodesPage from "../../src/areas/Clients/pages/DiscountCodesPage/DiscountCodesPage";
 import ClientApplicationPage from "../../src/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage";
 import ClientsApplicationsPage from "../../src/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage";
 import MediaPage from "../../src/areas/MediaItems/pages/MediaPage/MediaPage";
@@ -85,6 +87,8 @@ const Components = {
 	DownloadCenterCategoriesPage,
 	ClientRolePage,
 	ClientRolesPage,
+	DiscountCodePage,
+	DiscountCodesPage,
 	ClientApplicationPage,
 	ClientsApplicationsPage,
 	MediaPage,

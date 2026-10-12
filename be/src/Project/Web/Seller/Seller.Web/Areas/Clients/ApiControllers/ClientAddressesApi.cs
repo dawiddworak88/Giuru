@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
             if (client is not null)
             {
-                await _cacheInvalidatorService.InvalidateAsync(client.Email);
+                await _cacheInvalidatorService.InvalidateAsync(client.Email, client.OrganisationId);
             }
 
             var clientAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Id, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.City, model.ClientId, model.CountryId);

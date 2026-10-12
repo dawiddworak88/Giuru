@@ -3,6 +3,7 @@ using Client.Api.Services.Applications;
 using Client.Api.Services.Clients;
 using Client.Api.Services.Groups;
 using Client.Api.Services.Roles;
+using Client.Api.Services.DiscountCodes;
 using Client.Api.Services.Managers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +35,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientFieldsService,  ClientFieldsService>();
             services.AddScoped<IClientFieldOptionsService, ClientFieldOptionsService>();
             services.AddScoped<IClientFieldValuesService, ClientFieldValuesService>();
+            services.AddScoped<IDiscountCodesService, DiscountCodesService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

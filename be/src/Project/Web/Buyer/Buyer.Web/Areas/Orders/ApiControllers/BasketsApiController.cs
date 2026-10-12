@@ -11,7 +11,9 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Extensions;
 using Foundation.Pricing.Baskets;
+using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
+using Buyer.Web.Shared.Services.DiscountCodes;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -52,8 +54,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly ILogger<BasketsApiController> _logger;
 
         private readonly IPriceProductFactory _priceProductFactory;
-        private readonly IPriceClientResolver _priceClientResolver;
+        private readonly IBasketPriceClientResolver _priceClientResolver;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
@@ -67,8 +70,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IOptions<AppSettings> options,
             ILogger<BasketsApiController> logger,
             IPriceProductFactory priceProductFactory,
-            IPriceClientResolver priceClientResolver,
-            IBasketRepricingService basketRepricingService)
+            IBasketPriceClientResolver priceClientResolver,
+            IBasketRepricingService basketRepricingService,
+            IDiscountCodeValidator discountCodeValidator)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
@@ -83,6 +87,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceProductFactory = priceProductFactory;
             _priceClientResolver = priceClientResolver;
             _basketRepricingService = basketRepricingService;
+            _discountCodeValidator = discountCodeValidator;
         }
 
         [HttpPost]
@@ -111,7 +116,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 items.Any(),
                 async () => (await _basketRepository.GetBasketById(token, language, id))?.DiscountCode,
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
+                code => _discountCodeValidator.ValidateAsync(User.GetClientId(), code, token),
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
 
             if (discountOutcome.IsRejected)
             {

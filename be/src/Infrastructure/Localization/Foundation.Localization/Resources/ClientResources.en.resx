@@ -384,4 +384,49 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Approval deleted successfully.</value>
   </data>
+  <data name="DiscountCodes" xml:space="preserve">
+    <value>Discount codes</value>
+  </data>
+  <data name="NewDiscountCode" xml:space="preserve">
+    <value>New discount code</value>
+  </data>
+  <data name="EditDiscountCode" xml:space="preserve">
+    <value>Edit discount code</value>
+  </data>
+  <data name="DiscountCodeDescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DiscountCodeClientsLabel" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="DiscountCodeGrulaHint" xml:space="preserve">
+    <value>Must match the "Discount Code" driver item in Grula exactly. Giuru does not verify its Grula configuration; applying a code may leave prices unchanged</value>
+  </data>
+  <data name="DiscountCodeNoClientsHint" xml:space="preserve">
+    <value>No client can newly apply this code until at least one is assigned</value>
+  </data>
+  <data name="NavigateToDiscountCodesText" xml:space="preserve">
+    <value>Back to discount codes</value>
+  </data>
+  <data name="DiscountCodeRequiredErrorMessage" xml:space="preserve">
+    <value>Enter a discount code</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Discount code saved</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Discount code deleted</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Discount code not found</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>A discount code with this value already exists</value>
+  </data>
+  <data name="DiscountCodeClientsInvalid" xml:space="preserve">
+    <value>One or more selected clients are unavailable for assignment</value>
+  </data>
+  <data name="DiscountCodeChanged" xml:space="preserve">
+    <value>This discount code changed since you opened it. Reload before saving or deleting</value>
+  </data>
 </root>

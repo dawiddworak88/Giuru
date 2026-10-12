@@ -2,6 +2,8 @@ using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Giuru.IntegrationTests.Definitions;
+using Giuru.IntegrationTests.Helpers;
+using Giuru.IntegrationTests.HttpClients;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -9,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace Giuru.IntegrationTests
 {
+    // The tests that go straight to Basket.Api keep their meaning: that service stores whatever code it is given. The rule
+    // that a code must exist, be active and be assigned to the client is enforced by the buyer and seller apps in front
+    // of it (see BuyerDiscountCodeEnforcementTests and SellerDiscountCodeEnforcementTests), so a direct call to
+    // Basket.Api is outside that enforcement boundary by decision.
     [Collection(nameof(ApiCollection))]
     public class BasketDiscountCodeTests
     {
@@ -127,30 +133,65 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact]
-        public async Task SaveBuyerBasket_WithDiscountCode_WhenConfiguredGrulaIsUnavailable_StillStoresTheCode()
+        public async Task SaveBasket_DirectlyAtBasketApi_StoresACodeNobodyRegistered()
         {
-            // Discount-code storage is gated purely on IsGrulaConfigured, not on Grula's
-            // reachability (see BasketsApiController.Index) - only pricing is cleared when
-            // the configured Grula instance can't be reached (see BasketPricingTests).
-            var basket = await _apiFixture.BuyerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
-                ApiEndpoints.BasketApiEndpoint,
-                new SaveBasketRequestModel
+            // Direct Basket.Api calls are outside the enforcement boundary: only the web apps check a code.
+            var saved = await SaveBasketAsync(Guid.NewGuid(), $"UNREGISTERED{Guid.NewGuid():N}".Substring(0, 24));
+
+            Assert.False(string.IsNullOrWhiteSpace(saved.DiscountCode));
+        }
+
+        private async Task<(DiscountCodeKit Kit, TestClient Client, RestClient Web, DiscountCodeProduct Product)> CreateBuyerAsync()
+        {
+            var kit = await DiscountCodeKit.CreateAsync(_apiFixture);
+            var client = await kit.CreateClientAsync();
+
+            return (kit, client, await kit.CreateBuyerWebClientAsync(client), await _apiFixture.GetDiscountCodeProductAsync());
+        }
+
+        private static SaveBasketRequestModel BuyerBasket(DiscountCodeProduct product, string discountCode)
+        {
+            return new SaveBasketRequestModel
+            {
+                DiscountCode = discountCode,
+                Items = new List<BasketItemRequestModel>
                 {
-                    DiscountCode = DiscountCode,
-                    Items = new List<BasketItemRequestModel>
+                    new BasketItemRequestModel
                     {
-                        new BasketItemRequestModel
-                        {
-                            ProductId = Products.Lamica.Id,
-                            Sku = Products.Lamica.Sku,
-                            Name = Products.Lamica.Name,
-                            Quantity = Inventories.Quantities.Quantity
-                        }
+                        ProductId = product.Id,
+                        Sku = product.Sku,
+                        Name = product.Name,
+                        Quantity = Inventories.Quantities.Quantity
                     }
-                });
+                }
+            };
+        }
+
+        [Fact]
+        public async Task SaveBuyerBasket_WithAnUnregisteredNewDiscountCode_IsRejected()
+        {
+            var buyer = await CreateBuyerAsync();
+
+            var response = await buyer.Web.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, BuyerBasket(buyer.Product, DiscountCodeKit.NewCode()));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("This discount code cannot be applied", await RestClient.ReadMessageAsync(response));
+        }
+
+        [Fact]
+        public async Task SaveBuyerBasket_WithARegisteredAssignedDiscountCode_WhenConfiguredGrulaIsUnavailable_StillStoresTheCode()
+        {
+            // Discount-code storage is gated purely on IsGrulaConfigured, not on Grula's reachability (see
+            // BasketsApiController.Index) - only pricing is cleared when the configured Grula instance can't be reached
+            // (see BasketPricingTests). Whether the code may be applied at all is decided by Client.Api.
+            var buyer = await CreateBuyerAsync();
+            var codeText = DiscountCodeKit.NewCode();
+            await buyer.Kit.CreateCodeAsync(codeText, new[] { buyer.Client.Id });
+
+            var basket = await buyer.Web.PostAsync<SaveBasketRequestModel, BasketResponseModel>(ApiEndpoints.BasketApiEndpoint, BuyerBasket(buyer.Product, codeText));
 
             Assert.NotNull(basket);
-            Assert.Equal(DiscountCode, basket.DiscountCode);
+            Assert.Equal(codeText, basket.DiscountCode);
         }
     }
 }

@@ -1,15 +1,19 @@
 ﻿using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
+using Buyer.Web.Shared.DomainModels.Clients;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -18,6 +22,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ClaimsEnrichmentConstants = Buyer.Web.Shared.Definitions.Middlewares.ClaimsEnrichmentConstants;
+using SharedClaimsEnrichmentConstants = Foundation.Extensions.Definitions.ClaimsEnrichmentConstants;
 
 namespace Buyer.Web.Shared.Middlewares
 {
@@ -30,6 +35,7 @@ namespace Buyer.Web.Shared.Middlewares
         private readonly IOptions<AppSettings> _options;
         private readonly IDistributedCache _cache;
         private readonly ICacheService _cacheService;
+        private readonly ILogger<ClaimsEnrichmentMiddleware> _logger;
 
         public ClaimsEnrichmentMiddleware(
             IClientsRepository clientsRepository,
@@ -38,7 +44,8 @@ namespace Buyer.Web.Shared.Middlewares
             IClientFieldValuesRepository clientFieldValuesRepository,
             IOptions<AppSettings> options,
             IDistributedCache cache,
-            ICacheService cacheService)
+            ICacheService cacheService,
+            ILogger<ClaimsEnrichmentMiddleware> logger)
         {
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
@@ -47,6 +54,7 @@ namespace Buyer.Web.Shared.Middlewares
             _options = options;
             _cache = cache;
             _cacheService = cacheService;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -65,7 +73,12 @@ namespace Buyer.Web.Shared.Middlewares
                 return;
             }
 
-            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
+            // The client a buyer prices for is the client of their organisation. A team member signs in with an email of
+            // their own, so the claims are cached per organisation and email rather than by email alone.
+            var organisationId = Guid.TryParse(context.User.FindFirst(AccountConstants.Claims.OrganisationIdClaim)?.Value, out var parsedOrganisationId)
+                ? parsedOrganisationId
+                : (Guid?)null;
+            var cacheKey = SharedClaimsEnrichmentConstants.GetClientClaimsCacheKey(email, organisationId);
             var cachedClaims = await _cache.GetStringAsync(cacheKey);
 
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;
@@ -86,11 +99,21 @@ namespace Buyer.Web.Shared.Middlewares
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
 
+            if (client is null && organisationId.HasValue)
+            {
+                // Not the primary contact of a client, so this may be a member of a client's team.
+                client = await TryGetClientByOrganisationAsync(context, token);
+            }
+
             if (client is null)
             {
                 await next(context);
                 return;
             }
+
+            // The claim is added to this request's principal as well as cached: the first request after a cache miss
+            // is as much in need of the client as the ones that follow.
+            claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ClientIdClaimType, client.Id.ToString()));
 
             var claimsToCache = new List<CachedClaim>()
             {
@@ -240,6 +263,25 @@ namespace Buyer.Web.Shared.Middlewares
             });
 
             await next(context);
+        }
+
+        private async Task<Client> TryGetClientByOrganisationAsync(HttpContext context, string token)
+        {
+            try
+            {
+                return await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture);
+            }
+            catch (Exception ex) when (!context.RequestAborted.IsCancellationRequested)
+            {
+                // Only the status is logged: the token and the user's email stay out of the log. Nothing is cached, so
+                // the next request looks the client up again.
+                _logger.LogWarning(
+                    "The client of the user's organisation could not be looked up ({ExceptionType}, status {StatusCode}). The user is treated as having no client.",
+                    ex.GetType().Name,
+                    (ex as CustomException)?.StatusCode);
+
+                return null;
+            }
         }
 
         private class CachedClaim

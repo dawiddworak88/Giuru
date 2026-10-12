@@ -26,5 +26,6 @@
         public static readonly string Archive = "Archive";
         public static readonly string Check = "Check";
         public static readonly string DollarSign = "DollarSign";
+        public static readonly string Percent = "Percent";
     }
 }

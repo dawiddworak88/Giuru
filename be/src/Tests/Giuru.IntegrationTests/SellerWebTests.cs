@@ -52,10 +52,11 @@ namespace Giuru.IntegrationTests
 
             var getResults = await _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<ClientResponseModel>>>($"{ApiEndpoints.GetClientsApiEndpoint}?pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
 
+            // Other tests create clients of their own in the same database, so the list is not assumed to hold only this one.
             Assert.NotNull(getResults.Data);
-            Assert.Equal(1, getResults.Total);
-            Assert.Equal(updatedResult.Id, getResults.Data.FirstOrDefault().Id);
-            Assert.Equal(Clients.UpdatedName, getResults.Data.FirstOrDefault().Name);
+            var updatedClient = getResults.Data.FirstOrDefault(x => x.Id == updatedResult.Id);
+            Assert.NotNull(updatedClient);
+            Assert.Equal(Clients.UpdatedName, updatedClient.Name);
         }
 
         [Fact]

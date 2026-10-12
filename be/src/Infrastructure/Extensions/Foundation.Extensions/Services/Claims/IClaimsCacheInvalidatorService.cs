@@ -4,6 +4,6 @@ namespace Foundation.Extensions.Services.Claims
 {
     public interface IClaimsCacheInvalidatorService
     {
-        Task InvalidateAsync(string email);
+        Task InvalidateAsync(string email, System.Guid? organisationId);
     }
 }

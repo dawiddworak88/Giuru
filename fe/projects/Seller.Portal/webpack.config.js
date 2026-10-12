@@ -25,6 +25,8 @@ module.exports = {
         downloadcentercategoriespage: ["./src/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/index.js", "./src/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/DownloadCenterCategoriesPage.scss"],
         clientrolepage: ["./src/areas/Clients/pages/ClientRolePage/index.js", "./src/areas/Clients/pages/ClientRolePage/ClientRolePage.scss"],
         clientrolespage: ["./src/areas/Clients/pages/ClientRolesPage/index.js", "./src/areas/Clients/pages/ClientRolesPage/ClientRolesPage.scss"],
+        discountcodepage: ["./src/areas/Clients/pages/DiscountCodePage/index.js", "./src/areas/Clients/pages/DiscountCodePage/DiscountCodePage.scss"],
+        discountcodespage: ["./src/areas/Clients/pages/DiscountCodesPage/index.js", "./src/areas/Clients/pages/DiscountCodesPage/DiscountCodesPage.scss"],
         clientapplicationpage: ["./src/areas/Clients/pages/ClientApplicationPage/index.js", "./src/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage.scss"],
         clientsapplicationspage: ["./src/areas/Clients/pages/ClientsApplicationsPage/index.js", "./src/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage.scss"],
         mediapage: ["./src/areas/MediaItems/pages/MediaPage/index.js", "./src/areas/MediaItems/pages/MediaPage/MediaPage.scss"],

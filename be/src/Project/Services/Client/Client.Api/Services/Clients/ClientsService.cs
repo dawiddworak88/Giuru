@@ -166,6 +166,11 @@ namespace Client.Api.Services.Clients
             client.IsDisabled = true;
             client.LastModifiedDate = DateTime.UtcNow;
 
+            // A deleted client keeps none of its discount code assignments.
+            var discountCodeLinks = await _context.ClientsDiscountCodes.Where(x => x.ClientId == client.Id).ToListAsync();
+
+            _context.ClientsDiscountCodes.RemoveRange(discountCodeLinks);
+
             await _context.SaveChangesAsync();
         }
 

@@ -83,6 +83,10 @@ namespace Giuru.IntegrationTests
                     warehouseId,
                     ApiEndpoints.OutletsApiEndpoint);
 
+            // The line with the untrusted prices has to carry the catalog's own identity of its SKU: a product id that does
+            // not match the SKU is refused before anything is priced, and other test classes create products too.
+            var untrustedPriceProduct = await _apiFixture.GetDiscountCodeProductAsync();
+
             var basket = await _apiFixture.BuyerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
                 ApiEndpoints.BasketApiEndpoint, 
                 new SaveBasketRequestModel
@@ -91,9 +95,9 @@ namespace Giuru.IntegrationTests
                     {
                         new BasketItemRequestModel
                         {
-                            ProductId = Products.Lamica.Id,
-                            Sku = Products.Lamica.Sku,
-                            Name = Products.Lamica.Name,
+                            ProductId = untrustedPriceProduct.Id,
+                            Sku = untrustedPriceProduct.Sku,
+                            Name = untrustedPriceProduct.Name,
                             Quantity = Inventories.Quantities.Quantity,
                             UnitPrice = 0.01m,
                             Price = 0.01m,
@@ -119,8 +123,8 @@ namespace Giuru.IntegrationTests
             Assert.NotNull(basket);
             Assert.NotEqual(Guid.Empty, basket.Id);
             Assert.NotNull(basket.Items);
-            Assert.Equal(Products.Lamica.Id, basket.Items.FirstOrDefault().ProductId);
-            var savedBasketItem = basket.Items.Single(x => x.ProductId == Products.Lamica.Id);
+            Assert.Equal(untrustedPriceProduct.Id, basket.Items.FirstOrDefault().ProductId);
+            var savedBasketItem = basket.Items.Single(x => x.ProductId == untrustedPriceProduct.Id);
             Assert.Null(savedBasketItem.UnitPrice);
             Assert.Null(savedBasketItem.Price);
             Assert.Null(savedBasketItem.Currency);
@@ -129,7 +133,7 @@ namespace Giuru.IntegrationTests
             // values were removed before that boundary rather than only hidden in the response.
             var persistedBasket = await _apiFixture.BasketApiClient.GetAsync<BasketApiResponseModel>(
                 $"{ApiConstants.Baskets.BasketsApiEndpoint}/{basket.Id}");
-            var persistedBasketItem = persistedBasket.Items.Single(x => x.ProductId == Products.Lamica.Id);
+            var persistedBasketItem = persistedBasket.Items.Single(x => x.ProductId == untrustedPriceProduct.Id);
             Assert.Null(persistedBasketItem.UnitPrice);
             Assert.Null(persistedBasketItem.Price);
             Assert.Null(persistedBasketItem.Currency);
@@ -150,8 +154,8 @@ namespace Giuru.IntegrationTests
 
             var order = orders.Data.FirstOrDefault();
 
-            Assert.Equal(Products.Lamica.Id, order.OrderItems.FirstOrDefault().ProductId);
-            var orderItem = order.OrderItems.Single(x => x.ProductId == Products.Lamica.Id);
+            Assert.Equal(untrustedPriceProduct.Id, order.OrderItems.FirstOrDefault().ProductId);
+            var orderItem = order.OrderItems.Single(x => x.ProductId == untrustedPriceProduct.Id);
             Assert.Null(orderItem.UnitPrice);
             Assert.Null(orderItem.Price);
             Assert.Null(orderItem.Currency);

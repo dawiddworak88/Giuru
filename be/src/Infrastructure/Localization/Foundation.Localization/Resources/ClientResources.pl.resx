@@ -384,4 +384,49 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto zgodę.</value>
   </data>
+  <data name="DiscountCodes" xml:space="preserve">
+    <value>Kody rabatowe</value>
+  </data>
+  <data name="NewDiscountCode" xml:space="preserve">
+    <value>Nowy kod rabatowy</value>
+  </data>
+  <data name="EditDiscountCode" xml:space="preserve">
+    <value>Edytuj kod rabatowy</value>
+  </data>
+  <data name="DiscountCodeDescriptionLabel" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="DiscountCodeClientsLabel" xml:space="preserve">
+    <value>Klienci</value>
+  </data>
+  <data name="DiscountCodeGrulaHint" xml:space="preserve">
+    <value>Musi dokładnie odpowiadać pozycji sterownika „Discount Code” w Grula. Giuru nie weryfikuje jego konfiguracji w Grula; zastosowanie kodu może nie zmienić cen</value>
+  </data>
+  <data name="DiscountCodeNoClientsHint" xml:space="preserve">
+    <value>Żaden klient nie może zastosować tego kodu, dopóki nie zostanie przypisany co najmniej jeden</value>
+  </data>
+  <data name="NavigateToDiscountCodesText" xml:space="preserve">
+    <value>Powrót do kodów rabatowych</value>
+  </data>
+  <data name="DiscountCodeRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź kod rabatowy</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Kod rabatowy został zapisany</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Kod rabatowy został usunięty</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Nie znaleziono kodu rabatowego</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>Kod rabatowy o tej wartości już istnieje</value>
+  </data>
+  <data name="DiscountCodeClientsInvalid" xml:space="preserve">
+    <value>Co najmniej jeden z wybranych klientów jest niedostępny do przypisania</value>
+  </data>
+  <data name="DiscountCodeChanged" xml:space="preserve">
+    <value>Ten kod rabatowy został zmieniony od czasu jego otwarcia. Odśwież stronę przed zapisaniem lub usunięciem</value>
+  </data>
 </root>

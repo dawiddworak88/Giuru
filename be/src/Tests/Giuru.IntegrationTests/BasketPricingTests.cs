@@ -1,5 +1,6 @@
 using Foundation.ApiExtensions.Shared.Definitions;
 using Giuru.IntegrationTests.Definitions;
+using Giuru.IntegrationTests.Helpers;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
 using System;
@@ -24,19 +25,24 @@ namespace Giuru.IntegrationTests
         {
             var basketId = Guid.NewGuid();
 
+            // The basket has to be one the seller app can actually price: a product id that does not match the catalog's
+            // own for the SKU is refused before anything is priced, and a client that does not exist cannot be priced for.
+            var product = await _apiFixture.GetDiscountCodeProductAsync();
+            var client = await (await DiscountCodeKit.CreateAsync(_apiFixture)).CreateClientAsync();
+
             var savedBasket = await _apiFixture.SellerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
                 ApiEndpoints.BasketApiEndpoint,
                 new SaveBasketRequestModel
                 {
                     Id = basketId,
-                    ClientId = Clients.Id,
+                    ClientId = client.Id,
                     Items = new List<BasketItemRequestModel>
                     {
                         new()
                         {
-                            ProductId = Products.Lamica.Id,
-                            Sku = Products.Lamica.Sku,
-                            Name = Products.Lamica.Name,
+                            ProductId = product.Id,
+                            Sku = product.Sku,
+                            Name = product.Name,
                             Quantity = Inventories.Quantities.Quantity,
                             UnitPrice = 0.01m,
                             Price = 0.01m,
@@ -44,9 +50,9 @@ namespace Giuru.IntegrationTests
                         },
                         new()
                         {
-                            ProductId = Products.Lamica.Id,
-                            Sku = Products.Lamica.Sku,
-                            Name = $"{Products.Lamica.Name} duplicate line",
+                            ProductId = product.Id,
+                            Sku = product.Sku,
+                            Name = $"{product.Name} duplicate line",
                             Quantity = 2,
                             UnitPrice = 999m,
                             Price = 1998m,

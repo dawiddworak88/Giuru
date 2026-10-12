@@ -25,6 +25,15 @@ namespace Giuru.IntegrationTests.Definitions
             public const string Ean = "6978494041191";
         }
 
+        public struct DiscountCodeProduct
+        {
+            public const string Name = "Discount Code Product";
+            public const string Sku = "DC_01";
+            public static readonly Guid CategoryId = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
+            public const bool IsPublished = true;
+            public const string Ean = "6978494041201";
+        }
+
         public struct Aga
         {
             public const string Name = "Aga";

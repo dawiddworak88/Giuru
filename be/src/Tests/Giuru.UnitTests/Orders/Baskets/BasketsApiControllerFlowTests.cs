@@ -12,6 +12,7 @@ using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Pricing.DomainModels;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.Pricing.Services;
+using Giuru.UnitTests.Helpers;
 using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
@@ -101,7 +102,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<ILogger<BasketsApiController>>(),
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -187,7 +189,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<ILogger<BasketsApiController>>(),
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -226,7 +229,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             return new BasketRepricingService(priceService, Substitute.For<ILogger<BasketRepricingService>>());
         }
 
-        private static IPriceClientResolver CreatePriceClientResolver(HttpContext httpContext)
+        private static IBasketPriceClientResolver CreatePriceClientResolver(HttpContext httpContext)
         {
             var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             httpContextAccessor.HttpContext.Returns(httpContext);
@@ -267,7 +270,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             var priceService = Substitute.For<IPriceService>();
             var productsService = Substitute.For<SellerIProductsService>();
             var productColorsService = Substitute.For<SellerIProductColorsService>();
-            var priceClientResolver = Substitute.For<IPriceClientResolver>();
+            var priceClientResolver = Substitute.For<IBasketPriceClientResolver>();
             var options = Options.Create(new SellerAppSettings
             {
                 GrulaAccessToken = "test-token",
@@ -312,7 +315,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 priceClientResolver,
                 Substitute.For<ILogger<SellerBasketsApiController>>(),
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
             };
@@ -375,7 +379,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var productsService = Substitute.For<SellerIProductsService>();
             var productColorsService = Substitute.For<SellerIProductColorsService>();
-            var priceClientResolver = Substitute.For<IPriceClientResolver>();
+            var priceClientResolver = Substitute.For<IBasketPriceClientResolver>();
             var options = Options.Create(new SellerAppSettings
             {
                 GrulaAccessToken = "test-token",
@@ -395,7 +399,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 priceClientResolver,
                 Substitute.For<ILogger<SellerBasketsApiController>>(),
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
             };

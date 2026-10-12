@@ -13,11 +13,9 @@ namespace Foundation.Extensions.Services.Claims
             _cache = cache;
         }
 
-        public async Task InvalidateAsync(string email)
+        public async Task InvalidateAsync(string email, System.Guid? organisationId)
         {
-            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
-
-            await _cache.RemoveAsync(cacheKey);
+            await _cache.RemoveAsync(ClaimsEnrichmentConstants.GetClientClaimsCacheKey(email, organisationId));
         }
     }
 }

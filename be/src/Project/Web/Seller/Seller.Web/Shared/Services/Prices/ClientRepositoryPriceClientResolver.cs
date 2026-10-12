@@ -20,7 +20,7 @@ namespace Seller.Web.Shared.Services.Prices
     /// <c>clientId</c> is required. Every read uses the configured default culture rather than the
     /// request culture, because Grula price drivers are matched on the canonical values.
     /// </summary>
-    public class ClientRepositoryPriceClientResolver : IPriceClientResolver
+    public class ClientRepositoryPriceClientResolver : IBasketPriceClientResolver
     {
         private readonly IClientLookupService _clientLookupService;
         private readonly ICountriesRepository _countriesRepository;

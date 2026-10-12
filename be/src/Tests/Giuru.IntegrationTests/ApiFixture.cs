@@ -1,6 +1,9 @@
+using Catalog.Api.v1.Products.RequestModels;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
+using Giuru.IntegrationTests.Definitions;
+using Giuru.IntegrationTests.Helpers;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -8,6 +11,7 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Testcontainers.MsSql;
 using Testcontainers.RabbitMq;
@@ -20,6 +24,10 @@ namespace Giuru.IntegrationTests
         private const string UnreachableGrulaUrl = "http://127.0.0.1:1";
         private const string TestGrulaAccessToken = "integration-test-token";
         private const string TestGrulaEnvironmentId = "00000000-0000-0000-0000-000000000001";
+
+        // Repricing a basket line that resolves to a real product translates its colours first, which reads the
+        // items of this attribute from the catalog. No such attribute exists here, so the answer is an empty list.
+        private const string TestProductColorAttributeId = "00000000-0000-0000-0000-000000000002";
 
         private INetwork _giuruNetwork;
         private RedisContainer _redisContainer;
@@ -34,9 +42,108 @@ namespace Giuru.IntegrationTests
         private IContainer _basketApiContainer;
         private IContainer _inventoryApiContainer;
 
+        private WebApplicationFactory<SellerWebProgram> _sellerWebFactory;
+        private WebApplicationFactory<BuyerWebProgram> _buyerWebFactory;
+        private string _tokenEndpoint;
+
         public RestClient SellerWebClient { get; private set; }
         public RestClient BuyerWebClient { get; private set; }
         public RestClient BasketApiClient { get; private set; }
+
+        /// <summary>Client.Api, signed in as the seller the whole run signs in as.</summary>
+        public RestClient ClientApiClient { get; private set; }
+
+        /// <summary>The organisation of the seller every default client signs in as.</summary>
+        public static readonly Guid SellerOrganisationId = Guid.Parse("09affcc9-1665-45d6-919f-3d2026106ba1");
+
+        /// <summary>The organisation of a second seller, who must never see or touch the first one's data.</summary>
+        public static readonly Guid OtherSellerOrganisationId = Guid.Parse("f3c1f7a2-6b1e-4d6a-9d52-5b8e7a0c4d11");
+
+        public const string SellerEmail = "seller@user.com";
+        public const string OtherSellerEmail = "other.seller@user.com";
+
+        /// <summary>
+        /// Issues a token for an identity of the test's choosing. An empty <paramref name="role"/> issues a token without
+        /// any role, which is what a buyer or a member of a buyer's team looks like.
+        /// </summary>
+        public async Task<string> IssueTokenAsync(string email, string role, Guid organisationId)
+        {
+            var query = $"?email={Uri.EscapeDataString(email)}&role={Uri.EscapeDataString(string.IsNullOrWhiteSpace(role) ? "none" : role)}&organisationId={organisationId}";
+
+            return await new TokenClient(new HttpClient()).GetTokenAsync(_tokenEndpoint + query);
+        }
+
+        public Task<string> IssueSellerTokenAsync(string email, Guid organisationId)
+        {
+            return IssueTokenAsync(email, "Seller", organisationId);
+        }
+
+        public Task<string> IssueBuyerTokenAsync(string email, Guid organisationId)
+        {
+            return IssueTokenAsync(email, string.Empty, organisationId);
+        }
+
+        /// <summary>
+        /// Each client has a cookie jar of its own, so a buyer web client keeps one basket across its requests and
+        /// a new client starts with a new basket.
+        /// </summary>
+        public RestClient CreateSellerWebClient(string token) => new RestClient(CreateAuthenticatedClient(_sellerWebFactory.CreateClient(), token));
+
+        public RestClient CreateBuyerWebClient(string token) => new RestClient(CreateAuthenticatedClient(_buyerWebFactory.CreateClient(), token));
+
+        public RestClient CreateClientApiClient(string token)
+        {
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri($"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}")
+            };
+
+            return new RestClient(CreateAuthenticatedClient(httpClient, token));
+        }
+
+        private readonly SemaphoreSlim _discountCodeProductLock = new SemaphoreSlim(1, 1);
+        private DiscountCodeProduct _discountCodeProduct;
+
+        /// <summary>
+        /// A product of its own for the discount code tests, created once for the whole run. Its identity has to be the
+        /// catalog's, because a basket line whose product id does not match its SKU is refused when it is repriced.
+        /// </summary>
+        public async Task<DiscountCodeProduct> GetDiscountCodeProductAsync()
+        {
+            await _discountCodeProductLock.WaitAsync();
+
+            try
+            {
+                if (_discountCodeProduct is null)
+                {
+                    var productId = await InventoryHelper.CreateProductAndAddToStockAsync(this, new ProductRequestModel
+                    {
+                        Name = Products.DiscountCodeProduct.Name,
+                        Sku = Products.DiscountCodeProduct.Sku,
+                        CategoryId = Products.DiscountCodeProduct.CategoryId,
+                        IsPublished = Products.DiscountCodeProduct.IsPublished,
+                        Ean = Products.DiscountCodeProduct.Ean
+                    });
+
+                    _discountCodeProduct = new DiscountCodeProduct(productId.Value, Products.DiscountCodeProduct.Sku, Products.DiscountCodeProduct.Name);
+                }
+
+                return _discountCodeProduct;
+            }
+            finally
+            {
+                _discountCodeProductLock.Release();
+            }
+        }
+
+        private static HttpClient CreateAuthenticatedClient(HttpClient httpClient, string token)
+        {
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            return httpClient;
+        }
 
         public async Task InitializeAsync()
         {
@@ -280,8 +387,10 @@ namespace Giuru.IntegrationTests
 
             await _inventoryApiContainer.StartAsync();
 
+            _tokenEndpoint = $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token";
+
             var tokenClient = new TokenClient(new HttpClient());
-            var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
+            var token = await tokenClient.GetTokenAsync(_tokenEndpoint);
 
             var basketApiHttpClient = new HttpClient
             {
@@ -294,12 +403,14 @@ namespace Giuru.IntegrationTests
 
             BasketApiClient = new RestClient(basketApiHttpClient);
 
-            var sellerWebFactpry = new WebApplicationFactory<SellerWebProgram>()
+            _sellerWebFactory = new WebApplicationFactory<SellerWebProgram>()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
                     builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                    builder.UseSetting("RedisUrl", "redis,abortConnect=false");
+                    // The seller app reads the colour translations it prices with from Redis itself, so like the buyer app
+                    // it needs an address the test process can reach rather than the container network's name.
+                    builder.UseSetting("RedisUrl", $"{_redisContainer.Hostname}:{_redisContainer.GetMappedPublicPort(6379)},abortConnect=false");
                     builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
                     builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
                     builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
@@ -307,14 +418,17 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("GlobalUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("GrulaUrl", UnreachableGrulaUrl);
                     builder.UseSetting("GrulaAccessToken", TestGrulaAccessToken);
                     builder.UseSetting("GrulaEnvironmentId", TestGrulaEnvironmentId);
+                    builder.UseSetting("ProductColorAttributeId", TestProductColorAttributeId);
                     builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");
-                })
-                .CreateClient();
+                });
+
+            var sellerWebFactpry = _sellerWebFactory.CreateClient();
 
             sellerWebFactpry.DefaultRequestHeaders.Accept.Clear();
             sellerWebFactpry.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -322,12 +436,13 @@ namespace Giuru.IntegrationTests
 
             SellerWebClient = new RestClient(sellerWebFactpry);
 
-            var buyerWebFactpry = new WebApplicationFactory<BuyerWebProgram>()
+            _buyerWebFactory = new WebApplicationFactory<BuyerWebProgram>()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
                     builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                    builder.UseSetting("RedisUrl", "redis,abortConnect=false");
+                    // The buyer app caches claims and reference data in Redis itself, so it needs an address the test process can reach.
+                    builder.UseSetting("RedisUrl", $"{_redisContainer.Hostname}:{_redisContainer.GetMappedPublicPort(6379)},abortConnect=false");
                     builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
                     builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
                     builder.UseSetting("OrderUrl", $"http://{_orderingApiContainer.Hostname}:{_orderingApiContainer.GetMappedPublicPort(8080)}");
@@ -336,20 +451,25 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("IdentityUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("GlobalUrl", $"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("GrulaUrl", UnreachableGrulaUrl);
                     builder.UseSetting("GrulaAccessToken", TestGrulaAccessToken);
                     builder.UseSetting("GrulaEnvironmentId", TestGrulaEnvironmentId);
+                    builder.UseSetting("ProductColorAttributeId", TestProductColorAttributeId);
                     builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");
-                })
-                .CreateClient();
+                });
+
+            var buyerWebFactpry = _buyerWebFactory.CreateClient();
 
             buyerWebFactpry.DefaultRequestHeaders.Accept.Clear();
             buyerWebFactpry.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             buyerWebFactpry.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             BuyerWebClient = new RestClient(buyerWebFactpry);
+
+            ClientApiClient = CreateClientApiClient(token);
         }
 
         public async Task DisposeAsync()

@@ -42,6 +42,9 @@
             public static readonly string FieldsApiEndpoint = "/api/v1/clientfields";
             public static readonly string FieldOptionsApiEndpoint = "/api/v1/clientfieldoptions";
             public static readonly string FieldValuesApiEndpoint = "/api/v1/clientfieldvalues";
+            public static readonly string DiscountCodesApiEndpoint = "/api/v1/discountcodes";
+            public static readonly string DiscountCodeClientOptionsApiEndpoint = "/api/v1/discountcodes/clients";
+            public static readonly string DiscountCodesValidationApiEndpoint = "/api/v1/discountcodes/validation";
         }
 
         public struct Identity

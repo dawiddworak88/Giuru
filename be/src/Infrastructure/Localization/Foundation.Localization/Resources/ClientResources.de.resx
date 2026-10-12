@@ -384,4 +384,49 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Zustimmung erfolgreich gelöscht.</value>
   </data>
+  <data name="DiscountCodes" xml:space="preserve">
+    <value>Rabattcodes</value>
+  </data>
+  <data name="NewDiscountCode" xml:space="preserve">
+    <value>Neuer Rabattcode</value>
+  </data>
+  <data name="EditDiscountCode" xml:space="preserve">
+    <value>Rabattcode bearbeiten</value>
+  </data>
+  <data name="DiscountCodeDescriptionLabel" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="DiscountCodeClientsLabel" xml:space="preserve">
+    <value>Kunden</value>
+  </data>
+  <data name="DiscountCodeGrulaHint" xml:space="preserve">
+    <value>Muss genau dem Eintrag des Treibers „Discount Code“ in Grula entsprechen. Giuru überprüft dessen Konfiguration in Grula nicht; die Anwendung eines Codes kann die Preise unverändert lassen</value>
+  </data>
+  <data name="DiscountCodeNoClientsHint" xml:space="preserve">
+    <value>Kein Kunde kann diesen Code neu anwenden, bis mindestens einer zugewiesen ist</value>
+  </data>
+  <data name="NavigateToDiscountCodesText" xml:space="preserve">
+    <value>Zurück zu den Rabattcodes</value>
+  </data>
+  <data name="DiscountCodeRequiredErrorMessage" xml:space="preserve">
+    <value>Geben Sie einen Rabattcode ein</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Rabattcode gespeichert</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Rabattcode gelöscht</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Rabattcode nicht gefunden</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>Ein Rabattcode mit diesem Wert existiert bereits</value>
+  </data>
+  <data name="DiscountCodeClientsInvalid" xml:space="preserve">
+    <value>Mindestens ein ausgewählter Kunde steht für die Zuweisung nicht zur Verfügung</value>
+  </data>
+  <data name="DiscountCodeChanged" xml:space="preserve">
+    <value>Dieser Rabattcode wurde geändert, seit Sie ihn geöffnet haben. Laden Sie die Seite neu, bevor Sie speichern oder löschen</value>
+  </data>
 </root>
