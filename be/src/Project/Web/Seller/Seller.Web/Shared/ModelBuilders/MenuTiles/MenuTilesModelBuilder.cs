@@ -181,37 +181,6 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Icon = IconsConstants.Grid,
                         Title = _globalLocalizer.GetString("ClientsGroups"),
                         Url = _linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
-                    },
-                    new MenuTileViewModel
-                    {
-                        Icon = IconsConstants.Media,
-                        Title = _globalLocalizer.GetString("Media"),
-                        Url = _linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
-                    },
-                    new MenuTileViewModel
-                    {
-                        Icon = IconsConstants.Content,
-                        Title = _globalLocalizer.GetString("Content"),
-                        Target = "_blank",
-                        Url = _options.CurrentValue.ContentUrl
-                    },
-                    new MenuTileViewModel
-                    {
-                        Icon = IconsConstants.Download,
-                        Title = _globalLocalizer.GetString("DownloadCenter"),
-                        Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
-                    },
-                    new MenuTileViewModel
-                    {
-                        Icon = IconsConstants.Grid,
-                        Title = _globalLocalizer.GetString("DownloadCenterCategories"),
-                        Url = _linkGenerator.GetPathByAction("Index", "DownloadCenterCategories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
-                    },
-                    new MenuTileViewModel
-                    {
-                        Icon = IconsConstants.Settings,
-                        Title = _globalLocalizer.GetString("Settings"),
-                        Url = _linkGenerator.GetPathByAction("Index", "Settings", new { Area = "Settings", culture = CultureInfo.CurrentUICulture.Name })
                     }
                 }
             };
@@ -223,8 +192,43 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     Icon = IconsConstants.Percent,
                     Title = _clientLocalizer.GetString("DiscountCodes"),
                     Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
-                }).ToList();
+                });
             }
+
+            viewModel.Tiles = viewModel.Tiles.Concat(new List<MenuTileViewModel>
+            {
+                new MenuTileViewModel
+                {
+                    Icon = IconsConstants.Media,
+                    Title = _globalLocalizer.GetString("Media"),
+                    Url = _linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new MenuTileViewModel
+                {
+                    Icon = IconsConstants.Content,
+                    Title = _globalLocalizer.GetString("Content"),
+                    Target = "_blank",
+                    Url = _options.CurrentValue.ContentUrl
+                },
+                new MenuTileViewModel
+                {
+                    Icon = IconsConstants.Download,
+                    Title = _globalLocalizer.GetString("DownloadCenter"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new MenuTileViewModel
+                {
+                    Icon = IconsConstants.Grid,
+                    Title = _globalLocalizer.GetString("DownloadCenterCategories"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DownloadCenterCategories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new MenuTileViewModel
+                {
+                    Icon = IconsConstants.Settings,
+                    Title = _globalLocalizer.GetString("Settings"),
+                    Url = _linkGenerator.GetPathByAction("Index", "Settings", new { Area = "Settings", culture = CultureInfo.CurrentUICulture.Name })
+                }
+            }).ToList();
 
             return viewModel;
         }
