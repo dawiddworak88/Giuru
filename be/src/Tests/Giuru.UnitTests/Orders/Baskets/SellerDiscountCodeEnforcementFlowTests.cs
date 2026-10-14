@@ -23,7 +23,16 @@ using SellerAppSettings = Seller.Web.Shared.Configurations.AppSettings;
 using SellerBasket = Seller.Web.Areas.Orders.DomainModels.Basket;
 using SellerBasketItem = Seller.Web.Areas.Orders.DomainModels.BasketItem;
 using SellerBasketItemRequestModel = Seller.Web.Areas.Orders.ApiRequestModels.BasketItemRequestModel;
+using SellerBasketCheckoutApiController = Seller.Web.Areas.Orders.ApiControllers.BasketCheckoutApiController;
 using SellerBasketsApiController = Seller.Web.Areas.Orders.ApiControllers.BasketsApiController;
+using SellerCheckoutBasketRequestModel = Seller.Web.Areas.Orders.ApiRequestModels.CheckoutBasketRequestModel;
+using SellerClient = Seller.Web.Areas.Clients.DomainModels.Client;
+using SellerIBasketService = Seller.Web.Areas.Orders.Services.Basket.IBasketService;
+using SellerIClientsRepository = Seller.Web.Shared.Repositories.Clients.IClientsRepository;
+using SellerIIdentityRepository = Seller.Web.Shared.Repositories.Identity.IIdentityRepository;
+using SellerIInventoryAreaRepository = Seller.Web.Areas.Inventory.Repositories.Inventories.IInventoryRepository;
+using SellerIOutletRepository = Seller.Web.Areas.Inventory.Repositories.IOutletRepository;
+using SellerIUserApprovalsRepository = Seller.Web.Areas.Shared.Repositories.UserApprovals.IUserApprovalsRepository;
 using SellerIBasketRepository = Seller.Web.Areas.Orders.Repositories.Baskets.IBasketRepository;
 using SellerIInventoryRepository = Seller.Web.Shared.Repositories.Inventory.IInventoryRepository;
 using SellerInventoryItem = Seller.Web.Shared.DomainModels.Inventory.InventoryItem;
@@ -195,30 +204,58 @@ namespace Giuru.UnitTests.Orders.Baskets
         [InlineData(true, "stored25")]
         [InlineData(true, "   ")]
         [InlineData(false, null)]
-        public async Task Index_WhenTheStoredCodeIsKept_SurvivesRevocationWithoutAnyValidationEvenForAnotherClient(bool hasDiscountCode, string requested)
+        public async Task Index_WhenTheBasketIsSavedForAnotherClient_DoesNotCarryTheStoredCodeOver(bool hasDiscountCode, string requested)
         {
-            var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.NotAssigned);
+            // The code was applied for client A; the same basket is now saved for client B, to whom it is not assigned.
+            var otherClientId = Guid.NewGuid();
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(otherClientId, "STORED25", "token")
+                .Returns(Task.FromResult(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned)));
 
-            // A different client than the one the basket was started for: the stored code is retained as it is (C9/C10).
-            var flow = await RunAsync(validator, hasDiscountCode, requested, "STORED25", Guid.NewGuid());
+            var flow = await RunAsync(validator, hasDiscountCode, requested, "STORED25", otherClientId);
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
+            Assert.Equal("DiscountCodeNotAssignedToClient", flow.Message);
+            Assert.Equal(0, flow.SaveCalls);
+            Assert.Equal(0, flow.PricingCalls);
+            await validator.Received(1).ValidateAsync(otherClientId, "STORED25", "token");
+        }
+
+        [Theory]
+        [InlineData(true, "stored25")]
+        [InlineData(false, null)]
+        public async Task Index_WhenTheStoredCodeIsStillApplicableForTheClient_KeepsItWithTheCanonicalSpelling(bool hasDiscountCode, string requested)
+        {
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(ClientId, "STORED25", "token").Returns(Task.FromResult(DiscountCodeValidation.Valid("Stored25")));
+
+            var flow = await RunAsync(validator, hasDiscountCode, requested, "STORED25", ClientId);
 
             Assert.Equal(1, flow.SaveCalls);
-            Assert.Equal("STORED25", flow.SavedDiscountCode);
-            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
-            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
+            Assert.Equal("Stored25", flow.SavedDiscountCode);
+            Assert.Equal("Stored25", flow.PricedWithDiscountCode);
+            await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
         }
 
         [Fact]
-        public async Task Index_WhenTheStoredCodeIsKeptWhileTheLookupIsDown_StillSavesWithoutAskingTheLookup()
+        public async Task Index_WhenTheStoredCodeCannotBeVerified_RejectsRatherThanPricingWithIt()
         {
-            var validator = Substitute.For<IDiscountCodeValidator>();
-            validator.ValidateAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
-                .Returns<Task<DiscountCodeValidation>>(_ => throw new InvalidOperationException("Client.Api is down"));
+            var validator = new DiscountCodeValidator(LookupThatIsDown(), Substitute.For<ILogger<DiscountCodeValidator>>());
 
             var flow = await RunAsync(validator, false, null, "STORED25", ClientId);
 
-            Assert.Equal(1, flow.SaveCalls);
-            Assert.Equal("STORED25", flow.SavedDiscountCode);
+            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
+            Assert.Equal("DiscountCodeCouldNotBeVerified", flow.Message);
+            Assert.Equal(0, flow.SaveCalls);
+        }
+
+        private static IDiscountCodeLookup LookupThatIsDown()
+        {
+            var lookup = Substitute.For<IDiscountCodeLookup>();
+            lookup.ValidateAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<string>())
+                .Returns<Task<DiscountCodeValidation>>(_ => throw new InvalidOperationException("Client.Api is down"));
+
+            return lookup;
         }
 
         [Fact]
@@ -365,16 +402,42 @@ namespace Giuru.UnitTests.Orders.Baskets
         [InlineData(true, "stored25")]
         [InlineData(true, "   ")]
         [InlineData(false, null)]
-        public async Task Index_WhenTheStoredCodeIsKept_SurvivesRevocationWithoutAnyValidationAndRepricesWithTheStoredSpelling(bool formHasDiscountCode, string requested)
+        public async Task Index_WhenTheUploadIsForAClientTheStoredCodeIsNotAssignedTo_DoesNotCarryTheCodeOver(bool formHasDiscountCode, string requested)
         {
-            var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.Disabled);
+            var otherClientId = Guid.NewGuid();
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(otherClientId, "STORED25", "token")
+                .Returns(Task.FromResult(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned)));
 
-            var flow = await RunAsync(validator, formHasDiscountCode, requested, "STORED25", ClientId);
+            var flow = await RunAsync(validator, formHasDiscountCode, requested, "STORED25", otherClientId);
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
+            Assert.Equal("DiscountCodeNotAssignedToClient", flow.Message);
+            Assert.Equal(0, flow.SaveCalls);
+            Assert.Equal(0, flow.PricingCalls);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheStoredCodeWasRevoked_RejectsTheUpload()
+        {
+            var flow = await RunAsync(DiscountCodeValidators.Returning(DiscountCodeValidationStatus.Disabled), false, null, "STORED25", ClientId);
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
+            Assert.Equal("DiscountCodeDisabled", flow.Message);
+            Assert.Equal(0, flow.SaveCalls);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheStoredCodeIsStillApplicableForTheClient_RepricesWithItsCanonicalSpelling()
+        {
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(ClientId, "STORED25", "token").Returns(Task.FromResult(DiscountCodeValidation.Valid("Stored25")));
+
+            var flow = await RunAsync(validator, true, "stored25", "STORED25", ClientId);
 
             Assert.Equal(1, flow.SaveCalls);
-            Assert.Equal("STORED25", flow.SavedDiscountCode);
-            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
-            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
+            Assert.Equal("Stored25", flow.SavedDiscountCode);
+            Assert.Equal("Stored25", flow.PricedWithDiscountCode);
         }
 
         [Fact]
@@ -385,6 +448,91 @@ namespace Giuru.UnitTests.Orders.Baskets
             var flow = await RunAsync(validator, true, null, "STORED25", ClientId);
 
             Assert.Null(flow.SavedDiscountCode);
+            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
+        }
+    }
+
+    public class SellerBasketCheckoutApiControllerDiscountCodeEnforcementTests
+    {
+        private static readonly Guid ClientId = Guid.NewGuid();
+
+        private static async Task<(DiscountFlowResult Flow, int CheckoutCalls)> CheckoutAsync(IDiscountCodeValidator validator, string storedDiscountCode, Guid clientId)
+        {
+            var basketId = Guid.NewGuid();
+            var basketRepository = Substitute.For<SellerIBasketRepository>();
+            var clientsRepository = Substitute.For<SellerIClientsRepository>();
+            var options = Options.Create(new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() });
+
+            // The basket was saved, and priced, while the form was for another client.
+            basketRepository.GetBasketByIdAsync("token", Arg.Any<string>(), basketId)
+                .Returns(Task.FromResult(new SellerBasket
+                {
+                    Id = basketId,
+                    DiscountCode = storedDiscountCode,
+                    Items = new[] { new SellerBasketItem { ProductId = Guid.NewGuid(), ProductSku = "SKU", ProductName = "Product", Quantity = 1, UnitPrice = 9m, Price = 9m } }
+                }));
+            clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>(), clientId)
+                .Returns(Task.FromResult(new SellerClient { Id = clientId, Email = "client@example.com", OrganisationId = Guid.NewGuid() }));
+
+            var controller = new SellerBasketCheckoutApiController(
+                basketRepository,
+                TestLocalizer.Create<OrderResources>(),
+                TestLocalizer.Create<ClientResources>(),
+                Substitute.For<SellerIUserApprovalsRepository>(),
+                clientsRepository,
+                Substitute.For<SellerIIdentityRepository>(),
+                Substitute.For<SellerIBasketService>(),
+                Substitute.For<SellerIInventoryAreaRepository>(),
+                Substitute.For<SellerIOutletRepository>(),
+                validator,
+                options)
+            {
+                ControllerContext = new ControllerContext { HttpContext = SellerFlowHelpers.CreateHttpContext() }
+            };
+
+            var result = await controller.Checkout(new SellerCheckoutBasketRequestModel { BasketId = basketId, ClientId = clientId });
+
+            return (
+                new DiscountFlowResult { Result = result },
+                basketRepository.ReceivedCalls().Count(x => x.GetMethodInfo().Name == nameof(SellerIBasketRepository.CheckoutBasketAsync)));
+        }
+
+        [Fact]
+        public async Task Checkout_ForAClientTheStoredCodeIsNotAssignedTo_IsRefusedSoTheDiscountIsNotOrderedForThem()
+        {
+            var otherClientId = Guid.NewGuid();
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(otherClientId, "STORED25", "token")
+                .Returns(Task.FromResult(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned)));
+
+            var (flow, checkoutCalls) = await CheckoutAsync(validator, "STORED25", otherClientId);
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
+            Assert.Equal("DiscountCodeNotAssignedToClient", flow.Message);
+            Assert.Equal(0, checkoutCalls);
+        }
+
+        [Fact]
+        public async Task Checkout_WhenTheStoredCodeIsApplicableForTheClient_PlacesTheOrder()
+        {
+            var validator = DiscountCodeValidators.AlwaysValid();
+
+            var (flow, checkoutCalls) = await CheckoutAsync(validator, "STORED25", ClientId);
+
+            Assert.Equal((int)HttpStatusCode.Accepted, flow.StatusCode);
+            Assert.Equal(1, checkoutCalls);
+            await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
+        }
+
+        [Fact]
+        public async Task Checkout_OfABasketWithoutACode_DoesNotValidateAnything()
+        {
+            var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.Unavailable);
+
+            var (flow, checkoutCalls) = await CheckoutAsync(validator, null, ClientId);
+
+            Assert.Equal((int)HttpStatusCode.Accepted, flow.StatusCode);
+            Assert.Equal(1, checkoutCalls);
             await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
         }
     }

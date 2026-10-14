@@ -18,13 +18,21 @@ namespace Giuru.IntegrationTests.HttpClients
             _client = client;
         }
 
-        public async Task<HttpResponseMessage> PostForResponseAsync<S>(string requestUrl, S request) where S : class
+        public async Task<HttpResponseMessage> PostForResponseAsync<S>(string requestUrl, S request, string cookieHeader = null) where S : class
         {
-            return await _client.PostAsync(
-                    requestUrl,
-                    new StringContent(JsonConvert.SerializeObject(request, CamelCaseSettings),
+            using var message = new HttpRequestMessage(HttpMethod.Post, requestUrl)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(request, CamelCaseSettings),
                     Encoding.UTF8,
-                    "application/json"));
+                    "application/json")
+            };
+
+            if (cookieHeader is not null)
+            {
+                message.Headers.Add("Cookie", cookieHeader);
+            }
+
+            return await _client.SendAsync(message);
         }
 
         public async Task<HttpResponseMessage> PostMultipartForResponseAsync(string requestUrl, MultipartFormDataContent content)

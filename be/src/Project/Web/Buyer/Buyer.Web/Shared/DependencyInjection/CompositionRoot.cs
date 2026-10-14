@@ -101,6 +101,8 @@ namespace Buyer.Web.Shared.DependencyInjection
             
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
             services.AddScoped<IDiscountCodeLookup, ClientApiDiscountCodeLookup>();
+            services.AddScoped<IBasketDiscountCodeBinding, BasketDiscountCodeBinding>();
+            services.AddScoped<IStoredDiscountCodeReader, BasketCookieDiscountCodeReader>();
             services.RegisterPriceClientResolvers<ClaimsPriceClientResolver>();
             services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
             services.RegisterPricingDependencies(configuration);

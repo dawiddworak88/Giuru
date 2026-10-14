@@ -42,14 +42,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
+            var clientAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Id, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.City, model.ClientId, model.CountryId);
+
+            // Only once the address is saved: a buyer request in between would otherwise cache the old one again.
             var client = await _clientsRepository.GetClientAsync(token, language, model.ClientId);
 
             if (client is not null)
             {
-                await _cacheInvalidatorService.InvalidateAsync(client.Email, client.OrganisationId);
+                await _cacheInvalidatorService.InvalidateAsync(client.OrganisationId);
             }
-
-            var clientAddressId = await _deliveryAddressesRepository.SaveAsync(token, language, model.Id, model.Company, model.FirstName, model.LastName, model.PhoneNumber, model.Street, model.Region, model.PostCode, model.City, model.ClientId, model.CountryId);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = clientAddressId, Message = _clientLocalizer.GetString("ClientAddressSavedSuccessfully").Value });
         }

@@ -74,6 +74,20 @@ namespace Foundation.Pricing.Baskets
             return !hasItems;
         }
 
+        /// <summary>
+        /// Whether a requested code is the code stored on the basket: the same text, whatever its letter casing or
+        /// surrounding spacing. Where a stored code stays in force without revalidation, the basket save and the fresh
+        /// price reads both recognise it with this one test - otherwise a product page and the basket would price the
+        /// same code differently.
+        /// </summary>
+        public static bool IsStoredDiscountCode(string requestedDiscountCode, string persistedDiscountCode)
+        {
+            var persistedCode = Normalize(persistedDiscountCode);
+
+            return persistedCode is not null
+                && string.Equals(requestedDiscountCode?.Trim(), persistedCode, StringComparison.OrdinalIgnoreCase);
+        }
+
         private static string Normalize(string discountCode)
         {
             return string.IsNullOrWhiteSpace(discountCode) ? null : discountCode.Trim();

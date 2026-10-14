@@ -3,9 +3,11 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Localization;
+using Foundation.Pricing.DiscountCodes;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
@@ -14,9 +16,11 @@ using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Services.Basket;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
+using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.DomainModels.UserApproval;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Identity;
+using Seller.Web.Shared.Services.DiscountCodes;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -37,6 +41,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IBasketService _basketService;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IOutletRepository _outletRepository;
+        private readonly IDiscountCodeValidator _discountCodeValidator;
+        private readonly IOptions<AppSettings> _options;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -47,7 +53,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IIdentityRepository identityRepository,
             IBasketService basketService,
             IInventoryRepository inventoryRepository,
-            IOutletRepository outletRepository)
+            IOutletRepository outletRepository,
+            IDiscountCodeValidator discountCodeValidator,
+            IOptions<AppSettings> options)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
@@ -58,6 +66,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _basketService = basketService;
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
+            _discountCodeValidator = discountCodeValidator;
+            _options = options;
         }
 
         [HttpPost]
@@ -71,6 +81,18 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             if (basket is null || basket.Items.OrEmptyIfNull().Any() is false)
             {
                 throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
+            }
+
+            // The order keeps the prices the basket was saved with, but the client is named again here. The stored code has
+            // to be applicable for this client too, or a basket priced with one client's code could be ordered for another.
+            if (_options.Value.IsGrulaConfigured && !string.IsNullOrWhiteSpace(basket.DiscountCode))
+            {
+                var validation = await _discountCodeValidator.ValidateAsync(model.ClientId, basket.DiscountCode, token);
+
+                if (!validation.IsValid)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, validation.Status) });
+                }
             }
 
             var items = basket.Items.ToList();

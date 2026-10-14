@@ -101,7 +101,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                   }));
             }
 
-            await _cacheInvalidatorService.InvalidateAsync(model.Email, organisationId);
+            await _cacheInvalidatorService.InvalidateAsync(organisationId);
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = _clientLocalizer.GetString("ClientSavedSuccessfully").Value });
         }

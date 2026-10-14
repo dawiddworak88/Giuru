@@ -127,5 +127,21 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Assert.Equal(withoutPersisted.IsAppliedToEmptyBasket, withPersisted.IsAppliedToEmptyBasket);
             }
         }
+
+        [Theory]
+        [InlineData("SUMMER25", "SUMMER25", true)]
+        [InlineData(" summer25 ", "SUMMER25 ", true)]
+        [InlineData("SUMMER25", "WINTER25", false)]
+        [InlineData("SUMMER25", null, false)]
+        [InlineData("SUMMER25", "   ", false)]
+        [InlineData(null, null, false)]
+        [InlineData("   ", "   ", false)]
+        public void IsStoredDiscountCode_MatchesTheStoredTextWhateverItsCasingOrSpacing_AndNeverAMissingCode(
+            string requestedDiscountCode,
+            string persistedDiscountCode,
+            bool expected)
+        {
+            Assert.Equal(expected, DiscountCodeResolver.IsStoredDiscountCode(requestedDiscountCode, persistedDiscountCode));
+        }
     }
 }

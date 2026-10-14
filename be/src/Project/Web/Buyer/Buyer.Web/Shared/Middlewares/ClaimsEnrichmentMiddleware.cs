@@ -10,6 +10,7 @@ using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.Cache;
+using Foundation.Extensions.Services.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
@@ -74,11 +75,13 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             // The client a buyer prices for is the client of their organisation. A team member signs in with an email of
-            // their own, so the claims are cached per organisation and email rather than by email alone.
+            // their own, so the claims are cached per organisation and email rather than by email alone - and under the
+            // organisation's current version, so that an edit of the client reaches every member of it at once.
             var organisationId = Guid.TryParse(context.User.FindFirst(AccountConstants.Claims.OrganisationIdClaim)?.Value, out var parsedOrganisationId)
                 ? parsedOrganisationId
                 : (Guid?)null;
-            var cacheKey = SharedClaimsEnrichmentConstants.GetClientClaimsCacheKey(email, organisationId);
+            var claimsVersion = await ClientClaimsCacheVersion.GetOrStartAsync(_cache, organisationId);
+            var cacheKey = SharedClaimsEnrichmentConstants.GetClientClaimsCacheKey(email, organisationId, claimsVersion);
             var cachedClaims = await _cache.GetStringAsync(cacheKey);
 
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;

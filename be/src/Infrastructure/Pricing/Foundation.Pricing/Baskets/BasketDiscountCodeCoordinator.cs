@@ -11,11 +11,18 @@ namespace Foundation.Pricing.Baskets
     /// to read the basket (including whether it can be read at all), how to validate a code for the
     /// client, and the localised messages to use if the request must be rejected.
     ///
-    /// This is also the basket write seam of discount code enforcement. Only a code that is new or
-    /// replaces the stored one is validated: a newly applied code that is not applicable is rejected,
-    /// and one whose applicability cannot be determined is rejected too, so the basket is never priced
-    /// with an unverified code. A code that is already stored on the basket is kept as it is - through
-    /// edits and uploads, and even if it has since been revoked - and is never revalidated here.
+    /// This is also the basket write seam of discount code enforcement. A newly applied code that is not
+    /// applicable is rejected, and one whose applicability cannot be determined is rejected too, so the
+    /// basket is never priced with an unverified code. A code that is already stored on the basket is
+    /// treated according to <c>revalidateStoredDiscountCode</c>:
+    /// <list type="bullet">
+    /// <item>A buyer basket with proof that its code was validated for the current client keeps that code
+    /// through edits and uploads, even if it has since been revoked. A missing or mismatched binding
+    /// requires validation again.</item>
+    /// <item>A basket that names its client on every save (the seller's) is not bound to any client, so a
+    /// stored code is validated for the client of every save that prices it, exactly like a new code.
+    /// Otherwise a code applied for one client would carry its discount into another client's basket.</item>
+    /// </list>
     /// </summary>
     public static class BasketDiscountCodeCoordinator
     {
@@ -27,7 +34,8 @@ namespace Foundation.Pricing.Baskets
             Func<Task<string>> readPersistedDiscountCode,
             Func<string> appliedToEmptyBasketMessage,
             Func<string, Task<DiscountCodeValidation>> validateDiscountCode,
-            Func<DiscountCodeValidationStatus, string> rejectionMessage)
+            Func<DiscountCodeValidationStatus, string> rejectionMessage,
+            bool revalidateStoredDiscountCode)
         {
             // The persisted code is read at most once however many of the steps below need it.
             var persistedDiscountCode = new Lazy<Task<string>>(readPersistedDiscountCode);
@@ -48,7 +56,7 @@ namespace Foundation.Pricing.Baskets
             // other letter casing or spacing. Handing the resolver the stored spelling keeps its rule that
             // emptying a discounted basket is not "applying a code to an empty basket".
             var isUnchanged = isNewOrReplacement
-                && string.Equals(requestedDiscountCode.Trim(), existingDiscountCode?.Trim(), StringComparison.OrdinalIgnoreCase);
+                && DiscountCodeResolver.IsStoredDiscountCode(requestedDiscountCode, existingDiscountCode);
             var resolution = DiscountCodeResolver.Resolve(
                 hasDiscountCode,
                 isUnchanged ? existingDiscountCode.Trim() : requestedDiscountCode,
@@ -60,8 +68,17 @@ namespace Foundation.Pricing.Baskets
                 return BasketDiscountCodeOutcome.Rejected(appliedToEmptyBasketMessage());
             }
 
-            // A removal, a basket without a code and a code that is already stored need no validation.
-            if (!isNewOrReplacement || isUnchanged || string.IsNullOrWhiteSpace(resolution.DiscountCode))
+            // A removal and a basket without a code need no validation.
+            if (string.IsNullOrWhiteSpace(resolution.DiscountCode))
+            {
+                return BasketDiscountCodeOutcome.ForDiscountCode(resolution.DiscountCode);
+            }
+
+            // Nor does a code that is already stored, unless the caller revalidates stored codes - and even then only
+            // when this save prices it: an emptied basket keeps its code unpriced until lines are added again.
+            var isStoredDiscountCode = !isNewOrReplacement || isUnchanged;
+
+            if (isStoredDiscountCode && (!revalidateStoredDiscountCode || !hasItems))
             {
                 return BasketDiscountCodeOutcome.ForDiscountCode(resolution.DiscountCode);
             }

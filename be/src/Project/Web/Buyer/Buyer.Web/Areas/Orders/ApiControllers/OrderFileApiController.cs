@@ -68,6 +68,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketPriceClientResolver _priceClientResolver;
         private readonly IBasketRepricingService _basketRepricingService;
         private readonly IDiscountCodeValidator _discountCodeValidator;
+        private readonly IBasketDiscountCodeBinding _discountCodeBinding;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -87,7 +88,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IPriceProductFactory priceProductFactory,
             IBasketPriceClientResolver priceClientResolver,
             IBasketRepricingService basketRepricingService,
-            IDiscountCodeValidator discountCodeValidator)
+            IDiscountCodeValidator discountCodeValidator,
+            IBasketDiscountCodeBinding discountCodeBinding)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -107,6 +109,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceClientResolver = priceClientResolver;
             _basketRepricingService = basketRepricingService;
             _discountCodeValidator = discountCodeValidator;
+            _discountCodeBinding = discountCodeBinding;
         }
 
         [HttpPost]
@@ -162,7 +165,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 () => Task.FromResult(existingBasket?.DiscountCode),
                 () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
                 code => _discountCodeValidator.ValidateAsync(User.GetClientId(), code, token),
-                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status),
+                revalidateStoredDiscountCode: !_discountCodeBinding.IsBoundToClient(id, User.GetClientId(), existingBasket?.DiscountCode));
 
             if (discountOutcome.IsRejected)
             {
@@ -242,6 +246,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             var basket = await _basketRepository.SaveAsync(token, language, id, completeBasketItems, discountCode);
+
+            if (string.IsNullOrWhiteSpace(discountCode) || _options.Value.IsGrulaConfigured)
+            {
+                _discountCodeBinding.Bind(id, User.GetClientId(), discountCode);
+            }
 
             var basketResponseModel = new BasketResponseModel
             {

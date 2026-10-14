@@ -82,6 +82,15 @@ namespace Giuru.UnitTests.Extensions
             return context;
         }
 
+        private async Task<string> GetCachedClaimsAsync(string email, Guid organisationId)
+        {
+            var version = await _cache.GetStringAsync(ClaimsEnrichmentConstants.GetClientClaimsVersionCacheKey(organisationId));
+
+            return version is null
+                ? null
+                : await _cache.GetStringAsync(ClaimsEnrichmentConstants.GetClientClaimsCacheKey(email, organisationId, version));
+        }
+
         private static async Task<Guid?> RunAsync(ClaimsEnrichmentMiddleware middleware, DefaultHttpContext context)
         {
             Guid? clientIdSeenByTheRequest = null;
@@ -187,7 +196,7 @@ namespace Giuru.UnitTests.Extensions
 
             Assert.Null(seen);
             await _clientsRepository.Received(2).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
-            Assert.Null(await _cache.GetStringAsync(ClaimsEnrichmentConstants.GetClientClaimsCacheKey(Email, OrganisationId)));
+            Assert.Null(await GetCachedClaimsAsync(Email, OrganisationId));
         }
 
         [Fact]
@@ -200,7 +209,7 @@ namespace Giuru.UnitTests.Extensions
             var seen = await RunAsync(middleware, CreateHttpContext(TeamMemberEmail));
 
             Assert.Null(seen);
-            Assert.Null(await _cache.GetStringAsync(ClaimsEnrichmentConstants.GetClientClaimsCacheKey(TeamMemberEmail, OrganisationId)));
+            Assert.Null(await GetCachedClaimsAsync(TeamMemberEmail, OrganisationId));
 
             // The next request retries instead of reading a remembered failure.
             _clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult(new BuyerClient { Id = Guid.NewGuid() }));
@@ -267,7 +276,7 @@ namespace Giuru.UnitTests.Extensions
         }
 
         [Fact]
-        public async Task InvalidateAsync_RemovesTheEntryTheMiddlewareWrote()
+        public async Task InvalidateAsync_MakesThePrimaryContactLookTheClientUpAgain()
         {
             var firstClientId = Guid.NewGuid();
             var secondClientId = Guid.NewGuid();
@@ -277,7 +286,65 @@ namespace Giuru.UnitTests.Extensions
             var middleware = CreateMiddleware();
             await RunAsync(middleware, CreateHttpContext());
 
-            await new ClaimsCacheInvalidatorService(_cache).InvalidateAsync(Email, OrganisationId);
+            await new ClaimsCacheInvalidatorService(_cache).InvalidateAsync(OrganisationId);
+
+            Assert.Equal(secondClientId, await RunAsync(middleware, CreateHttpContext()));
+        }
+
+        [Fact]
+        public async Task InvalidateAsync_AlsoMakesEveryTeamMemberOfTheOrganisationLookTheClientUpAgain()
+        {
+            // An edit of the client - its currency, say - must not stay hidden from the team for the life of their entries.
+            var firstClientId = Guid.NewGuid();
+            var secondClientId = Guid.NewGuid();
+            const string otherTeamMemberEmail = "other.member@test.com";
+            _clientsRepository.GetClientByEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
+                .Returns(Task.FromResult<BuyerClient>(null));
+            _clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(Task.FromResult(new BuyerClient { Id = firstClientId }), Task.FromResult(new BuyerClient { Id = firstClientId }), Task.FromResult(new BuyerClient { Id = secondClientId }));
+
+            var middleware = CreateMiddleware();
+            await RunAsync(middleware, CreateHttpContext(TeamMemberEmail));
+            await RunAsync(middleware, CreateHttpContext(otherTeamMemberEmail));
+
+            await new ClaimsCacheInvalidatorService(_cache).InvalidateAsync(OrganisationId);
+
+            Assert.Equal(secondClientId, await RunAsync(middleware, CreateHttpContext(TeamMemberEmail)));
+            Assert.Equal(secondClientId, await RunAsync(middleware, CreateHttpContext(otherTeamMemberEmail)));
+            await _clientsRepository.Received(4).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task InvalidateAsync_LeavesTheClaimsOfOtherOrganisationsCached()
+        {
+            var otherOrganisationId = Guid.NewGuid();
+            _clientsRepository.GetClientByEmailAsync(Arg.Any<string>(), Arg.Any<string>(), TeamMemberEmail)
+                .Returns(Task.FromResult<BuyerClient>(null));
+            _clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(Task.FromResult(new BuyerClient { Id = Guid.NewGuid() }));
+
+            var middleware = CreateMiddleware();
+            await RunAsync(middleware, CreateHttpContext(TeamMemberEmail, otherOrganisationId));
+
+            await new ClaimsCacheInvalidatorService(_cache).InvalidateAsync(OrganisationId);
+            await RunAsync(middleware, CreateHttpContext(TeamMemberEmail, otherOrganisationId));
+
+            await _clientsRepository.Received(1).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task InvokeAsync_WhenTheOrganisationsVersionIsGone_NeverReadsTheEntriesCachedUnderAnEarlierOne()
+        {
+            var firstClientId = Guid.NewGuid();
+            var secondClientId = Guid.NewGuid();
+            _clientsRepository.GetClientByEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Email)
+                .Returns(Task.FromResult(new BuyerClient { Id = firstClientId, Email = Email }), Task.FromResult(new BuyerClient { Id = secondClientId, Email = Email }));
+
+            var middleware = CreateMiddleware();
+            await RunAsync(middleware, CreateHttpContext());
+
+            // Evicted, or expired, while the entries it versioned are still cached.
+            await _cache.RemoveAsync(ClaimsEnrichmentConstants.GetClientClaimsVersionCacheKey(OrganisationId));
 
             Assert.Equal(secondClientId, await RunAsync(middleware, CreateHttpContext()));
         }

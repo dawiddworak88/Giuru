@@ -23,7 +23,8 @@ namespace Giuru.UnitTests.Services.DiscountCodes
                 bool hasItems,
                 string persistedDiscountCode,
                 DiscountCodeValidation validation = null,
-                bool isGrulaConfigured = true)
+                bool isGrulaConfigured = true,
+                bool revalidateStoredDiscountCode = false)
             {
                 return await BasketDiscountCodeCoordinator.ResolveAsync(
                     isGrulaConfigured,
@@ -48,7 +49,8 @@ namespace Giuru.UnitTests.Services.DiscountCodes
                         RejectionStatuses.Add(status);
 
                         return $"rejected-{status}";
-                    });
+                    },
+                    revalidateStoredDiscountCode);
             }
         }
 
@@ -243,11 +245,99 @@ namespace Giuru.UnitTests.Services.DiscountCodes
         [InlineData(true, "  ", true)]
         public async Task ResolveAsync_ReadsTheStoredCodeAtMostOnce(bool hasDiscountCode, string requested, bool hasItems)
         {
+            foreach (var revalidateStoredDiscountCode in new[] { false, true })
+            {
+                var scenario = new Scenario();
+
+                await scenario.RunAsync(hasDiscountCode, requested, hasItems, "STORED25", revalidateStoredDiscountCode: revalidateStoredDiscountCode);
+
+                Assert.True(scenario.PersistedReads <= 1);
+            }
+        }
+
+        [Theory]
+        [InlineData(false, null)]
+        [InlineData(true, "")]
+        [InlineData(true, "   ")]
+        [InlineData(true, "STORED25")]
+        [InlineData(true, "  stored25 ")]
+        public async Task ResolveAsync_WhenStoredCodesAreRevalidated_ValidatesTheStoredCodeForTheSaveAndUsesTheCanonicalSpelling(bool hasDiscountCode, string requested)
+        {
             var scenario = new Scenario();
 
-            await scenario.RunAsync(hasDiscountCode, requested, hasItems, "STORED25");
+            var outcome = await scenario.RunAsync(hasDiscountCode, requested, true, "STORED25", DiscountCodeValidation.Valid("Stored25"), revalidateStoredDiscountCode: true);
 
-            Assert.True(scenario.PersistedReads <= 1);
+            Assert.False(outcome.IsRejected);
+            Assert.Equal("Stored25", outcome.DiscountCode);
+            Assert.Equal(new[] { "STORED25" }, scenario.ValidatedCodes);
+        }
+
+        [Theory]
+        [InlineData(DiscountCodeValidationStatus.NotAssigned)]
+        [InlineData(DiscountCodeValidationStatus.Disabled)]
+        [InlineData(DiscountCodeValidationStatus.NotFound)]
+        [InlineData(DiscountCodeValidationStatus.ClientUnknown)]
+        [InlineData(DiscountCodeValidationStatus.Unavailable)]
+        public async Task ResolveAsync_WhenStoredCodesAreRevalidated_RejectsAStoredCodeThatIsNotApplicableForTheSave(DiscountCodeValidationStatus status)
+        {
+            // A code stored while the basket was for another client, or revoked since, must not price this save.
+            var scenario = new Scenario();
+
+            var outcome = await scenario.RunAsync(false, null, true, "STORED25", DiscountCodeValidation.Invalid(status), revalidateStoredDiscountCode: true);
+
+            Assert.True(outcome.IsRejected);
+            Assert.Null(outcome.DiscountCode);
+            Assert.Equal(new[] { status }, scenario.RejectionStatuses);
+        }
+
+        [Theory]
+        [InlineData(false, null)]
+        [InlineData(true, "stored25")]
+        public async Task ResolveAsync_WhenStoredCodesAreRevalidated_KeepsTheStoredCodeOfAnEmptiedBasketWithoutValidating(bool hasDiscountCode, string requested)
+        {
+            // Nothing is priced, and the code is validated again as soon as lines are added.
+            var scenario = new Scenario();
+
+            var outcome = await scenario.RunAsync(hasDiscountCode, requested, false, "STORED25", DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned), revalidateStoredDiscountCode: true);
+
+            Assert.False(outcome.IsRejected);
+            Assert.Equal("STORED25", outcome.DiscountCode);
+            Assert.Empty(scenario.ValidatedCodes);
+        }
+
+        [Fact]
+        public async Task ResolveAsync_WhenStoredCodesAreRevalidated_StillRemovesACodeWithoutValidating()
+        {
+            var scenario = new Scenario();
+
+            var outcome = await scenario.RunAsync(true, null, true, "STORED25", DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned), revalidateStoredDiscountCode: true);
+
+            Assert.False(outcome.IsRejected);
+            Assert.Null(outcome.DiscountCode);
+            Assert.Empty(scenario.ValidatedCodes);
+        }
+
+        [Fact]
+        public async Task ResolveAsync_WhenStoredCodesAreRevalidated_ButGrulaIsNotConfigured_KeepsTheStoredCodeWithoutValidating()
+        {
+            var scenario = new Scenario();
+
+            var outcome = await scenario.RunAsync(false, null, true, "STORED25", isGrulaConfigured: false, revalidateStoredDiscountCode: true);
+
+            Assert.False(outcome.IsRejected);
+            Assert.Equal("STORED25", outcome.DiscountCode);
+            Assert.Empty(scenario.ValidatedCodes);
+        }
+
+        [Fact]
+        public async Task ResolveAsync_WhenStoredCodesAreRevalidated_ValidatesAReplacementOnlyOnce()
+        {
+            var scenario = new Scenario();
+
+            var outcome = await scenario.RunAsync(true, "NEW25", true, "STORED25", revalidateStoredDiscountCode: true);
+
+            Assert.Equal("NEW25", outcome.DiscountCode);
+            Assert.Equal(new[] { "NEW25" }, scenario.ValidatedCodes);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Foundation.Extensions.Definitions;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using System.Threading.Tasks;
 
 namespace Foundation.Extensions.Services.Claims
@@ -13,9 +12,9 @@ namespace Foundation.Extensions.Services.Claims
             _cache = cache;
         }
 
-        public async Task InvalidateAsync(string email, System.Guid? organisationId)
+        public Task InvalidateAsync(System.Guid? organisationId)
         {
-            await _cache.RemoveAsync(ClaimsEnrichmentConstants.GetClientClaimsCacheKey(email, organisationId));
+            return ClientClaimsCacheVersion.RenewAsync(_cache, organisationId);
         }
     }
 }

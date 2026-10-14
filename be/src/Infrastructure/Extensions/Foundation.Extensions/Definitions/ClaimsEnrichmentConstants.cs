@@ -12,9 +12,26 @@
         /// </summary>
         public static readonly string ClientClaimsCacheKey = "ClientClaims";
 
-        public static string GetClientClaimsCacheKey(string email, System.Guid? organisationId)
+        /// <summary>
+        /// Prefix of the current version of an organisation's cached client claims. The primary contact and every team
+        /// member cache their claims under their own email, so an edit of the client cannot remove them one by one: it
+        /// replaces the version instead, and the entries of every member of the organisation stop being read at once.
+        /// </summary>
+        public static readonly string ClientClaimsVersionCacheKey = "ClientClaimsVersion";
+
+        public static string GetClientClaimsCacheKey(string email, System.Guid? organisationId, string version)
         {
-            return $"{ClientClaimsCacheKey}-{organisationId?.ToString("N") ?? "none"}-{email}";
+            return $"{ClientClaimsCacheKey}-{FormatOrganisationId(organisationId)}-{version}-{email}";
+        }
+
+        public static string GetClientClaimsVersionCacheKey(System.Guid? organisationId)
+        {
+            return $"{ClientClaimsVersionCacheKey}-{FormatOrganisationId(organisationId)}";
+        }
+
+        private static string FormatOrganisationId(System.Guid? organisationId)
+        {
+            return organisationId?.ToString("N") ?? "none";
         }
     }
 }

@@ -86,6 +86,33 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact]
+        public async Task CopiedBasketAndBindingCookies_DoNotLetAnotherClientUseOrCheckoutTheDiscount()
+        {
+            var buyer = await CreateBuyerAsync();
+            var codeText = DiscountCodeKit.NewCode();
+            await buyer.Kit.CreateCodeAsync(codeText, new[] { buyer.Client.Id });
+            var applied = await buyer.Web.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, Basket(buyer.Product, true, codeText));
+            await RestClient.AssertStatusAsync(applied, HttpStatusCode.OK);
+            var basket = await RestClient.ReadAsync<BasketResponseModel>(applied);
+            var copiedCookies = string.Join("; ", applied.Headers.GetValues("Set-Cookie").Select(x => x.Split(';')[0]));
+            Assert.Contains("basket-discount-binding=", copiedCookies);
+
+            var otherClient = await buyer.Kit.CreateClientAsync();
+            var otherBuyer = await buyer.Kit.CreateBuyerWebClientAsync(otherClient);
+            var save = await otherBuyer.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint,
+                Basket(buyer.Product, false, null, quantity: 5), copiedCookies);
+
+            await RestClient.AssertStatusAsync(save, HttpStatusCode.BadRequest);
+            Assert.Equal(InvalidCodeMessage, await RestClient.ReadMessageAsync(save));
+            Assert.Equal(1, (await GetPersistedAsync(basket.Id)).Items.Single().Quantity);
+
+            var checkout = await otherBuyer.PostForResponseAsync(ApiEndpoints.OrderCheckoutApiEndpoint,
+                new { BasketId = basket.Id, ClientId = buyer.Client.Id }, copiedCookies);
+
+            await RestClient.AssertStatusAsync(checkout, HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
         public async Task Apply_ByAMemberOfTheClientsTeam_IsAcceptedOnTheirVeryFirstRequest()
         {
             var buyer = await CreateBuyerAsync();

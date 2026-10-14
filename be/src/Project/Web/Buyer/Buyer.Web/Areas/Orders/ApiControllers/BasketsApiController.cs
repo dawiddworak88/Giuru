@@ -57,6 +57,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketPriceClientResolver _priceClientResolver;
         private readonly IBasketRepricingService _basketRepricingService;
         private readonly IDiscountCodeValidator _discountCodeValidator;
+        private readonly IBasketDiscountCodeBinding _discountCodeBinding;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
@@ -72,7 +73,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IPriceProductFactory priceProductFactory,
             IBasketPriceClientResolver priceClientResolver,
             IBasketRepricingService basketRepricingService,
-            IDiscountCodeValidator discountCodeValidator)
+            IDiscountCodeValidator discountCodeValidator,
+            IBasketDiscountCodeBinding discountCodeBinding)
         {
             _basketRepository = basketRepository;
             _linkGenerator = linkGenerator;
@@ -88,6 +90,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceClientResolver = priceClientResolver;
             _basketRepricingService = basketRepricingService;
             _discountCodeValidator = discountCodeValidator;
+            _discountCodeBinding = discountCodeBinding;
         }
 
         [HttpPost]
@@ -110,15 +113,21 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
             var id = Guid.Parse(reqCookie);
 
+            // An explicit removal needs no stored code. Every retained code needs proof of its original client.
+            var existingDiscountCode = _options.Value.IsGrulaConfigured && model.HasDiscountCode && model.DiscountCode is null
+                ? null
+                : (await _basketRepository.GetBasketById(token, language, id))?.DiscountCode;
+
             var discountOutcome = await BasketDiscountCodeCoordinator.ResolveAsync(
                 _options.Value.IsGrulaConfigured,
                 model.HasDiscountCode,
                 model.DiscountCode,
                 items.Any(),
-                async () => (await _basketRepository.GetBasketById(token, language, id))?.DiscountCode,
+                () => Task.FromResult(existingDiscountCode),
                 () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
-                code => _discountCodeValidator.ValidateAsync(User.GetClientId(), code, token),
-                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
+                code => _discountCodeValidator.ValidateAsync(clientId, code, token),
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status),
+                revalidateStoredDiscountCode: !_discountCodeBinding.IsBoundToClient(id, clientId, existingDiscountCode));
 
             if (discountOutcome.IsRejected)
             {
@@ -154,6 +163,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     ExpectedLeadTime = x.ExpectedLeadTime
                 }),
                 discountCode);
+
+            // An empty or unpriced save has not validated a retained code and must not grant a new exemption.
+            if (string.IsNullOrWhiteSpace(discountCode) || (_options.Value.IsGrulaConfigured && items.Any()))
+            {
+                _discountCodeBinding.Bind(id, clientId, discountCode);
+            }
 
             var basketResponseModel = new BasketResponseModel
             {
@@ -282,6 +297,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             await _basketRepository.DeleteAsync(token, language, id);
 
             Response.Cookies.Delete(BasketConstants.BasketCookieName);
+            Response.Cookies.Delete(BasketConstants.DiscountCodeBindingCookieName);
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _orderLocalizer.GetString("BasketDeletedSuccessfully").Value });
         }

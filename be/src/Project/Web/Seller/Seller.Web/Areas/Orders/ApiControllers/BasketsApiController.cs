@@ -101,7 +101,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     : null,
                 () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
                 code => _discountCodeValidator.ValidateAsync(model.ClientId, code, token),
-                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status));
+                status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status),
+                // Every save names its client, so a stored code has to be applicable for that client again.
+                revalidateStoredDiscountCode: true);
 
             if (discountOutcome.IsRejected)
             {

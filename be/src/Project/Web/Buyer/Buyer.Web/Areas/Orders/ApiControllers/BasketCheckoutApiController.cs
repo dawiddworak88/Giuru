@@ -4,9 +4,11 @@ using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Repositories.UserApprovals;
 using Buyer.Web.Shared.Definitions.Basket;
+using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.Services.DiscountCodes;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Helpers;
@@ -35,6 +37,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly IBasketDiscountCodeBinding _discountCodeBinding;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -42,7 +45,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
-            IIdentityRepository identityRepository)
+            IIdentityRepository identityRepository,
+            IBasketDiscountCodeBinding discountCodeBinding)
         {
             _basketRepository = basketRepository;
             _basketService = basketService;
@@ -50,6 +54,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _clientAddressesRepository = clientAddressesRepository;
             _userApprovalsRepository = userApprovalsRepository;
             _identityRepository = identityRepository;
+            _discountCodeBinding = discountCodeBinding;
         }
 
         [HttpPost]
@@ -58,6 +63,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var organisationId = GuidHelper.ParseNullable(User.FindFirstValue(AccountConstants.Claims.OrganisationIdClaim));
+            var clientId = User.GetClientId();
 
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
 
@@ -73,7 +79,19 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
 
-            await _basketService.ValidateStockOutletQuantitiesAsync(model.BasketId, token, language);
+            var basketId = Guid.Parse(reqCookie);
+            var basket = await _basketRepository.GetBasketById(token, language, basketId);
+
+            // Checkout consumes saved prices. A different client (or a legacy basket without proof) must save and
+            // reprice the basket for themselves first; validating the code alone would keep another client's prices.
+            // Basket.Api returns an empty basket when the ID is new; null means the read failed, so fail closed.
+            if (basket is null || (!string.IsNullOrWhiteSpace(basket.DiscountCode)
+                && !_discountCodeBinding.IsBoundToClient(basketId, clientId, basket.DiscountCode)))
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value });
+            }
+
+            await _basketService.ValidateStockOutletQuantitiesAsync(basketId, token, language);
 
             var deliveryAddressesIds = new List<Guid>();
 
@@ -101,10 +119,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             await _basketRepository.CheckoutBasketAsync(
                 token,
                 language,
-                model.ClientId,
+                clientId,
                 model.ClientName,
                 User.FindFirstValue(ClaimTypes.Email),
-                Guid.Parse(reqCookie),
+                basketId,
                 clientAddresses?.FirstOrDefault(x => x.Id == model.BillingAddressId),
                 clientAddresses?.FirstOrDefault(x => x.Id == model.ShippingAddressId),
                 model.MoreInfo,

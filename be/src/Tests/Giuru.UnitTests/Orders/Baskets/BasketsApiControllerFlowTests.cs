@@ -103,7 +103,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
                 CreateBasketRepricingService(priceService),
-                DiscountCodeValidators.AlwaysValid())
+                DiscountCodeValidators.AlwaysValid(),
+                DiscountCodeBindingTestHelper.Create(httpContext))
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -190,7 +191,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
                 CreateBasketRepricingService(priceService),
-                DiscountCodeValidators.AlwaysValid())
+                DiscountCodeValidators.AlwaysValid(),
+                DiscountCodeBindingTestHelper.Create(httpContext))
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
