@@ -1,5 +1,6 @@
 ﻿using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.Infrastructure.Clients.Entities;
+using Client.Api.Infrastructure.DiscountCodes.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.Infrastructure.Roles.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientGroup> ClientGroups { get; set; }
         public DbSet<ClientGroupTranslation> ClientGroupTranslations { get; set; }
         public DbSet<ClientsGroup> ClientsGroups { get; set; }
+        public DbSet<DiscountCode> DiscountCodes { get; set; }
+        public DbSet<DiscountCodeClient> DiscountCodeClients { get; set; }
         public DbSet<ClientRole> ClientRoles { get; set; }
         public DbSet<ClientAccountManager> ClientAccountManagers { get; set; }
         public DbSet<ClientsAccountManagers> ClientsAccountManagers { get; set; }
@@ -35,5 +38,20 @@ namespace Client.Api.Infrastructure
         public DbSet<Option> FieldOptions { get; set; }
         public DbSet<OptionTranslation> FieldOptionTranslations { get; set; }
         public DbSet<OptionSet> FieldOptionSets { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<DiscountCode>()
+                .HasIndex(x => new { x.SellerId, x.Code })
+                .IsUnique()
+                .HasFilter("[IsActive] = 1");
+
+            modelBuilder.Entity<DiscountCodeClient>()
+                .HasIndex(x => new { x.DiscountCodeId, x.ClientId })
+                .IsUnique()
+                .HasFilter("[IsActive] = 1");
+        }
     }
 }

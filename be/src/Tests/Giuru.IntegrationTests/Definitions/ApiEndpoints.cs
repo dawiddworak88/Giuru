@@ -3,6 +3,7 @@
     public struct ApiEndpoints
     {
         public const string ClientsApiEndpoint = "Clients/ClientsApi";
+        public const string DiscountCodesClientApiEndpoint = "api/v1/DiscountCodes";
         public const string GetClientsApiEndpoint = "Clients/ClientsApi/Get";
         public const string ProductsApiEndpoint = "Products/ProductsApi";
         public const string GetProductsApiEndpoint = "Products/ProductsApi/Get";
