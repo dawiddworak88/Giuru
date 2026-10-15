@@ -38,16 +38,19 @@ export const useBasketDiscountCode = ({
         // cleared in a finally regardless: anything that escapes here - building the basket, or
         // applying the response - would otherwise leave the form spinning and block the order.
         try {
-            const { ok, jsonResponse, message } = await BasketDiscountCodeClient.save({
+            const { isSaved, notice, jsonResponse, message } = await BasketDiscountCodeClient.save({
                 updateBasketUrl,
                 basket: buildBasket(newDiscountCode),
                 generalErrorMessage
             });
 
-            if (ok) {
+            if (isSaved) {
                 applyBasketResponse(jsonResponse);
 
-                if (showSuccessMessage) {
+                if (notice) {
+                    toast.warn(notice);
+                }
+                else if (showSuccessMessage) {
                     toast.success(discountCodeAppliedMessage);
                 }
             }

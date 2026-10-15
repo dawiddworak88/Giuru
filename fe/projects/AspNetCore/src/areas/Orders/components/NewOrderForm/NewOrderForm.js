@@ -20,6 +20,7 @@ import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
 import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
+import BasketResponseHelper from "../../../../shared/helpers/baskets/BasketResponseHelper";
 import { useDiscountCode } from "../../../../shared/hooks/useDiscountCode";
 import { useBasketDiscountCode } from "../../../../shared/hooks/useBasketDiscountCode";
 import DiscountCodeField from "../../../../shared/components/DiscountCode/DiscountCodeField";
@@ -257,10 +258,12 @@ function NewOrderForm(props) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     AuthenticationHelper.HandleResponse(response);
-                    const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
+                    const { jsonResponse, message, isSaved, notice } = await BasketResponseHelper.read(response, props.generalErrorMessage);
 
-                    if (response.ok && jsonResponse) {
+                    if (isSaved) {
                         basketDiscountCode.applyBasketResponse(jsonResponse);
+
+                        if (notice) toast.warn(notice);
                     }
                     else {
                         toast.error(message);

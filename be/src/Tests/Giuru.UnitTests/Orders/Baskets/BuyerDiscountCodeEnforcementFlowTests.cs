@@ -46,15 +46,40 @@ namespace Giuru.UnitTests.Orders.Baskets
         public IActionResult Result { get; init; }
         public int SaveCalls { get; init; }
         public string SavedDiscountCode { get; init; }
+
+        /// <summary>The client the basket was saved, and so priced, for - recorded by the seller's saves only.</summary>
+        public Guid? SavedClientId { get; init; }
         public string PricedWithDiscountCode { get; init; }
         public int PricingCalls { get; init; }
-        public bool IssuedDiscountCodeBinding { get; init; }
 
         public int StatusCode => (Result as ObjectResult)?.StatusCode ?? 0;
 
-        public string Message => Result is ObjectResult { Value: not null } objectResult
-            ? objectResult.Value.GetType().GetProperty("Message")?.GetValue(objectResult.Value) as string
-            : null;
+        public string Message => GetResponseProperty("Message") as string;
+
+        /// <summary>The id of the basket in the response body - set only when the body carries the saved basket.</summary>
+        public Guid? ResponseBasketId => GetResponseProperty("Id") as Guid?;
+
+        public string ResponseDiscountCode => GetResponseProperty("DiscountCode") as string;
+
+        private object GetResponseProperty(string name)
+        {
+            return Result is ObjectResult { Value: not null } objectResult
+                ? objectResult.Value.GetType().GetProperty(name)?.GetValue(objectResult.Value)
+                : null;
+        }
+    }
+
+    internal static class LookupDown
+    {
+        /// <summary>The real validator over a lookup that cannot reach Client.Api, as it is wired in the apps.</summary>
+        public static IDiscountCodeValidator CreateValidator()
+        {
+            var lookup = Substitute.For<IDiscountCodeLookup>();
+            lookup.ValidateAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<string>())
+                .Returns<Task<DiscountCodeValidation>>(_ => throw new InvalidOperationException("Client.Api is down"));
+
+            return new DiscountCodeValidator(lookup, Substitute.For<ILogger<DiscountCodeValidator>>());
+        }
     }
 
     public class BuyerBasketsApiControllerDiscountCodeEnforcementTests
@@ -67,8 +92,6 @@ namespace Giuru.UnitTests.Orders.Baskets
             string requestedDiscountCode,
             string persistedDiscountCode,
             bool hasItems = true,
-            Guid? persistedCodeClientId = null,
-            bool hasBinding = true,
             bool isGrulaConfigured = true)
         {
             var basketId = Guid.NewGuid();
@@ -104,11 +127,6 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var httpContext = BuyerFlowHelpers.CreateHttpContext(basketId, ClientId);
 
-            if (hasBinding && persistedDiscountCode is not null)
-            {
-                DiscountCodeBindingTestHelper.AddProof(httpContext, basketId, persistedCodeClientId ?? ClientId, persistedDiscountCode);
-            }
-
             var controller = new BasketsApiController(
                 basketRepository,
                 Substitute.For<LinkGenerator>(),
@@ -123,8 +141,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 BuyerFlowHelpers.CreatePriceClientResolver(httpContext),
                 new BasketRepricingService(priceService, Substitute.For<ILogger<BasketRepricingService>>()),
-                validator,
-                DiscountCodeBindingTestHelper.Create(httpContext))
+                validator)
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -149,7 +166,6 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Result = result,
                 SaveCalls = saveCalls,
                 SavedDiscountCode = savedDiscountCode,
-                IssuedDiscountCodeBinding = DiscountCodeBindingTestHelper.HasNewBinding(httpContext, basketId, ClientId, savedDiscountCode),
                 PricingCalls = priceService.ReceivedCalls().Count(x => x.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync)),
                 PricedWithDiscountCode = priceService.ReceivedCalls()
                     .Where(x => x.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync))
@@ -169,7 +185,6 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Equal(1, flow.SaveCalls);
             Assert.Equal("SUMMER25", flow.SavedDiscountCode);
             Assert.Equal("SUMMER25", flow.PricedWithDiscountCode);
-            Assert.True(flow.IssuedDiscountCodeBinding);
             await validator.Received(1).ValidateAsync(ClientId, "summer25", "token");
         }
 
@@ -222,75 +237,79 @@ namespace Giuru.UnitTests.Orders.Baskets
         [InlineData(true, "stored25")]
         [InlineData(true, "   ")]
         [InlineData(false, null)]
-        public async Task Index_WhenTheStoredCodeIsKept_SurvivesRevocationWithoutAnyValidationAndRepricesWithTheStoredSpelling(bool hasDiscountCode, string requested)
+        public async Task Index_WhenTheStoredCodeIsKept_RevalidatesItForTheBuyersOwnClientAndRepricesWithTheCanonicalSpelling(bool hasDiscountCode, string requested)
         {
-            // Every status the validator could answer with is a revocation; the stored code must not even ask.
-            var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.Disabled);
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(ClientId, "STORED25", "token").Returns(Task.FromResult(DiscountCodeValidation.Valid("Stored25")));
 
             var flow = await RunAsync(validator, hasDiscountCode, requested, "STORED25");
 
             Assert.Equal(1, flow.SaveCalls);
-            Assert.Equal("STORED25", flow.SavedDiscountCode);
-            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
-            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
-        }
-
-        [Fact]
-        public async Task Index_WhenTheStoredCodeIsKeptWhileTheLookupIsDown_StillSavesWithoutAskingTheLookup()
-        {
-            var validator = Substitute.For<IDiscountCodeValidator>();
-            validator.ValidateAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
-                .Returns<Task<DiscountCodeValidation>>(_ => throw new InvalidOperationException("Client.Api is down"));
-
-            var flow = await RunAsync(validator, false, null, "STORED25");
-
-            Assert.Equal(1, flow.SaveCalls);
-            Assert.Equal("STORED25", flow.SavedDiscountCode);
+            Assert.Equal("Stored25", flow.SavedDiscountCode);
+            Assert.Equal("Stored25", flow.PricedWithDiscountCode);
+            await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
         }
 
         [Theory]
-        [InlineData(true, "STORED25")]
-        [InlineData(true, " stored25 ")]
-        [InlineData(true, "   ")]
-        [InlineData(false, null)]
-        public async Task Index_AfterSwitchingAccounts_RevalidatesTheStoredCodeAndRejectsAnUnassignedCode(bool hasDiscountCode, string requested)
+        [InlineData(DiscountCodeValidationStatus.Disabled, true, "STORED25")]
+        [InlineData(DiscountCodeValidationStatus.NotFound, true, " stored25 ")]
+        [InlineData(DiscountCodeValidationStatus.NotAssigned, true, "   ")]
+        [InlineData(DiscountCodeValidationStatus.NotAssigned, false, null)]
+        public async Task Index_WhenTheStoredCodeIsNoLongerApplicableForTheBuyersClient_SavesTheBasketRepricedWithoutItAndAnswers422WithTheBasket(DiscountCodeValidationStatus status, bool hasDiscountCode, string requested)
         {
-            var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.NotAssigned);
+            // The code was revoked after it was stored, or the basket was stored by another client: its cookie survives
+            // logout. Neither may block the buyer's edit - the code goes, and the buyer is told why the prices changed.
+            var validator = DiscountCodeValidators.Returning(status);
 
-            var flow = await RunAsync(validator, hasDiscountCode, requested, "STORED25", persistedCodeClientId: Guid.NewGuid());
+            var flow = await RunAsync(validator, hasDiscountCode, requested, "STORED25");
 
-            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
-            Assert.Equal(0, flow.SaveCalls);
-            Assert.Equal(0, flow.PricingCalls);
-            Assert.False(flow.IssuedDiscountCodeBinding);
+            Assert.Equal((int)HttpStatusCode.UnprocessableEntity, flow.StatusCode);
+            Assert.Equal("DiscountCodeRemovedPricesUpdated", flow.Message);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Null(flow.SavedDiscountCode);
+            Assert.Equal(1, flow.PricingCalls);
+            Assert.Null(flow.PricedWithDiscountCode);
+            Assert.NotNull(flow.ResponseBasketId);
+            Assert.Null(flow.ResponseDiscountCode);
             await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
         }
 
         [Fact]
-        public async Task Index_ForALegacyBasket_ValidatesItsCodeBeforeIssuingABinding()
+        public async Task Index_WhenTheStoredCodeIsKeptWhileTheLookupIsDown_StillSavesAndPricesWithIt()
+        {
+            var flow = await RunAsync(LookupDown.CreateValidator(), false, null, "STORED25");
+
+            Assert.Equal((int)HttpStatusCode.OK, flow.StatusCode);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Equal("STORED25", flow.SavedDiscountCode);
+            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenGrulaIsNotConfigured_AnExplicitRemovalStillClearsTheStoredCode()
         {
             var validator = DiscountCodeValidators.AlwaysValid();
 
-            var flow = await RunAsync(validator, false, null, "STORED25", hasBinding: false);
+            var flow = await RunAsync(validator, true, null, "STORED25", isGrulaConfigured: false);
 
+            Assert.Equal((int)HttpStatusCode.OK, flow.StatusCode);
             Assert.Equal(1, flow.SaveCalls);
-            Assert.True(flow.IssuedDiscountCodeBinding);
-            await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
+            Assert.Null(flow.SavedDiscountCode);
+            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
         }
 
         [Theory]
         [InlineData(false, true)]
         [InlineData(true, false)]
-        public async Task Index_WhenAnUnboundCodeIsRetainedWithoutPricing_DoesNotGrantAnExemption(bool hasItems, bool isGrulaConfigured)
+        public async Task Index_WhenTheStoredCodeIsRetainedWithoutPricing_KeepsItWithoutValidating(bool hasItems, bool isGrulaConfigured)
         {
+            // Nothing is priced with it, and it is validated again by the next save that prices it.
             var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.NotAssigned);
 
-            var flow = await RunAsync(validator, false, null, "STORED25", hasItems: hasItems,
-                hasBinding: false, isGrulaConfigured: isGrulaConfigured);
+            var flow = await RunAsync(validator, false, null, "STORED25", hasItems: hasItems, isGrulaConfigured: isGrulaConfigured);
 
             Assert.Equal(1, flow.SaveCalls);
             Assert.Equal("STORED25", flow.SavedDiscountCode);
-            Assert.False(flow.IssuedDiscountCodeBinding);
             await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
         }
 
@@ -328,9 +347,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             IDiscountCodeValidator validator,
             bool formHasDiscountCode,
             string requestedDiscountCode,
-            string persistedDiscountCode,
-            Guid? persistedCodeClientId = null,
-            bool hasBinding = true)
+            string persistedDiscountCode)
         {
             var basketId = Guid.NewGuid();
             var productId = Guid.NewGuid();
@@ -378,11 +395,6 @@ namespace Giuru.UnitTests.Orders.Baskets
                 : new Dictionary<string, StringValues>();
             var httpContext = BuyerFlowHelpers.CreateHttpContext(basketId, ClientId, formFields);
 
-            if (hasBinding && persistedDiscountCode is not null)
-            {
-                DiscountCodeBindingTestHelper.AddProof(httpContext, basketId, persistedCodeClientId ?? ClientId, persistedDiscountCode);
-            }
-
             var controller = new OrderFileApiController(
                 orderFileService,
                 productsRepository,
@@ -401,8 +413,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 BuyerFlowHelpers.CreatePriceClientResolver(httpContext),
                 new BasketRepricingService(priceService, Substitute.For<ILogger<BasketRepricingService>>()),
-                validator,
-                DiscountCodeBindingTestHelper.Create(httpContext))
+                validator)
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -414,7 +425,6 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Result = result,
                 SaveCalls = saveCalls,
                 SavedDiscountCode = savedDiscountCode,
-                IssuedDiscountCodeBinding = DiscountCodeBindingTestHelper.HasNewBinding(httpContext, basketId, ClientId, savedDiscountCode),
                 PricingCalls = priceService.ReceivedCalls().Count(x => x.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync)),
                 PricedWithDiscountCode = priceService.ReceivedCalls()
                     .Where(x => x.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync))
@@ -433,7 +443,6 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             Assert.Equal("NEW25", flow.SavedDiscountCode);
             Assert.Equal("NEW25", flow.PricedWithDiscountCode);
-            Assert.True(flow.IssuedDiscountCodeBinding);
             await validator.Received(1).ValidateAsync(ClientId, "new25", "token");
         }
 
@@ -458,16 +467,17 @@ namespace Giuru.UnitTests.Orders.Baskets
         [InlineData(true, "stored25")]
         [InlineData(true, "   ")]
         [InlineData(false, null)]
-        public async Task Index_WhenTheStoredCodeIsKept_SurvivesRevocationWithoutAnyValidationAndRepricesWithTheStoredSpelling(bool formHasDiscountCode, string requested)
+        public async Task Index_WhenTheStoredCodeIsKept_RevalidatesItForTheBuyersOwnClientAndRepricesWithTheCanonicalSpelling(bool formHasDiscountCode, string requested)
         {
-            var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.NotAssigned);
+            var validator = Substitute.For<IDiscountCodeValidator>();
+            validator.ValidateAsync(ClientId, "STORED25", "token").Returns(Task.FromResult(DiscountCodeValidation.Valid("Stored25")));
 
             var flow = await RunAsync(validator, formHasDiscountCode, requested, "STORED25");
 
             Assert.Equal(1, flow.SaveCalls);
-            Assert.Equal("STORED25", flow.SavedDiscountCode);
-            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
-            await validator.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
+            Assert.Equal("Stored25", flow.SavedDiscountCode);
+            Assert.Equal("Stored25", flow.PricedWithDiscountCode);
+            await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
         }
 
         [Fact]
@@ -483,31 +493,33 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Theory]
-        [InlineData(true, "stored25")]
-        [InlineData(false, null)]
-        public async Task Index_AfterSwitchingAccounts_RejectsAnUploadWithAnotherClientsCode(bool formHasDiscountCode, string requested)
+        [InlineData(DiscountCodeValidationStatus.Disabled, true, "stored25")]
+        [InlineData(DiscountCodeValidationStatus.NotAssigned, false, null)]
+        public async Task Index_WhenTheStoredCodeIsNoLongerApplicableForTheBuyersClient_SavesTheUploadRepricedWithoutItAndAnswers422WithTheBasket(DiscountCodeValidationStatus status, bool formHasDiscountCode, string requested)
         {
-            var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.NotAssigned);
+            var validator = DiscountCodeValidators.Returning(status);
 
-            var flow = await RunAsync(validator, formHasDiscountCode, requested, "STORED25", persistedCodeClientId: Guid.NewGuid());
+            var flow = await RunAsync(validator, formHasDiscountCode, requested, "STORED25");
 
-            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
-            Assert.Equal(0, flow.SaveCalls);
-            Assert.Equal(0, flow.PricingCalls);
-            Assert.False(flow.IssuedDiscountCodeBinding);
+            Assert.Equal((int)HttpStatusCode.UnprocessableEntity, flow.StatusCode);
+            Assert.Equal("DiscountCodeRemovedPricesUpdated", flow.Message);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Null(flow.SavedDiscountCode);
+            Assert.Equal(1, flow.PricingCalls);
+            Assert.Null(flow.PricedWithDiscountCode);
+            Assert.NotNull(flow.ResponseBasketId);
             await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
         }
 
         [Fact]
-        public async Task Index_ForALegacyBasket_ValidatesTheStoredCodeBeforeBindingTheUpload()
+        public async Task Index_WhenTheStoredCodeIsKeptWhileTheLookupIsDown_StillSavesTheUploadAndPricesWithIt()
         {
-            var validator = DiscountCodeValidators.AlwaysValid();
+            var flow = await RunAsync(LookupDown.CreateValidator(), false, null, "STORED25");
 
-            var flow = await RunAsync(validator, false, null, "STORED25", hasBinding: false);
-
+            Assert.Equal((int)HttpStatusCode.OK, flow.StatusCode);
             Assert.Equal(1, flow.SaveCalls);
-            Assert.True(flow.IssuedDiscountCodeBinding);
-            await validator.Received(1).ValidateAsync(ClientId, "STORED25", "token");
+            Assert.Equal("STORED25", flow.SavedDiscountCode);
+            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
         }
     }
 

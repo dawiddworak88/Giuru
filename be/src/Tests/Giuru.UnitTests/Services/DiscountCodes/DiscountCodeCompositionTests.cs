@@ -19,11 +19,8 @@ namespace Giuru.UnitTests.Services.DiscountCodes
     {
         private static readonly Guid ClientId = Guid.NewGuid();
 
-        private static ServiceProvider BuildBuyerProvider(IDiscountCodeLookup lookup, ClaimsPrincipal user = null, string storedDiscountCode = null)
+        private static ServiceProvider BuildBuyerProvider(IDiscountCodeLookup lookup, ClaimsPrincipal user = null)
         {
-            var storedDiscountCodeReader = Substitute.For<IStoredDiscountCodeReader>();
-            storedDiscountCodeReader.ReadAsync(Arg.Any<Guid?>(), Arg.Any<string>()).Returns(Task.FromResult(storedDiscountCode));
-
             var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
@@ -36,9 +33,7 @@ namespace Giuru.UnitTests.Services.DiscountCodes
             var services = new ServiceCollection();
             services.AddSingleton(httpContextAccessor);
             services.AddSingleton(Substitute.For<ILogger<DiscountCodeValidator>>());
-            services.AddSingleton(Substitute.For<ILogger<VerifiedDiscountCodePriceClientResolver>>());
             services.AddSingleton(lookup);
-            services.AddSingleton(storedDiscountCodeReader);
             services.AddSingleton<IPricingSettings>(new TestPricingSettings());
             services.AddScoped<IDiscountCodeValidator, DiscountCodeValidator>();
             services.RegisterPriceClientResolvers<ClaimsPriceClientResolver>();
@@ -79,25 +74,6 @@ namespace Giuru.UnitTests.Services.DiscountCodes
 
             Assert.IsType<ClaimsPriceClientResolver>(resolver);
             Assert.Equal("STORED25", priceClient.DiscountCode);
-            await lookup.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
-        }
-
-        [Fact]
-        public async Task ARevokedStoredCode_IsPricedTheSameOnAProductPageAsInTheBasket()
-        {
-            // The product page must not show the undiscounted price while the basket charges the discounted one.
-            var lookup = Substitute.For<IDiscountCodeLookup>();
-            lookup.ValidateAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<string>())
-                .Returns(Task.FromResult(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.Disabled)));
-
-            using var provider = BuildBuyerProvider(lookup, storedDiscountCode: "STORED25");
-            using var scope = provider.CreateScope();
-
-            var productPriceClient = await scope.ServiceProvider.GetRequiredService<IPriceClientResolver>().ResolveAsync(null, "STORED25", "token");
-            var basketPriceClient = await scope.ServiceProvider.GetRequiredService<IBasketPriceClientResolver>().ResolveAsync(null, "STORED25", "token");
-
-            Assert.Equal("STORED25", productPriceClient.DiscountCode);
-            Assert.Equal(basketPriceClient.DiscountCode, productPriceClient.DiscountCode);
             await lookup.DidNotReceiveWithAnyArgs().ValidateAsync(default, default, default);
         }
 

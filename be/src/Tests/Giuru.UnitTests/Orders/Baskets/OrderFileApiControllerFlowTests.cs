@@ -129,8 +129,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
                 CreateBasketRepricingService(priceService),
-                DiscountCodeValidators.AlwaysValid(),
-                DiscountCodeBindingTestHelper.Create(httpContext))
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -305,8 +304,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
                 CreateBasketRepricingService(priceService),
-                DiscountCodeValidators.AlwaysValid(),
-                DiscountCodeBindingTestHelper.Create(httpContext))
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -401,10 +399,10 @@ namespace Giuru.UnitTests.Orders.Baskets
                 }));
             priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
                 .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0) }));
-            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<Guid?>(), Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
                 .Returns(call =>
                 {
-                    savedItems = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList();
+                    savedItems = call.ArgAt<IEnumerable<SellerBasketItem>>(4).ToList();
                     return Task.FromResult(new SellerBasket { Id = basketId, Items = savedItems });
                 });
 
@@ -576,11 +574,11 @@ namespace Giuru.UnitTests.Orders.Baskets
                 }));
             priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
                 .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0) }));
-            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<Guid?>(), Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
                 .Returns(call =>
                 {
-                    savedDiscountCode = call.ArgAt<string>(4);
-                    return Task.FromResult(new SellerBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList() });
+                    savedDiscountCode = call.ArgAt<string>(5);
+                    return Task.FromResult(new SellerBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(4).ToList() });
                 });
 
             var formFields = formHasDiscountCode

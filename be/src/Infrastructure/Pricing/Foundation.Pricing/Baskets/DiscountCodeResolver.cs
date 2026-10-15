@@ -76,9 +76,7 @@ namespace Foundation.Pricing.Baskets
 
         /// <summary>
         /// Whether a requested code is the code stored on the basket: the same text, whatever its letter casing or
-        /// surrounding spacing. Where a stored code stays in force without revalidation, the basket save and the fresh
-        /// price reads both recognise it with this one test - otherwise a product page and the basket would price the
-        /// same code differently.
+        /// surrounding spacing. The frontend sends the applied code again with every edit, and that is not a new code.
         /// </summary>
         public static bool IsStoredDiscountCode(string requestedDiscountCode, string persistedDiscountCode)
         {

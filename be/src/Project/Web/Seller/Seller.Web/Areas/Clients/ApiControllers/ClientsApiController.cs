@@ -69,25 +69,26 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            Guid? organisationId;
+            // The organisation is looked up by email, so a new email moves the client to another organisation. Read the
+            // one it is in now before the save: its members must stop pricing for the client as well.
+            var previousOrganisationId = model.Id.HasValue
+                ? (await _clientsRepository.GetClientAsync(token, language, model.Id))?.OrganisationId
+                : null;
 
             var organisation = await _organisationsRepository.GetAsync(token, language, model.Email);
 
-            if (organisation is not null)
-            {
-                organisationId = organisation.Id;
-
-                if (organisation.Name != model.Name)
-                {
-                    await _organisationsRepository.UpdateAsync(token, language, organisation.Id.Value, model.Name);
-                }
-            }
-            else
-            {
-                organisationId = await _organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
-            }
+            var organisationId = organisation is not null
+                ? organisation.Id
+                : await _organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
 
             var clientId = await _clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.CountryId, model.PreferedCurrencyId, model.PhoneNumber, model.IsDisabled, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds, model.DefaultDeliveryAddressId, model.DefaultBillingAddressId);
+
+            // Renamed only once the client is saved: the save refuses an email that is another client's, and the
+            // organisation found by it is then that client's, which keeps its name.
+            if (organisation is not null && organisation.Name != model.Name)
+            {
+                await _organisationsRepository.UpdateAsync(token, language, organisation.Id.Value, model.Name);
+            }
 
             await _organisationsRepository.UpdateStatusAsync(token, language, organisationId.Value, model.IsDisabled);
 
@@ -102,6 +103,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             }
 
             await _cacheInvalidatorService.InvalidateAsync(organisationId);
+
+            if (previousOrganisationId.HasValue && previousOrganisationId != organisationId)
+            {
+                await _cacheInvalidatorService.InvalidateAsync(previousOrganisationId);
+            }
 
             return StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = _clientLocalizer.GetString("ClientSavedSuccessfully").Value });
         }
@@ -119,6 +125,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             if (client is not null)
             {
                 await _organisationsRepository.UpdateStatusAsync(token, language, client.OrganisationId, true);
+
+                // Only once the client is deleted: a buyer request in between would otherwise cache it again.
+                await _cacheInvalidatorService.InvalidateAsync(client.OrganisationId);
             }
 
             return StatusCode((int)HttpStatusCode.OK, new { Message = _clientLocalizer.GetString("ClientDeletedSuccessfully").Value });

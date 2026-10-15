@@ -7,6 +7,7 @@ using Foundation.Pricing.DiscountCodes;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.Repositories;
@@ -43,6 +44,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IOutletRepository _outletRepository;
         private readonly IDiscountCodeValidator _discountCodeValidator;
         private readonly IOptions<AppSettings> _options;
+        private readonly ILogger<BasketCheckoutApiController> _logger;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -55,7 +57,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
             IDiscountCodeValidator discountCodeValidator,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            ILogger<BasketCheckoutApiController> logger)
         {
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
@@ -68,6 +71,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _outletRepository = outletRepository;
             _discountCodeValidator = discountCodeValidator;
             _options = options;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -83,15 +87,31 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 throw new CustomException(_orderLocalizer.GetString("BasketNotFound").Value, (int)HttpStatusCode.NotFound);
             }
 
-            // The order keeps the prices the basket was saved with, but the client is named again here. The stored code has
-            // to be applicable for this client too, or a basket priced with one client's code could be ordered for another.
-            if (_options.Value.IsGrulaConfigured && !string.IsNullOrWhiteSpace(basket.DiscountCode))
+            if (_options.Value.IsGrulaConfigured)
             {
-                var validation = await _discountCodeValidator.ValidateAsync(model.ClientId, basket.DiscountCode, token);
-
-                if (!validation.IsValid)
+                // The order keeps the prices the basket was saved with, and those were calculated for the client of its last
+                // save: their currency, country and postal code, and a discount code validated for them. The client is named
+                // again here, so a basket priced for another client - or saved before its client was recorded - is refused,
+                // even when its code is applicable for both. It has to be saved for this client first.
+                if (basket.ClientId != model.ClientId)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, validation.Status) });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("BasketPricedForAnotherClient").Value });
+                }
+
+                // The stored code was applicable for this client when the basket was priced with it, but it may have been
+                // revoked since. A code that cannot be verified right now does not block the order.
+                if (!string.IsNullOrWhiteSpace(basket.DiscountCode))
+                {
+                    var validation = await _discountCodeValidator.ValidateAsync(model.ClientId, basket.DiscountCode, token);
+
+                    if (validation.Status is DiscountCodeValidationStatus.Unavailable)
+                    {
+                        _logger.LogWarning("The discount code stored on basket {BasketId} could not be verified at checkout. The order keeps the prices the basket was saved with.", model.BasketId);
+                    }
+                    else if (!validation.IsValid)
+                    {
+                        return StatusCode((int)HttpStatusCode.BadRequest, new { Message = DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, validation.Status) });
+                    }
                 }
             }
 

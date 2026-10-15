@@ -193,6 +193,7 @@ namespace Basket.Api.Services
             var response = new BasketServiceModel
             {
                 Id = basket.Id.Value,
+                ClientId = basket.ClientId,
                 DiscountCode = basket.DiscountCode,
                 Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {
@@ -220,6 +221,7 @@ namespace Basket.Api.Services
             var basketModel = new BasketRepositoryModel
             {
                 Id = serviceModel.Id,
+                ClientId = serviceModel.ClientId,
                 DiscountCode = serviceModel.DiscountCode,
                 Items = serviceModel.Items.OrEmptyIfNull().Select(x => new BasketItemRepositoryModel
                 {
@@ -244,6 +246,7 @@ namespace Basket.Api.Services
             return new BasketServiceModel
             {
                 Id = result.Id,
+                ClientId = result.ClientId,
                 DiscountCode = result.DiscountCode,
                 Items = result.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {

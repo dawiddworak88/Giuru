@@ -68,6 +68,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             var productId = Guid.NewGuid();
             var saveCalls = 0;
             string savedDiscountCode = null;
+            Guid? savedClientId = null;
             var basketRepository = Substitute.For<SellerIBasketRepository>();
             var productsRepository = Substitute.For<SellerIProductsRepository>();
             var priceService = Substitute.For<IPriceService>();
@@ -89,13 +90,14 @@ namespace Giuru.UnitTests.Orders.Baskets
                 }));
             priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
                 .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0), DiscountCode = call.ArgAt<string>(1) }));
-            basketRepository.SaveAsync("token", Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+            basketRepository.SaveAsync("token", Arg.Any<string>(), basketId, Arg.Any<Guid?>(), Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
                 .Returns(call =>
                 {
                     saveCalls++;
-                    savedDiscountCode = call.ArgAt<string>(4);
+                    savedClientId = call.ArgAt<Guid?>(3);
+                    savedDiscountCode = call.ArgAt<string>(5);
 
-                    return Task.FromResult(new SellerBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList() });
+                    return Task.FromResult(new SellerBasket { Id = basketId, ClientId = savedClientId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(4).ToList() });
                 });
 
             var controller = new SellerBasketsApiController(
@@ -138,6 +140,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Result = result,
                 SaveCalls = saveCalls,
                 SavedDiscountCode = savedDiscountCode,
+                SavedClientId = savedClientId,
                 PricingCalls = priceService.ReceivedCalls().Count(x => x.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync)),
                 PricedWithDiscountCode = priceClientResolver.ReceivedCalls()
                     .Where(x => x.GetMethodInfo().Name == nameof(IPriceClientResolver.ResolveAsync))
@@ -206,7 +209,8 @@ namespace Giuru.UnitTests.Orders.Baskets
         [InlineData(false, null)]
         public async Task Index_WhenTheBasketIsSavedForAnotherClient_DoesNotCarryTheStoredCodeOver(bool hasDiscountCode, string requested)
         {
-            // The code was applied for client A; the same basket is now saved for client B, to whom it is not assigned.
+            // The code was applied for client A; the same basket is now saved for client B, to whom it is not assigned. The
+            // seller's edit is saved, priced without the code, and the 422 says why the prices changed.
             var otherClientId = Guid.NewGuid();
             var validator = Substitute.For<IDiscountCodeValidator>();
             validator.ValidateAsync(otherClientId, "STORED25", "token")
@@ -214,10 +218,15 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var flow = await RunAsync(validator, hasDiscountCode, requested, "STORED25", otherClientId);
 
-            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
-            Assert.Equal("DiscountCodeNotAssignedToClient", flow.Message);
-            Assert.Equal(0, flow.SaveCalls);
-            Assert.Equal(0, flow.PricingCalls);
+            Assert.Equal((int)HttpStatusCode.UnprocessableEntity, flow.StatusCode);
+            Assert.Equal("DiscountCodeRemovedPricesUpdated", flow.Message);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Null(flow.SavedDiscountCode);
+            Assert.Equal(otherClientId, flow.SavedClientId);
+            Assert.Equal(1, flow.PricingCalls);
+            Assert.Null(flow.PricedWithDiscountCode);
+            Assert.NotNull(flow.ResponseBasketId);
+            Assert.Null(flow.ResponseDiscountCode);
             await validator.Received(1).ValidateAsync(otherClientId, "STORED25", "token");
         }
 
@@ -238,24 +247,14 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Fact]
-        public async Task Index_WhenTheStoredCodeCannotBeVerified_RejectsRatherThanPricingWithIt()
+        public async Task Index_WhenTheStoredCodeIsKeptWhileTheLookupIsDown_StillSavesAndPricesWithIt()
         {
-            var validator = new DiscountCodeValidator(LookupThatIsDown(), Substitute.For<ILogger<DiscountCodeValidator>>());
+            var flow = await RunAsync(LookupDown.CreateValidator(), false, null, "STORED25", ClientId);
 
-            var flow = await RunAsync(validator, false, null, "STORED25", ClientId);
-
-            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
-            Assert.Equal("DiscountCodeCouldNotBeVerified", flow.Message);
-            Assert.Equal(0, flow.SaveCalls);
-        }
-
-        private static IDiscountCodeLookup LookupThatIsDown()
-        {
-            var lookup = Substitute.For<IDiscountCodeLookup>();
-            lookup.ValidateAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<string>())
-                .Returns<Task<DiscountCodeValidation>>(_ => throw new InvalidOperationException("Client.Api is down"));
-
-            return lookup;
+            Assert.Equal((int)HttpStatusCode.OK, flow.StatusCode);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Equal("STORED25", flow.SavedDiscountCode);
+            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
         }
 
         [Fact]
@@ -286,6 +285,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             var productId = Guid.NewGuid();
             var saveCalls = 0;
             string savedDiscountCode = null;
+            Guid? savedClientId = null;
             var orderFileService = Substitute.For<SellerIOrderFileService>();
             var basketRepository = Substitute.For<SellerIBasketRepository>();
             var productsRepository = Substitute.For<SellerIProductsRepository>();
@@ -317,13 +317,14 @@ namespace Giuru.UnitTests.Orders.Baskets
                 }));
             priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
                 .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0), DiscountCode = call.ArgAt<string>(1) }));
-            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<Guid?>(), Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
                 .Returns(call =>
                 {
                     saveCalls++;
-                    savedDiscountCode = call.ArgAt<string>(4);
+                    savedClientId = call.ArgAt<Guid?>(3);
+                    savedDiscountCode = call.ArgAt<string>(5);
 
-                    return Task.FromResult(new SellerBasket { Id = basketId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList() });
+                    return Task.FromResult(new SellerBasket { Id = basketId, ClientId = savedClientId, DiscountCode = savedDiscountCode, Items = call.ArgAt<IEnumerable<SellerBasketItem>>(4).ToList() });
                 });
 
             var formFields = formHasDiscountCode
@@ -360,6 +361,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Result = result,
                 SaveCalls = saveCalls,
                 SavedDiscountCode = savedDiscountCode,
+                SavedClientId = savedClientId,
                 PricingCalls = priceService.ReceivedCalls().Count(x => x.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync)),
                 PricedWithDiscountCode = priceClientResolver.ReceivedCalls()
                     .Where(x => x.GetMethodInfo().Name == nameof(IPriceClientResolver.ResolveAsync))
@@ -411,20 +413,36 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var flow = await RunAsync(validator, formHasDiscountCode, requested, "STORED25", otherClientId);
 
-            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
-            Assert.Equal("DiscountCodeNotAssignedToClient", flow.Message);
-            Assert.Equal(0, flow.SaveCalls);
-            Assert.Equal(0, flow.PricingCalls);
+            Assert.Equal((int)HttpStatusCode.UnprocessableEntity, flow.StatusCode);
+            Assert.Equal("DiscountCodeRemovedPricesUpdated", flow.Message);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Null(flow.SavedDiscountCode);
+            Assert.Equal(otherClientId, flow.SavedClientId);
+            Assert.Equal(1, flow.PricingCalls);
+            Assert.Null(flow.PricedWithDiscountCode);
+            Assert.NotNull(flow.ResponseBasketId);
         }
 
         [Fact]
-        public async Task Index_WhenTheStoredCodeWasRevoked_RejectsTheUpload()
+        public async Task Index_WhenTheStoredCodeWasRevoked_SavesTheUploadWithoutIt()
         {
             var flow = await RunAsync(DiscountCodeValidators.Returning(DiscountCodeValidationStatus.Disabled), false, null, "STORED25", ClientId);
 
-            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
-            Assert.Equal("DiscountCodeDisabled", flow.Message);
-            Assert.Equal(0, flow.SaveCalls);
+            Assert.Equal((int)HttpStatusCode.UnprocessableEntity, flow.StatusCode);
+            Assert.Equal("DiscountCodeRemovedPricesUpdated", flow.Message);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Null(flow.SavedDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheStoredCodeIsKeptWhileTheLookupIsDown_StillSavesTheUploadAndPricesWithIt()
+        {
+            var flow = await RunAsync(LookupDown.CreateValidator(), false, null, "STORED25", ClientId);
+
+            Assert.Equal((int)HttpStatusCode.OK, flow.StatusCode);
+            Assert.Equal(1, flow.SaveCalls);
+            Assert.Equal("STORED25", flow.SavedDiscountCode);
+            Assert.Equal("STORED25", flow.PricedWithDiscountCode);
         }
 
         [Fact]
@@ -456,18 +474,26 @@ namespace Giuru.UnitTests.Orders.Baskets
     {
         private static readonly Guid ClientId = Guid.NewGuid();
 
-        private static async Task<(DiscountFlowResult Flow, int CheckoutCalls)> CheckoutAsync(IDiscountCodeValidator validator, string storedDiscountCode, Guid clientId)
+        private static async Task<(DiscountFlowResult Flow, int CheckoutCalls)> CheckoutAsync(
+            IDiscountCodeValidator validator,
+            string storedDiscountCode,
+            Guid? pricedForClientId,
+            Guid clientId,
+            bool isGrulaConfigured = true)
         {
             var basketId = Guid.NewGuid();
             var basketRepository = Substitute.For<SellerIBasketRepository>();
             var clientsRepository = Substitute.For<SellerIClientsRepository>();
-            var options = Options.Create(new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() });
+            var options = Options.Create(isGrulaConfigured
+                ? new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() }
+                : new SellerAppSettings());
 
-            // The basket was saved, and priced, while the form was for another client.
+            // The basket as its last save stored it: priced for pricedForClientId, and checked out below for clientId.
             basketRepository.GetBasketByIdAsync("token", Arg.Any<string>(), basketId)
                 .Returns(Task.FromResult(new SellerBasket
                 {
                     Id = basketId,
+                    ClientId = pricedForClientId,
                     DiscountCode = storedDiscountCode,
                     Items = new[] { new SellerBasketItem { ProductId = Guid.NewGuid(), ProductSku = "SKU", ProductName = "Product", Quantity = 1, UnitPrice = 9m, Price = 9m } }
                 }));
@@ -485,7 +511,8 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<SellerIInventoryAreaRepository>(),
                 Substitute.For<SellerIOutletRepository>(),
                 validator,
-                options)
+                options,
+                Substitute.For<ILogger<SellerBasketCheckoutApiController>>())
             {
                 ControllerContext = new ControllerContext { HttpContext = SellerFlowHelpers.CreateHttpContext() }
             };
@@ -497,15 +524,50 @@ namespace Giuru.UnitTests.Orders.Baskets
                 basketRepository.ReceivedCalls().Count(x => x.GetMethodInfo().Name == nameof(SellerIBasketRepository.CheckoutBasketAsync)));
         }
 
-        [Fact]
-        public async Task Checkout_ForAClientTheStoredCodeIsNotAssignedTo_IsRefusedSoTheDiscountIsNotOrderedForThem()
+        [Theory]
+        [InlineData("STORED25")]
+        [InlineData(null)]
+        public async Task Checkout_OfABasketPricedForAnotherClient_IsRefusedEvenWhenItsCodeIsApplicableForBoth(string storedDiscountCode)
         {
+            // The code is assigned to client A and client B. The basket was priced for A - with A's currency, country and
+            // postal code - and is checked out for B, so B would be ordered A's prices.
             var otherClientId = Guid.NewGuid();
+
+            var (flow, checkoutCalls) = await CheckoutAsync(DiscountCodeValidators.AlwaysValid(), storedDiscountCode, otherClientId, ClientId);
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
+            Assert.Equal("BasketPricedForAnotherClient", flow.Message);
+            Assert.Equal(0, checkoutCalls);
+        }
+
+        [Fact]
+        public async Task Checkout_OfABasketSavedBeforeItsClientWasRecorded_IsRefusedUntilItIsSavedForTheClient()
+        {
+            var (flow, checkoutCalls) = await CheckoutAsync(DiscountCodeValidators.AlwaysValid(), "STORED25", null, ClientId);
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
+            Assert.Equal("BasketPricedForAnotherClient", flow.Message);
+            Assert.Equal(0, checkoutCalls);
+        }
+
+        [Fact]
+        public async Task Checkout_WithoutPricing_DoesNotRequireTheBasketToHaveBeenPricedForTheClient()
+        {
+            // Without Grula every save clears the prices, so the basket carries nothing calculated for any one client.
+            var (flow, checkoutCalls) = await CheckoutAsync(DiscountCodeValidators.AlwaysValid(), null, null, ClientId, isGrulaConfigured: false);
+
+            Assert.Equal((int)HttpStatusCode.Accepted, flow.StatusCode);
+            Assert.Equal(1, checkoutCalls);
+        }
+
+        [Fact]
+        public async Task Checkout_WhenTheStoredCodeWasUnassignedFromTheClientSinceTheBasketWasPriced_IsRefused()
+        {
             var validator = Substitute.For<IDiscountCodeValidator>();
-            validator.ValidateAsync(otherClientId, "STORED25", "token")
+            validator.ValidateAsync(ClientId, "STORED25", "token")
                 .Returns(Task.FromResult(DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.NotAssigned)));
 
-            var (flow, checkoutCalls) = await CheckoutAsync(validator, "STORED25", otherClientId);
+            var (flow, checkoutCalls) = await CheckoutAsync(validator, "STORED25", ClientId, ClientId);
 
             Assert.Equal((int)HttpStatusCode.BadRequest, flow.StatusCode);
             Assert.Equal("DiscountCodeNotAssignedToClient", flow.Message);
@@ -517,7 +579,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         {
             var validator = DiscountCodeValidators.AlwaysValid();
 
-            var (flow, checkoutCalls) = await CheckoutAsync(validator, "STORED25", ClientId);
+            var (flow, checkoutCalls) = await CheckoutAsync(validator, "STORED25", ClientId, ClientId);
 
             Assert.Equal((int)HttpStatusCode.Accepted, flow.StatusCode);
             Assert.Equal(1, checkoutCalls);
@@ -525,11 +587,21 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Fact]
+        public async Task Checkout_WhenTheStoredCodeCannotBeVerifiedBecauseTheLookupIsDown_PlacesTheOrder()
+        {
+            // The basket was priced with the code when it was applicable; an outage of the lookup does not block the order.
+            var (flow, checkoutCalls) = await CheckoutAsync(LookupDown.CreateValidator(), "STORED25", ClientId, ClientId);
+
+            Assert.Equal((int)HttpStatusCode.Accepted, flow.StatusCode);
+            Assert.Equal(1, checkoutCalls);
+        }
+
+        [Fact]
         public async Task Checkout_OfABasketWithoutACode_DoesNotValidateAnything()
         {
             var validator = DiscountCodeValidators.Returning(DiscountCodeValidationStatus.Unavailable);
 
-            var (flow, checkoutCalls) = await CheckoutAsync(validator, null, ClientId);
+            var (flow, checkoutCalls) = await CheckoutAsync(validator, null, ClientId, ClientId);
 
             Assert.Equal((int)HttpStatusCode.Accepted, flow.StatusCode);
             Assert.Equal(1, checkoutCalls);

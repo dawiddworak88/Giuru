@@ -11,7 +11,14 @@ import { Context } from "../../shared/stores/Store";
 import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
-import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
+import BasketResponseHelper from "../helpers/baskets/BasketResponseHelper";
+
+// This hook only adds and removes basket lines; it never applies or clears a code. An empty string
+// tells the server to keep the code stored on the basket and reprice the lines against it, and the
+// server answers with the code it kept - a save drops a stored code that is no longer valid.
+// Forwarding the code this page last saw instead would ask the server to apply a dropped code
+// anew, and the catalog and product pages are never told of a drop. A null would be a removal.
+const KeepStoredDiscountCode = "";
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -31,13 +38,6 @@ export const useOrderManagement = ({
     const [state, dispatch] = useContext(Context);
     const [basketId, setBasketId] = useState(initialBasketId || null);
     const [orderItems, setOrderItems] = useState(initialOrderItems || []);
-
-    // This hook only adds and removes basket lines; it never applies or clears a code.
-    // Forward the currently applied code (kept in sync with the server by the caller) so
-    // that newly added lines are repriced against it. An empty string tells the server to
-    // leave whatever is stored alone; a null would be interpreted as a removal, so it is
-    // never sent from here.
-    const basketDiscountCode = discountCode || "";
 
     const addOrderItemToBasket = useCallback(
         async ({
@@ -114,7 +114,7 @@ export const useOrderManagement = ({
             const basket = {
                 id: basketId, 
                 items: newItems,
-                ...(isDiscountCodeEnabled && { discountCode: basketDiscountCode })
+                ...(isDiscountCodeEnabled && { discountCode: KeepStoredDiscountCode })
             };
 
             try {
@@ -128,9 +128,9 @@ export const useOrderManagement = ({
                 });
 
                 AuthenticationHelper.HandleResponse(response);
-                const { jsonResponse, message } = await ResponseMessageHelper.read(response, generalErrorMessage);
+                const { jsonResponse, message, isSaved, notice } = await BasketResponseHelper.read(response, generalErrorMessage);
 
-                if (response.ok && jsonResponse) {
+                if (isSaved) {
                     setBasketId(jsonResponse.id);
                     onDiscountCodeChanged?.(jsonResponse.discountCode || "");
                     dispatch({
@@ -139,6 +139,7 @@ export const useOrderManagement = ({
                     });
 
                     if (addProductToBasketMessage) ToastSuccessAddProductToBasket(addProductToBasketMessage)
+                    if (notice) toast.warn(notice);
 
                     if (jsonResponse.items?.length > 0) {
                         setOrderItems(jsonResponse.items);
@@ -155,7 +156,7 @@ export const useOrderManagement = ({
                 toast.error(generalErrorMessage);
             }
         }, [
-            addProductToBasketMessage, basketDiscountCode, basketId, discountCode, dispatch,
+            addProductToBasketMessage, basketId, discountCode, dispatch,
             generalErrorMessage, getPriceUrl, isDiscountCodeEnabled, maxAllowedOrderQuantity,
             maxAllowedOrderQuantityErrorMessage, minOrderQuantityErrorMessage, onDiscountCodeChanged,
             orderItems, state.totalBasketItems, updateBasketUrl
@@ -220,7 +221,7 @@ export const useOrderManagement = ({
             const basket = {
                 id: basketId, 
                 items: newItems,
-                ...(isDiscountCodeEnabled && { discountCode: basketDiscountCode })
+                ...(isDiscountCodeEnabled && { discountCode: KeepStoredDiscountCode })
             };
 
             try {
@@ -234,13 +235,15 @@ export const useOrderManagement = ({
                 });
 
                 AuthenticationHelper.HandleResponse(response);
-                const { jsonResponse, message } = await ResponseMessageHelper.read(response, generalErrorMessage);
+                const { jsonResponse, message, isSaved, notice } = await BasketResponseHelper.read(response, generalErrorMessage);
 
-                if (response.ok && jsonResponse) {
+                if (isSaved) {
                     const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
 
                     onDiscountCodeChanged?.(jsonResponse.discountCode || "");
                     dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
+
+                    if (notice) toast.warn(notice);
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
                         setOrderItems(OrderItemsGroupHelper.groupOrderItems(jsonResponse.items));
@@ -261,7 +264,7 @@ export const useOrderManagement = ({
                 toast.error(generalErrorMessage);
             }
         }, [
-            basketDiscountCode, basketId, dispatch, generalErrorMessage, isDiscountCodeEnabled,
+            basketId, dispatch, generalErrorMessage, isDiscountCodeEnabled,
             onDiscountCodeChanged, orderItems, state.totalBasketItems, updateBasketUrl
         ]
     );

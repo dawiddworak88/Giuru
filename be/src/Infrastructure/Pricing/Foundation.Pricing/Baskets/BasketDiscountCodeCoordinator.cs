@@ -1,4 +1,5 @@
 using Foundation.Pricing.DiscountCodes;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -11,17 +12,16 @@ namespace Foundation.Pricing.Baskets
     /// to read the basket (including whether it can be read at all), how to validate a code for the
     /// client, and the localised messages to use if the request must be rejected.
     ///
-    /// This is also the basket write seam of discount code enforcement. A newly applied code that is not
-    /// applicable is rejected, and one whose applicability cannot be determined is rejected too, so the
-    /// basket is never priced with an unverified code. A code that is already stored on the basket is
-    /// treated according to <c>revalidateStoredDiscountCode</c>:
+    /// This is also the basket write seam of discount code enforcement, with one rule for every app: every code a save
+    /// prices is validated for the client of that save.
     /// <list type="bullet">
-    /// <item>A buyer basket with proof that its code was validated for the current client keeps that code
-    /// through edits and uploads, even if it has since been revoked. A missing or mismatched binding
-    /// requires validation again.</item>
-    /// <item>A basket that names its client on every save (the seller's) is not bound to any client, so a
-    /// stored code is validated for the client of every save that prices it, exactly like a new code.
-    /// Otherwise a code applied for one client would carry its discount into another client's basket.</item>
+    /// <item>A newly applied code is stored only once it is known to be applicable. One that is not, or whose
+    /// applicability cannot be determined, is rejected, and the basket keeps what it had.</item>
+    /// <item>A code already stored on the basket that is no longer applicable - revoked since it was stored, or the
+    /// basket is now saved for another client - is removed: the save goes ahead priced without it, and the outcome
+    /// names the removed code so that the caller can tell the user why the prices changed.</item>
+    /// <item>A stored code whose applicability cannot be determined right now stays in force, and a warning is logged,
+    /// so an outage of the lookup neither blocks the save nor changes the basket's prices.</item>
     /// </list>
     /// </summary>
     public static class BasketDiscountCodeCoordinator
@@ -35,16 +35,18 @@ namespace Foundation.Pricing.Baskets
             Func<string> appliedToEmptyBasketMessage,
             Func<string, Task<DiscountCodeValidation>> validateDiscountCode,
             Func<DiscountCodeValidationStatus, string> rejectionMessage,
-            bool revalidateStoredDiscountCode)
+            ILogger logger)
         {
             // The persisted code is read at most once however many of the steps below need it.
             var persistedDiscountCode = new Lazy<Task<string>>(readPersistedDiscountCode);
 
             if (!isGrulaConfigured)
             {
-                // Discount codes are Grula price drivers. While pricing is unavailable,
-                // ignore incoming mutations but retain any code already stored on the basket.
-                return BasketDiscountCodeOutcome.ForDiscountCode(await persistedDiscountCode.Value);
+                // Discount codes are Grula price drivers. While pricing is unavailable no code is applied, but any code
+                // already stored on the basket is retained - unless the request removes it, which needs no pricing.
+                return BasketDiscountCodeOutcome.ForDiscountCode(hasDiscountCode && requestedDiscountCode is null
+                    ? null
+                    : await persistedDiscountCode.Value);
             }
 
             var isNewOrReplacement = hasDiscountCode && !string.IsNullOrWhiteSpace(requestedDiscountCode);
@@ -74,20 +76,35 @@ namespace Foundation.Pricing.Baskets
                 return BasketDiscountCodeOutcome.ForDiscountCode(resolution.DiscountCode);
             }
 
-            // Nor does a code that is already stored, unless the caller revalidates stored codes - and even then only
-            // when this save prices it: an emptied basket keeps its code unpriced until lines are added again.
+            // Nor does a stored code that this save does not price: an emptied basket keeps its code unpriced, and the
+            // code is validated again as soon as lines are added.
             var isStoredDiscountCode = !isNewOrReplacement || isUnchanged;
 
-            if (isStoredDiscountCode && (!revalidateStoredDiscountCode || !hasItems))
+            if (isStoredDiscountCode && !hasItems)
             {
                 return BasketDiscountCodeOutcome.ForDiscountCode(resolution.DiscountCode);
             }
 
             var validation = await validateDiscountCode(resolution.DiscountCode);
 
-            return validation.IsValid
-                ? BasketDiscountCodeOutcome.ForDiscountCode(validation.DiscountCode)
-                : BasketDiscountCodeOutcome.Rejected(rejectionMessage(validation.Status));
+            if (validation.IsValid)
+            {
+                return BasketDiscountCodeOutcome.ForDiscountCode(validation.DiscountCode);
+            }
+
+            if (!isStoredDiscountCode)
+            {
+                return BasketDiscountCodeOutcome.Rejected(rejectionMessage(validation.Status));
+            }
+
+            if (validation.Status is DiscountCodeValidationStatus.Unavailable)
+            {
+                logger.LogWarning("The discount code stored on the basket could not be verified. It is kept, and the basket is priced with it.");
+
+                return BasketDiscountCodeOutcome.ForDiscountCode(resolution.DiscountCode);
+            }
+
+            return BasketDiscountCodeOutcome.Removed(resolution.DiscountCode);
         }
     }
 }

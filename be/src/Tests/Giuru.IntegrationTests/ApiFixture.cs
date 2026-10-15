@@ -7,6 +7,11 @@ using Giuru.IntegrationTests.Helpers;
 using Giuru.IntegrationTests.HttpClients;
 using Giuru.IntegrationTests.Images;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -41,6 +46,11 @@ namespace Giuru.IntegrationTests
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
         private IContainer _inventoryApiContainer;
+
+        // With integration tests enabled each web app registers an in-memory cache of its own. Outside the tests both
+        // share one Redis, which is what carries a seller's invalidation of a client's cached claims to the buyer app,
+        // so the two are given one cache here as well.
+        private readonly IDistributedCache _webCache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
 
         private WebApplicationFactory<SellerWebProgram> _sellerWebFactory;
         private WebApplicationFactory<BuyerWebProgram> _buyerWebFactory;
@@ -426,6 +436,7 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");
+                    builder.ConfigureTestServices(services => services.AddSingleton(_webCache));
                 });
 
             var sellerWebFactpry = _sellerWebFactory.CreateClient();
@@ -459,6 +470,7 @@ namespace Giuru.IntegrationTests
                     builder.UseSetting("IntegrationTestsEnabled", "true");
                     builder.UseSetting("SupportedCultures", "de,en,pl");
                     builder.UseSetting("DefaultCulture", "en");
+                    builder.ConfigureTestServices(services => services.AddSingleton(_webCache));
                 });
 
             var buyerWebFactpry = _buyerWebFactory.CreateClient();

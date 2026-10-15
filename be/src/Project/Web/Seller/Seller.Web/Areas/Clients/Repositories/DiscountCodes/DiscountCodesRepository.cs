@@ -44,7 +44,8 @@ namespace Seller.Web.Areas.Clients.Repositories.DiscountCodes
                     Code = code,
                     Description = description,
                     IsDisabled = isDisabled,
-                    ClientIds = clientIds ?? Enumerable.Empty<Guid>()
+                    // A missing list is passed on as it is, so the API rejects it instead of unassigning every client.
+                    ClientIds = clientIds
                 },
                 AccessToken = token,
                 EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.DiscountCodesApiEndpoint}"

@@ -57,6 +57,7 @@ namespace Basket.Api.v1.Controllers
             {
                 Id = request.Id ?? Guid.NewGuid(),
                 IsSeller = isSeller,
+                ClientId = request.ClientId,
                 DiscountCode = request.DiscountCode,
                 Items = request.Items.OrEmptyIfNull().Select(x => new UpdateBasketItemServiceModel 
                 { 
@@ -91,6 +92,7 @@ namespace Basket.Api.v1.Controllers
                     var response = new BasketResponseModel
                     {
                         Id = basket.Id,
+                        ClientId = basket.ClientId,
                         DiscountCode = basket.DiscountCode,
                         Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                         {
@@ -181,6 +183,7 @@ namespace Basket.Api.v1.Controllers
                     var response = new BasketResponseModel
                     {
                         Id = basket.Id,
+                        ClientId = basket.ClientId,
                         DiscountCode = basket.DiscountCode,
                         Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                         {

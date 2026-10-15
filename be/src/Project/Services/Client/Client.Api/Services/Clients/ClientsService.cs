@@ -12,6 +12,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,15 +26,18 @@ namespace Client.Api.Services.Clients
         private readonly ClientContext _context;
         private readonly IStringLocalizer _clientLocalizer;
         private readonly IEventBus _eventBus;
+        private readonly ILogger<ClientsService> _logger;
 
         public ClientsService(
             ClientContext context,
             IStringLocalizer<ClientResources> clientLocalizer,
-            IEventBus eventBus)
+            IEventBus eventBus,
+            ILogger<ClientsService> logger)
         {
             _context = context;
             _clientLocalizer = clientLocalizer;
             _eventBus = eventBus;
+            _logger = logger;
         }
 
         public PagedResults<IEnumerable<ClientServiceModel>> Get(GetClientsServiceModel model)
@@ -183,6 +187,19 @@ namespace Client.Api.Services.Clients
                 throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
+            // A buyer is matched to their client by email, or by organisation for a member of the client's team - and the
+            // organisation is itself looked up by the email. A new email that is another client's would leave two clients
+            // to one buyer, so it is refused as it is on create.
+            var isTakenByAnotherClient = await _context.Clients.AnyAsync(x =>
+                x.Id != client.Id &&
+                x.IsActive &&
+                (x.Email == serviceModel.Email || x.OrganisationId == serviceModel.ClientOrganisationId.Value));
+
+            if (isTakenByAnotherClient)
+            {
+                throw new ConflictException(_clientLocalizer.GetString("ClientExists"));
+            }
+
             client.Name = serviceModel.Name;
             client.Email = serviceModel.Email;
             client.CountryId = serviceModel.CountryId;
@@ -245,7 +262,7 @@ namespace Client.Api.Services.Clients
 
         public async Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel)
         {
-            var exsitingClient = _context.Clients.FirstOrDefault(x => x.Email == serviceModel.Email && x.IsActive);
+            var exsitingClient = _context.Clients.FirstOrDefault(x => (x.Email == serviceModel.Email || x.OrganisationId == serviceModel.ClientOrganisationId.Value) && x.IsActive);
 
             if (exsitingClient is not null)
             {
@@ -355,7 +372,7 @@ namespace Client.Api.Services.Clients
                               CreatedDate = c.CreatedDate
                           };
 
-            return await clients.FirstOrDefaultAsync();
+            return await GetSingleOrDefaultAsync(clients);
         }
 
         public Task<ClientServiceModel> GetByEmailAsync(GetClientByEmailServiceModel model)
@@ -384,7 +401,26 @@ namespace Client.Api.Services.Clients
                 throw new NotFoundException(_clientLocalizer.GetString("ClientNotFound"));
             }
 
-            return client.FirstOrDefaultAsync();
+            return GetSingleOrDefaultAsync(client);
+        }
+
+        // These lookups tell the buyer app which client a buyer prices and orders as. The saves keep an email and an
+        // organisation to one active client, but data saved before they did may still hold two - and then neither is
+        // more the buyer's than the other, so none is returned rather than an arbitrary one.
+        private async Task<ClientServiceModel> GetSingleOrDefaultAsync(IQueryable<ClientServiceModel> clients)
+        {
+            var matches = await clients.Take(2).ToListAsync();
+
+            if (matches.Count > 1)
+            {
+                _logger.LogWarning(
+                    "The buyer matches more than one active client ({ClientIds}), so no client is returned. Only one of them may keep the email and organisation.",
+                    string.Join(", ", matches.Select(x => x.Id)));
+
+                return null;
+            }
+
+            return matches.FirstOrDefault();
         }
     }
 }

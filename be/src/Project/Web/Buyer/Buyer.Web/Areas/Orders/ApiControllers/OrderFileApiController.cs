@@ -68,7 +68,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketPriceClientResolver _priceClientResolver;
         private readonly IBasketRepricingService _basketRepricingService;
         private readonly IDiscountCodeValidator _discountCodeValidator;
-        private readonly IBasketDiscountCodeBinding _discountCodeBinding;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -88,8 +87,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IPriceProductFactory priceProductFactory,
             IBasketPriceClientResolver priceClientResolver,
             IBasketRepricingService basketRepricingService,
-            IDiscountCodeValidator discountCodeValidator,
-            IBasketDiscountCodeBinding discountCodeBinding)
+            IDiscountCodeValidator discountCodeValidator)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -109,7 +107,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceClientResolver = priceClientResolver;
             _basketRepricingService = basketRepricingService;
             _discountCodeValidator = discountCodeValidator;
-            _discountCodeBinding = discountCodeBinding;
         }
 
         [HttpPost]
@@ -166,7 +163,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
                 code => _discountCodeValidator.ValidateAsync(User.GetClientId(), code, token),
                 status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status),
-                revalidateStoredDiscountCode: !_discountCodeBinding.IsBoundToClient(id, User.GetClientId(), existingBasket?.DiscountCode));
+                _logger);
 
             if (discountOutcome.IsRejected)
             {
@@ -247,11 +244,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             var basket = await _basketRepository.SaveAsync(token, language, id, completeBasketItems, discountCode);
 
-            if (string.IsNullOrWhiteSpace(discountCode) || _options.Value.IsGrulaConfigured)
-            {
-                _discountCodeBinding.Bind(id, User.GetClientId(), discountCode);
-            }
-
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id,
@@ -278,6 +270,14 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     Currency = canSeePrices ? x.Currency : null,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 });
+            }
+
+            if (discountOutcome.IsDiscountCodeRemoved)
+            {
+                // The basket is saved, but not as it was sent: the 422 carries it with the reason its prices changed.
+                basketResponseModel.Message = DiscountCodeMessages.GetRemovalMessage(_orderLocalizer, discountOutcome.RemovedDiscountCode);
+
+                return StatusCode((int)HttpStatusCode.UnprocessableEntity, basketResponseModel);
             }
 
             return StatusCode((int)HttpStatusCode.OK, basketResponseModel);

@@ -61,9 +61,6 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<IClientLookupService, ClientLookupService>();
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
             services.AddScoped<IDiscountCodeLookup, ClientApiDiscountCodeLookup>();
-            // A seller basket names its client on every save, so a stored code is revalidated every time and none is in
-            // force without validation (BasketsApiController passes revalidateStoredDiscountCode: true).
-            services.AddScoped<IStoredDiscountCodeReader, NoStoredDiscountCodeReader>();
             services.RegisterPriceClientResolvers<ClientRepositoryPriceClientResolver>();
             services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
             services.AddScoped<IProductsService, ProductsService>();

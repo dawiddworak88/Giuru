@@ -6,7 +6,6 @@ using Foundation.Pricing.Services;
 using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Foundation.Pricing.DependencyInjection
 {
@@ -36,9 +35,8 @@ namespace Foundation.Pricing.DependencyInjection
 
         /// <summary>
         /// Registers the price client resolvers of an app from its one concrete resolver. Fresh product price
-        /// reads get <see cref="IPriceClientResolver"/>, which keeps the code stored on the basket (read through the
-        /// app's <see cref="IStoredDiscountCodeReader"/>) and validates any other; basket saves get
-        /// <see cref="IBasketPriceClientResolver"/>, which keeps the code the basket coordinator resolved.
+        /// reads get <see cref="IPriceClientResolver"/>, which validates a supplied discount code; basket saves
+        /// get <see cref="IBasketPriceClientResolver"/>, which keeps the code the basket coordinator resolved.
         /// The decorator wraps the concrete resolver, never the decorated interface.
         /// </summary>
         public static void RegisterPriceClientResolvers<TResolver>(this IServiceCollection services)
@@ -49,9 +47,7 @@ namespace Foundation.Pricing.DependencyInjection
             services.AddScoped<IPriceClientResolver>(sp => new VerifiedDiscountCodePriceClientResolver(
                 sp.GetRequiredService<TResolver>(),
                 sp.GetRequiredService<IDiscountCodeValidator>(),
-                sp.GetRequiredService<IStoredDiscountCodeReader>(),
-                sp.GetRequiredService<IPricingSettings>(),
-                sp.GetRequiredService<ILogger<VerifiedDiscountCodePriceClientResolver>>()));
+                sp.GetRequiredService<IPricingSettings>()));
         }
     }
 }

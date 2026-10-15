@@ -27,6 +27,8 @@ namespace Giuru.IntegrationTests
         private const string NotAssignedMessage = "This discount code is not assigned to the selected client";
         private const string ClientRequiredMessage = "Select a client before applying a discount code";
 
+        private static string RemovedCodeMessage(string code) => $"The discount code {code} is no longer valid and has been removed. The prices have been updated.";
+
         private readonly ApiFixture _apiFixture;
 
         public SellerDiscountCodeEnforcementTests(ApiFixture apiFixture)
@@ -72,6 +74,18 @@ namespace Giuru.IntegrationTests
             await RestClient.AssertStatusAsync(response, HttpStatusCode.OK);
 
             return await RestClient.ReadAsync<SellerBasketResponseModel>(response);
+        }
+
+        /// <summary>A save that dropped the stored code: the basket is saved, repriced without it, and the 422 carries it.</summary>
+        private static async Task AssertSavedWithoutTheCodeAsync(HttpResponseMessage response, Guid basketId, string removedCode)
+        {
+            await RestClient.AssertStatusAsync(response, HttpStatusCode.UnprocessableEntity);
+
+            var basket = await RestClient.ReadAsync<SellerBasketResponseModel>(response);
+
+            Assert.Equal(RemovedCodeMessage(removedCode), basket.Message);
+            Assert.Equal(basketId, basket.Id);
+            Assert.Null(basket.DiscountCode);
         }
 
         private async Task<BuyerBasketApiResponseModel> GetPersistedAsync(Guid basketId)
@@ -186,18 +200,17 @@ namespace Giuru.IntegrationTests
             await seller.Kit.CreateCodeAsync(codeText, new[] { seller.Client.Id });
             await SaveOkAsync(seller.Web, Basket(seller.Product, basketId, seller.Client.Id, true, codeText));
 
-            // A direct request that reuses the basket for a client the code is not assigned to.
+            // A request that reuses the basket for a client the code is not assigned to: the edit is saved without the code.
             var response = await seller.Web.PostForResponseAsync(
                 ApiEndpoints.BasketApiEndpoint,
                 Basket(seller.Product, basketId, otherClient.Id, resendTheCode, resendTheCode ? codeText : null, quantity: 5));
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal(NotAssignedMessage, await RestClient.ReadMessageAsync(response));
+            await AssertSavedWithoutTheCodeAsync(response, basketId, codeText);
 
             var persisted = await GetPersistedAsync(basketId);
 
-            Assert.Equal(codeText, persisted.DiscountCode);
-            Assert.Equal(1, persisted.Items.Single().Quantity);
+            Assert.Null(persisted.DiscountCode);
+            Assert.Equal(5, persisted.Items.Single().Quantity);
         }
 
         [Theory]
@@ -205,7 +218,7 @@ namespace Giuru.IntegrationTests
         [InlineData("unassigned", NotAssignedMessage)]
         [InlineData("deleted", InvalidCodeMessage)]
         [InlineData("renamed", InvalidCodeMessage)]
-        public async Task AStoredCode_ThatWasRevoked_IsRefusedAtTheNextSave_AndCanStillBeRemoved(string revocation, string expectedMessage)
+        public async Task AStoredCode_ThatWasRevoked_IsRemovedByTheNextSave_AndCannotThenBeAppliedAgain(string revocation, string expectedMessage)
         {
             var seller = await CreateSellerAsync();
             var basketId = Guid.NewGuid();
@@ -229,23 +242,22 @@ namespace Giuru.IntegrationTests
                     break;
             }
 
-            // A seller basket is not bound to a client, so its stored code is validated again on every save that prices it.
+            // The stored code is validated again on every save that prices it, and the save goes ahead without it.
             var edited = await seller.Web.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, Basket(seller.Product, basketId, seller.Client.Id, false, null, quantity: 3));
-            var resent = await seller.Web.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, Basket(seller.Product, basketId, seller.Client.Id, true, codeText.ToLowerInvariant(), quantity: 4));
 
-            Assert.Equal(HttpStatusCode.BadRequest, edited.StatusCode);
-            Assert.Equal(expectedMessage, await RestClient.ReadMessageAsync(edited));
-            Assert.Equal(HttpStatusCode.BadRequest, resent.StatusCode);
-            Assert.Equal(1, (await GetPersistedAsync(basketId)).Items.Single().Quantity);
-
-            var removed = await SaveOkAsync(seller.Web, Basket(seller.Product, basketId, seller.Client.Id, true, null, quantity: 3));
-
-            Assert.Null(removed.DiscountCode);
+            await AssertSavedWithoutTheCodeAsync(edited, basketId, codeText);
 
             var persisted = await GetPersistedAsync(basketId);
 
             Assert.Null(persisted.DiscountCode);
             Assert.Equal(3, persisted.Items.Single().Quantity);
+
+            // Once removed, sending the text again is applying a new code, which is refused with the specific reason.
+            var resent = await seller.Web.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, Basket(seller.Product, basketId, seller.Client.Id, true, codeText.ToLowerInvariant(), quantity: 4));
+
+            Assert.Equal(HttpStatusCode.BadRequest, resent.StatusCode);
+            Assert.Equal(expectedMessage, await RestClient.ReadMessageAsync(resent));
+            Assert.Equal(3, (await GetPersistedAsync(basketId)).Items.Single().Quantity);
         }
 
         [Fact]
@@ -348,7 +360,7 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact]
-        public async Task Upload_ToABasketWhoseStoredCodeWasRevoked_IsRefusedAndLeavesTheBasketAlone()
+        public async Task Upload_ToABasketWhoseStoredCodeWasRevoked_IsSavedWithoutTheCode()
         {
             var seller = await CreateSellerAsync();
             var basketId = Guid.NewGuid();
@@ -359,17 +371,17 @@ namespace Giuru.IntegrationTests
 
             var response = await seller.Web.PostMultipartForResponseAsync(ApiEndpoints.OrderFileApiEndpoint, CreateUpload(seller.Product, basketId, seller.Client.Id, true, codeText));
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal(InactiveMessage, await RestClient.ReadMessageAsync(response));
+            await AssertSavedWithoutTheCodeAsync(response, basketId, codeText);
 
             var persisted = await GetPersistedAsync(basketId);
+            var line = persisted.Items.Single();
 
-            Assert.Equal(codeText, persisted.DiscountCode);
-            Assert.Equal(1, persisted.Items.Single().Quantity);
+            Assert.Null(persisted.DiscountCode);
+            Assert.Equal(3, line.Quantity + line.StockQuantity);
         }
 
         [Fact]
-        public async Task Upload_ForAClientTheStoredCodeIsNotAssignedTo_IsRefused()
+        public async Task Upload_ForAClientTheStoredCodeIsNotAssignedTo_IsSavedWithoutTheCode()
         {
             var seller = await CreateSellerAsync();
             var otherClient = await seller.Kit.CreateClientAsync();
@@ -380,8 +392,8 @@ namespace Giuru.IntegrationTests
 
             var response = await seller.Web.PostMultipartForResponseAsync(ApiEndpoints.OrderFileApiEndpoint, CreateUpload(seller.Product, basketId, otherClient.Id, false, null));
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal(NotAssignedMessage, await RestClient.ReadMessageAsync(response));
+            await AssertSavedWithoutTheCodeAsync(response, basketId, codeText);
+            Assert.Null((await GetPersistedAsync(basketId)).DiscountCode);
         }
     }
 }

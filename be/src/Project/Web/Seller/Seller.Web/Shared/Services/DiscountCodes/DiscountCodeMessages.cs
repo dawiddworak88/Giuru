@@ -20,5 +20,11 @@ namespace Seller.Web.Shared.Services.DiscountCodes
                 _ => orderLocalizer.GetString("DiscountCodeInvalid").Value
             };
         }
+
+        /// <summary>A save dropped the stored code, which is no longer valid, and priced the basket without it.</summary>
+        public static string GetRemovalMessage(IStringLocalizer<OrderResources> orderLocalizer, string removedDiscountCode)
+        {
+            return orderLocalizer.GetString("DiscountCodeRemovedPricesUpdated", removedDiscountCode).Value;
+        }
     }
 }

@@ -402,4 +402,13 @@
   <data name="DiscountCodeCouldNotBeVerified" xml:space="preserve">
     <value>Der Rabattcode konnte nicht überprüft werden. Versuchen Sie es erneut</value>
   </data>
+  <data name="DiscountCodeRemovedPricesUpdated" xml:space="preserve">
+    <value>Der Rabattcode {0} ist nicht mehr gültig und wurde entfernt. Die Preise wurden aktualisiert.</value>
+  </data>
+  <data name="DiscountCodeNoLongerValid" xml:space="preserve">
+    <value>Der Rabattcode {0} ist nicht mehr gültig. Entfernen Sie ihn, um die Preise zu aktualisieren, und geben Sie die Bestellung dann erneut auf.</value>
+  </data>
+  <data name="BasketPricedForAnotherClient" xml:space="preserve">
+    <value>Die Preise in diesem Warenkorb wurden nicht für den ausgewählten Kunden berechnet. Aktualisieren Sie den Warenkorb, um sie neu zu berechnen, und geben Sie die Bestellung dann erneut auf.</value>
+  </data>
 </root>

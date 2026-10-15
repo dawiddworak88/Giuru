@@ -402,4 +402,13 @@
   <data name="DiscountCodeCouldNotBeVerified" xml:space="preserve">
     <value>The discount code could not be verified. Try again</value>
   </data>
+  <data name="DiscountCodeRemovedPricesUpdated" xml:space="preserve">
+    <value>The discount code {0} is no longer valid and has been removed. The prices have been updated.</value>
+  </data>
+  <data name="DiscountCodeNoLongerValid" xml:space="preserve">
+    <value>The discount code {0} is no longer valid. Remove it to update the prices, then place the order again.</value>
+  </data>
+  <data name="BasketPricedForAnotherClient" xml:space="preserve">
+    <value>The prices in this basket were not calculated for the selected client. Update the basket to recalculate them, then place the order again.</value>
+  </data>
 </root>

@@ -402,4 +402,13 @@
   <data name="DiscountCodeCouldNotBeVerified" xml:space="preserve">
     <value>Nie udało się zweryfikować kodu rabatowego. Spróbuj ponownie</value>
   </data>
+  <data name="DiscountCodeRemovedPricesUpdated" xml:space="preserve">
+    <value>Kod rabatowy {0} nie jest już ważny i został usunięty. Ceny zostały zaktualizowane.</value>
+  </data>
+  <data name="DiscountCodeNoLongerValid" xml:space="preserve">
+    <value>Kod rabatowy {0} nie jest już ważny. Usuń go, aby zaktualizować ceny, a następnie ponownie złóż zamówienie.</value>
+  </data>
+  <data name="BasketPricedForAnotherClient" xml:space="preserve">
+    <value>Ceny w koszyku nie zostały obliczone dla wybranego klienta. Zaktualizuj koszyk, aby je przeliczyć, a następnie ponownie złóż zamówienie.</value>
+  </data>
 </root>

@@ -20,6 +20,7 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
 import OrderItemsGroupHelper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
 import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
+import BasketResponseHelper from "../../../../shared/helpers/baskets/BasketResponseHelper";
 import { useDiscountCode } from "../../../../shared/hooks/useDiscountCode";
 import { useBasketDiscountCode } from "../../../../shared/hooks/useBasketDiscountCode";
 import DiscountCodeField from "../../../../shared/components/DiscountCode/DiscountCodeField";
@@ -222,10 +223,12 @@ function OrderForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
-                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
+                const { jsonResponse, message, isSaved, notice } = await BasketResponseHelper.read(response, props.generalErrorMessage);
 
-                if (response.ok && jsonResponse) {
+                if (isSaved) {
                     basketDiscountCode.applyBasketResponse(jsonResponse);
+
+                    if (notice) toast.warn(notice);
 
                     if (jsonResponse.items?.length) {
                         setProduct(null);
@@ -284,11 +287,13 @@ function OrderForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
-                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
+                const { jsonResponse, message, isSaved, notice } = await BasketResponseHelper.read(response, props.generalErrorMessage);
 
-                if (response.ok && jsonResponse) {
+                if (isSaved) {
                     basketDiscountCode.applyBasketResponse(jsonResponse);
                     setOpenDeleteDialog(false);
+
+                    if (notice) toast.warn(notice);
                 } else {
                     toast.error(message);
                 }
@@ -464,10 +469,12 @@ function OrderForm(props) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     AuthenticationHelper.HandleResponse(response);
-                    const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
+                    const { jsonResponse, message, isSaved, notice } = await BasketResponseHelper.read(response, props.generalErrorMessage);
 
-                    if (response.ok && jsonResponse) {
+                    if (isSaved) {
                         basketDiscountCode.applyBasketResponse(jsonResponse);
+
+                        if (notice) toast.warn(notice);
                     }
                     else {
                         toast.error(message);

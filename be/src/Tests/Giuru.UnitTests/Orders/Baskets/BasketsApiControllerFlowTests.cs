@@ -103,8 +103,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
                 CreateBasketRepricingService(priceService),
-                DiscountCodeValidators.AlwaysValid(),
-                DiscountCodeBindingTestHelper.Create(httpContext))
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -191,8 +190,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
                 CreateBasketRepricingService(priceService),
-                DiscountCodeValidators.AlwaysValid(),
-                DiscountCodeBindingTestHelper.Create(httpContext))
+                DiscountCodeValidators.AlwaysValid())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -297,10 +295,10 @@ namespace Giuru.UnitTests.Orders.Baskets
             priceService.CanSeePrices(Arg.Any<Guid?>()).Returns(true);
             priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
                 .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0), DiscountCode = call.ArgAt<string>(1) }));
-            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<Guid?>(), Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
                 .Returns(call =>
                 {
-                    savedItems = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList();
+                    savedItems = call.ArgAt<IEnumerable<SellerBasketItem>>(4).ToList();
                     return Task.FromResult(new SellerBasket { Id = basketId, Items = savedItems });
                 });
 
@@ -430,6 +428,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             await basketRepository.DidNotReceive().SaveAsync(
                 Arg.Any<string>(),
                 Arg.Any<string>(),
+                Arg.Any<Guid?>(),
                 Arg.Any<Guid?>(),
                 Arg.Any<IEnumerable<SellerBasketItem>>(),
                 Arg.Any<string>());

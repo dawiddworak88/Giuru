@@ -102,8 +102,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
                 code => _discountCodeValidator.ValidateAsync(model.ClientId, code, token),
                 status => DiscountCodeMessages.GetRejectionMessage(_orderLocalizer, status),
-                // Every save names its client, so a stored code has to be applicable for that client again.
-                revalidateStoredDiscountCode: true);
+                _logger);
 
             if (discountOutcome.IsRejected)
             {
@@ -121,7 +120,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 BasketPriceApplier.ClearUntrustedPrices(items);
             }
 
-            var basket = await _basketRepository.SaveAsync(token, language, model.Id,
+            var basket = await _basketRepository.SaveAsync(token, language, model.Id, model.ClientId,
                 items.Select(x => new BasketItem
                 {
                     ProductId = x.ProductId,
@@ -170,6 +169,14 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     Currency = canSeePrices ? x.Currency : null,
                     ExpectedLeadTime = x.ExpectedLeadTime
                 });
+            }
+
+            if (discountOutcome.IsDiscountCodeRemoved)
+            {
+                // The basket is saved, but not as it was sent: the 422 carries it with the reason its prices changed.
+                basketResponseModel.Message = DiscountCodeMessages.GetRemovalMessage(_orderLocalizer, discountOutcome.RemovedDiscountCode);
+
+                return StatusCode((int)HttpStatusCode.UnprocessableEntity, basketResponseModel);
             }
 
             return StatusCode((int)HttpStatusCode.OK, basketResponseModel);

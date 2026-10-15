@@ -30,11 +30,12 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             _settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, Guid? clientId, IEnumerable<BasketItem> items, string discountCode = null)
         {
             var requestModel = new SaveBasketApiRequestModel
             {
                 Id = id,
+                ClientId = clientId,
                 DiscountCode = discountCode,
                 Items = items.OrEmptyIfNull().Select(x => new BasketItemApiRequestModel
                 {
@@ -69,6 +70,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 return new Basket
                 { 
                     Id = response.Data.Id,
+                    ClientId = response.Data.ClientId,
                     DiscountCode = response.Data.DiscountCode,
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
