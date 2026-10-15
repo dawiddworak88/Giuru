@@ -16,6 +16,7 @@ namespace Foundation.Pricing.DependencyInjection
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<IBasketRepricingService, BasketRepricingService>();
             services.AddScoped<IProductPricingService, ProductPricingService>();
+            services.AddScoped<IDiscountCodeLookup, ClientApiDiscountCodeLookup>();
             services.AddScoped<IDiscountCodeValidator, DiscountCodeValidator>();
 
             services.AddHttpClient("GrulaApi")

@@ -9,6 +9,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
 		<ProjectReference Include="..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
 	</ItemGroup>
 

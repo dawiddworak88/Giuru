@@ -1,7 +1,7 @@
 using Foundation.ApiExtensions.Models.Request;
 using System;
 
-namespace Seller.Web.Areas.Clients.ApiRequestModels
+namespace Foundation.Pricing.ApiRequestModels
 {
     /// <summary>The query of the Client.Api validation endpoint. Its properties become the query string.</summary>
     public class DiscountCodeValidationApiRequestModel : RequestModelBase

@@ -1,5 +1,4 @@
 using Foundation.GenericRepository.Paginations;
-using Foundation.Pricing.DiscountCodes;
 using Seller.Web.Areas.Clients.DomainModels;
 using System;
 using System.Collections.Generic;
@@ -20,6 +19,5 @@ namespace Seller.Web.Areas.Clients.Repositories.DiscountCodes
         /// answer throws, so an unavailable list can never be mistaken for "no clients".
         /// </summary>
         Task<IEnumerable<DiscountCodeClientOption>> GetClientOptionsAsync(string token, string language);
-        Task<DiscountCodeValidation> ValidateAsync(string token, string language, Guid clientId, string code);
     }
 }

@@ -40,9 +40,7 @@ using Buyer.Web.Shared.ModelBuilders.NotificationBar;
 using Buyer.Web.Shared.ViewModels.NotificationBar;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Prices;
-using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
-using Buyer.Web.Shared.Services.DiscountCodes;
 using Buyer.Web.Shared.Middlewares;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.Extensions.Services.Cache;
@@ -88,7 +86,6 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<ILeadTimeRepository, LeadTimeRepository>();
-            services.AddScoped<IDiscountCodesRepository, DiscountCodesRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();
@@ -100,7 +97,6 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<ICacheService, CacheService>();
             
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
-            services.AddScoped<IDiscountCodeLookup, ClientApiDiscountCodeLookup>();
             services.RegisterPriceClientResolvers<ClaimsPriceClientResolver>();
             services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
             services.RegisterPricingDependencies(configuration);

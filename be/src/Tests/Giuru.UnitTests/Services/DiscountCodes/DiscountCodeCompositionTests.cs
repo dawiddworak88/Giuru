@@ -1,4 +1,5 @@
 using Buyer.Web.Shared.Services.Prices;
+using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.Pricing.Configurations;
 using Foundation.Pricing.DependencyInjection;
 using Foundation.Pricing.DiscountCodes;
@@ -6,6 +7,7 @@ using Foundation.Pricing.DomainModels;
 using Foundation.Pricing.Services;
 using Giuru.UnitTests.Helpers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -97,6 +99,20 @@ namespace Giuru.UnitTests.Services.DiscountCodes
             Assert.True(typeof(IBasketPriceClientResolver).IsAssignableFrom(typeof(ClaimsPriceClientResolver)));
             Assert.True(typeof(IBasketPriceClientResolver).IsAssignableFrom(typeof(Seller.Web.Shared.Services.Prices.ClientRepositoryPriceClientResolver)));
             Assert.False(typeof(IBasketPriceClientResolver).IsAssignableFrom(typeof(VerifiedDiscountCodePriceClientResolver)));
+        }
+
+        [Fact]
+        public void ThePricingDependencies_RegisterTheOneClientApiLookupThatBothAppsUse()
+        {
+            var services = new ServiceCollection();
+            services.AddScoped<IApiClientService, ApiClientService>();
+            services.AddSingleton<IPricingSettings>(new TestPricingSettings());
+            services.RegisterPricingDependencies(new ConfigurationBuilder().Build());
+
+            using var provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
+            using var scope = provider.CreateScope();
+
+            Assert.IsType<ClientApiDiscountCodeLookup>(scope.ServiceProvider.GetRequiredService<IDiscountCodeLookup>());
         }
 
         [Fact]

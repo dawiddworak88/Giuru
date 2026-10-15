@@ -1,43 +1,48 @@
-using Buyer.Web.Shared.ApiRequestModels.Clients;
-using Buyer.Web.Shared.ApiResponseModels;
-using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
-using Foundation.Pricing.DiscountCodes;
-using Microsoft.Extensions.Options;
+using Foundation.Pricing.ApiRequestModels;
+using Foundation.Pricing.ApiResponseModels;
+using Foundation.Pricing.Configurations;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Shared.Repositories.Clients
+namespace Foundation.Pricing.DiscountCodes
 {
-    public class DiscountCodesRepository : IDiscountCodesRepository
+    /// <summary>
+    /// The one port to Client.Api, shared by the buyer and seller apps: one call with the caller's own token and an
+    /// explicit client id. Client.Api checks that client against the organisation of the token, so a buyer can only ask
+    /// for their own client. A failed call throws and is turned into "unverified" by <see cref="DiscountCodeValidator"/>;
+    /// it is never read as an answer.
+    /// </summary>
+    public sealed class ClientApiDiscountCodeLookup : IDiscountCodeLookup
     {
         private readonly IApiClientService _apiClientService;
-        private readonly IOptions<AppSettings> _settings;
+        private readonly IPricingSettings _pricingSettings;
 
-        public DiscountCodesRepository(
+        public ClientApiDiscountCodeLookup(
             IApiClientService apiClientService,
-            IOptions<AppSettings> settings)
+            IPricingSettings pricingSettings)
         {
             _apiClientService = apiClientService;
-            _settings = settings;
+            _pricingSettings = pricingSettings;
         }
 
-        public async Task<DiscountCodeValidation> ValidateAsync(string token, string language, Guid clientId, string code)
+        public async Task<DiscountCodeValidation> ValidateAsync(Guid clientId, string discountCode, string token)
         {
             // The API client service encodes the query values.
             var apiRequest = new ApiRequest<DiscountCodeValidationApiRequestModel>
             {
-                Language = language,
+                Language = CultureInfo.CurrentUICulture.Name,
                 Data = new DiscountCodeValidationApiRequestModel
                 {
-                    Code = code,
+                    Code = discountCode,
                     ClientId = clientId
                 },
                 AccessToken = token,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.DiscountCodesValidationApiEndpoint}"
+                EndpointAddress = $"{_pricingSettings.ClientUrl}{ApiConstants.Client.DiscountCodesValidationApiEndpoint}"
             };
 
             var response = await _apiClientService

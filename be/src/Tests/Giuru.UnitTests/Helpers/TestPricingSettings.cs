@@ -9,6 +9,7 @@ namespace Giuru.UnitTests.Helpers
         public string GrulaEnvironmentId { get; set; } = "00000000-0000-0000-0000-000000000001";
         public string DefaultCurrency { get; set; }
         public string EnablePricesForClients { get; set; }
+        public string ClientUrl { get; set; }
 
         public bool IsGrulaConfigured =>
             !string.IsNullOrWhiteSpace(GrulaAccessToken) && Guid.TryParse(GrulaEnvironmentId, out _);

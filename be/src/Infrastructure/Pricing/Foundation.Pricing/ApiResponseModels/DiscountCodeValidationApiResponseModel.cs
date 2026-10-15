@@ -1,4 +1,4 @@
-namespace Buyer.Web.Shared.ApiResponseModels
+namespace Foundation.Pricing.ApiResponseModels
 {
     public class DiscountCodeValidationApiResponseModel
     {

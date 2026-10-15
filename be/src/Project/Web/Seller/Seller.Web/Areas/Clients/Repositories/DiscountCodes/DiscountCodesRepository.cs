@@ -5,7 +5,6 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
-using Foundation.Pricing.DiscountCodes;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.ApiResponseModels;
@@ -173,35 +172,6 @@ namespace Seller.Web.Areas.Clients.Repositories.DiscountCodes
             }
 
             return options;
-        }
-
-        public async Task<DiscountCodeValidation> ValidateAsync(string token, string language, Guid clientId, string code)
-        {
-            // The API client service encodes the query values.
-            var apiRequest = new ApiRequest<DiscountCodeValidationApiRequestModel>
-            {
-                Language = language,
-                Data = new DiscountCodeValidationApiRequestModel
-                {
-                    Code = code,
-                    ClientId = clientId
-                },
-                AccessToken = token,
-                EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.DiscountCodesValidationApiEndpoint}"
-            };
-
-            var response = await _apiClientService
-                .GetAsync<ApiRequest<DiscountCodeValidationApiRequestModel>, DiscountCodeValidationApiRequestModel, DiscountCodeValidationApiResponseModel>(apiRequest);
-
-            if (response.IsSuccessStatusCode is false)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            // An empty body is not an answer either.
-            return response.Data is null
-                ? DiscountCodeValidation.Invalid(DiscountCodeValidationStatus.Unavailable)
-                : DiscountCodeValidation.FromApiResponse(response.Data.Status, response.Data.DiscountCode);
         }
 
         private async Task<PagedResults<IEnumerable<DiscountCodeClientOption>>> GetClientOptionsPageAsync(string token, string language, int pageIndex)

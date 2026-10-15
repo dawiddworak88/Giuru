@@ -28,9 +28,7 @@ using Seller.Web.Shared.ModelBuilders.Dialogs;
 using Seller.Web.Areas.Shared.Repositories.UserApprovals;
 using Seller.Web.Shared.Services.Clients;
 using Seller.Web.Shared.Services.Prices;
-using Foundation.Pricing.DiscountCodes;
 using Foundation.Pricing.Services;
-using Seller.Web.Shared.Services.DiscountCodes;
 using Seller.Web.Shared.Services.Products;
 using Foundation.Extensions.Services.Claims;
 using Seller.Web.Shared.Services.ProductColors;
@@ -60,7 +58,6 @@ namespace Seller.Web.Shared.DependencyInjection
 
             services.AddScoped<IClientLookupService, ClientLookupService>();
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
-            services.AddScoped<IDiscountCodeLookup, ClientApiDiscountCodeLookup>();
             services.RegisterPriceClientResolvers<ClientRepositoryPriceClientResolver>();
             services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
             services.AddScoped<IProductsService, ProductsService>();

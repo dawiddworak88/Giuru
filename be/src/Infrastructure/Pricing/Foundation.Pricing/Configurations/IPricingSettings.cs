@@ -11,5 +11,8 @@ namespace Foundation.Pricing.Configurations
         string EnablePricesForClients { get; }
 
         bool IsGrulaConfigured { get; }
+
+        /// <summary>The base address of Client.Api, which validates discount codes.</summary>
+        string ClientUrl { get; }
     }
 }

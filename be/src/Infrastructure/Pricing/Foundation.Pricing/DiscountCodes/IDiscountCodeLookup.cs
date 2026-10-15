@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 namespace Foundation.Pricing.DiscountCodes
 {
     /// <summary>
-    /// Port implemented by each web app: one HTTP call to Client.Api that answers whether a code can be applied
-    /// for a client. Client.Api returns an explicit string status that the adapter maps to
-    /// <see cref="DiscountCodeValidationStatus"/>; the two services do not share an HTTP DTO.
+    /// Port to Client.Api, implemented by <see cref="ClientApiDiscountCodeLookup"/> for both web apps: one HTTP call that
+    /// answers whether a code can be applied for a client. Client.Api returns an explicit string status that the adapter
+    /// maps to <see cref="DiscountCodeValidationStatus"/>; the two services do not share an HTTP DTO.
     /// An implementation must not turn a failed call into an applicability answer: failures throw, or return
     /// <see cref="DiscountCodeValidationStatus.Unavailable"/>.
     /// </summary>
