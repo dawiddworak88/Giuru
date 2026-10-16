@@ -91,7 +91,7 @@ namespace Client.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DiscountCodeResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
@@ -109,12 +109,12 @@ namespace Client.Api.v1.Controllers
             {
                 var discountCode = await _discountCodesService.GetAsync(serviceModel);
 
-                if (discountCode is null)
+                if (discountCode is not null)
                 {
-                    throw new NotFoundException(_clientLocalizer.GetString("DiscountCodeNotFound"));
+                    return this.StatusCode((int)HttpStatusCode.OK, MapToResponse(discountCode));
                 }
 
-                return this.StatusCode((int)HttpStatusCode.OK, MapToResponse(discountCode));
+                return this.StatusCode((int)HttpStatusCode.NoContent);
             }
 
             throw ToValidationException(validationResult.Errors.Select(x => x.ErrorMessage));

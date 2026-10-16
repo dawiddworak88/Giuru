@@ -399,4 +399,10 @@
   <data name="DiscountCodeClientNotFound" xml:space="preserve">
     <value>One or more assigned clients have not been found.</value>
   </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Discount code has been saved successfully.</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Discount code has been deleted successfully.</value>
+  </data>
 </root>

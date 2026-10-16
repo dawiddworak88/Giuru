@@ -64,9 +64,10 @@ Every PR targets `develop`, stays behind the Grula gate, and leaves `develop` re
    - Discount Code and Assigned Client entities, plus the EF migration.
    - Endpoints: paged list with search, get by id, save (code, description, active, client ids), soft delete.
    - Validators for format, uniqueness and immutable code text.
-   - Integration tests.
+   - Seller repository and API controller proxying to Client.Api, returning 404 when Grula is off.
+   - Integration tests, through the Seller API into Client.Api.
 2. **Seller: list page + tile**
-   - Seller repository, list page, delete.
+   - List page, delete.
    - Tile after Orders, hidden/404 when Grula is off.
    - Localisation.
 3. **Seller: create/edit form**

@@ -399,4 +399,10 @@
   <data name="DiscountCodeClientNotFound" xml:space="preserve">
     <value>Nie znaleziono jednego lub więcej przypisanych klientów.</value>
   </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Kod rabatowy został pomyślnie zapisany.</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Kod rabatowy został usunięty.</value>
+  </data>
 </root>

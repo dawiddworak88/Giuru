@@ -1,5 +1,3 @@
-using Client.Api.v1.RequestModels;
-using Client.Api.v1.ResponseModels;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
@@ -8,13 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using ClientRequestModel = Client.Api.v1.RequestModels.ClientRequestModel;
+using DiscountCode = Seller.Web.Areas.Clients.DomainModels.DiscountCode;
+using DiscountCodeRequestModel = Seller.Web.Areas.Clients.ApiRequestModels.DiscountCodeRequestModel;
 
 namespace Giuru.IntegrationTests
 {
-    // Discount Code management is exercised against Client.Api directly: the Seller portal proxy
-    // that fronts it arrives in a later pull request. Clients created here are deleted again so
-    // that tests sharing the fixture keep seeing only their own Clients.
+    // Discount Code management is driven through the Seller portal's API, which proxies to Client.Api.
+    // Clients are only test data here, so they are created and deleted in Client.Api directly, and
+    // deleted again so that tests sharing the fixture keep seeing only their own Clients.
     [Collection(nameof(ApiCollection))]
     public class DiscountCodeManagementTests
     {
@@ -109,7 +111,7 @@ namespace Giuru.IntegrationTests
         [InlineData("zażółć")]
         public async Task Save_WithInvalidFormat_IsRejected(string code)
         {
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Code = code });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Code = code });
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
@@ -117,7 +119,7 @@ namespace Giuru.IntegrationTests
         [Fact]
         public async Task Save_WithCodeLongerThanFiftyCharacters_IsRejected()
         {
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Code = new string('A', 51) });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Code = new string('A', 51) });
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
@@ -128,7 +130,7 @@ namespace Giuru.IntegrationTests
             var code = NewCode();
             await SaveAsync(new DiscountCodeRequestModel { Code = code });
 
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Code = code.ToLowerInvariant() });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Code = code.ToLowerInvariant() });
 
             Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         }
@@ -139,7 +141,7 @@ namespace Giuru.IntegrationTests
             var code = NewCode();
             await SaveAsync(new DiscountCodeRequestModel { Code = code, IsDisabled = true });
 
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Code = code });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Code = code });
 
             Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         }
@@ -150,7 +152,7 @@ namespace Giuru.IntegrationTests
             var code = NewCode();
             var first = await SaveAsync(new DiscountCodeRequestModel { Code = code });
 
-            var deleteResponse = await _apiFixture.ClientApiClient.DeleteForResponseAsync($"{ApiEndpoints.DiscountCodesClientApiEndpoint}/{first.Id}");
+            var deleteResponse = await DeleteAsync(first.Id);
             Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
             var second = await SaveAsync(new DiscountCodeRequestModel { Code = code });
@@ -163,7 +165,7 @@ namespace Giuru.IntegrationTests
         {
             var created = await SaveAsync(new DiscountCodeRequestModel { Code = NewCode() });
 
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Id = created.Id, Code = NewCode() });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Id = created.Id, Code = NewCode() });
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
@@ -174,7 +176,7 @@ namespace Giuru.IntegrationTests
             var code = NewCode();
             var created = await SaveAsync(new DiscountCodeRequestModel { Code = code });
 
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Id = created.Id, Code = code.ToLowerInvariant() });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Id = created.Id, Code = code.ToLowerInvariant() });
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
@@ -182,7 +184,7 @@ namespace Giuru.IntegrationTests
         [Fact]
         public async Task Save_WithUnknownClientId_IsRejected()
         {
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Code = NewCode(), ClientIds = new[] { Guid.NewGuid() } });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Code = NewCode(), ClientIds = new[] { Guid.NewGuid() } });
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
@@ -193,7 +195,7 @@ namespace Giuru.IntegrationTests
             var clientId = await CreateClientAsync();
             await DeleteClientAsync(clientId);
 
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Code = NewCode(), ClientIds = new[] { clientId } });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Code = NewCode(), ClientIds = new[] { clientId } });
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
@@ -210,8 +212,8 @@ namespace Giuru.IntegrationTests
                 await SaveAsync(new DiscountCodeRequestModel { Code = $"{prefix}-B" });
                 await SaveAsync(new DiscountCodeRequestModel { Code = NewCode() });
 
-                var results = await _apiFixture.ClientApiClient.GetAsync<PagedResults<IEnumerable<DiscountCodeResponseModel>>>(
-                    $"{ApiEndpoints.DiscountCodesClientApiEndpoint}?searchTerm={prefix[3..]}&pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
+                var results = await _apiFixture.SellerWebClient.GetAsync<PagedResults<IEnumerable<DiscountCode>>>(
+                    $"{ApiEndpoints.GetDiscountCodesApiEndpoint}?searchTerm={prefix[3..]}&pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
 
                 Assert.Equal(2, results.Total);
                 Assert.Equal(1, results.Data.Single(x => x.Code == $"{prefix}-A").ClientsCount);
@@ -228,11 +230,11 @@ namespace Giuru.IntegrationTests
         {
             var created = await SaveAsync(new DiscountCodeRequestModel { Code = NewCode() });
 
-            var deleteResponse = await _apiFixture.ClientApiClient.DeleteForResponseAsync($"{ApiEndpoints.DiscountCodesClientApiEndpoint}/{created.Id}");
-            var getResponse = await _apiFixture.ClientApiClient.GetForResponseAsync($"{ApiEndpoints.DiscountCodesClientApiEndpoint}/{created.Id}");
+            var deleteResponse = await DeleteAsync(created.Id);
+            var getResponse = await _apiFixture.SellerWebClient.GetForResponseAsync($"{ApiEndpoints.GetDiscountCodeApiEndpoint}/{created.Id}");
 
             Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
-            Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, getResponse.StatusCode);
         }
 
         [Fact]
@@ -252,7 +254,7 @@ namespace Giuru.IntegrationTests
         [Fact]
         public async Task Update_OfUnknownCodeWithUnknownClient_IsNotFound()
         {
-            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Id = Guid.NewGuid(), Code = NewCode(), ClientIds = new[] { Guid.NewGuid() } });
+            var response = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.DiscountCodesApiEndpoint, new DiscountCodeRequestModel { Id = Guid.NewGuid(), Code = NewCode(), ClientIds = new[] { Guid.NewGuid() } });
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
@@ -266,7 +268,7 @@ namespace Giuru.IntegrationTests
             try
             {
                 var first = await SaveAsync(new DiscountCodeRequestModel { Code = code, ClientIds = new[] { clientId } });
-                await _apiFixture.ClientApiClient.DeleteForResponseAsync($"{ApiEndpoints.DiscountCodesClientApiEndpoint}/{first.Id}");
+                await DeleteAsync(first.Id);
 
                 var second = await SaveAsync(new DiscountCodeRequestModel { Code = code });
 
@@ -285,12 +287,17 @@ namespace Giuru.IntegrationTests
 
         private async Task<BaseResponseModel> SaveAsync(DiscountCodeRequestModel request)
         {
-            return await _apiFixture.ClientApiClient.PostAsync<DiscountCodeRequestModel, BaseResponseModel>(ApiEndpoints.DiscountCodesClientApiEndpoint, request);
+            return await _apiFixture.SellerWebClient.PostAsync<DiscountCodeRequestModel, BaseResponseModel>(ApiEndpoints.DiscountCodesApiEndpoint, request);
         }
 
-        private async Task<DiscountCodeResponseModel> GetByIdAsync(Guid? id)
+        private async Task<DiscountCode> GetByIdAsync(Guid? id)
         {
-            return await _apiFixture.ClientApiClient.GetAsync<DiscountCodeResponseModel>($"{ApiEndpoints.DiscountCodesClientApiEndpoint}/{id}");
+            return await _apiFixture.SellerWebClient.GetAsync<DiscountCode>($"{ApiEndpoints.GetDiscountCodeApiEndpoint}/{id}");
+        }
+
+        private async Task<HttpResponseMessage> DeleteAsync(Guid? id)
+        {
+            return await _apiFixture.SellerWebClient.DeleteForResponseAsync($"{ApiEndpoints.DeleteDiscountCodeApiEndpoint}/{id}");
         }
 
         private async Task<Guid> CreateClientAsync()
