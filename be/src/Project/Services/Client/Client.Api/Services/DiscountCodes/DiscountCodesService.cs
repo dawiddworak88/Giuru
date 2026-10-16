@@ -37,7 +37,7 @@ namespace Client.Api.Services.DiscountCodes
             {
                 var searchTerm = model.SearchTerm.Trim();
 
-                discountCodes = discountCodes.Where(x => x.Code.StartsWith(searchTerm));
+                discountCodes = discountCodes.Where(x => x.Code.Contains(searchTerm));
             }
 
             discountCodes = discountCodes.ApplySort(model.OrderBy);
@@ -110,14 +110,7 @@ namespace Client.Api.Services.DiscountCodes
             var code = model.Code.Trim();
             var clientIds = model.ClientIds.OrEmptyIfNull().Distinct().ToList();
 
-            var knownClientsCount = await _context.Clients.CountAsync(x => x.SellerId == sellerId && x.IsActive && clientIds.Contains(x.Id));
-
-            if (knownClientsCount != clientIds.Count)
-            {
-                throw new UnprocessableEntityException(_clientLocalizer.GetString("DiscountCodeClientNotFound"));
-            }
-
-            DiscountCode discountCode;
+            DiscountCode discountCode = null;
 
             if (model.Id.HasValue)
             {
@@ -127,7 +120,17 @@ namespace Client.Api.Services.DiscountCodes
                 {
                     throw new NotFoundException(_clientLocalizer.GetString("DiscountCodeNotFound"));
                 }
+            }
 
+            var knownClientsCount = await _context.Clients.CountAsync(x => x.SellerId == sellerId && x.IsActive && clientIds.Contains(x.Id));
+
+            if (knownClientsCount != clientIds.Count)
+            {
+                throw new UnprocessableEntityException(_clientLocalizer.GetString("DiscountCodeClientNotFound"));
+            }
+
+            if (discountCode is not null)
+            {
                 if (string.Equals(discountCode.Code, code, StringComparison.Ordinal) is false)
                 {
                     throw new UnprocessableEntityException(_clientLocalizer.GetString("DiscountCodeCodeCannotBeChanged"));
@@ -172,7 +175,20 @@ namespace Client.Api.Services.DiscountCodes
                 }.FillCommonProperties());
             }
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                // A concurrent create with the same code text loses to the filtered unique index.
+                if (model.Id.HasValue is false && await _context.DiscountCodes.AsNoTracking().AnyAsync(x => x.SellerId == sellerId && x.IsActive && x.Code == code && x.Id != discountCode.Id))
+                {
+                    throw new ConflictException(_clientLocalizer.GetString("DiscountCodeExists"));
+                }
+
+                throw;
+            }
 
             return discountCode.Id;
         }
@@ -188,6 +204,14 @@ namespace Client.Api.Services.DiscountCodes
 
             discountCode.IsActive = false;
             discountCode.LastModifiedDate = DateTime.UtcNow;
+
+            var assignments = await _context.DiscountCodeClients.Where(x => x.DiscountCodeId == discountCode.Id && x.IsActive).ToListAsync();
+
+            foreach (var assignment in assignments)
+            {
+                assignment.IsActive = false;
+                assignment.LastModifiedDate = DateTime.UtcNow;
+            }
 
             await _context.SaveChangesAsync();
         }

@@ -211,7 +211,7 @@ namespace Giuru.IntegrationTests
                 await SaveAsync(new DiscountCodeRequestModel { Code = NewCode() });
 
                 var results = await _apiFixture.ClientApiClient.GetAsync<PagedResults<IEnumerable<DiscountCodeResponseModel>>>(
-                    $"{ApiEndpoints.DiscountCodesClientApiEndpoint}?searchTerm={prefix}&pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
+                    $"{ApiEndpoints.DiscountCodesClientApiEndpoint}?searchTerm={prefix[3..]}&pageIndex={Constants.DefaultPageIndex}&itemsPerPage={Constants.DefaultItemsPerPage}");
 
                 Assert.Equal(2, results.Total);
                 Assert.Equal(1, results.Data.Single(x => x.Code == $"{prefix}-A").ClientsCount);
@@ -247,6 +247,35 @@ namespace Giuru.IntegrationTests
 
             Assert.Empty(discountCode.ClientIds);
             Assert.Equal(0, discountCode.ClientsCount);
+        }
+
+        [Fact]
+        public async Task Update_OfUnknownCodeWithUnknownClient_IsNotFound()
+        {
+            var response = await _apiFixture.ClientApiClient.PostForResponseAsync(ApiEndpoints.DiscountCodesClientApiEndpoint, new DiscountCodeRequestModel { Id = Guid.NewGuid(), Code = NewCode(), ClientIds = new[] { Guid.NewGuid() } });
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Delete_DropsAssignmentsSoRecreatedCodeStartsWithNoClients()
+        {
+            var code = NewCode();
+            var clientId = await CreateClientAsync();
+
+            try
+            {
+                var first = await SaveAsync(new DiscountCodeRequestModel { Code = code, ClientIds = new[] { clientId } });
+                await _apiFixture.ClientApiClient.DeleteForResponseAsync($"{ApiEndpoints.DiscountCodesClientApiEndpoint}/{first.Id}");
+
+                var second = await SaveAsync(new DiscountCodeRequestModel { Code = code });
+
+                Assert.Empty((await GetByIdAsync(second.Id)).ClientIds);
+            }
+            finally
+            {
+                await DeleteClientAsync(clientId);
+            }
         }
 
         private static string NewCode()
