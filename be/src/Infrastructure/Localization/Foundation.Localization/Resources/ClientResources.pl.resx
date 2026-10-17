@@ -384,4 +384,25 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto zgodę.</value>
   </data>
+  <data name="DiscountCodeFormatInvalid" xml:space="preserve">
+    <value>Kod rabatowy musi mieć od 3 do 50 znaków i może zawierać tylko litery, cyfry, myślniki i podkreślenia.</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>Kod rabatowy o takim kodzie już istnieje.</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Nie znaleziono kodu rabatowego.</value>
+  </data>
+  <data name="DiscountCodeCodeCannotBeChanged" xml:space="preserve">
+    <value>Kodu rabatowego nie można zmienić po jego utworzeniu.</value>
+  </data>
+  <data name="DiscountCodeClientNotFound" xml:space="preserve">
+    <value>Nie znaleziono jednego lub więcej przypisanych klientów.</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Kod rabatowy został pomyślnie zapisany.</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Kod rabatowy został usunięty.</value>
+  </data>
 </root>

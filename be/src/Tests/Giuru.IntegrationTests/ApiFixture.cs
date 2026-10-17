@@ -37,6 +37,7 @@ namespace Giuru.IntegrationTests
         public RestClient SellerWebClient { get; private set; }
         public RestClient BuyerWebClient { get; private set; }
         public RestClient BasketApiClient { get; private set; }
+        public RestClient ClientApiClient { get; private set; }
 
         public async Task InitializeAsync()
         {
@@ -293,6 +294,17 @@ namespace Giuru.IntegrationTests
             basketApiHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             BasketApiClient = new RestClient(basketApiHttpClient);
+
+            var clientApiHttpClient = new HttpClient
+            {
+                BaseAddress = new Uri($"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}")
+            };
+
+            clientApiHttpClient.DefaultRequestHeaders.Accept.Clear();
+            clientApiHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            clientApiHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            ClientApiClient = new RestClient(clientApiHttpClient);
 
             var sellerWebFactpry = new WebApplicationFactory<SellerWebProgram>()
                 .WithWebHostBuilder(builder =>

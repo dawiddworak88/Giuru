@@ -384,4 +384,25 @@
   <data name="ClientApprovalDeletedSuccessfully" xml:space="preserve">
     <value>Zustimmung erfolgreich gelöscht.</value>
   </data>
+  <data name="DiscountCodeFormatInvalid" xml:space="preserve">
+    <value>Der Rabattcode muss 3-50 Zeichen lang sein und darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten.</value>
+  </data>
+  <data name="DiscountCodeExists" xml:space="preserve">
+    <value>Ein Rabattcode mit diesem Code existiert bereits.</value>
+  </data>
+  <data name="DiscountCodeNotFound" xml:space="preserve">
+    <value>Der Rabattcode wurde nicht gefunden.</value>
+  </data>
+  <data name="DiscountCodeCodeCannotBeChanged" xml:space="preserve">
+    <value>Der Rabattcode kann nach der Erstellung nicht mehr geändert werden.</value>
+  </data>
+  <data name="DiscountCodeClientNotFound" xml:space="preserve">
+    <value>Ein oder mehrere zugewiesene Kunden wurden nicht gefunden.</value>
+  </data>
+  <data name="DiscountCodeSavedSuccessfully" xml:space="preserve">
+    <value>Rabattcode wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
+    <value>Rabattcode wurde erfolgreich gelöscht.</value>
+  </data>
 </root>
