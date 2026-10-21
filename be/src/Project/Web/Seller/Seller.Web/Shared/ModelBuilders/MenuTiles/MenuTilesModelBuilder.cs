@@ -9,6 +9,7 @@ using System.Globalization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Shared.Configurations;
 using System;
+using System.Linq;
 
 namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 {
@@ -39,7 +40,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 
         public MenuTilesViewModel BuildModel()
         {
-            return new MenuTilesViewModel
+            var viewModel = new MenuTilesViewModel
             {
                 Tiles = new List<MenuTileViewModel>
                 {
@@ -214,6 +215,21 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     }
                 }
             };
+
+            if (_options.CurrentValue.IsGrulaConfigured)
+            {
+                // Discount Codes only matter while Grula prices the Orders, so the tile follows the same gate.
+                var discountCodesTile = new MenuTileViewModel
+                {
+                    Icon = IconsConstants.DiscountCode,
+                    Title = _clientLocalizer.GetString("DiscountCodes"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                };
+
+                viewModel.Tiles = viewModel.Tiles.Take(1).Append(discountCodesTile).Concat(viewModel.Tiles.Skip(1)).ToList();
+            }
+
+            return viewModel;
         }
     }
 }
