@@ -49,13 +49,18 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             viewModel.OrderBy = $"{nameof(DiscountCode.CreatedDate)} desc";
 
+            viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
+            {
+                nameof(DiscountCode.Code).ToCamelCase()
+            };
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
                 {
                     _clientLocalizer.GetString("DiscountCode"),
                     _globalLocalizer.GetString("Description"),
-                    _clientLocalizer.GetString("Status"),
+                    _globalLocalizer.GetString("Status"),
                     _clientLocalizer.GetString("AssignedClients"),
                     _globalLocalizer.GetString("LastModifiedDate"),
                     _globalLocalizer.GetString("CreatedDate")

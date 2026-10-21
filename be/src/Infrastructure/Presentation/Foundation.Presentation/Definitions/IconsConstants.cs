@@ -14,7 +14,7 @@
         public static readonly string Warehouses = "Server";
         public static readonly string Inventory = "Box";
         public static readonly string Outlet = "Tag";
-        public static readonly string DiscountCode = "Tag";
+        public static readonly string DiscountCode = "Percent";
         public static readonly string News = "BookOpen";
         public static readonly string Key = "Key";
         public static readonly string List = "List";

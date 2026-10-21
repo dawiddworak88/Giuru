@@ -20,14 +20,14 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IOptionsMonitor<AppSettings> _options;
+        private readonly IOptions<AppSettings> _options;
 
         public MenuTilesModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DashboardResources> dashboardResources,
             IStringLocalizer<ClientResources> clientLocalizer,
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
-            IOptionsMonitor<AppSettings> options,
+            IOptions<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
@@ -40,16 +40,18 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
 
         public MenuTilesViewModel BuildModel()
         {
+            var ordersTile = new MenuTileViewModel
+            {
+                Icon = IconsConstants.ShoppingCart,
+                Title = _globalLocalizer.GetString("Orders"),
+                Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+            };
+
             var viewModel = new MenuTilesViewModel
             {
                 Tiles = new List<MenuTileViewModel>
                 {
-                    new MenuTileViewModel
-                    {
-                        Icon = IconsConstants.ShoppingCart,
-                        Title = _globalLocalizer.GetString("Orders"),
-                        Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-                    },
+                    ordersTile,
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.TrendingUp,
@@ -193,7 +195,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Icon = IconsConstants.Content,
                         Title = _globalLocalizer.GetString("Content"),
                         Target = "_blank",
-                        Url = _options.CurrentValue.ContentUrl
+                        Url = _options.Value.ContentUrl
                     },
                     new MenuTileViewModel
                     {
@@ -216,7 +218,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                 }
             };
 
-            if (_options.CurrentValue.IsGrulaConfigured)
+            if (_options.Value.IsGrulaConfigured)
             {
                 // Discount Codes only matter while Grula prices the Orders, so the tile follows the same gate.
                 var discountCodesTile = new MenuTileViewModel
@@ -226,7 +228,9 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                 };
 
-                viewModel.Tiles = viewModel.Tiles.Take(1).Append(discountCodesTile).Concat(viewModel.Tiles.Skip(1)).ToList();
+                var tiles = viewModel.Tiles.ToList();
+                tiles.Insert(tiles.IndexOf(ordersTile) + 1, discountCodesTile);
+                viewModel.Tiles = tiles;
             }
 
             return viewModel;

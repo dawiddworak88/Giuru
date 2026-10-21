@@ -843,4 +843,7 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Erstellt von</value>
   </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>

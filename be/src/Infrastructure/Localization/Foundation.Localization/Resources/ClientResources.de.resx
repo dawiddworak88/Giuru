@@ -414,7 +414,4 @@
   <data name="AssignedClients" xml:space="preserve">
     <value>Zugewiesene Kunden</value>
   </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status</value>
-  </data>
 </root>

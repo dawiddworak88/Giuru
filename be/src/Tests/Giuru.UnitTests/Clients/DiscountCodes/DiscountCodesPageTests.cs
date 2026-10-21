@@ -1,3 +1,4 @@
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -12,10 +13,15 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Seller.Web.Areas.Clients.Controllers;
+using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.ModelBuilders;
+using Seller.Web.Areas.Clients.Repositories.DiscountCodes;
 using Seller.Web.Areas.Clients.ViewModels;
+using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.ModelBuilders.DrawerMenu;
 using Seller.Web.Shared.ModelBuilders.MenuTiles;
+using Seller.Web.Shared.ViewModels;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -89,6 +95,23 @@ namespace Giuru.UnitTests.Clients.DiscountCodes
             Assert.Equal(new[] { "Orders" }, titles);
         }
 
+        [Fact]
+        public async Task Catalog_DeleteConfirmationNamesTheCode()
+        {
+            var catalogModelBuilder = Substitute.For<ICatalogModelBuilder>();
+            catalogModelBuilder.BuildModel<CatalogViewModel<DiscountCode>, DiscountCode>().Returns(new CatalogViewModel<DiscountCode>());
+            var builder = new DiscountCodesPageCatalogModelBuilder(
+                catalogModelBuilder,
+                GlobalLocalizer(),
+                ClientLocalizer(),
+                Substitute.For<IDiscountCodesRepository>(),
+                Substitute.For<LinkGenerator>());
+
+            var catalog = await builder.BuildModelAsync(new ComponentModelBase());
+
+            Assert.Equal(new[] { "code" }, catalog.ConfirmationDialogDeleteNameProperty);
+        }
+
         private static DefaultHttpContext CreateHttpContext()
         {
             var context = new DefaultHttpContext
@@ -97,7 +120,7 @@ namespace Giuru.UnitTests.Clients.DiscountCodes
             };
             var authentication = Substitute.For<IAuthenticationService>();
             var properties = new AuthenticationProperties();
-            properties.StoreTokens(new[] { new AuthenticationToken { Name = "access_token", Value = "token" } });
+            properties.StoreTokens(new[] { new AuthenticationToken { Name = ApiExtensionsConstants.TokenName, Value = "token" } });
             authentication.AuthenticateAsync(Arg.Any<HttpContext>(), Arg.Any<string>())
                 .Returns(Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(context.User, properties, "test"))));
             context.RequestServices = new ServiceCollection().AddSingleton(authentication).BuildServiceProvider();
@@ -111,7 +134,7 @@ namespace Giuru.UnitTests.Clients.DiscountCodes
                 Substitute.For<IStringLocalizer<DashboardResources>>(),
                 ClientLocalizer(),
                 Substitute.For<IStringLocalizer<TeamMembersResources>>(),
-                OptionsMonitor(settings),
+                Options.Create(settings),
                 Substitute.For<LinkGenerator>());
 
             return builder.BuildModel().Tiles.Select(x => x.Title).ToArray();
@@ -124,7 +147,7 @@ namespace Giuru.UnitTests.Clients.DiscountCodes
                 Substitute.For<IStringLocalizer<DashboardResources>>(),
                 ClientLocalizer(),
                 Substitute.For<IStringLocalizer<TeamMembersResources>>(),
-                OptionsMonitor(settings),
+                Options.Create(settings),
                 Substitute.For<LinkGenerator>());
 
             return builder.BuildModel().First().Items.Select(x => x.Title).ToArray();
@@ -142,13 +165,6 @@ namespace Giuru.UnitTests.Clients.DiscountCodes
             var localizer = Substitute.For<IStringLocalizer<ClientResources>>();
             localizer["DiscountCodes"].Returns(new LocalizedString("DiscountCodes", "Discount codes"));
             return localizer;
-        }
-
-        private static IOptionsMonitor<AppSettings> OptionsMonitor(AppSettings settings)
-        {
-            var options = Substitute.For<IOptionsMonitor<AppSettings>>();
-            options.CurrentValue.Returns(settings);
-            return options;
         }
     }
 }

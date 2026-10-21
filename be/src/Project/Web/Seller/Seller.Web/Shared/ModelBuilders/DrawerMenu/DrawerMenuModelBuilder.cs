@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Microsoft.Extensions.Options;
 using Seller.Web.Shared.Configurations;
 
@@ -19,14 +18,14 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly IStringLocalizer<TeamMembersResources> _teamMembersLocalizer;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IOptionsMonitor<AppSettings> _options;
+        private readonly IOptions<AppSettings> _options;
 
         public DrawerMenuModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DashboardResources> dashboardLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IStringLocalizer<TeamMembersResources> teamMembersLocalizer,
-            IOptionsMonitor<AppSettings> options,
+            IOptions<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             _globalLocalizer = globalLocalizer;
@@ -39,19 +38,32 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
 
         public IEnumerable<DrawerMenuViewModel> BuildModel()
         {
-            var menu = new List<DrawerMenuViewModel>
+            var ordersItems = new List<DrawerMenuItemViewModel>
+            {
+                new DrawerMenuItemViewModel
+                {
+                    Icon = IconsConstants.ShoppingCart,
+                    Title = _globalLocalizer.GetString("Orders"),
+                    Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                }
+            };
+
+            if (_options.Value.IsGrulaConfigured)
+            {
+                // Discount Codes only matter while Grula prices the Orders, so the entry follows the same gate.
+                ordersItems.Add(new DrawerMenuItemViewModel
+                {
+                    Icon = IconsConstants.DiscountCode,
+                    Title = _clientLocalizer.GetString("DiscountCodes"),
+                    Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                });
+            }
+
+            return new List<DrawerMenuViewModel>
             {
                 new DrawerMenuViewModel
                 {
-                    Items = new List<DrawerMenuItemViewModel>
-                    {
-                        new DrawerMenuItemViewModel
-                        {
-                            Icon = IconsConstants.ShoppingCart,
-                            Title = _globalLocalizer.GetString("Orders"),
-                            Url = _linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                        }
-                    }
+                    Items = ordersItems
                 },
                 new DrawerMenuViewModel
                 {
@@ -252,21 +264,6 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                     }
                 }
             };
-
-            if (_options.CurrentValue.IsGrulaConfigured)
-            {
-                // Discount Codes only matter while Grula prices the Orders, so the entry follows the same gate.
-                var discountCodesItem = new DrawerMenuItemViewModel
-                {
-                    Icon = IconsConstants.DiscountCode,
-                    Title = _clientLocalizer.GetString("DiscountCodes"),
-                    Url = _linkGenerator.GetPathByAction("Index", "DiscountCodes", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
-                };
-
-                menu[0].Items = menu[0].Items.Append(discountCodesItem).ToList();
-            }
-
-            return menu;
         }
     }
 }
