@@ -16,6 +16,7 @@ using Seller.Web.Areas.Clients.ComponentModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Approvals;
 using Seller.Web.Areas.Clients.Repositories.ClientTeamMembers;
+using Seller.Web.Areas.Clients.Repositories.DiscountCodes;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -33,6 +34,8 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientFieldsRepository, ClientFieldsRepository>();
             services.AddScoped<IClientFieldOptionsRepository, ClientFieldOptionsRepository>();
             services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
+
+            services.AddScoped<IDiscountCodesRepository, DiscountCodesRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();

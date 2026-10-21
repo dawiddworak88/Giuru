@@ -1,0 +1,75 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace Client.Api.Infrastructure.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddedDiscountCodes : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "DiscountCodeClients",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DiscountCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DiscountCodeClients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DiscountCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    SellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DiscountCodes", x => x.Id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiscountCodeClients_DiscountCodeId_ClientId",
+                table: "DiscountCodeClients",
+                columns: new[] { "DiscountCodeId", "ClientId" },
+                unique: true,
+                filter: "[IsActive] = 1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DiscountCodes_SellerId_Code",
+                table: "DiscountCodes",
+                columns: new[] { "SellerId", "Code" },
+                unique: true,
+                filter: "[IsActive] = 1");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "DiscountCodeClients");
+
+            migrationBuilder.DropTable(
+                name: "DiscountCodes");
+        }
+    }
+}
