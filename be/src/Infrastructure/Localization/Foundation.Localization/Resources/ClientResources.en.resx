@@ -405,4 +405,13 @@
   <data name="DiscountCodeDeletedSuccessfully" xml:space="preserve">
     <value>Discount code has been deleted successfully.</value>
   </data>
+  <data name="DiscountCodes" xml:space="preserve">
+    <value>Discount codes</value>
+  </data>
+  <data name="DiscountCode" xml:space="preserve">
+    <value>Discount code</value>
+  </data>
+  <data name="AssignedClients" xml:space="preserve">
+    <value>Assigned clients</value>
+  </data>
 </root>
