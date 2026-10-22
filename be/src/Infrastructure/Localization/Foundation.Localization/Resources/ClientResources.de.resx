@@ -414,4 +414,16 @@
   <data name="AssignedClients" xml:space="preserve">
     <value>Zugewiesene Kunden</value>
   </data>
+  <data name="NewDiscountCode" xml:space="preserve">
+    <value>Neuer Rabattcode</value>
+  </data>
+  <data name="EditDiscountCode" xml:space="preserve">
+    <value>Rabattcode bearbeiten</value>
+  </data>
+  <data name="NavigateToDiscountCodesText" xml:space="preserve">
+    <value>Zurück zu den Rabattcodes</value>
+  </data>
+  <data name="DiscountCodeRequiredErrorMessage" xml:space="preserve">
+    <value>Der Rabattcode ist erforderlich.</value>
+  </data>
 </root>
