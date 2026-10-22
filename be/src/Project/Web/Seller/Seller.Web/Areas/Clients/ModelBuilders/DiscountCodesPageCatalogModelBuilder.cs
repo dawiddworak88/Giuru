@@ -45,10 +45,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
             viewModel.NewText = _clientLocalizer.GetString("NewDiscountCode");
-            viewModel.NewUrl = _linkGenerator.GetPathByAction("Edit", "DiscountCode", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "DiscountCode", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            var discountCodeUrl = _linkGenerator.GetPathByAction("Edit", "DiscountCode", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = discountCodeUrl;
+            viewModel.EditUrl = discountCodeUrl;
 
-            viewModel.DeleteApiUrl =_linkGenerator.GetPathByAction("Delete", "DiscountCodesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "DiscountCodesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "DiscountCodesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(DiscountCode.CreatedDate)} desc";

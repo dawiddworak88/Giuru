@@ -15,7 +15,7 @@ const DiscountCodeForm = (props) => {
         id: { value: props.id ? props.id : null, error: "" },
         code: { value: props.code ? props.code : "", error: "" },
         description: { value: props.description ? props.description : "", error: "" },
-        isDisabled: { value: props.isDisabled ? props.isDisabled : false },
+        isDisabled: { value: !!props.isDisabled },
         clientIds: { value: props.clientIds ? props.clientIds : [] }
     };
 
@@ -90,7 +90,7 @@ const DiscountCodeForm = (props) => {
                                 value={code}
                                 onChange={handleOnChange}
                                 variant="standard"
-                                disabled={!!props.id}
+                                disabled={!!id}
                                 inputProps={{ maxLength: 50 }}
                                 helperText={dirty.code ? errors.code : ""}
                                 error={(errors.code.length > 0) && dirty.code} />
@@ -113,7 +113,7 @@ const DiscountCodeForm = (props) => {
                                         onChange={() => {
                                             setFieldValue({ name: "isDisabled", value: !isDisabled });
                                         }}
-                                        checked={isDisabled ? false : true}
+                                        checked={!isDisabled}
                                         id="isDisabled"
                                         name="isDisabled"
                                         color="secondary"

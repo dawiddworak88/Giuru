@@ -39,7 +39,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = new DiscountCodeFormViewModel
             {
-                Title = _clientLocalizer.GetString("EditDiscountCode"),
+                Title = _clientLocalizer.GetString(componentModel.Id.HasValue ? "EditDiscountCode" : "NewDiscountCode"),
                 IdLabel = _globalLocalizer.GetString("Id"),
                 CodeLabel = _clientLocalizer.GetString("DiscountCode"),
                 DescriptionLabel = _globalLocalizer.GetString("Description"),
