@@ -44,6 +44,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.Title = _clientLocalizer.GetString("DiscountCodes");
             viewModel.DefaultItemsPerPage = Constants.DefaultItemsPerPage;
 
+            viewModel.NewText = _clientLocalizer.GetString("NewDiscountCode");
+            var discountCodeUrl = _linkGenerator.GetPathByAction("Edit", "DiscountCode", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = discountCodeUrl;
+            viewModel.EditUrl = discountCodeUrl;
+
             viewModel.DeleteApiUrl = _linkGenerator.GetPathByAction("Delete", "DiscountCodesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = _linkGenerator.GetPathByAction("Get", "DiscountCodesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
@@ -67,6 +72,10 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
+                    new CatalogActionViewModel
+                    {
+                        IsEdit = true
+                    },
                     new CatalogActionViewModel
                     {
                         IsDelete = true
