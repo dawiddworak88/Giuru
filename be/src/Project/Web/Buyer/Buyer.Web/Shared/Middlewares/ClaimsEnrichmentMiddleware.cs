@@ -4,7 +4,9 @@ using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.ApiExtensions.Definitions;
+using Buyer.Web.Shared.DomainModels.Clients;
 using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
@@ -84,13 +86,15 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
+            var client = await GetClientOrDefaultAsync(token);
 
             if (client is null)
             {
                 await next(context);
                 return;
             }
+
+            claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ClientIdClaimType, client.Id.ToString()));
 
             var claimsToCache = new List<CachedClaim>()
             {
@@ -240,6 +244,18 @@ namespace Buyer.Web.Shared.Middlewares
             });
 
             await next(context);
+        }
+
+        private async Task<Client> GetClientOrDefaultAsync(string token)
+        {
+            try
+            {
+                return await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture);
+            }
+            catch (CustomException)
+            {
+                return null;
+            }
         }
 
         private class CachedClaim
