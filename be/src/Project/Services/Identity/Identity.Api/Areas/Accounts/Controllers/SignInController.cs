@@ -68,7 +68,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
 
                     if (context is not null)
                     {
-                        await _userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId);
+                        await _userService.SignInAsync(model.Email, model.Password, context.Client.ClientId);
 
                         return Redirect(model.ReturnUrl);
                     }
