@@ -221,6 +221,130 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
 
+        [Fact]
+        public async Task Index_WhenANewDiscountCodeIsNotValidForTheClient_RejectsWithoutPricingOrSaving()
+        {
+            var harness = CreateDiscountHarness(DiscountCodeEligibilityStubs.Knowing("SUMMER25"), storedDiscountCode: "SUMMER25");
+
+            var result = await harness.Controller.Index(new SaveBasketRequestModel { DiscountCode = "WINTER", Items = harness.Items });
+
+            Assert.Equal(400, Assert.IsType<ObjectResult>(result).StatusCode);
+            await harness.PriceService.DidNotReceiveWithAnyArgs().GetPriceResultsForBasketAsync(default, default, default);
+            await harness.BasketRepository.DidNotReceiveWithAnyArgs().SaveAsync(default, default, default, default, default);
+        }
+
+        [Fact]
+        public async Task Index_WhenAValidNewDiscountCodeIsTypedInAnotherCase_PricesAndStoresTheStoredSpelling()
+        {
+            var harness = CreateDiscountHarness(DiscountCodeEligibilityStubs.Knowing("SUMMER25"), storedDiscountCode: null);
+
+            await harness.Controller.Index(new SaveBasketRequestModel { DiscountCode = " summer25 ", Items = harness.Items });
+
+            await harness.BasketRepository.Received(1).SaveAsync(Arg.Any<string>(), Arg.Any<string>(), harness.BasketId, Arg.Any<IEnumerable<BasketItem>>(), "SUMMER25");
+            var priceClient = harness.PriceService.ReceivedCalls()
+                .Single(call => call.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync))
+                .GetArguments()[2] as PriceClient;
+            Assert.Equal("SUMMER25", priceClient.DiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheStoredDiscountCodeIsNoLongerValid_DropsItRepricesWithoutItAndSaysSo()
+        {
+            var harness = CreateDiscountHarness(DiscountCodeEligibilityStubs.Knowing(), storedDiscountCode: "SUMMER25");
+
+            var result = await harness.Controller.Index(new SaveBasketRequestModel { Items = harness.Items });
+
+            var response = Assert.IsType<Buyer.Web.Areas.Orders.ApiResponseModels.BasketResponseModel>(Assert.IsType<ObjectResult>(result).Value);
+            Assert.Null(response.DiscountCode);
+            Assert.Equal("DiscountCodeRemoved", response.DiscountCodeRemovedMessage);
+            await harness.BasketRepository.Received(1).SaveAsync(Arg.Any<string>(), Arg.Any<string>(), harness.BasketId, Arg.Any<IEnumerable<BasketItem>>(), Arg.Is<string>(x => x == null));
+            var priceClient = harness.PriceService.ReceivedCalls()
+                .Single(call => call.GetMethodInfo().Name == nameof(IPriceService.GetPriceResultsForBasketAsync))
+                .GetArguments()[2] as PriceClient;
+            Assert.Null(priceClient.DiscountCode);
+        }
+
+        private sealed class DiscountHarness
+        {
+            public Guid BasketId { get; init; }
+            public BasketsApiController Controller { get; init; }
+            public IBasketRepository BasketRepository { get; init; }
+            public IPriceService PriceService { get; init; }
+            public IEnumerable<BasketItemRequestModel> Items { get; init; }
+        }
+
+        private static DiscountHarness CreateDiscountHarness(IDiscountCodeEligibilityRepository eligibility, string storedDiscountCode)
+        {
+            var basketId = Guid.NewGuid();
+            var productId = Guid.NewGuid();
+            var basketRepository = Substitute.For<IBasketRepository>();
+            var productsRepository = Substitute.For<IProductsRepository>();
+            var priceService = Substitute.For<IPriceService>();
+            var productsService = Substitute.For<IProductsService>();
+            var productColorsService = Substitute.For<IProductColorsService>();
+            var orderLocalizer = Substitute.For<IStringLocalizer<OrderResources>>();
+            var options = Options.Create(new AppSettings
+            {
+                GrulaAccessToken = "test-token",
+                GrulaEnvironmentId = Guid.NewGuid().ToString()
+            });
+
+            orderLocalizer[Arg.Any<string>()].Returns(call => new LocalizedString(call.ArgAt<string>(0), call.ArgAt<string>(0)));
+            productsRepository.GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<Product>>(new[]
+                {
+                    new Product { Id = productId, Sku = "RESOLVED", Name = "Product", PrimaryProductSku = "PRIMARY" }
+                }));
+            productColorsService.ToEnglishAsync(Arg.Any<string>()).Returns(Task.FromResult<string>(null));
+            priceService.GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>())
+                .Returns(Task.FromResult<IReadOnlyList<PriceLookupResult>>(new[]
+                {
+                    new PriceLookupResult
+                    {
+                        Status = PriceLookupStatus.Priced,
+                        Price = new Price { CurrentPrice = 12m, CurrencyCode = "EUR" }
+                    }
+                }));
+            priceService.CanSeePrices(Arg.Any<Guid?>()).Returns(true);
+            basketRepository.GetBasketById(Arg.Any<string>(), Arg.Any<string>(), basketId)
+                .Returns(Task.FromResult(new DomainBasket { Id = basketId, DiscountCode = storedDiscountCode }));
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<BasketItem>>(), Arg.Any<string>())
+                .Returns(call => Task.FromResult(new DomainBasket
+                {
+                    Id = basketId,
+                    DiscountCode = call.ArgAt<string>(4),
+                    Items = call.ArgAt<IEnumerable<BasketItem>>(3).ToList()
+                }));
+
+            var httpContext = CreateHttpContext(basketId);
+
+            return new DiscountHarness
+            {
+                BasketId = basketId,
+                BasketRepository = basketRepository,
+                PriceService = priceService,
+                Items = new[] { new BasketItemRequestModel { ProductId = productId, Sku = "RESOLVED", Name = "Product", Quantity = 1 } },
+                Controller = new BasketsApiController(
+                    basketRepository,
+                    eligibility,
+                    Substitute.For<LinkGenerator>(),
+                    Substitute.For<IMediaService>(),
+                    orderLocalizer,
+                    productsRepository,
+                    priceService,
+                    productsService,
+                    productColorsService,
+                    options,
+                    Substitute.For<ILogger<BasketsApiController>>(),
+                    new PriceProductFactory(productsService, productColorsService, options),
+                    CreatePriceClientResolver(httpContext),
+                    CreateBasketRepricingService(priceService))
+                {
+                    ControllerContext = new ControllerContext { HttpContext = httpContext }
+                }
+            };
+        }
+
         // The controllers delegate the align/apply spine to BasketRepricingService, so these flow
         // tests drive the real one over a substituted IPriceService rather than stubbing it out.
         private static IBasketRepricingService CreateBasketRepricingService(IPriceService priceService)

@@ -227,11 +227,66 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Null(savedDiscountCode);
         }
 
+        [Fact]
+        public async Task Index_WhenTheUploadCarriesAnInvalidDiscountCode_RejectsWithoutPricingOrSaving()
+        {
+            var (result, savedDiscountCode, priceService) = await RunDiscountCodeScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "WINTER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "SUMMER25",
+                eligibility: DiscountCodeEligibilityStubs.Knowing("WINTER25"));
+
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(400, objectResult.StatusCode);
+            Assert.Null(savedDiscountCode);
+            await priceService.DidNotReceiveWithAnyArgs().GetPriceResultsForBasketAsync(default, default, default);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadSendsTheValidCodeInAnotherCase_SavesTheStoredSpelling()
+        {
+            var (_, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: null,
+                formHasDiscountCode: true,
+                requestedDiscountCode: "summer25",
+                eligibility: DiscountCodeEligibilityStubs.Knowing("SUMMER25"));
+
+            Assert.Equal("SUMMER25", savedDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenThePersistedCodeIsNoLongerValid_DropsItAndReportsIt()
+        {
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new AppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: false,
+                requestedDiscountCode: null,
+                eligibility: DiscountCodeEligibilityStubs.Knowing());
+
+            var response = Assert.IsType<Buyer.Web.Areas.Orders.ApiResponseModels.BasketResponseModel>(Assert.IsType<ObjectResult>(result).Value);
+            Assert.Null(savedDiscountCode);
+            Assert.Null(response.DiscountCode);
+            Assert.Equal("DiscountCodeRemoved", response.DiscountCodeRemovedMessage);
+        }
+
+        private static IStringLocalizer<OrderResources> CreateKeyLocalizer()
+        {
+            var localizer = Substitute.For<IStringLocalizer<OrderResources>>();
+
+            localizer[Arg.Any<string>()].Returns(call => new LocalizedString(call.ArgAt<string>(0), call.ArgAt<string>(0)));
+
+            return localizer;
+        }
+
         private static async Task<(IActionResult Result, string SavedDiscountCode, IPriceService PriceService)> RunDiscountCodeScenarioAsync(
             AppSettings appSettings,
             string persistedDiscountCode,
             bool formHasDiscountCode,
-            string requestedDiscountCode)
+            string requestedDiscountCode,
+            IDiscountCodeEligibilityRepository eligibility = null)
         {
             var basketId = Guid.NewGuid();
             var productId = Guid.NewGuid();
@@ -289,7 +344,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 orderFileService,
                 productsRepository,
                 basketRepository,
-                DiscountCodeEligibilityStubs.Accepting(),
+                eligibility ?? DiscountCodeEligibilityStubs.Accepting(),
                 Substitute.For<LinkGenerator>(),
                 options,
                 Substitute.For<IMediaService>(),
@@ -297,7 +352,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 Substitute.For<IOrdersRepository>(),
                 inventoryRepository,
                 Substitute.For<ILogger<OrderFileApiController>>(),
-                Substitute.For<IStringLocalizer<OrderResources>>(),
+                CreateKeyLocalizer(),
                 priceService,
                 productsService,
                 productColorsService,
@@ -523,14 +578,87 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Null(savedDiscountCode);
         }
 
+        [Fact]
+        public async Task Index_WhenTheUploadCarriesAnInvalidDiscountCode_RejectsWithoutPricingOrSaving()
+        {
+            var (result, savedDiscountCode, priceService) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "WINTER25",
+                formHasDiscountCode: true,
+                requestedDiscountCode: "SUMMER25",
+                eligibility: DiscountCodeEligibilityStubs.Knowing("WINTER25"));
+
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(400, objectResult.StatusCode);
+            Assert.Null(savedDiscountCode);
+            await priceService.DidNotReceiveWithAnyArgs().GetPriceResultsForBasketAsync(default, default, default);
+        }
+
+        [Fact]
+        public async Task Index_WhenTheUploadSendsTheValidCodeInAnotherCase_SavesTheStoredSpelling()
+        {
+            var (_, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: null,
+                formHasDiscountCode: true,
+                requestedDiscountCode: "summer25",
+                eligibility: DiscountCodeEligibilityStubs.Knowing("SUMMER25"));
+
+            Assert.Equal("SUMMER25", savedDiscountCode);
+        }
+
+        [Fact]
+        public async Task Index_WhenThePersistedCodeIsNoLongerValid_DropsItAndReportsIt()
+        {
+            var (result, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: "SUMMER25",
+                formHasDiscountCode: false,
+                requestedDiscountCode: null,
+                eligibility: DiscountCodeEligibilityStubs.Knowing());
+
+            var response = Assert.IsType<Seller.Web.Areas.Orders.ApiResponseModels.BasketResponseModel>(Assert.IsType<ObjectResult>(result).Value);
+            Assert.Null(savedDiscountCode);
+            Assert.Null(response.DiscountCode);
+            Assert.Equal("DiscountCodeRemoved", response.DiscountCodeRemovedMessage);
+        }
+
+        [Fact]
+        public async Task Index_ChecksTheCodeAgainstTheClientTheUploadIsFor()
+        {
+            var clientId = Guid.NewGuid();
+            var eligibility = DiscountCodeEligibilityStubs.Knowing("SUMMER25");
+
+            await RunDiscountCodeScenarioAsync(
+                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+                persistedDiscountCode: null,
+                formHasDiscountCode: true,
+                requestedDiscountCode: "SUMMER25",
+                eligibility: eligibility,
+                clientIdOverride: clientId);
+
+            await eligibility.Received(1).GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), clientId, "SUMMER25");
+        }
+
+        private static IStringLocalizer<OrderResources> CreateKeyLocalizer()
+        {
+            var localizer = Substitute.For<IStringLocalizer<OrderResources>>();
+
+            localizer[Arg.Any<string>()].Returns(call => new LocalizedString(call.ArgAt<string>(0), call.ArgAt<string>(0)));
+
+            return localizer;
+        }
+
         private static async Task<(IActionResult Result, string SavedDiscountCode, IPriceService PriceService)> RunDiscountCodeScenarioAsync(
             SellerAppSettings appSettings,
             string persistedDiscountCode,
             bool formHasDiscountCode,
-            string requestedDiscountCode)
+            string requestedDiscountCode,
+            IDiscountCodeEligibilityRepository eligibility = null,
+            Guid? clientIdOverride = null)
         {
             var basketId = Guid.NewGuid();
-            var clientId = Guid.NewGuid();
+            var clientId = clientIdOverride ?? Guid.NewGuid();
             var productId = Guid.NewGuid();
             string savedDiscountCode = null;
             var existingBasket = new SellerBasket
@@ -588,14 +716,14 @@ namespace Giuru.UnitTests.Orders.Baskets
                 orderFileService,
                 productsRepository,
                 basketRepository,
-                DiscountCodeEligibilityStubs.Accepting(),
+                eligibility ?? DiscountCodeEligibilityStubs.Accepting(),
                 Substitute.For<LinkGenerator>(),
                 Substitute.For<IMediaService>(),
                 Substitute.For<SellerIMediaItemsRepository>(),
                 Substitute.For<SellerIOrdersRepository>(),
                 inventoryRepository,
                 Substitute.For<ILogger<SellerOrderFileApiController>>(),
-                Substitute.For<IStringLocalizer<OrderResources>>(),
+                CreateKeyLocalizer(),
                 priceService,
                 productsService,
                 productColorsService,
