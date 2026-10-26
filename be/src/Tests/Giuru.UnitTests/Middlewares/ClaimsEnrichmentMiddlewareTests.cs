@@ -12,14 +12,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using BuyerClient = Buyer.Web.Shared.DomainModels.Clients.Client;
 using System.Threading.Tasks;
+using BuyerClient = Buyer.Web.Shared.DomainModels.Clients.Client;
 
 namespace Giuru.UnitTests.Middlewares
 {
@@ -31,119 +32,119 @@ namespace Giuru.UnitTests.Middlewares
         private const string TeamMemberEmail = "team.member@example.com";
 
         [Fact]
-        public async Task InvokeAsync_TeamMemberWhoseEmailMatchesNoClient_GetsTheirClientsClaims()
+        public async Task InvokeAsync_OnClaimsCacheMiss_AddsClaimsOfTheClientResolvedByOrganisation()
         {
             var client = new BuyerClient { Id = Guid.NewGuid(), Name = "Acme" };
-            var fixture = new Fixture(client);
+            var clientsRepository = CreateClientsRepository(client);
+            var middleware = CreateMiddleware(clientsRepository);
 
-            var user = await fixture.InvokeAsync(TeamMemberEmail);
+            var context = await InvokeAsync(middleware);
 
-            Assert.Equal(client.Id.ToString(), ClaimValue(user, ClaimsEnrichmentConstants.ClientIdClaimType));
-            Assert.Equal("Acme", ClaimValue(user, ClaimsEnrichmentConstants.ClientNameClaimType));
-            await fixture.ClientsRepository.Received(1).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public async Task InvokeAsync_OnClaimsCacheMiss_AddsClientIdToTheCurrentRequest()
-        {
-            var client = new BuyerClient { Id = Guid.NewGuid() };
-            var fixture = new Fixture(client);
-
-            var user = await fixture.InvokeAsync(TeamMemberEmail);
-
-            Assert.Equal(client.Id.ToString(), ClaimValue(user, ClaimsEnrichmentConstants.ClientIdClaimType));
+            Assert.Equal(client.Id.ToString(), ClaimValue(context.User, ClaimsEnrichmentConstants.ClientIdClaimType));
+            Assert.Equal("Acme", ClaimValue(context.User, ClaimsEnrichmentConstants.ClientNameClaimType));
+            await clientsRepository.Received(1).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]
         public async Task InvokeAsync_OnClaimsCacheHit_AddsClientIdFromTheCache()
         {
             var client = new BuyerClient { Id = Guid.NewGuid(), Name = "Acme" };
-            var fixture = new Fixture(client);
-            await fixture.InvokeAsync(TeamMemberEmail);
+            var clientsRepository = CreateClientsRepository(client);
+            var middleware = CreateMiddleware(clientsRepository);
+            await InvokeAsync(middleware);
 
-            var user = await fixture.InvokeAsync(TeamMemberEmail);
+            var context = await InvokeAsync(middleware);
 
-            Assert.Equal(client.Id.ToString(), ClaimValue(user, ClaimsEnrichmentConstants.ClientIdClaimType));
-            Assert.Equal("Acme", ClaimValue(user, ClaimsEnrichmentConstants.ClientNameClaimType));
-            await fixture.ClientsRepository.Received(1).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
+            Assert.Equal(client.Id.ToString(), ClaimValue(context.User, ClaimsEnrichmentConstants.ClientIdClaimType));
+            Assert.Equal("Acme", ClaimValue(context.User, ClaimsEnrichmentConstants.ClientNameClaimType));
+            await clientsRepository.Received(1).GetClientAsync(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]
         public async Task InvokeAsync_OrganisationHasNoClient_AddsNoClaimsAndContinues()
         {
-            var fixture = new Fixture(null);
+            var middleware = CreateMiddleware(CreateClientsRepository(null));
+            var nextCalled = false;
 
-            var user = await fixture.InvokeAsync(TeamMemberEmail);
+            var context = await InvokeAsync(middleware, () => nextCalled = true);
 
-            Assert.Null(ClaimValue(user, ClaimsEnrichmentConstants.ClientIdClaimType));
-            Assert.True(fixture.NextCalled);
+            Assert.Null(ClaimValue(context.User, ClaimsEnrichmentConstants.ClientIdClaimType));
+            Assert.True(nextCalled);
         }
 
         [Fact]
-        public async Task InvokeAsync_ClientLookupFails_AddsNoClaimsAndContinues()
+        public async Task InvokeAsync_ClientLookupFails_LogsAWarningAddsNoClaimsAndContinues()
         {
-            var fixture = new Fixture(null);
-            fixture.ClientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>())
+            var clientsRepository = Substitute.For<IClientsRepository>();
+            clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>())
                 .Returns<Task<BuyerClient>>(_ => throw new CustomException("Unprocessable", 422));
+            var logger = Substitute.For<ILogger<ClaimsEnrichmentMiddleware>>();
+            var middleware = CreateMiddleware(clientsRepository, logger);
+            var nextCalled = false;
 
-            var user = await fixture.InvokeAsync(TeamMemberEmail);
+            var context = await InvokeAsync(middleware, () => nextCalled = true);
 
-            Assert.Null(ClaimValue(user, ClaimsEnrichmentConstants.ClientIdClaimType));
-            Assert.True(fixture.NextCalled);
+            Assert.Null(ClaimValue(context.User, ClaimsEnrichmentConstants.ClientIdClaimType));
+            Assert.True(nextCalled);
+            Assert.Contains(logger.ReceivedCalls(), call =>
+                call.GetMethodInfo().Name == nameof(ILogger.Log) && (LogLevel)call.GetArguments()[0] == LogLevel.Warning);
         }
 
         private static string ClaimValue(ClaimsPrincipal user, string type) => user.Claims.FirstOrDefault(x => x.Type == type)?.Value;
 
-        private class Fixture
+        private static IClientsRepository CreateClientsRepository(BuyerClient client)
         {
-            private readonly ClaimsEnrichmentMiddleware _middleware;
+            var clientsRepository = Substitute.For<IClientsRepository>();
+            clientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult(client));
 
-            public Fixture(BuyerClient client)
+            return clientsRepository;
+        }
+
+        private static ClaimsEnrichmentMiddleware CreateMiddleware(
+            IClientsRepository clientsRepository,
+            ILogger<ClaimsEnrichmentMiddleware> logger = null)
+        {
+            var fieldValuesRepository = Substitute.For<IClientFieldValuesRepository>();
+            fieldValuesRepository.GetAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>())
+                .Returns(Task.FromResult<IEnumerable<ClientFieldValue>>([]));
+
+            var cacheService = Substitute.For<ICacheService>();
+            cacheService.GetOrSetAsync(Arg.Any<string>(), Arg.Any<Func<Task<IEnumerable<Country>>>>(), Arg.Any<TimeSpan?>())
+                .Returns(Task.FromResult<IEnumerable<Country>>([]));
+
+            return new ClaimsEnrichmentMiddleware(
+                clientsRepository,
+                Substitute.For<IClientAddressesRepository>(),
+                Substitute.For<IGlobalRepository>(),
+                fieldValuesRepository,
+                Options.Create(new AppSettings { DefaultCulture = "en-US" }),
+                new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions())),
+                cacheService,
+                logger ?? Substitute.For<ILogger<ClaimsEnrichmentMiddleware>>());
+        }
+
+        private static HttpContext CreateHttpContext()
+        {
+            var identity = new ClaimsIdentity([new Claim(ClaimTypes.Email, TeamMemberEmail)], "test");
+            var authenticationService = Substitute.For<IAuthenticationService>();
+            authenticationService.AuthenticateAsync(Arg.Any<HttpContext>(), Arg.Any<string>())
+                .Returns(Task.FromResult(AuthenticateResult.NoResult()));
+            var services = new ServiceCollection().AddSingleton(authenticationService).BuildServiceProvider();
+
+            return new DefaultHttpContext { User = new ClaimsPrincipal(identity), RequestServices = services };
+        }
+
+        private static async Task<HttpContext> InvokeAsync(ClaimsEnrichmentMiddleware middleware, Action onNext = null)
+        {
+            var context = CreateHttpContext();
+
+            await middleware.InvokeAsync(context, _ =>
             {
-                ClientsRepository = Substitute.For<IClientsRepository>();
-                ClientsRepository.GetClientAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(Task.FromResult(client));
+                onNext?.Invoke();
+                return Task.CompletedTask;
+            });
 
-                var addressesRepository = Substitute.For<IClientAddressesRepository>();
-                var globalRepository = Substitute.For<IGlobalRepository>();
-                var fieldValuesRepository = Substitute.For<IClientFieldValuesRepository>();
-                fieldValuesRepository.GetAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>())
-                    .Returns(Task.FromResult<IEnumerable<ClientFieldValue>>([]));
-
-                var cacheService = Substitute.For<ICacheService>();
-                cacheService.GetOrSetAsync(Arg.Any<string>(), Arg.Any<Func<Task<IEnumerable<Country>>>>(), Arg.Any<TimeSpan?>())
-                    .Returns(Task.FromResult<IEnumerable<Country>>([]));
-
-                _middleware = new ClaimsEnrichmentMiddleware(
-                    ClientsRepository,
-                    addressesRepository,
-                    globalRepository,
-                    fieldValuesRepository,
-                    Options.Create(new AppSettings { DefaultCulture = "en-US" }),
-                    new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions())),
-                    cacheService);
-            }
-
-            public IClientsRepository ClientsRepository { get; }
-
-            public bool NextCalled { get; private set; }
-
-            public async Task<ClaimsPrincipal> InvokeAsync(string email)
-            {
-                var identity = new ClaimsIdentity([new Claim(ClaimTypes.Email, email)], "test");
-                var authenticationService = Substitute.For<IAuthenticationService>();
-                authenticationService.AuthenticateAsync(Arg.Any<HttpContext>(), Arg.Any<string>())
-                    .Returns(Task.FromResult(AuthenticateResult.NoResult()));
-                var services = new ServiceCollection().AddSingleton(authenticationService).BuildServiceProvider();
-                var context = new DefaultHttpContext { User = new ClaimsPrincipal(identity), RequestServices = services };
-
-                await _middleware.InvokeAsync(context, _ =>
-                {
-                    NextCalled = true;
-                    return Task.CompletedTask;
-                });
-
-                return context.User;
-            }
+            return context;
         }
     }
 }
