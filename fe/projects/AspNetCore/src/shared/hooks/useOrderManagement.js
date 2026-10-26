@@ -133,6 +133,9 @@ export const useOrderManagement = ({
                 if (response.ok && jsonResponse) {
                     setBasketId(jsonResponse.id);
                     onDiscountCodeChanged?.(jsonResponse.discountCode || "");
+
+                    if (jsonResponse.discountCodeRemovedMessage) toast.warning(jsonResponse.discountCodeRemovedMessage);
+
                     dispatch({
                         type: "SET_TOTAL_BASKET",
                         payload: parseInt(quantity + state.totalBasketItems),
@@ -240,6 +243,9 @@ export const useOrderManagement = ({
                     const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
 
                     onDiscountCodeChanged?.(jsonResponse.discountCode || "");
+
+                    if (jsonResponse.discountCodeRemovedMessage) toast.warning(jsonResponse.discountCodeRemovedMessage);
+
                     dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {

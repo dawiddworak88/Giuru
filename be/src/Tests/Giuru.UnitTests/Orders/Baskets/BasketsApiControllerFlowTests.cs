@@ -90,6 +90,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var controller = new BasketsApiController(
                 basketRepository,
+                DiscountCodeEligibilityStubs.Accepting(),
                 Substitute.For<LinkGenerator>(),
                 Substitute.For<IMediaService>(),
                 Substitute.For<IStringLocalizer<OrderResources>>(),
@@ -176,6 +177,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var controller = new BasketsApiController(
                 basketRepository,
+                DiscountCodeEligibilityStubs.Accepting(),
                 Substitute.For<LinkGenerator>(),
                 Substitute.For<IMediaService>(),
                 orderLocalizer,
@@ -301,6 +303,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var controller = new SellerBasketsApiController(
                 basketRepository,
+                DiscountCodeEligibilityStubs.Accepting(),
                 Substitute.For<LinkGenerator>(),
                 Substitute.For<IMediaService>(),
                 productsRepository,
@@ -384,6 +387,7 @@ namespace Giuru.UnitTests.Orders.Baskets
 
             var controller = new SellerBasketsApiController(
                 basketRepository,
+                DiscountCodeEligibilityStubs.Accepting(),
                 Substitute.For<LinkGenerator>(),
                 Substitute.For<IMediaService>(),
                 productsRepository,
@@ -431,6 +435,152 @@ namespace Giuru.UnitTests.Orders.Baskets
 
         // The controllers delegate the align/apply spine to BasketRepricingService, so these flow
         // tests drive the real one over a substituted IPriceService rather than stubbing it out.
+        [Fact]
+        public async Task Index_WhenANewDiscountCodeIsNotValidForTheClient_RejectsWithoutPricingOrSaving()
+        {
+            var harness = CreateDiscountHarness(DiscountCodeEligibilityStubs.Knowing("SUMMER25"), storedDiscountCode: "SUMMER25");
+
+            var result = await harness.Controller.Index(harness.CreateRequest(discountCode: "WINTER"));
+
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(400, objectResult.StatusCode);
+            await harness.PriceService.DidNotReceiveWithAnyArgs().GetPriceResultsForBasketAsync(default, default, default);
+            await harness.BasketRepository.DidNotReceiveWithAnyArgs().SaveAsync(default, default, default, default, default);
+        }
+
+        [Fact]
+        public async Task Index_WhenAValidNewDiscountCodeIsTypedInAnotherCase_StoresAndPricesWithTheStoredSpelling()
+        {
+            var harness = CreateDiscountHarness(DiscountCodeEligibilityStubs.Knowing("SUMMER25"), storedDiscountCode: null);
+
+            await harness.Controller.Index(harness.CreateRequest(discountCode: " summer25 "));
+
+            await harness.PriceClientResolver.Received(1).ResolveAsync(harness.ClientId, "SUMMER25", Arg.Any<string>());
+            await harness.BasketRepository.Received(1).SaveAsync(Arg.Any<string>(), Arg.Any<string>(), harness.BasketId, Arg.Any<IEnumerable<SellerBasketItem>>(), "SUMMER25");
+        }
+
+        [Fact]
+        public async Task Index_WhenTheStoredDiscountCodeIsNoLongerValid_DropsItRepricesWithoutItAndSaysSo()
+        {
+            var harness = CreateDiscountHarness(DiscountCodeEligibilityStubs.Knowing(), storedDiscountCode: "SUMMER25");
+
+            var result = await harness.Controller.Index(harness.CreateRequest(discountCode: null, hasDiscountCode: false));
+
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(200, objectResult.StatusCode);
+            var response = Assert.IsType<Seller.Web.Areas.Orders.ApiResponseModels.BasketResponseModel>(objectResult.Value);
+            Assert.Equal("DiscountCodeRemoved", response.DiscountCodeRemovedMessage);
+            await harness.PriceClientResolver.Received(1).ResolveAsync(harness.ClientId, Arg.Is<string>(x => x == null), Arg.Any<string>());
+            await harness.BasketRepository.Received(1).SaveAsync(Arg.Any<string>(), Arg.Any<string>(), harness.BasketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Is<string>(x => x == null));
+        }
+
+        private sealed class DiscountHarness
+        {
+            public Guid BasketId { get; init; }
+            public Guid ClientId { get; init; }
+            public Guid ProductId { get; init; }
+            public SellerBasketsApiController Controller { get; init; }
+            public SellerIBasketRepository BasketRepository { get; init; }
+            public IPriceService PriceService { get; init; }
+            public IPriceClientResolver PriceClientResolver { get; init; }
+
+            public SellerSaveBasketRequestModel CreateRequest(string discountCode, bool hasDiscountCode = true)
+            {
+                var request = new SellerSaveBasketRequestModel
+                {
+                    Id = BasketId,
+                    ClientId = ClientId,
+                    Items = new[]
+                    {
+                        new SellerBasketItemRequestModel { ProductId = ProductId, Sku = "RESOLVED", Name = "Product", Quantity = 1 }
+                    }
+                };
+
+                if (hasDiscountCode)
+                {
+                    request.DiscountCode = discountCode;
+                }
+
+                return request;
+            }
+        }
+
+        private static DiscountHarness CreateDiscountHarness(IDiscountCodeEligibilityRepository eligibility, string storedDiscountCode)
+        {
+            var basketId = Guid.NewGuid();
+            var clientId = Guid.NewGuid();
+            var productId = Guid.NewGuid();
+            var basketRepository = Substitute.For<SellerIBasketRepository>();
+            var productsRepository = Substitute.For<SellerIProductsRepository>();
+            var priceService = Substitute.For<IPriceService>();
+            var productsService = Substitute.For<SellerIProductsService>();
+            var productColorsService = Substitute.For<SellerIProductColorsService>();
+            var priceClientResolver = Substitute.For<IPriceClientResolver>();
+            var orderLocalizer = Substitute.For<IStringLocalizer<OrderResources>>();
+            var options = Options.Create(new SellerAppSettings
+            {
+                GrulaAccessToken = "test-token",
+                GrulaEnvironmentId = Guid.NewGuid().ToString()
+            });
+
+            orderLocalizer[Arg.Any<string>()].Returns(call => new LocalizedString(call.ArgAt<string>(0), call.ArgAt<string>(0)));
+            productsRepository.GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<SellerProduct>>(new[]
+                {
+                    new SellerProduct { Id = productId, Sku = "RESOLVED", Name = "Product", PrimaryProductSku = "PRIMARY" }
+                }));
+            productColorsService.ToEnglishAsync(Arg.Any<string>()).Returns(Task.FromResult<string>(null));
+            priceService.GetPriceResultsForBasketAsync(Arg.Any<DateTime>(), Arg.Any<IEnumerable<PriceProduct>>(), Arg.Any<PriceClient>())
+                .Returns(Task.FromResult<IReadOnlyList<PriceLookupResult>>(new[]
+                {
+                    new PriceLookupResult
+                    {
+                        Status = PriceLookupStatus.Priced,
+                        Price = new Price { CurrentPrice = 12m, CurrencyCode = "EUR" }
+                    }
+                }));
+            priceService.CanSeePrices(Arg.Any<Guid?>()).Returns(true);
+            priceClientResolver.ResolveAsync(Arg.Any<Guid?>(), Arg.Any<string>(), Arg.Any<string>())
+                .Returns(call => Task.FromResult(new PriceClient { Id = call.ArgAt<Guid?>(0), DiscountCode = call.ArgAt<string>(1) }));
+            basketRepository.GetBasketByIdAsync(Arg.Any<string>(), Arg.Any<string>(), basketId)
+                .Returns(Task.FromResult(new SellerBasket { Id = basketId, DiscountCode = storedDiscountCode }));
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+                .Returns(call => Task.FromResult(new SellerBasket
+                {
+                    Id = basketId,
+                    DiscountCode = call.ArgAt<string>(4),
+                    Items = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList()
+                }));
+
+            return new DiscountHarness
+            {
+                BasketId = basketId,
+                ClientId = clientId,
+                ProductId = productId,
+                BasketRepository = basketRepository,
+                PriceService = priceService,
+                PriceClientResolver = priceClientResolver,
+                Controller = new SellerBasketsApiController(
+                    basketRepository,
+                    eligibility,
+                    Substitute.For<LinkGenerator>(),
+                    Substitute.For<IMediaService>(),
+                    productsRepository,
+                    priceService,
+                    productsService,
+                    productColorsService,
+                    orderLocalizer,
+                    options,
+                    priceClientResolver,
+                    Substitute.For<ILogger<SellerBasketsApiController>>(),
+                    new SellerPriceProductFactory(productsService, productColorsService, options),
+                    CreateBasketRepricingService(priceService))
+                {
+                    ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
+                }
+            };
+        }
+
         private static IBasketRepricingService CreateBasketRepricingService(IPriceService priceService)
         {
             return new BasketRepricingService(priceService, Substitute.For<ILogger<BasketRepricingService>>());

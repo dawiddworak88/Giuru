@@ -41,6 +41,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
     public class BasketsApiController : BaseApiController
     {
         private readonly IBasketRepository _basketRepository;
+        private readonly IDiscountCodeEligibilityRepository _discountCodeEligibilityRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IMediaService _mediaService;
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
@@ -57,6 +58,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
         public BasketsApiController(
             IBasketRepository basketRepository,
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository,
             LinkGenerator linkGenerator,
             IMediaService mediaService,
             IStringLocalizer<OrderResources> orderLocalizer,
@@ -71,6 +73,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IBasketRepricingService basketRepricingService)
         {
             _basketRepository = basketRepository;
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
             _linkGenerator = linkGenerator;
             _mediaService = mediaService;
             _orderLocalizer = orderLocalizer;
@@ -111,7 +114,13 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 items.Any(),
                 async () => (await _basketRepository.GetBasketById(token, language, id))?.DiscountCode,
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                _discountCodeEligibilityRepository,
+                token,
+                language,
+                clientId,
+                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
+                () => _orderLocalizer.GetString("DiscountCodeInvalid").Value,
+                () => _orderLocalizer.GetString("DiscountCodeRemoved").Value);
 
             if (discountOutcome.IsRejected)
             {
@@ -151,7 +160,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id,
-                DiscountCode = basket.DiscountCode
+                DiscountCode = basket.DiscountCode,
+                DiscountCodeRemovedMessage = discountOutcome.RemovedMessage
             };
 
             var productIds = basket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

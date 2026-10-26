@@ -104,6 +104,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
             services.AddScoped<IClientsRepository, ClientsRepository>();
+            services.AddScoped<IDiscountCodeEligibilityRepository, DiscountCodeEligibilityRepository>();
 
             //Middlewares
             services.AddScoped<ClaimsEnrichmentMiddleware>();

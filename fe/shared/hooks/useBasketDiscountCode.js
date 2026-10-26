@@ -21,10 +21,15 @@ export const useBasketDiscountCode = ({
 
     // Every basket response - an apply, a removal, an added or deleted line, a file upload -
     // carries the same three things back, so the handlers share this instead of repeating it.
+    // A code that stopped being valid is dropped by the server on save and explained here.
     const applyBasketResponse = useCallback((jsonResponse) => {
         setBasketId(jsonResponse.id);
         setGroupedOrderItems(jsonResponse.items || []);
         syncFromResponse(jsonResponse);
+
+        if (jsonResponse.discountCodeRemovedMessage) {
+            toast.warning(jsonResponse.discountCodeRemovedMessage);
+        }
     }, [setBasketId, setGroupedOrderItems, syncFromResponse]);
 
     // Deliberately not memoised: buildBasket closes over the current basket id and items and is

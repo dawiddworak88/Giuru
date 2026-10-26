@@ -216,6 +216,31 @@ namespace Client.Api.Services.DiscountCodes
             await _context.SaveChangesAsync();
         }
 
+        public async Task<string> GetValidCodeAsync(GetValidDiscountCodeServiceModel model)
+        {
+            var client = await _context.Clients.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.ClientId.Value && x.IsActive);
+
+            // The caller must be the Client's own organisation (buyer, Team Member) or its Seller, so the
+            // check cannot be used to probe which codes another Client holds.
+            if (client is null || (client.OrganisationId != model.OrganisationId.Value && client.SellerId != model.OrganisationId.Value))
+            {
+                return default;
+            }
+
+            var code = model.Code.Trim();
+
+            return await (
+                from discountCode in _context.DiscountCodes.AsNoTracking()
+                join assignment in _context.DiscountCodeClients.AsNoTracking() on discountCode.Id equals assignment.DiscountCodeId
+                where discountCode.SellerId == client.SellerId
+                    && discountCode.IsActive
+                    && discountCode.IsDisabled == false
+                    && discountCode.Code == code
+                    && assignment.IsActive
+                    && assignment.ClientId == client.Id
+                select discountCode.Code).FirstOrDefaultAsync();
+        }
+
         private async Task<List<Guid>> GetAssignedClientIdsAsync(Guid discountCodeId)
         {
             return await _context.DiscountCodeClients

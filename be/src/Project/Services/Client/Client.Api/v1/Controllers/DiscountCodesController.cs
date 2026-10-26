@@ -84,6 +84,45 @@ namespace Client.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Checks whether a discount code is a valid discount code for a client.
+        /// </summary>
+        /// <param name="clientId">The client id.</param>
+        /// <param name="code">The requested code text.</param>
+        /// <returns>The stored spelling of the code, or not found without a reason.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("eligibility")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ValidDiscountCodeResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetEligibility(Guid? clientId, string code)
+        {
+            var serviceModel = new GetValidDiscountCodeServiceModel
+            {
+                ClientId = clientId,
+                Code = code,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = GetUsername(),
+                OrganisationId = GetOrganisationId()
+            };
+
+            var validationResult = await new GetValidDiscountCodeModelValidator().ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var validCode = await _discountCodesService.GetValidCodeAsync(serviceModel);
+
+                if (validCode is not null)
+                {
+                    return this.StatusCode((int)HttpStatusCode.OK, new ValidDiscountCodeResponseModel { Code = validCode });
+                }
+
+                return this.StatusCode((int)HttpStatusCode.NotFound);
+            }
+
+            throw ToValidationException(validationResult.Errors.Select(x => x.ErrorMessage));
+        }
+
+        /// <summary>
         /// Gets discount code by id.
         /// </summary>
         /// <param name="id">The id.</param>

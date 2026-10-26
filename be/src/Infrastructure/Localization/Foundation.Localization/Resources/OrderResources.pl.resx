@@ -387,4 +387,10 @@
   <data name="BasketPricesCouldNotBeVerified" xml:space="preserve">
     <value>Nie udało się zweryfikować cen w koszyku. Spróbuj ponownie.</value>
   </data>
+  <data name="DiscountCodeInvalid" xml:space="preserve">
+    <value>Ten kod rabatowy jest nieprawidłowy.</value>
+  </data>
+  <data name="DiscountCodeRemoved" xml:space="preserve">
+    <value>Twój kod rabatowy nie jest już ważny i został usunięty z koszyka. Ceny zostały zaktualizowane.</value>
+  </data>
 </root>
