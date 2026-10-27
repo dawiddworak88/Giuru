@@ -3,9 +3,11 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -54,18 +56,20 @@ namespace Buyer.Web.Shared.Middlewares
             if (context.User.Identity?.IsAuthenticated is false)
             {
                 await next(context);
+
                 return;
             }
 
-            var email = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var organisationId = GuidHelper.ParseNullable(context.User.FindFirstValue(AccountConstants.Claims.OrganisationIdClaim));
 
-            if (string.IsNullOrWhiteSpace(email))
+            if (organisationId.HasValue is false)
             {
                 await next(context);
+
                 return;
             }
 
-            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
+            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{organisationId.Value}";
             var cachedClaims = await _cache.GetStringAsync(cacheKey);
 
             var claimsIdentity = (ClaimsIdentity)context.User.Identity;
@@ -80,17 +84,21 @@ namespace Buyer.Web.Shared.Middlewares
                 }
 
                 await next(context);
+
                 return;
             }
 
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var client = await _clientsRepository.GetClientByEmailAsync(token, _options.Value.DefaultCulture, email);
+            var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture);
 
             if (client is null)
             {
                 await next(context);
+
                 return;
             }
+
+            claimsIdentity.AddClaim(new Claim(ClaimsEnrichmentConstants.ClientIdClaimType, client.Id.ToString()));
 
             var claimsToCache = new List<CachedClaim>()
             {
@@ -138,7 +146,7 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             var countries = await _cacheService.GetOrSetAsync(
-                CacheKeysConstants.CountriesCacheKey, 
+                CacheKeysConstants.CountriesCacheKey,
                 () => _globalRepository.GetCountriesAsync(token, _options.Value.DefaultCulture, null));
 
             if (countries is not null)
