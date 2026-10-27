@@ -3,7 +3,10 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Repositories.UserApprovals;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
+using Buyer.Web.Shared.Extensions;
+using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Baskets;
@@ -16,6 +19,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -35,6 +39,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly IApplicableDiscountCodeService _applicableDiscountCodeService;
+        private readonly IOptions<AppSettings> _options;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -42,8 +48,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
-            IIdentityRepository identityRepository)
+            IIdentityRepository identityRepository,
+            IApplicableDiscountCodeService applicableDiscountCodeService,
+            IOptions<AppSettings> options)
         {
+            _applicableDiscountCodeService = applicableDiscountCodeService;
+            _options = options;
             _basketRepository = basketRepository;
             _basketService = basketService;
             _orderLocalizer = orderLocalizer;
@@ -59,6 +69,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
             var organisationId = GuidHelper.ParseNullable(User.FindFirstValue(AccountConstants.Claims.OrganisationIdClaim));
 
+            if (model.ClientId != User.GetClientId())
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("CheckoutClientMismatch").Value });
+            }
+
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
 
             if (reqCookie is null)
@@ -71,6 +86,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 };
 
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+            }
+
+            if (_options.Value.IsGrulaConfigured)
+            {
+                var basket = await _basketRepository.GetBasketById(token, language, Guid.Parse(reqCookie));
+
+                if (string.IsNullOrWhiteSpace(basket?.DiscountCode) is false &&
+                    await _applicableDiscountCodeService.GetValidAsync(token, basket.DiscountCode) is null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("CheckoutDiscountCodeNoLongerValid").Value });
+                }
             }
 
             await _basketService.ValidateStockOutletQuantitiesAsync(model.BasketId, token, language);

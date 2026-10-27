@@ -356,7 +356,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         {
             var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             httpContextAccessor.HttpContext.Returns(httpContext);
-            return new ClaimsPriceClientResolver(httpContextAccessor);
+            return new ClaimsPriceClientResolver(httpContextAccessor, DiscountCodeEligibilityStubs.AcceptingForBuyer());
         }
 
         private static DefaultHttpContext CreateHttpContext(Guid basketId)

@@ -2,6 +2,7 @@
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
@@ -26,6 +27,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IOptions<AppSettings> _options;
+        private readonly IApplicableDiscountCodeService _applicableDiscountCodeService;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -35,8 +37,10 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IClientAddressesRepository clientAddressesRepository,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IApplicableDiscountCodeService applicableDiscountCodeService)
         {
+            _applicableDiscountCodeService = applicableDiscountCodeService;
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
@@ -119,9 +123,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 if (basket is not null)
                 {
                     viewModel.BasketItems = basket.Items;
-                    viewModel.DiscountCode = _options.Value.IsGrulaConfigured
-                        ? basket.DiscountCode
-                        : null;
+                    viewModel.DiscountCode = await _applicableDiscountCodeService.GetValidAsync(componentModel.Token, basket.DiscountCode);
                 }
             }
 

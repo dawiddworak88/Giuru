@@ -393,4 +393,10 @@
   <data name="DiscountCodeRemoved" xml:space="preserve">
     <value>Your discount code is no longer valid and was removed from the basket. Prices have been updated.</value>
   </data>
+  <data name="CheckoutDiscountCodeNoLongerValid" xml:space="preserve">
+    <value>Your discount code is no longer valid. Save your basket again to update the prices, then place the order.</value>
+  </data>
+  <data name="CheckoutClientMismatch" xml:space="preserve">
+    <value>This order cannot be placed for a different client.</value>
+  </data>
 </root>

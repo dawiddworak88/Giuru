@@ -35,7 +35,6 @@ namespace Giuru.IntegrationTests
     public class DiscountCodeEnforcementTests
     {
         private const string ClientsEndpoint = "api/v1/Clients";
-        private const string ClientByOrganisationEndpoint = "api/v1/Clients/organisation";
         private const string TestUserEmail = "seller@user.com";
 
         private readonly ApiFixture _apiFixture;
@@ -238,7 +237,7 @@ namespace Giuru.IntegrationTests
         public async Task BuyerSaveBasket_AsATeamMember_AppliesTheClientsCode()
         {
             // The test user is a Team Member of the Client that shares its organisation but not its email.
-            var client = await GetOrCreateTestUsersClientAsync();
+            var client = await ClientHelper.GetOrCreateTestUsersClientAsync(_apiFixture);
             Assert.NotEqual(TestUserEmail, client.Email, StringComparer.OrdinalIgnoreCase);
 
             var code = NewCode();
@@ -428,31 +427,6 @@ namespace Giuru.IntegrationTests
         private async Task DeleteClientAsync(Guid clientId)
         {
             await _apiFixture.ClientApiClient.DeleteForResponseAsync($"{ClientsEndpoint}/{clientId}");
-        }
-
-        // The buyer portal resolves the test user's Client by organisation and caches it, so this Client is
-        // reused when another test already created one, and is not deleted afterwards.
-        private async Task<ClientResponseModel> GetOrCreateTestUsersClientAsync()
-        {
-            var response = await _apiFixture.ClientApiClient.GetForResponseAsync(ClientByOrganisationEndpoint);
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return await ReadAsync<ClientResponseModel>(response);
-            }
-
-            var suffix = Guid.NewGuid().ToString("N");
-            var email = $"{suffix}@team-member-tests.com";
-
-            var created = await _apiFixture.ClientApiClient.PostAsync<ClientRequestModel, BaseResponseModel>(ClientsEndpoint, new ClientRequestModel
-            {
-                Name = $"TeamMember-{suffix}",
-                Email = email,
-                CommunicationLanguage = Clients.Language,
-                OrganisationId = Clients.OrganisationId
-            });
-
-            return new ClientResponseModel { Id = created.Id, Email = email };
         }
 
         private static async Task AssertOkAsync(HttpResponseMessage response)

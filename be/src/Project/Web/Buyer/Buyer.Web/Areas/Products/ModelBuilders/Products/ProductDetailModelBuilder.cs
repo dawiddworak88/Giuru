@@ -65,6 +65,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IProductPricingService _productPricingService;
         private readonly IPriceClientResolver _priceClientResolver;
+        private readonly IApplicableDiscountCodeService _applicableDiscountCodeService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -89,8 +90,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IExpectedDeliveryDateService expectedDeliveryDateService,
             IPriceProductFactory priceProductFactory,
             IProductPricingService productPricingService,
-            IPriceClientResolver priceClientResolver)
+            IPriceClientResolver priceClientResolver,
+            IApplicableDiscountCodeService applicableDiscountCodeService)
         {
+            _applicableDiscountCodeService = applicableDiscountCodeService;
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
             _globalLocalizer = globalLocalizer;
@@ -160,7 +163,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 var basket = componentModel.IsAuthenticated && componentModel.BasketId.HasValue
                     ? await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language)
                     : null;
-                var discountCode = _options.Value.IsGrulaConfigured ? basket?.DiscountCode : null;
+                var discountCode = await _applicableDiscountCodeService.GetValidAsync(componentModel.Token, basket?.DiscountCode);
 
                 if (basket is not null)
                 {

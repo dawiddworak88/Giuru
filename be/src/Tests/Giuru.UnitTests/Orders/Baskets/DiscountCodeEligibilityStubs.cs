@@ -1,3 +1,4 @@
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.Extensions.Exceptions;
 using Foundation.Pricing.Services;
 using NSubstitute;
@@ -18,6 +19,17 @@ namespace Giuru.UnitTests.Orders.Baskets
                 .Returns(call => Task.FromResult(call.ArgAt<string>(3)));
 
             return repository;
+        }
+
+        /// <summary>The buyer-side check, treating every requested code as valid for the signed-in Client.</summary>
+        public static IApplicableDiscountCodeService AcceptingForBuyer()
+        {
+            var service = Substitute.For<IApplicableDiscountCodeService>();
+
+            service.GetValidAsync(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(call => Task.FromResult(call.ArgAt<string>(1)));
+
+            return service;
         }
 
         /// <summary>

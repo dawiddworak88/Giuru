@@ -28,6 +28,7 @@ namespace Seller.Web.Shared.Services.Prices
         private readonly IClientAddressesRepository _clientAddressesRepository;
         private readonly ICurrenciesRepository _currenciesRepository;
         private readonly IOptions<AppSettings> _options;
+        private readonly IDiscountCodeEligibilityRepository _discountCodeEligibilityRepository;
 
         public ClientRepositoryPriceClientResolver(
             IClientLookupService clientLookupService,
@@ -35,8 +36,10 @@ namespace Seller.Web.Shared.Services.Prices
             IClientFieldValuesRepository clientFieldValuesRepository,
             IClientAddressesRepository clientAddressesRepository,
             ICurrenciesRepository currenciesRepository,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository)
         {
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
             _clientLookupService = clientLookupService;
             _countriesRepository = countriesRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
@@ -60,6 +63,11 @@ namespace Seller.Web.Shared.Services.Prices
             var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, culture, clientId);
             var currency = await _currenciesRepository.GetAsync(token, culture, client?.PreferedCurrencyId);
 
+            // An invalid code is priced as no code at all - a price lookup never fails on it.
+            var validDiscountCode = _options.Value.IsGrulaConfigured && string.IsNullOrWhiteSpace(discountCode) is false
+                ? await _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, culture, clientId, discountCode)
+                : null;
+
             return new PriceClient
             {
                 Id = client?.Id,
@@ -69,7 +77,7 @@ namespace Seller.Web.Shared.Services.Prices
                 PaletteLoading = clientFieldValues.OrEmptyIfNull().FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
                 Country = clientCountryName,
                 DeliveryZipCode = deliveryZipCode,
-                DiscountCode = discountCode
+                DiscountCode = validDiscountCode
             };
         }
     }

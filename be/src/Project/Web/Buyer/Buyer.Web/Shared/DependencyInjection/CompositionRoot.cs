@@ -98,6 +98,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             
             services.AddScoped<IPriceProductFactory, PriceProductFactory>();
             services.AddScoped<IPriceClientResolver, ClaimsPriceClientResolver>();
+            services.AddScoped<IApplicableDiscountCodeService, ApplicableDiscountCodeService>();
             services.AddScoped<IPricingSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
             services.RegisterPricingDependencies(configuration);
 
