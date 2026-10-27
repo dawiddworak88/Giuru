@@ -16,13 +16,8 @@ using System.Threading.Tasks;
 using BuyerBasketItemRequestModel = Buyer.Web.Areas.Orders.ApiRequestModels.BasketItemRequestModel;
 using BuyerBasketResponseModel = Buyer.Web.Areas.Orders.ApiResponseModels.BasketResponseModel;
 using BuyerSaveBasketRequestModel = Buyer.Web.Areas.Orders.ApiRequestModels.SaveBasketRequestModel;
-using ClientRequestModel = Client.Api.v1.RequestModels.ClientRequestModel;
-using ClientResponseModel = Client.Api.v1.ResponseModels.ClientResponseModel;
 using DiscountCodeRequestModel = Seller.Web.Areas.Clients.ApiRequestModels.DiscountCodeRequestModel;
-using SellerBasketApiResponseModel = Seller.Web.Areas.Orders.ApiResponseModels.BasketApiResponseModel;
-using SellerBasketItemRequestModel = Seller.Web.Areas.Orders.ApiRequestModels.BasketItemRequestModel;
 using SellerBasketResponseModel = Seller.Web.Areas.Orders.ApiResponseModels.BasketResponseModel;
-using SellerSaveBasketRequestModel = Seller.Web.Areas.Orders.ApiRequestModels.SaveBasketRequestModel;
 
 namespace Giuru.IntegrationTests
 {
@@ -34,7 +29,6 @@ namespace Giuru.IntegrationTests
     [Collection(nameof(ApiCollection))]
     public class DiscountCodeEnforcementTests
     {
-        private const string ClientsEndpoint = "api/v1/Clients";
         private const string TestUserEmail = "seller@user.com";
 
         private readonly ApiFixture _apiFixture;
@@ -47,68 +41,68 @@ namespace Giuru.IntegrationTests
         [Fact]
         public async Task SellerSaveBasket_WithAValidCodeTypedInAnotherCase_StoresItsStoredSpelling()
         {
-            var clientId = await CreateClientAsync();
+            var clientId = await ClientHelper.CreateClientAsync(_apiFixture, "Enforce");
 
             try
             {
-                var code = NewCode();
-                await CreateCodeAsync(code, clientId);
+                var code = DiscountCodeHelper.NewCode();
+                await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code, clientId);
                 var basketId = Guid.NewGuid();
 
-                var saved = await SaveSellerBasketAsync(basketId, clientId, code.ToLowerInvariant());
+                var saved = await DiscountCodeHelper.SaveSellerBasketAsync(_apiFixture, basketId, clientId, code.ToLowerInvariant());
 
                 Assert.Equal(code, saved.DiscountCode);
                 Assert.Null(saved.DiscountCodeRemovedMessage);
-                Assert.Equal(code, (await GetPersistedBasketAsync(basketId)).DiscountCode);
+                Assert.Equal(code, (await DiscountCodeHelper.GetPersistedBasketAsync(_apiFixture, basketId)).DiscountCode);
             }
             finally
             {
-                await DeleteClientAsync(clientId);
+                await ClientHelper.DeleteClientAsync(_apiFixture, clientId);
             }
         }
 
         [Fact]
         public async Task SellerSaveBasket_WithACodeNotValidForTheClient_IsRejectedAndLeavesTheBasketUnchanged()
         {
-            var clientId = await CreateClientAsync();
+            var clientId = await ClientHelper.CreateClientAsync(_apiFixture, "Enforce");
 
             try
             {
-                var code = NewCode();
-                var unassignedCode = NewCode();
-                await CreateCodeAsync(code, clientId);
-                await CreateCodeAsync(unassignedCode);
+                var code = DiscountCodeHelper.NewCode();
+                var unassignedCode = DiscountCodeHelper.NewCode();
+                await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code, clientId);
+                await DiscountCodeHelper.CreateCodeAsync(_apiFixture, unassignedCode);
                 var basketId = Guid.NewGuid();
-                await SaveSellerBasketAsync(basketId, clientId, code);
+                await DiscountCodeHelper.SaveSellerBasketAsync(_apiFixture, basketId, clientId, code);
 
                 var response = await _apiFixture.SellerWebClient.PostForResponseAsync(
                     ApiEndpoints.BasketApiEndpoint,
-                    CreateSellerRequest(basketId, clientId, unassignedCode, lineCount: 2));
+                    DiscountCodeHelper.CreateSellerBasketRequest(basketId, clientId, unassignedCode, lineCount: 2));
 
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-                var persisted = await GetPersistedBasketAsync(basketId);
+                var persisted = await DiscountCodeHelper.GetPersistedBasketAsync(_apiFixture, basketId);
                 Assert.Equal(code, persisted.DiscountCode);
                 Assert.Single(persisted.Items);
             }
             finally
             {
-                await DeleteClientAsync(clientId);
+                await ClientHelper.DeleteClientAsync(_apiFixture, clientId);
             }
         }
 
         [Fact]
         public async Task SellerSaveBasket_WithUnknownCode_IsRejectedWithTheSameMessageAsAnUnassignedOne()
         {
-            var clientId = await CreateClientAsync();
+            var clientId = await ClientHelper.CreateClientAsync(_apiFixture, "Enforce");
 
             try
             {
                 // A code that exists but is assigned to nobody.
-                var code = NewCode();
-                await CreateCodeAsync(code);
+                var code = DiscountCodeHelper.NewCode();
+                await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code);
 
-                var unassigned = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, CreateSellerRequest(Guid.NewGuid(), clientId, code));
-                var unknown = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, CreateSellerRequest(Guid.NewGuid(), clientId, "UNKNOWN-CODE"));
+                var unassigned = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, DiscountCodeHelper.CreateSellerBasketRequest(Guid.NewGuid(), clientId, code));
+                var unknown = await _apiFixture.SellerWebClient.PostForResponseAsync(ApiEndpoints.BasketApiEndpoint, DiscountCodeHelper.CreateSellerBasketRequest(Guid.NewGuid(), clientId, "UNKNOWN-CODE"));
 
                 Assert.Equal(HttpStatusCode.BadRequest, unassigned.StatusCode);
                 Assert.Equal(HttpStatusCode.BadRequest, unknown.StatusCode);
@@ -116,7 +110,7 @@ namespace Giuru.IntegrationTests
             }
             finally
             {
-                await DeleteClientAsync(clientId);
+                await ClientHelper.DeleteClientAsync(_apiFixture, clientId);
             }
         }
 
@@ -126,77 +120,77 @@ namespace Giuru.IntegrationTests
         [InlineData(Revocation.Deleted)]
         public async Task SellerSaveBasket_WhenTheStoredCodeStopsBeingValid_DropsItWithAMessage(Revocation revocation)
         {
-            var clientId = await CreateClientAsync();
+            var clientId = await ClientHelper.CreateClientAsync(_apiFixture, "Enforce");
 
             try
             {
-                var code = NewCode();
-                var codeId = await CreateCodeAsync(code, clientId);
+                var code = DiscountCodeHelper.NewCode();
+                var codeId = await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code, clientId);
                 var basketId = Guid.NewGuid();
-                await SaveSellerBasketAsync(basketId, clientId, code);
+                await DiscountCodeHelper.SaveSellerBasketAsync(_apiFixture, basketId, clientId, code);
 
                 await RevokeAsync(revocation, codeId, code, clientId);
 
                 // A blank code leaves the stored one unchanged, as the order form sends it.
-                var saved = await SaveSellerBasketAsync(basketId, clientId, string.Empty);
+                var saved = await DiscountCodeHelper.SaveSellerBasketAsync(_apiFixture, basketId, clientId, string.Empty);
 
                 Assert.Null(saved.DiscountCode);
                 Assert.False(string.IsNullOrWhiteSpace(saved.DiscountCodeRemovedMessage));
-                Assert.Null((await GetPersistedBasketAsync(basketId)).DiscountCode);
+                Assert.Null((await DiscountCodeHelper.GetPersistedBasketAsync(_apiFixture, basketId)).DiscountCode);
             }
             finally
             {
-                await DeleteClientAsync(clientId);
+                await ClientHelper.DeleteClientAsync(_apiFixture, clientId);
             }
         }
 
         [Fact]
         public async Task SellerUploadOrderFile_WithAValidCodeTypedInAnotherCase_StoresItsStoredSpelling()
         {
-            var clientId = await CreateClientAsync();
+            var clientId = await ClientHelper.CreateClientAsync(_apiFixture, "Enforce");
 
             try
             {
                 var sku = await CreateProductAsync();
-                var code = NewCode();
-                await CreateCodeAsync(code, clientId);
+                var code = DiscountCodeHelper.NewCode();
+                await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code, clientId);
                 var basketId = Guid.NewGuid();
 
                 var response = await UploadOrderFileAsync(basketId, clientId, sku, code.ToLowerInvariant());
 
                 await AssertOkAsync(response);
                 Assert.Equal(code, (await ReadAsync<SellerBasketResponseModel>(response)).DiscountCode);
-                Assert.Equal(code, (await GetPersistedBasketAsync(basketId)).DiscountCode);
+                Assert.Equal(code, (await DiscountCodeHelper.GetPersistedBasketAsync(_apiFixture, basketId)).DiscountCode);
             }
             finally
             {
-                await DeleteClientAsync(clientId);
+                await ClientHelper.DeleteClientAsync(_apiFixture, clientId);
             }
         }
 
         [Fact]
         public async Task SellerUploadOrderFile_WithACodeNotValidForTheClient_IsRejectedAndLeavesTheBasketUnchanged()
         {
-            var clientId = await CreateClientAsync();
+            var clientId = await ClientHelper.CreateClientAsync(_apiFixture, "Enforce");
 
             try
             {
                 var sku = await CreateProductAsync();
-                var code = NewCode();
-                await CreateCodeAsync(code, clientId);
+                var code = DiscountCodeHelper.NewCode();
+                await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code, clientId);
                 var basketId = Guid.NewGuid();
-                await SaveSellerBasketAsync(basketId, clientId, code);
+                await DiscountCodeHelper.SaveSellerBasketAsync(_apiFixture, basketId, clientId, code);
 
                 var response = await UploadOrderFileAsync(basketId, clientId, sku, "UNKNOWN-CODE");
 
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-                var persisted = await GetPersistedBasketAsync(basketId);
+                var persisted = await DiscountCodeHelper.GetPersistedBasketAsync(_apiFixture, basketId);
                 Assert.Equal(code, persisted.DiscountCode);
                 Assert.DoesNotContain(persisted.Items, x => x.ProductSku == sku);
             }
             finally
             {
-                await DeleteClientAsync(clientId);
+                await ClientHelper.DeleteClientAsync(_apiFixture, clientId);
             }
         }
 
@@ -206,15 +200,15 @@ namespace Giuru.IntegrationTests
         [InlineData(Revocation.Deleted)]
         public async Task SellerUploadOrderFile_WhenTheStoredCodeStopsBeingValid_DropsItWithAMessage(Revocation revocation)
         {
-            var clientId = await CreateClientAsync();
+            var clientId = await ClientHelper.CreateClientAsync(_apiFixture, "Enforce");
 
             try
             {
                 var sku = await CreateProductAsync();
-                var code = NewCode();
-                var codeId = await CreateCodeAsync(code, clientId);
+                var code = DiscountCodeHelper.NewCode();
+                var codeId = await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code, clientId);
                 var basketId = Guid.NewGuid();
-                await SaveSellerBasketAsync(basketId, clientId, code);
+                await DiscountCodeHelper.SaveSellerBasketAsync(_apiFixture, basketId, clientId, code);
 
                 await RevokeAsync(revocation, codeId, code, clientId);
 
@@ -225,11 +219,11 @@ namespace Giuru.IntegrationTests
                 var saved = await ReadAsync<SellerBasketResponseModel>(response);
                 Assert.Null(saved.DiscountCode);
                 Assert.False(string.IsNullOrWhiteSpace(saved.DiscountCodeRemovedMessage));
-                Assert.Null((await GetPersistedBasketAsync(basketId)).DiscountCode);
+                Assert.Null((await DiscountCodeHelper.GetPersistedBasketAsync(_apiFixture, basketId)).DiscountCode);
             }
             finally
             {
-                await DeleteClientAsync(clientId);
+                await ClientHelper.DeleteClientAsync(_apiFixture, clientId);
             }
         }
 
@@ -240,8 +234,8 @@ namespace Giuru.IntegrationTests
             var client = await ClientHelper.GetOrCreateTestUsersClientAsync(_apiFixture);
             Assert.NotEqual(TestUserEmail, client.Email, StringComparer.OrdinalIgnoreCase);
 
-            var code = NewCode();
-            await CreateCodeAsync(code, client.Id.Value);
+            var code = DiscountCodeHelper.NewCode();
+            await DiscountCodeHelper.CreateCodeAsync(_apiFixture, code, client.Id.Value);
 
             var response = await _apiFixture.BuyerWebClient.PostForResponseAsync(
                 ApiEndpoints.BasketApiEndpoint,
@@ -253,7 +247,7 @@ namespace Giuru.IntegrationTests
                         new BuyerBasketItemRequestModel
                         {
                             ProductId = Guid.NewGuid(),
-                            Sku = NewUnknownSku(),
+                            Sku = DiscountCodeHelper.NewUnknownSku(),
                             Name = "Unpriced line",
                             Quantity = 1
                         }
@@ -277,7 +271,7 @@ namespace Giuru.IntegrationTests
                         new BuyerBasketItemRequestModel
                         {
                             ProductId = Guid.NewGuid(),
-                            Sku = NewUnknownSku(),
+                            Sku = DiscountCodeHelper.NewUnknownSku(),
                             Name = "Unpriced line",
                             Quantity = 1
                         }
@@ -299,69 +293,16 @@ namespace Giuru.IntegrationTests
             switch (revocation)
             {
                 case Revocation.Unassigned:
-                    await SaveCodeAsync(new DiscountCodeRequestModel { Id = codeId, Code = code, ClientIds = Array.Empty<Guid>() });
+                    await DiscountCodeHelper.SaveCodeAsync(_apiFixture, new DiscountCodeRequestModel { Id = codeId, Code = code, ClientIds = Array.Empty<Guid>() });
                     break;
                 case Revocation.Deactivated:
-                    await SaveCodeAsync(new DiscountCodeRequestModel { Id = codeId, Code = code, IsDisabled = true, ClientIds = new[] { clientId } });
+                    await DiscountCodeHelper.SaveCodeAsync(_apiFixture, new DiscountCodeRequestModel { Id = codeId, Code = code, IsDisabled = true, ClientIds = new[] { clientId } });
                     break;
                 case Revocation.Deleted:
                     var response = await _apiFixture.SellerWebClient.DeleteForResponseAsync($"{ApiEndpoints.DeleteDiscountCodeApiEndpoint}/{codeId}");
                     Assert.True(response.IsSuccessStatusCode, $"Deleting the code failed with {(int)response.StatusCode}.");
                     break;
             }
-        }
-
-        private static string NewCode()
-        {
-            return $"T{Guid.NewGuid():N}"[..16].ToUpperInvariant();
-        }
-
-        private static string NewUnknownSku()
-        {
-            return $"NO-PRODUCT-{Guid.NewGuid():N}";
-        }
-
-        private async Task<Guid> CreateCodeAsync(string code, params Guid[] clientIds)
-        {
-            var created = await SaveCodeAsync(new DiscountCodeRequestModel { Code = code, ClientIds = clientIds });
-
-            return created.Id.Value;
-        }
-
-        private Task<BaseResponseModel> SaveCodeAsync(DiscountCodeRequestModel request)
-        {
-            return _apiFixture.SellerWebClient.PostAsync<DiscountCodeRequestModel, BaseResponseModel>(ApiEndpoints.DiscountCodesApiEndpoint, request);
-        }
-
-        private Task<SellerBasketResponseModel> SaveSellerBasketAsync(Guid basketId, Guid clientId, string discountCode)
-        {
-            return _apiFixture.SellerWebClient.PostAsync<SellerSaveBasketRequestModel, SellerBasketResponseModel>(
-                ApiEndpoints.BasketApiEndpoint,
-                CreateSellerRequest(basketId, clientId, discountCode));
-        }
-
-        private Task<SellerBasketApiResponseModel> GetPersistedBasketAsync(Guid basketId)
-        {
-            return _apiFixture.BasketApiClient.GetAsync<SellerBasketApiResponseModel>($"{ApiConstants.Baskets.BasketsApiEndpoint}/{basketId}");
-        }
-
-        private static SellerSaveBasketRequestModel CreateSellerRequest(Guid basketId, Guid clientId, string discountCode, int lineCount = 1)
-        {
-            return new SellerSaveBasketRequestModel
-            {
-                Id = basketId,
-                ClientId = clientId,
-                DiscountCode = discountCode,
-                Items = Enumerable.Range(0, lineCount)
-                    .Select(_ => new SellerBasketItemRequestModel
-                    {
-                        ProductId = Guid.NewGuid(),
-                        Sku = NewUnknownSku(),
-                        Name = "Unpriced line",
-                        Quantity = 1
-                    })
-                    .ToList()
-            };
         }
 
         private async Task<HttpResponseMessage> UploadOrderFileAsync(Guid basketId, Guid clientId, string sku, string discountCode)
@@ -407,26 +348,6 @@ namespace Giuru.IntegrationTests
             });
 
             return sku;
-        }
-
-        private async Task<Guid> CreateClientAsync()
-        {
-            var suffix = Guid.NewGuid().ToString("N");
-
-            var created = await _apiFixture.ClientApiClient.PostAsync<ClientRequestModel, BaseResponseModel>(ClientsEndpoint, new ClientRequestModel
-            {
-                Name = $"Enforce-{suffix}",
-                Email = $"{suffix}@discount-tests.com",
-                CommunicationLanguage = Clients.Language,
-                OrganisationId = Guid.NewGuid()
-            });
-
-            return created.Id.Value;
-        }
-
-        private async Task DeleteClientAsync(Guid clientId)
-        {
-            await _apiFixture.ClientApiClient.DeleteForResponseAsync($"{ClientsEndpoint}/{clientId}");
         }
 
         private static async Task AssertOkAsync(HttpResponseMessage response)

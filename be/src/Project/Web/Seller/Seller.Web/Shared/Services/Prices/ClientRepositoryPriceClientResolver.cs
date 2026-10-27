@@ -1,6 +1,8 @@
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Pricing.DomainModels;
 using Foundation.Pricing.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
@@ -11,6 +13,7 @@ using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.Services.Clients;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.Services.Prices
@@ -29,6 +32,7 @@ namespace Seller.Web.Shared.Services.Prices
         private readonly ICurrenciesRepository _currenciesRepository;
         private readonly IOptions<AppSettings> _options;
         private readonly IDiscountCodeEligibilityRepository _discountCodeEligibilityRepository;
+        private readonly ILogger<ClientRepositoryPriceClientResolver> _logger;
 
         public ClientRepositoryPriceClientResolver(
             IClientLookupService clientLookupService,
@@ -37,15 +41,17 @@ namespace Seller.Web.Shared.Services.Prices
             IClientAddressesRepository clientAddressesRepository,
             ICurrenciesRepository currenciesRepository,
             IOptions<AppSettings> options,
-            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository)
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository,
+            ILogger<ClientRepositoryPriceClientResolver> logger)
         {
-            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
             _clientLookupService = clientLookupService;
             _countriesRepository = countriesRepository;
             _clientFieldValuesRepository = clientFieldValuesRepository;
             _clientAddressesRepository = clientAddressesRepository;
             _currenciesRepository = currenciesRepository;
             _options = options;
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
+            _logger = logger;
         }
 
         public async Task<PriceClient> ResolveAsync(Guid? clientId, string discountCode, string token)
@@ -63,9 +69,8 @@ namespace Seller.Web.Shared.Services.Prices
             var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, culture, clientId);
             var currency = await _currenciesRepository.GetAsync(token, culture, client?.PreferedCurrencyId);
 
-            // An invalid code is priced as no code at all - a price lookup never fails on it.
-            var validDiscountCode = _options.Value.IsGrulaConfigured && string.IsNullOrWhiteSpace(discountCode) is false
-                ? await _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, culture, clientId, discountCode)
+            var validDiscountCode = _options.Value.IsGrulaConfigured
+                ? await GetApplicableDiscountCodeAsync(token, culture, clientId, discountCode)
                 : null;
 
             return new PriceClient
@@ -79,6 +84,20 @@ namespace Seller.Web.Shared.Services.Prices
                 DeliveryZipCode = deliveryZipCode,
                 DiscountCode = validDiscountCode
             };
+        }
+
+        // An invalid or unverifiable code is priced as no code at all - a price lookup never fails on it.
+        private async Task<string> GetApplicableDiscountCodeAsync(string token, string culture, Guid? clientId, string discountCode)
+        {
+            try
+            {
+                return await _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, culture, clientId, discountCode);
+            }
+            catch (Exception exception) when (exception is CustomException or HttpRequestException or TaskCanceledException)
+            {
+                _logger.LogWarning(exception, "Couldn't check the Discount Code for Client {ClientId}; pricing without it.", clientId);
+                return null;
+            }
         }
     }
 }

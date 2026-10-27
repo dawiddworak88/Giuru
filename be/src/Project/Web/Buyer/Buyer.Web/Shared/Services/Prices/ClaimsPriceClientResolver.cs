@@ -38,8 +38,8 @@ namespace Buyer.Web.Shared.Services.Prices
 
             var user = _httpContextAccessor.HttpContext?.User;
 
-            // An invalid code is priced as no code at all - a price lookup never fails on it.
-            var validDiscountCode = await _applicableDiscountCodeService.GetValidAsync(token, discountCode);
+            // An invalid or unverifiable code is priced as no code at all - a price lookup never fails on it.
+            var validDiscountCode = await _applicableDiscountCodeService.GetApplicableAsync(token, discountCode);
 
             return new PriceClient
             {

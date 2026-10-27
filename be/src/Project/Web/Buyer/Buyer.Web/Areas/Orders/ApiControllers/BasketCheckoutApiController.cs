@@ -6,7 +6,6 @@ using Buyer.Web.Areas.Orders.Repositories.UserApprovals;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Extensions;
-using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Baskets;
@@ -15,6 +14,7 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Helpers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
+using Foundation.Pricing.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IIdentityRepository _identityRepository;
-        private readonly IApplicableDiscountCodeService _applicableDiscountCodeService;
+        private readonly IDiscountCodeEligibilityRepository _discountCodeEligibilityRepository;
         private readonly IOptions<AppSettings> _options;
 
         public BasketCheckoutApiController(
@@ -49,17 +49,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IStringLocalizer<OrderResources> orderLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
             IIdentityRepository identityRepository,
-            IApplicableDiscountCodeService applicableDiscountCodeService,
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository,
             IOptions<AppSettings> options)
         {
-            _applicableDiscountCodeService = applicableDiscountCodeService;
-            _options = options;
             _basketRepository = basketRepository;
             _basketService = basketService;
             _orderLocalizer = orderLocalizer;
             _clientAddressesRepository = clientAddressesRepository;
             _userApprovalsRepository = userApprovalsRepository;
             _identityRepository = identityRepository;
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
+            _options = options;
         }
 
         [HttpPost]
@@ -92,8 +92,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             {
                 var basket = await _basketRepository.GetBasketById(token, language, Guid.Parse(reqCookie));
 
+                // Checked against Client.Api directly, so an outage fails checkout instead of dropping the code.
                 if (string.IsNullOrWhiteSpace(basket?.DiscountCode) is false &&
-                    await _applicableDiscountCodeService.GetValidAsync(token, basket.DiscountCode) is null)
+                    await _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, language, model.ClientId, basket.DiscountCode) is null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("CheckoutDiscountCodeNoLongerValid").Value });
                 }

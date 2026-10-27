@@ -40,7 +40,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IOptions<AppSettings> options,
             IApplicableDiscountCodeService applicableDiscountCodeService)
         {
-            _applicableDiscountCodeService = applicableDiscountCodeService;
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
@@ -49,6 +48,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
             _options = options;
+            _applicableDiscountCodeService = applicableDiscountCodeService;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -123,7 +123,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 if (basket is not null)
                 {
                     viewModel.BasketItems = basket.Items;
-                    viewModel.DiscountCode = await _applicableDiscountCodeService.GetValidAsync(componentModel.Token, basket.DiscountCode);
+                    viewModel.DiscountCode = await _applicableDiscountCodeService.GetApplicableAsync(componentModel.Token, basket.DiscountCode);
                 }
             }
 

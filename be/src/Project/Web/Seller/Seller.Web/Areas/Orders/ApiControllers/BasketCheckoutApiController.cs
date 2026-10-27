@@ -56,8 +56,6 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IDiscountCodeEligibilityRepository discountCodeEligibilityRepository,
             IOptions<AppSettings> options)
         {
-            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
-            _options = options;
             _basketRepository = basketRepository;
             _orderLocalizer = orderLocalizer;
             _clientLocalizer = clientLocalizer;
@@ -67,6 +65,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _basketService = basketService;
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
+            _options = options;
         }
 
         [HttpPost]

@@ -2,6 +2,7 @@
 using Foundation.Pricing.Services;
 using Giuru.UnitTests.Orders.Baskets;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System;
@@ -129,7 +130,7 @@ namespace Giuru.UnitTests.Services.Prices
                 new Claim(BuyerClaimsEnrichmentConstants.ClientIdClaimType, Guid.NewGuid().ToString())
             }, "test");
             var discountCodeService = Substitute.For<IApplicableDiscountCodeService>();
-            discountCodeService.GetValidAsync("token", "STOLEN").Returns(Task.FromResult<string>(null));
+            discountCodeService.GetApplicableAsync("token", "STOLEN").Returns(Task.FromResult<string>(null));
             var resolver = CreateResolver(new ClaimsPrincipal(identity), discountCodeService);
 
             var priceClient = await resolver.ResolveAsync(null, "STOLEN", "token");
@@ -145,7 +146,7 @@ namespace Giuru.UnitTests.Services.Prices
                 new Claim(BuyerClaimsEnrichmentConstants.ClientIdClaimType, Guid.NewGuid().ToString())
             }, "test");
             var discountCodeService = Substitute.For<IApplicableDiscountCodeService>();
-            discountCodeService.GetValidAsync("token", "summer25").Returns(Task.FromResult("SUMMER25"));
+            discountCodeService.GetApplicableAsync("token", "summer25").Returns(Task.FromResult("SUMMER25"));
             var resolver = CreateResolver(new ClaimsPrincipal(identity), discountCodeService);
 
             var priceClient = await resolver.ResolveAsync(null, "summer25", "token");
@@ -365,6 +366,16 @@ namespace Giuru.UnitTests.Services.Prices
             await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
         }
 
+        [Fact]
+        public async Task ResolveAsync_WhenClientApiIsUnavailable_PricesWithoutTheDiscountCodeAndDoesNotFail()
+        {
+            var resolver = CreateResolverWithEmptyClient(DiscountCodeEligibilityStubs.UnreachableRepository(), true);
+
+            var priceClient = await resolver.ResolveAsync(ClientId, "SUMMER25", "token");
+
+            Assert.Null(priceClient.DiscountCode);
+        }
+
         private static ClientRepositoryPriceClientResolver CreateResolverWithEmptyClient(IDiscountCodeEligibilityRepository eligibility, bool grulaConfigured)
         {
             var resolver = CreateResolver(
@@ -411,7 +422,8 @@ namespace Giuru.UnitTests.Services.Prices
                 clientAddressesRepository,
                 currenciesRepository,
                 options,
-                discountCodeEligibilityRepository ?? DiscountCodeEligibilityStubs.Accepting());
+                discountCodeEligibilityRepository ?? DiscountCodeEligibilityStubs.Accepting(),
+                Substitute.For<ILogger<ClientRepositoryPriceClientResolver>>());
         }
     }
 }

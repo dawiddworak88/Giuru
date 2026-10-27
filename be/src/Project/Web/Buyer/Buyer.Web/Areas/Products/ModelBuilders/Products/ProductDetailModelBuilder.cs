@@ -93,7 +93,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IPriceClientResolver priceClientResolver,
             IApplicableDiscountCodeService applicableDiscountCodeService)
         {
-            _applicableDiscountCodeService = applicableDiscountCodeService;
             _filesModelBuilder = filesModelBuilder;
             _productsRepository = productsRepository;
             _globalLocalizer = globalLocalizer;
@@ -117,6 +116,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             _priceProductFactory = priceProductFactory;
             _productPricingService = productPricingService;
             _priceClientResolver = priceClientResolver;
+            _applicableDiscountCodeService = applicableDiscountCodeService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(PriceComponentModel componentModel)
@@ -163,7 +163,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 var basket = componentModel.IsAuthenticated && componentModel.BasketId.HasValue
                     ? await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language)
                     : null;
-                var discountCode = await _applicableDiscountCodeService.GetValidAsync(componentModel.Token, basket?.DiscountCode);
+                var discountCode = await _applicableDiscountCodeService.GetApplicableAsync(componentModel.Token, basket?.DiscountCode);
 
                 if (basket is not null)
                 {

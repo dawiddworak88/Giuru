@@ -6,7 +6,7 @@ using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Baskets;
-using Buyer.Web.Shared.Services.Prices;
+using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Foundation.Pricing.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -49,7 +49,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         public async Task Checkout_WhenTheRequestClientIsNotTheSignedInClient_IsRefusedAndNothingIsCheckedOut()
         {
             var basketRepository = CreateBasketRepository("SUMMER25");
-            var controller = CreateController(basketRepository, Substitute.For<IApplicableDiscountCodeService>());
+            var controller = CreateController(basketRepository, Substitute.For<IDiscountCodeEligibilityRepository>());
 
             var result = await controller.Checkout(new CheckoutBasketRequestModel { ClientId = Guid.NewGuid() });
 
@@ -61,9 +61,9 @@ namespace Giuru.UnitTests.Orders.Baskets
         public async Task Checkout_WhenTheAppliedDiscountCodeIsNoLongerValid_IsRefusedAndNothingIsCheckedOut()
         {
             var basketRepository = CreateBasketRepository("SUMMER25");
-            var discountCodes = Substitute.For<IApplicableDiscountCodeService>();
-            discountCodes.GetValidAsync(Arg.Any<string>(), "SUMMER25").Returns(Task.FromResult<string>(null));
-            var controller = CreateController(basketRepository, discountCodes);
+            // The code now belongs to another Client only, so the signed-in Client can no longer use it.
+            var eligibility = DiscountCodeEligibilityStubs.KnowingFor(Guid.NewGuid(), "SUMMER25");
+            var controller = CreateController(basketRepository, eligibility);
 
             var result = await controller.Checkout(new CheckoutBasketRequestModel { ClientId = ClientId });
 
@@ -75,7 +75,7 @@ namespace Giuru.UnitTests.Orders.Baskets
         public async Task Checkout_WhenTheAppliedDiscountCodeIsStillValid_PlacesTheOrder()
         {
             var basketRepository = CreateBasketRepository("SUMMER25");
-            var controller = CreateController(basketRepository, DiscountCodeEligibilityStubs.AcceptingForBuyer());
+            var controller = CreateController(basketRepository, DiscountCodeEligibilityStubs.KnowingFor(ClientId, "SUMMER25"));
 
             var result = await controller.Checkout(new CheckoutBasketRequestModel { ClientId = ClientId });
 
@@ -87,13 +87,23 @@ namespace Giuru.UnitTests.Orders.Baskets
         public async Task Checkout_WhenTheBasketHasNoDiscountCode_PlacesTheOrderWithoutCheckingAnyCode()
         {
             var basketRepository = CreateBasketRepository(null);
-            var discountCodes = Substitute.For<IApplicableDiscountCodeService>();
-            var controller = CreateController(basketRepository, discountCodes);
+            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
+            var controller = CreateController(basketRepository, eligibility);
 
             var result = await controller.Checkout(new CheckoutBasketRequestModel { ClientId = ClientId });
 
             Assert.Equal(StatusCodes.Status202Accepted, Assert.IsType<ObjectResult>(result).StatusCode);
-            await discountCodes.DidNotReceive().GetValidAsync(Arg.Any<string>(), Arg.Any<string>());
+            await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task Checkout_WhenClientApiIsUnavailable_FailsAndNothingIsCheckedOut()
+        {
+            var basketRepository = CreateBasketRepository("SUMMER25");
+            var controller = CreateController(basketRepository, DiscountCodeEligibilityStubs.UnreachableRepository());
+
+            await Assert.ThrowsAsync<CustomException>(() => controller.Checkout(new CheckoutBasketRequestModel { ClientId = ClientId }));
+            await AssertNotCheckedOut(basketRepository);
         }
 
         private static BuyerIBasketRepository CreateBasketRepository(string discountCode)
@@ -106,7 +116,7 @@ namespace Giuru.UnitTests.Orders.Baskets
             return basketRepository;
         }
 
-        private static BasketCheckoutApiController CreateController(BuyerIBasketRepository basketRepository, IApplicableDiscountCodeService discountCodes)
+        private static BasketCheckoutApiController CreateController(BuyerIBasketRepository basketRepository, IDiscountCodeEligibilityRepository eligibility)
         {
             var localizer = Substitute.For<IStringLocalizer<OrderResources>>();
             localizer[Arg.Any<string>()].Returns(call => new LocalizedString(call.ArgAt<string>(0), call.ArgAt<string>(0)));
@@ -136,7 +146,7 @@ namespace Giuru.UnitTests.Orders.Baskets
                 localizer,
                 Substitute.For<IUserApprovalsRepository>(),
                 Substitute.For<IIdentityRepository>(),
-                discountCodes,
+                eligibility,
                 options)
             {
                 ControllerContext = new ControllerContext { HttpContext = context }
@@ -201,6 +211,16 @@ namespace Giuru.UnitTests.Orders.Baskets
             await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
         }
 
+        [Fact]
+        public async Task Checkout_WhenClientApiIsUnavailable_FailsAndNothingIsCheckedOut()
+        {
+            var basketRepository = CreateBasketRepository("SUMMER25");
+            var controller = CreateController(basketRepository, DiscountCodeEligibilityStubs.UnreachableRepository());
+
+            await Assert.ThrowsAsync<CustomException>(() => controller.Checkout(new SellerCheckoutBasketRequestModel { BasketId = BasketId, ClientId = ClientId }));
+            Assert.DoesNotContain(basketRepository.ReceivedCalls(), x => x.GetMethodInfo().Name == nameof(SellerIBasketRepository.CheckoutBasketAsync));
+        }
+
         private static SellerIBasketRepository CreateBasketRepository(string discountCode)
         {
             var basketRepository = Substitute.For<SellerIBasketRepository>();
@@ -252,68 +272,6 @@ namespace Giuru.UnitTests.Orders.Baskets
             {
                 ControllerContext = new ControllerContext { HttpContext = context }
             };
-        }
-    }
-
-    // The buyer-side check: the Client is always the one in the signed-in user's claims.
-    public class ApplicableDiscountCodeServiceTests
-    {
-        private static readonly Guid ClientId = Guid.NewGuid();
-
-        [Fact]
-        public async Task GetValidAsync_WhenTheCodeIsValidForTheSignedInClient_ReturnsItsStoredSpelling()
-        {
-            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
-            eligibility.GetValidDiscountCodeAsync("token", Arg.Any<string>(), ClientId, "summer25").Returns(Task.FromResult("SUMMER25"));
-            var service = CreateService(eligibility, true, ClientId);
-
-            Assert.Equal("SUMMER25", await service.GetValidAsync("token", "summer25"));
-        }
-
-        [Fact]
-        public async Task GetValidAsync_WhenGrulaIsNotConfigured_ReturnsNullWithoutCallingClientApi()
-        {
-            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
-            var service = CreateService(eligibility, false, ClientId);
-
-            Assert.Null(await service.GetValidAsync("token", "SUMMER25"));
-            await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public async Task GetValidAsync_WhenNoClientIsSignedIn_ReturnsNullWithoutCallingClientApi()
-        {
-            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
-            var service = CreateService(eligibility, true, null);
-
-            Assert.Null(await service.GetValidAsync("token", "SUMMER25"));
-            await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public async Task GetValidAsync_WhenThereIsNoCode_ReturnsNullWithoutCallingClientApi()
-        {
-            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
-            var service = CreateService(eligibility, true, ClientId);
-
-            Assert.Null(await service.GetValidAsync("token", "  "));
-            await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
-        }
-
-        private static ApplicableDiscountCodeService CreateService(IDiscountCodeEligibilityRepository eligibility, bool grulaConfigured, Guid? clientId)
-        {
-            var claims = clientId.HasValue
-                ? new[] { new Claim(BuyerClaimsEnrichmentConstants.ClientIdClaimType, clientId.Value.ToString()) }
-                : Array.Empty<Claim>();
-            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
-            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext { User = new ClaimsPrincipal(new ClaimsIdentity(claims, "test")) });
-            var options = Options.Create(new AppSettings
-            {
-                GrulaAccessToken = grulaConfigured ? "test-token" : null,
-                GrulaEnvironmentId = grulaConfigured ? Guid.NewGuid().ToString() : null
-            });
-
-            return new ApplicableDiscountCodeService(httpContextAccessor, eligibility, options);
         }
     }
 }

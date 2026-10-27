@@ -40,5 +40,26 @@ namespace Giuru.IntegrationTests.Helpers
 
             return new ClientResponseModel { Id = created.Id, Email = email };
         }
+
+        /// <summary>A Client in an organisation of its own, for tests to delete when they finish.</summary>
+        public static async Task<Guid> CreateClientAsync(ApiFixture apiFixture, string namePrefix)
+        {
+            var suffix = Guid.NewGuid().ToString("N");
+
+            var created = await apiFixture.ClientApiClient.PostAsync<ClientRequestModel, BaseResponseModel>(ClientsEndpoint, new ClientRequestModel
+            {
+                Name = $"{namePrefix}-{suffix}",
+                Email = $"{suffix}@discount-tests.com",
+                CommunicationLanguage = Clients.Language,
+                OrganisationId = Guid.NewGuid()
+            });
+
+            return created.Id.Value;
+        }
+
+        public static async Task DeleteClientAsync(ApiFixture apiFixture, Guid clientId)
+        {
+            await apiFixture.ClientApiClient.DeleteForResponseAsync($"{ClientsEndpoint}/{clientId}");
+        }
     }
 }
