@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.Definitions;
 using Microsoft.Extensions.Caching.Distributed;
+using System;
 using System.Threading.Tasks;
 
 namespace Foundation.Extensions.Services.Claims
@@ -13,9 +14,9 @@ namespace Foundation.Extensions.Services.Claims
             _cache = cache;
         }
 
-        public async Task InvalidateAsync(string email)
+        public async Task InvalidateAsync(Guid organisationId)
         {
-            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{email}";
+            var cacheKey = $"{ClaimsEnrichmentConstants.CacheKey}-{organisationId}";
 
             await _cache.RemoveAsync(cacheKey);
         }
