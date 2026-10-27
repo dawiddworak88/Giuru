@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
+using Foundation.Pricing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ModelBuilders;
@@ -36,6 +37,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
 
             services.AddScoped<IDiscountCodesRepository, DiscountCodesRepository>();
+            services.AddScoped<IDiscountCodeEligibilityRepository, DiscountCodeEligibilityRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();

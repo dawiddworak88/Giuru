@@ -25,7 +25,8 @@ export const useBasketDiscountCode = ({
         setBasketId(jsonResponse.id);
         setGroupedOrderItems(jsonResponse.items || []);
         syncFromResponse(jsonResponse);
-    }, [setBasketId, setGroupedOrderItems, syncFromResponse]);
+        BasketDiscountCodeClient.showRemovedMessage(jsonResponse);
+    },[setBasketId, setGroupedOrderItems, syncFromResponse]);
 
     // Deliberately not memoised: buildBasket closes over the current basket id and items and is
     // rebuilt every render, so a useCallback would have to list it and would never hold.

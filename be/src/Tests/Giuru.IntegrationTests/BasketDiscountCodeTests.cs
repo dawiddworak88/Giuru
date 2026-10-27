@@ -125,32 +125,5 @@ namespace Giuru.IntegrationTests
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
-
-        [Fact]
-        public async Task SaveBuyerBasket_WithDiscountCode_WhenConfiguredGrulaIsUnavailable_StillStoresTheCode()
-        {
-            // Discount-code storage is gated purely on IsGrulaConfigured, not on Grula's
-            // reachability (see BasketsApiController.Index) - only pricing is cleared when
-            // the configured Grula instance can't be reached (see BasketPricingTests).
-            var basket = await _apiFixture.BuyerWebClient.PostAsync<SaveBasketRequestModel, BasketResponseModel>(
-                ApiEndpoints.BasketApiEndpoint,
-                new SaveBasketRequestModel
-                {
-                    DiscountCode = DiscountCode,
-                    Items = new List<BasketItemRequestModel>
-                    {
-                        new BasketItemRequestModel
-                        {
-                            ProductId = Products.Lamica.Id,
-                            Sku = Products.Lamica.Sku,
-                            Name = Products.Lamica.Name,
-                            Quantity = Inventories.Quantities.Quantity
-                        }
-                    }
-                });
-
-            Assert.NotNull(basket);
-            Assert.Equal(DiscountCode, basket.DiscountCode);
-        }
     }
 }

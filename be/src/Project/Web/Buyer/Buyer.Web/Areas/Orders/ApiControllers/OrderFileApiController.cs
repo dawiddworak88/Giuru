@@ -51,6 +51,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IOrderFileService _orderFileService;
         private readonly IProductsRepository _productsRepository;
         private readonly IBasketRepository _basketRepository;
+        private readonly IDiscountCodeEligibilityRepository _discountCodeEligibilityRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IOptions<AppSettings> _options;
         private readonly IMediaService _mediaService;
@@ -70,6 +71,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IOrderFileService orderFileService,
             IProductsRepository productsRepository,
             IBasketRepository basketRepository,
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
             IMediaService mediaService,
@@ -88,6 +90,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
             _basketRepository = basketRepository;
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
             _linkGenerator = linkGenerator;
             _options = options;
             _mediaService = mediaService;
@@ -155,7 +158,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 hasItems: true,
                 () => Task.FromResult(existingBasket?.DiscountCode),
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
+                code => _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, language, User.GetClientId(), code),
+                _orderLocalizer);
 
             if (discountOutcome.IsRejected)
             {
@@ -239,7 +243,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id,
-                DiscountCode = basket.DiscountCode
+                DiscountCode = basket.DiscountCode,
+                DiscountCodeRemovedMessage = discountOutcome.RemovedMessage
             };
 
             if (basket.Items.OrEmptyIfNull().Any())

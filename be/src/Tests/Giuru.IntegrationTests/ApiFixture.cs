@@ -21,6 +21,10 @@ namespace Giuru.IntegrationTests
         private const string TestGrulaAccessToken = "integration-test-token";
         private const string TestGrulaEnvironmentId = "00000000-0000-0000-0000-000000000001";
 
+        // Pricing a real product translates its colours, which lists this attribute's items in Catalog.
+        // Catalog rejects a missing id; an id with no items yields no translations, which is all a test needs.
+        private const string TestProductColorAttributeId = "00000000-0000-0000-0000-000000000002";
+
         private INetwork _giuruNetwork;
         private RedisContainer _redisContainer;
         private RabbitMqContainer _rabbitMqContainer;
@@ -33,6 +37,7 @@ namespace Giuru.IntegrationTests
         private IContainer _orderingApiContainer;
         private IContainer _basketApiContainer;
         private IContainer _inventoryApiContainer;
+        private IContainer _globalApiContainer;
 
         public RestClient SellerWebClient { get; private set; }
         public RestClient BuyerWebClient { get; private set; }
@@ -281,6 +286,36 @@ namespace Giuru.IntegrationTests
 
             await _inventoryApiContainer.StartAsync();
 
+            var globalApiImage = new GlobalApiImage();
+
+            await globalApiImage.InitializeAsync();
+
+            // The Seller price-client resolver and the buyer claims enrichment read countries and
+            // currencies from it, so a Basket save that reaches pricing needs it.
+            _globalApiContainer = new ContainerBuilder(globalApiImage)
+                .WithName("global-api")
+                .WithNetwork(_giuruNetwork)
+                .WithExposedPort(8080)
+                .WithPortBinding(9108, 8080)
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
+                .WithEnvironment("RedisUrl", "redis")
+                .WithEnvironment("ConnectionString", "Server=sqldata;Database=GlobalDb;User Id=sa;Password=YourStrongPassword!;TrustServerCertificate=True")
+                .WithEnvironment("IdentityUrl", "http://mock-auth:8080")
+                .WithEnvironment("SupportedCultures", "de,en,pl")
+                .WithEnvironment("DefaultCulture", "en")
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r
+                    .ForPort(8080)
+                    .ForPath("/liveness")
+                    .ForStatusCode(System.Net.HttpStatusCode.OK)))
+                .Build();
+
+            await _globalApiContainer.StartAsync();
+
+            // Seller.Web and Buyer.Web run in this process, outside the container network, so they
+            // reach Redis through its mapped host port rather than the "redis" alias.
+            var hostRedisUrl = $"{_redisContainer.Hostname}:{_redisContainer.GetMappedPublicPort(6379)},abortConnect=false";
+            var globalUrl = $"http://{_globalApiContainer.Hostname}:{_globalApiContainer.GetMappedPublicPort(8080)}";
+
             var tokenClient = new TokenClient(new HttpClient());
             var token = await tokenClient.GetTokenAsync($"http://{_mockAuthContainer.Hostname}:{_mockAuthContainer.GetMappedPublicPort(8080)}/api/token");
 
@@ -311,10 +346,12 @@ namespace Giuru.IntegrationTests
                 {
                     builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
                     builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                    builder.UseSetting("RedisUrl", "redis,abortConnect=false");
+                    builder.UseSetting("RedisUrl", hostRedisUrl);
                     builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
                     builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
                     builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("GlobalUrl", globalUrl);
+                    builder.UseSetting("ProductColorAttributeId", TestProductColorAttributeId);
                     builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
@@ -339,11 +376,13 @@ namespace Giuru.IntegrationTests
                 {
                     builder.UseSetting("ASPNETCORE_HTTP_PORTS", "8080");
                     builder.UseSetting("ASPNETCORE_ENVIRONMENT", "Development");
-                    builder.UseSetting("RedisUrl", "redis,abortConnect=false");
+                    builder.UseSetting("RedisUrl", hostRedisUrl);
                     builder.UseSetting("ClientId", "663bba90-0036-4a58-8516-39faa8baba87");
                     builder.UseSetting("ClientSecret", "c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9");
                     builder.UseSetting("OrderUrl", $"http://{_orderingApiContainer.Hostname}:{_orderingApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("ClientUrl", $"http://{_clientApiContainer.Hostname}:{_clientApiContainer.GetMappedPublicPort(8080)}");
+                    builder.UseSetting("GlobalUrl", globalUrl);
+                    builder.UseSetting("ProductColorAttributeId", TestProductColorAttributeId);
                     builder.UseSetting("CatalogUrl", $"http://{_catalogApiContainer.Hostname}:{_catalogApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("InventoryUrl", $"http://{_inventoryApiContainer.Hostname}:{_inventoryApiContainer.GetMappedPublicPort(8080)}");
                     builder.UseSetting("BasketUrl", $"http://{_basketApiContainer.Hostname}:{_basketApiContainer.GetMappedPublicPort(8080)}");
@@ -400,6 +439,9 @@ namespace Giuru.IntegrationTests
 
             await _inventoryApiContainer.StopAsync();
             await _inventoryApiContainer.DisposeAsync();
+
+            await _globalApiContainer.StopAsync();
+            await _globalApiContainer.DisposeAsync();
         }
     }
 }

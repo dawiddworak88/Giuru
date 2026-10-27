@@ -12,5 +12,6 @@ namespace Client.Api.Services.DiscountCodes
         Task<DiscountCodeServiceModel> GetAsync(GetDiscountCodeServiceModel model);
         Task<Guid> SaveAsync(SaveDiscountCodeServiceModel model);
         Task DeleteAsync(DeleteDiscountCodeServiceModel model);
+        Task<string> GetValidCodeAsync(GetValidDiscountCodeServiceModel model);
     }
 }
