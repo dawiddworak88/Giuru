@@ -23,7 +23,7 @@ The Seller manages Discount Codes in the Seller portal and assigns each one to n
 - Delete is a soft delete. Past Orders keep the code text, which is plain text on the Order and never a reference.
 
 ### Validation
-- **Valid Discount Code for Client C:** the code exists (case-insensitive match), is active, and C is an active Client among its Assigned Clients.
+- **Valid Discount Code for Client C:** the code exists (case-insensitive match), is active, and C is a non-deleted Client among its Assigned Clients (a Client disabled by the Seller still qualifies).
 - **Who counts as Client C:**
   - Buyer portal: the Client resolved from the signed-in user's `OrganisationId`, so Team Members count as their Client.
   - Seller portal: the Client selected on the order.

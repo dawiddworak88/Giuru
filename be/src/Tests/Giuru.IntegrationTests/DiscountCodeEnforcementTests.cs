@@ -201,8 +201,11 @@ namespace Giuru.IntegrationTests
             }
         }
 
-        [Fact]
-        public async Task SellerUploadOrderFile_WhenTheStoredCodeStopsBeingValid_DropsItWithAMessage()
+        [Theory]
+        [InlineData(Revocation.Unassigned)]
+        [InlineData(Revocation.Deactivated)]
+        [InlineData(Revocation.Deleted)]
+        public async Task SellerUploadOrderFile_WhenTheStoredCodeStopsBeingValid_DropsItWithAMessage(Revocation revocation)
         {
             var clientId = await CreateClientAsync();
 
@@ -214,7 +217,7 @@ namespace Giuru.IntegrationTests
                 var basketId = Guid.NewGuid();
                 await SaveSellerBasketAsync(basketId, clientId, code);
 
-                await RevokeAsync(Revocation.Deactivated, codeId, code, clientId);
+                await RevokeAsync(revocation, codeId, code, clientId);
 
                 // The upload omits the code, which leaves the stored one unchanged.
                 var response = await UploadOrderFileAsync(basketId, clientId, sku, discountCode: null);

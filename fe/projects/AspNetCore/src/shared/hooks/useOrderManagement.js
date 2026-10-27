@@ -12,6 +12,7 @@ import AuthenticationHelper from "../helpers/globals/AuthenticationHelper";
 import QueryStringSerializer from '../helpers/serializers/QueryStringSerializer';
 import ToastSuccessAddProductToBasket from "../components/Toast/ToastSuccessAddProductToBasket";
 import ResponseMessageHelper from "../helpers/responses/ResponseMessageHelper";
+import BasketDiscountCodeClient from "../helpers/baskets/BasketDiscountCodeClient";
 
 export const useOrderManagement = ({
     initialBasketId,
@@ -39,11 +40,9 @@ export const useOrderManagement = ({
     // never sent from here.
     const basketDiscountCode = discountCode || "";
 
-    // A code that stopped being valid is dropped by the server on save and explained here.
     const syncDiscountCode = useCallback((jsonResponse) => {
         onDiscountCodeChanged?.(jsonResponse.discountCode || "");
-
-        if (jsonResponse.discountCodeRemovedMessage) toast.warning(jsonResponse.discountCodeRemovedMessage);
+        BasketDiscountCodeClient.showRemovedMessage(jsonResponse);
     }, [onDiscountCodeChanged]);
 
     const addOrderItemToBasket = useCallback(

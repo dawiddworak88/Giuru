@@ -88,11 +88,11 @@ namespace Client.Api.v1.Controllers
         /// </summary>
         /// <param name="clientId">The client id.</param>
         /// <param name="code">The requested code text.</param>
-        /// <returns>The stored spelling of the code, or not found without a reason.</returns>
+        /// <returns>The stored spelling of the code, or no content without a reason.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("eligibility")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ValidDiscountCodeResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetEligibility(Guid? clientId, string code)
         {
@@ -116,7 +116,8 @@ namespace Client.Api.v1.Controllers
                     return this.StatusCode((int)HttpStatusCode.OK, new ValidDiscountCodeResponseModel { Code = validCode });
                 }
 
-                return this.StatusCode((int)HttpStatusCode.NotFound);
+                // No content rather than not found, so a caller can tell "not valid" from a missing route.
+                return this.StatusCode((int)HttpStatusCode.NoContent);
             }
 
             throw ToValidationException(validationResult.Errors.Select(x => x.ErrorMessage));

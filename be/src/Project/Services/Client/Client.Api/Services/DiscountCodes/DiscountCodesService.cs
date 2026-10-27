@@ -220,7 +220,7 @@ namespace Client.Api.Services.DiscountCodes
         {
             var client = await _context.Clients.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.ClientId.Value && x.IsActive);
 
-            // The caller must be the Client's own organisation (buyer, Team Member) or its Seller, so the
+            // The caller must be the Client's own organisation (the Client or its Team Members) or its Seller, so the
             // check cannot be used to probe which codes another Client holds.
             if (client is null || (client.OrganisationId != model.OrganisationId.Value && client.SellerId != model.OrganisationId.Value))
             {

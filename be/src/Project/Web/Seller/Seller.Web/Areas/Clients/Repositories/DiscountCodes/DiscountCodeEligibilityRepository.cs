@@ -8,7 +8,6 @@ using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.Repositories.DiscountCodes
@@ -47,13 +46,9 @@ namespace Seller.Web.Areas.Clients.Repositories.DiscountCodes
 
             var response = await _apiClientService.GetAsync<ApiRequest<DiscountCodeEligibilityRequestModel>, DiscountCodeEligibilityRequestModel, ValidDiscountCode>(apiRequest);
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return null;
-            }
-
-            // Any other failure fails the save: the Basket is neither priced with an unverified code
-            // nor stripped of a code that may still be valid.
+            // Client.Api answers "not valid" with no content, so every failure - a not found included,
+            // which would mean a missing route - fails the save: the Basket is neither priced with an
+            // unverified code nor stripped of a code that may still be valid.
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
