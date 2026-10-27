@@ -229,6 +229,9 @@ namespace Client.Api.Services.DiscountCodes
 
             var code = model.Code.Trim();
 
+            // IsActive is the base entity's "not deleted" flag; IsDisabled is the Seller's active switch,
+            // so an Inactive Discount Code has IsDisabled set. The code comparison is case-insensitive
+            // through the database collation.
             return await (
                 from discountCode in _context.DiscountCodes.AsNoTracking()
                 join assignment in _context.DiscountCodeClients.AsNoTracking() on discountCode.Id equals assignment.DiscountCodeId

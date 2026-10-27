@@ -142,6 +142,7 @@ Team Members are treated as their Client everywhere pricing is concerned. They g
   - When the code is a Valid Discount Code for that Client, it returns the code's stored spelling.
   - Otherwise it returns "not found" with no reason, so callers cannot tell a missing code from an unassigned or inactive one.
   - Valid means: a case-insensitive match on trimmed text, the code is not deleted and is active, and the Client is among the Assigned Clients and not deleted.
+  - The caller's organisation must be the Client's own (the buyer or a Team Member) or the Client's Seller. Any other caller gets "not found", so the check cannot be used to probe another Client's codes.
   - No caching anywhere: revocation takes effect on the next request.
 
 ### Shared eligibility module (Foundation.Pricing)
@@ -160,6 +161,7 @@ Team Members are treated as their Client everywhere pricing is concerned. They g
   - Buyer portal: always the Client from the signed-in user's claims.
   - Seller portal: the Client id the request carries for Basket save, file upload, price lookup and checkout.
 - **Basket save** uses the extended coordinator on all four paths (buyer and Seller × form and order-file upload). The save response gains a field carrying the "code removed" message. The front-end discount-code hooks show it and sync the displayed code.
+- **Client.Api unavailable:** a Basket save that needs the eligibility check fails with an error. The Basket is neither priced with an unverified code nor stripped of a code that may still be valid. Saves that need no check (no code, removal, Grula off) are unaffected.
 - **Server-rendered pages** (catalog, product detail, order form) show the Applied Discount Code only when it is still valid.
 - **Checkout** (buyer and Seller) checks the Basket's Applied Discount Code against the checkout Client before handing the Basket to Basket.Api. An invalid code rejects checkout with a localised message, and nothing is checked out.
 - **Buyer checkout** additionally rejects a request whose Client id differs from the signed-in Client.

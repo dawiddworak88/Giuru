@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
+using Foundation.Pricing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ModelBuilders;
@@ -16,7 +17,6 @@ using Seller.Web.Areas.Clients.ComponentModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Approvals;
 using Seller.Web.Areas.Clients.Repositories.ClientTeamMembers;
-using Foundation.Pricing.Services;
 using Seller.Web.Areas.Clients.Repositories.DiscountCodes;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection

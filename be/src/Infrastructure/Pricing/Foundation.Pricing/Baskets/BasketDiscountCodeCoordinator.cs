@@ -1,4 +1,4 @@
-using Foundation.Pricing.Services;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Threading.Tasks;
 
@@ -8,24 +8,24 @@ namespace Foundation.Pricing.Baskets
     /// Shared body of the discount-code prologue that begins every basket save: reconcile the
     /// incoming request against the persisted code via <see cref="DiscountCodeResolver"/>, then
     /// accept it only if it is a Valid Discount Code for the Client. The caller owns everything
-    /// that is app-specific - how to read the basket (including whether it can be read at all),
-    /// which Client the basket is for and the localised messages.
+    /// that is app-specific - how to read the basket (including whether it can be read at all)
+    /// and which Client the eligibility check is made for.
     /// </summary>
     public static class BasketDiscountCodeCoordinator
     {
+        /// <param name="getValidDiscountCode">
+        /// The eligibility check, already bound to the basket's Client: returns the code's stored
+        /// spelling when it is valid for that Client, otherwise null.
+        /// </param>
+        /// <param name="orderLocalizer">Localizer over the order resources that hold the discount-code messages.</param>
         public static async Task<BasketDiscountCodeOutcome> ResolveAsync(
             bool isGrulaConfigured,
             bool hasDiscountCode,
             string requestedDiscountCode,
             bool hasItems,
             Func<Task<string>> readPersistedDiscountCode,
-            IDiscountCodeEligibilityRepository eligibilityRepository,
-            string token,
-            string language,
-            Guid? clientId,
-            Func<string> appliedToEmptyBasketMessage,
-            Func<string> invalidDiscountCodeMessage,
-            Func<string> discountCodeRemovedMessage)
+            Func<string, Task<string>> getValidDiscountCode,
+            IStringLocalizer orderLocalizer)
         {
             if (!isGrulaConfigured)
             {
@@ -43,7 +43,7 @@ namespace Foundation.Pricing.Baskets
 
             if (resolution.IsAppliedToEmptyBasket)
             {
-                return BasketDiscountCodeOutcome.Rejected(appliedToEmptyBasketMessage());
+                return BasketDiscountCodeOutcome.Rejected(orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value);
             }
 
             if (resolution.DiscountCode is null)
@@ -52,7 +52,7 @@ namespace Foundation.Pricing.Baskets
                 return BasketDiscountCodeOutcome.ForDiscountCode(null);
             }
 
-            var validDiscountCode = await eligibilityRepository.GetValidDiscountCodeAsync(token, language, clientId, resolution.DiscountCode);
+            var validDiscountCode = await getValidDiscountCode(resolution.DiscountCode);
 
             if (validDiscountCode is not null)
             {
@@ -68,11 +68,11 @@ namespace Foundation.Pricing.Baskets
 
                 if (!string.Equals(storedDiscountCode?.Trim(), resolution.DiscountCode, StringComparison.OrdinalIgnoreCase))
                 {
-                    return BasketDiscountCodeOutcome.Rejected(invalidDiscountCodeMessage());
+                    return BasketDiscountCodeOutcome.Rejected(orderLocalizer.GetString("DiscountCodeInvalid").Value);
                 }
             }
 
-            return BasketDiscountCodeOutcome.Dropped(discountCodeRemovedMessage());
+            return BasketDiscountCodeOutcome.Dropped(orderLocalizer.GetString("DiscountCodeRemoved").Value);
         }
     }
 }

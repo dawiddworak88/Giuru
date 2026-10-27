@@ -25,6 +25,11 @@ namespace Giuru.IntegrationTests.HttpClients
                     "application/json"));
         }
 
+        public async Task<HttpResponseMessage> PostFormForResponseAsync(string requestUrl, MultipartFormDataContent content)
+        {
+            return await _client.PostAsync(requestUrl, content);
+        }
+
         public async Task<T> PostAsync<S, T>(string requestUrl, S request) where S : class
         {
             var response = await PostForResponseAsync(requestUrl, request);

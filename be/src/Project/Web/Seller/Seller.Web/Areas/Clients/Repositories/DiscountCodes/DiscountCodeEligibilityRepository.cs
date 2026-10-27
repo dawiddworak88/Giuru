@@ -1,10 +1,11 @@
 using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Pricing.Services;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Clients.ApiRequestModels;
+using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Net;
@@ -44,30 +45,21 @@ namespace Seller.Web.Areas.Clients.Repositories.DiscountCodes
                 EndpointAddress = $"{_settings.Value.ClientUrl}{ApiConstants.Client.DiscountCodesApiEndpoint}/eligibility"
             };
 
-            var response = await _apiClientService.GetAsync<ApiRequest<DiscountCodeEligibilityRequestModel>, DiscountCodeEligibilityRequestModel, ValidDiscountCodeResponseModel>(apiRequest);
+            var response = await _apiClientService.GetAsync<ApiRequest<DiscountCodeEligibilityRequestModel>, DiscountCodeEligibilityRequestModel, ValidDiscountCode>(apiRequest);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
             }
 
+            // Any other failure fails the save: the Basket is neither priced with an unverified code
+            // nor stripped of a code that may still be valid.
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return response.Data?.Code;
-        }
-
-        private class DiscountCodeEligibilityRequestModel : RequestModelBase
-        {
-            public Guid? ClientId { get; set; }
-            public string Code { get; set; }
-        }
-
-        private class ValidDiscountCodeResponseModel
-        {
-            public string Code { get; set; }
         }
     }
 }

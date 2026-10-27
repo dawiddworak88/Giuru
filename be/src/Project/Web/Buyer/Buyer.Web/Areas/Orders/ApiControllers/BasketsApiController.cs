@@ -114,13 +114,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 model.DiscountCode,
                 items.Any(),
                 async () => (await _basketRepository.GetBasketById(token, language, id))?.DiscountCode,
-                _discountCodeEligibilityRepository,
-                token,
-                language,
-                clientId,
-                () => _orderLocalizer.GetString("DiscountCodeRequiresBasketItems").Value,
-                () => _orderLocalizer.GetString("DiscountCodeInvalid").Value,
-                () => _orderLocalizer.GetString("DiscountCodeRemoved").Value);
+                code => _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, language, clientId, code),
+                _orderLocalizer);
 
             if (discountOutcome.IsRejected)
             {

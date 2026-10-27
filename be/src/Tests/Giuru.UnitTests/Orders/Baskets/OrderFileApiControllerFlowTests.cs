@@ -624,20 +624,30 @@ namespace Giuru.UnitTests.Orders.Baskets
         }
 
         [Fact]
-        public async Task Index_ChecksTheCodeAgainstTheClientTheUploadIsFor()
+        public async Task Index_AcceptsACodeOnlyForTheClientTheUploadIsFor()
         {
             var clientId = Guid.NewGuid();
-            var eligibility = DiscountCodeEligibilityStubs.Knowing("SUMMER25");
+            var eligibility = DiscountCodeEligibilityStubs.KnowingFor(clientId, "SUMMER25");
+            var appSettings = new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() };
 
-            await RunDiscountCodeScenarioAsync(
-                new SellerAppSettings { GrulaAccessToken = "test-token", GrulaEnvironmentId = Guid.NewGuid().ToString() },
+            var (_, savedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                appSettings,
                 persistedDiscountCode: null,
                 formHasDiscountCode: true,
                 requestedDiscountCode: "SUMMER25",
                 eligibility: eligibility,
                 clientIdOverride: clientId);
+            var (otherClientResult, otherClientSavedDiscountCode, _) = await RunDiscountCodeScenarioAsync(
+                appSettings,
+                persistedDiscountCode: null,
+                formHasDiscountCode: true,
+                requestedDiscountCode: "SUMMER25",
+                eligibility: eligibility,
+                clientIdOverride: Guid.NewGuid());
 
-            await eligibility.Received(1).GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), clientId, "SUMMER25");
+            Assert.Equal("SUMMER25", savedDiscountCode);
+            Assert.Equal(400, Assert.IsType<ObjectResult>(otherClientResult).StatusCode);
+            Assert.Null(otherClientSavedDiscountCode);
         }
 
         private static IStringLocalizer<OrderResources> CreateKeyLocalizer()

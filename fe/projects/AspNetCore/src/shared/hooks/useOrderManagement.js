@@ -39,6 +39,13 @@ export const useOrderManagement = ({
     // never sent from here.
     const basketDiscountCode = discountCode || "";
 
+    // A code that stopped being valid is dropped by the server on save and explained here.
+    const syncDiscountCode = useCallback((jsonResponse) => {
+        onDiscountCodeChanged?.(jsonResponse.discountCode || "");
+
+        if (jsonResponse.discountCodeRemovedMessage) toast.warning(jsonResponse.discountCodeRemovedMessage);
+    }, [onDiscountCodeChanged]);
+
     const addOrderItemToBasket = useCallback(
         async ({
             product,
@@ -132,10 +139,7 @@ export const useOrderManagement = ({
 
                 if (response.ok && jsonResponse) {
                     setBasketId(jsonResponse.id);
-                    onDiscountCodeChanged?.(jsonResponse.discountCode || "");
-
-                    if (jsonResponse.discountCodeRemovedMessage) toast.warning(jsonResponse.discountCodeRemovedMessage);
-
+                    syncDiscountCode(jsonResponse);
                     dispatch({
                         type: "SET_TOTAL_BASKET",
                         payload: parseInt(quantity + state.totalBasketItems),
@@ -160,8 +164,8 @@ export const useOrderManagement = ({
         }, [
             addProductToBasketMessage, basketDiscountCode, basketId, discountCode, dispatch,
             generalErrorMessage, getPriceUrl, isDiscountCodeEnabled, maxAllowedOrderQuantity,
-            maxAllowedOrderQuantityErrorMessage, minOrderQuantityErrorMessage, onDiscountCodeChanged,
-            orderItems, state.totalBasketItems, updateBasketUrl
+            maxAllowedOrderQuantityErrorMessage, minOrderQuantityErrorMessage, orderItems,
+            state.totalBasketItems, syncDiscountCode, updateBasketUrl
         ]
     );
 
@@ -242,10 +246,7 @@ export const useOrderManagement = ({
                 if (response.ok && jsonResponse) {
                     const reducedQuantity = item.quantity + item.stockQuantity + item.outletQuantity;
 
-                    onDiscountCodeChanged?.(jsonResponse.discountCode || "");
-
-                    if (jsonResponse.discountCodeRemovedMessage) toast.warning(jsonResponse.discountCodeRemovedMessage);
-
+                    syncDiscountCode(jsonResponse);
                     dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems - reducedQuantity });
 
                     if (jsonResponse.items && jsonResponse.items.length > 0) {
@@ -268,7 +269,7 @@ export const useOrderManagement = ({
             }
         }, [
             basketDiscountCode, basketId, dispatch, generalErrorMessage, isDiscountCodeEnabled,
-            onDiscountCodeChanged, orderItems, state.totalBasketItems, updateBasketUrl
+            orderItems, state.totalBasketItems, syncDiscountCode, updateBasketUrl
         ]
     );
 

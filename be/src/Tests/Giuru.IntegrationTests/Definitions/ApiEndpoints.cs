@@ -11,6 +11,7 @@
         public const string ProductsApiEndpoint = "Products/ProductsApi";
         public const string GetProductsApiEndpoint = "Products/ProductsApi/Get";
         public const string BasketApiEndpoint = "Orders/BasketsApi";
+        public const string OrderFileApiEndpoint = "Orders/OrderFileApi";
         public const string OrderCheckoutApiEndpoint = "Orders/BasketCheckoutApi/Checkout";
         public const string GetOrdersApiEndpoint = "Orders/OrdersApi/Get";
         public const string InventoriesApiEndpoint = "Inventory/InventoriesApi";
