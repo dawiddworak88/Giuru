@@ -519,42 +519,52 @@ namespace Inventory.Api.Services.InventoryItems
 
         public PagedResults<IEnumerable<InventorySumServiceModel>> GetAvailableProductsInventories(GetInventoriesServiceModel model)
         {
-            var inventorySums = _context.Inventory
-                    .Where(x => x.IsActive)
-                    .GroupBy(x => x.ProductId)
-                    .Select(g => new
+            var inventoryItems = _context.Inventory.Where(x => x.IsActive && x.Product.IsActive)
+                    .Include(x => x.Product)
+                    .AsSingleQuery()
+                    .OrderBy(x => x.ProductId)
+                    .ThenBy(x => x.Id)
+                    .Select(y => new InventorySumServiceModel
                     {
-                        ProductId = g.Key,
-                        AvailableQuantity = g.Sum(y => y.AvailableQuantity),
-                        Quantity = g.Sum(y => y.Quantity),
-                        ExpectedDelivery = g.Min(y => y.ExpectedDelivery),
-                        RestockableInDays = g.Min(y => y.RestockableInDays)
+                        ProductId = y.ProductId,
+                        ProductEan = y.Product.Ean,
+                        ProductName = y.Product.Name,
+                        ProductSku = y.Product.Sku,
+                        AvailableQuantity = y.AvailableQuantity,
+                        Quantity = y.Quantity,
+                        ExpectedDelivery = y.ExpectedDelivery,
+                        RestockableInDays = y.RestockableInDays
                     });
 
-            var inventoryItems = from sum in inventorySums
-                                 join product in _context.Products on sum.ProductId equals product.Id
-                                 where product.IsActive
-                                 orderby sum.ProductId
-                                 select new InventorySumServiceModel
-                                 {
-                                     ProductId = sum.ProductId,
-                                     ProductEan = product.Ean,
-                                     ProductName = product.Name,
-                                     ProductSku = product.Sku,
-                                     AvailableQuantity = sum.AvailableQuantity,
-                                     Quantity = sum.Quantity,
-                                     ExpectedDelivery = sum.ExpectedDelivery,
-                                     RestockableInDays = sum.RestockableInDays
-                                 };
+            PagedResults<IEnumerable<InventorySumServiceModel>> pagedResults;
 
             if (model.PageIndex.HasValue is false || model.ItemsPerPage.HasValue is false)
             {
-                var limitedItems = inventoryItems.Take(Constants.MaxItemsPerPageLimit);
+                inventoryItems = inventoryItems.Take(Constants.MaxItemsPerPageLimit);
 
-                return limitedItems.PagedIndex(new Pagination(limitedItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), Constants.MaxItemsPerPageLimit), Constants.DefaultPageIndex);
+            }
+            else
+            {
+                pagedResults = inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
             }
 
-            return inventoryItems.PagedIndex(new Pagination(inventoryItems.Count(), model.ItemsPerPage.Value), model.PageIndex.Value);
+            var groupedResults = pagedResults.Data.GroupBy(x => x.ProductId);
+
+            return new PagedResults<IEnumerable<InventorySumServiceModel>>(inventoryItems.Count(), pagedResults.PageSize)
+            {
+                Data = groupedResults.OrEmptyIfNull().Select(x => new InventorySumServiceModel
+                {
+                    ProductId = x.Key,
+                    ProductName = x.FirstOrDefault().ProductName,
+                    ProductEan = x.FirstOrDefault().ProductEan,
+                    ProductSku = x.FirstOrDefault().ProductSku,
+                    AvailableQuantity = x.Sum(y => y.AvailableQuantity),
+                    Quantity = x.Sum(y => y.Quantity),
+                    ExpectedDelivery = x.Min(y => y.ExpectedDelivery),
+                    RestockableInDays = x.Min(y => y.RestockableInDays)
+                })
+            };
         }
 
         public async Task<InventoryUpdateResultServiceModel> UpdateInventoryQuantity(Guid productId, double bookedQuantity)
