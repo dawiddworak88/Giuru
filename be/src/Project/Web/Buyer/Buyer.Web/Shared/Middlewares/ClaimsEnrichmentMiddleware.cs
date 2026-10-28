@@ -1,11 +1,13 @@
 ﻿using Buyer.Web.Areas.Products.Services.DeliveryMessages;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Middlewares;
+using Buyer.Web.Shared.DomainModels.Clients;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Foundation.Extensions.Services.Cache;
@@ -89,7 +91,7 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture);
+            var client = await GetClientAsync(token);
 
             if (client is null)
             {
@@ -248,6 +250,19 @@ namespace Buyer.Web.Shared.Middlewares
             });
 
             await next(context);
+        }
+
+        private async Task<Client> GetClientAsync(string token)
+        {
+            try
+            {
+                return await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture);
+            }
+            catch (CustomException)
+            {
+                // Throwing outside MVC also fails the error handler; MVC handles the 401 redirect later
+                return default;
+            }
         }
 
         private class CachedClaim
