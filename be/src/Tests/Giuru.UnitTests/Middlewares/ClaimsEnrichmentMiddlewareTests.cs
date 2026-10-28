@@ -5,6 +5,7 @@ using Buyer.Web.Shared.DomainModels.Global;
 using Buyer.Web.Shared.Middlewares;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Global;
+using Foundation.Account.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
@@ -30,6 +31,8 @@ namespace Giuru.UnitTests.Middlewares
     public class ClaimsEnrichmentMiddlewareTests
     {
         private const string TeamMemberEmail = "team.member@example.com";
+        private const string OtherTeamMemberEmail = "other.team.member@example.com";
+        private static readonly Guid OrganisationId = Guid.NewGuid();
 
         [Fact]
         public async Task InvokeAsync_OnClaimsCacheMiss_AddsClaimsOfTheClientResolvedByOrganisation()
@@ -51,9 +54,11 @@ namespace Giuru.UnitTests.Middlewares
             var client = new BuyerClient { Id = Guid.NewGuid(), Name = "Acme" };
             var clientsRepository = CreateClientsRepository(client);
             var middleware = CreateMiddleware(clientsRepository);
+
             await InvokeAsync(middleware);
 
-            var context = await InvokeAsync(middleware);
+            // The claims are cached per organisation, so another Team Member of the Client hits the same entry
+            var context = await InvokeAsync(middleware, email: OtherTeamMemberEmail);
 
             Assert.Equal(client.Id.ToString(), ClaimValue(context.User, ClaimsEnrichmentConstants.ClientIdClaimType));
             Assert.Equal("Acme", ClaimValue(context.User, ClaimsEnrichmentConstants.ClientNameClaimType));
@@ -123,9 +128,14 @@ namespace Giuru.UnitTests.Middlewares
                 logger ?? Substitute.For<ILogger<ClaimsEnrichmentMiddleware>>());
         }
 
-        private static HttpContext CreateHttpContext()
+        private static HttpContext CreateHttpContext(string email)
         {
-            var identity = new ClaimsIdentity([new Claim(ClaimTypes.Email, TeamMemberEmail)], "test");
+            var identity = new ClaimsIdentity(
+                [
+                    new Claim(ClaimTypes.Email, email),
+                    new Claim(AccountConstants.Claims.OrganisationIdClaim, OrganisationId.ToString())
+                ],
+                "test");
             var authenticationService = Substitute.For<IAuthenticationService>();
             authenticationService.AuthenticateAsync(Arg.Any<HttpContext>(), Arg.Any<string>())
                 .Returns(Task.FromResult(AuthenticateResult.NoResult()));
@@ -134,13 +144,14 @@ namespace Giuru.UnitTests.Middlewares
             return new DefaultHttpContext { User = new ClaimsPrincipal(identity), RequestServices = services };
         }
 
-        private static async Task<HttpContext> InvokeAsync(ClaimsEnrichmentMiddleware middleware, Action onNext = null)
+        private static async Task<HttpContext> InvokeAsync(ClaimsEnrichmentMiddleware middleware, Action onNext = null, string email = TeamMemberEmail)
         {
-            var context = CreateHttpContext();
+            var context = CreateHttpContext(email);
 
             await middleware.InvokeAsync(context, _ =>
             {
                 onNext?.Invoke();
+
                 return Task.CompletedTask;
             });
 
