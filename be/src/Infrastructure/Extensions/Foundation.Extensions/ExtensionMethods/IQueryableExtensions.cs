@@ -36,6 +36,7 @@ namespace Foundation.Extensions.ExtensionMethods
 
             var orderByString = string.Empty;
             var usedProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var isLastDescending = false;
 
             var orderByAfterSplit = orderBy.Split(',');
 
@@ -57,6 +58,7 @@ namespace Foundation.Extensions.ExtensionMethods
                 }
 
                 usedProperties.Add(propertyMappingValue.Name);
+                isLastDescending = orderDescending;
 
                 orderByString = orderByString +
                     (string.IsNullOrWhiteSpace(orderByString) ? string.Empty : ", ")
@@ -64,7 +66,7 @@ namespace Foundation.Extensions.ExtensionMethods
                     + (orderDescending ? " descending" : " ascending");
             }
 
-            orderByString = EnsureStableTieBreaker<T>(orderByString, usedProperties);
+            orderByString = EnsureStableTieBreaker<T>(orderByString, usedProperties, isLastDescending);
 
             return source.OrderBy(orderByString);
         }
@@ -76,7 +78,7 @@ namespace Foundation.Extensions.ExtensionMethods
             return hasCreatedDate ? $"{CreatedDatePropertyName} desc" : null;
         }
 
-        private static string EnsureStableTieBreaker<T>(string orderByString, HashSet<string> usedProperties)
+        private static string EnsureStableTieBreaker<T>(string orderByString, HashSet<string> usedProperties, bool isLastDescending)
         {
             if (usedProperties.Contains(TieBreakerPropertyName))
             {
@@ -90,7 +92,8 @@ namespace Foundation.Extensions.ExtensionMethods
                 return orderByString;
             }
 
-            return $"{orderByString}, {tieBreakerProperty.Name} ascending";
+            // Same direction as the last sort column, so an index on (column, Id) can be read without a sort
+            return $"{orderByString}, {tieBreakerProperty.Name} {(isLastDescending ? "descending" : "ascending")}";
         }
     }
 }
