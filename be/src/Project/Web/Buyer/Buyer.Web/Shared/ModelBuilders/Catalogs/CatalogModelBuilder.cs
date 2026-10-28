@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.Services.Prices;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.ViewModels.Toasts;
 using Foundation.Extensions.ModelBuilders;
@@ -21,6 +22,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IOptions<AppSettings> _options;
+        private readonly IApplicableDiscountCodeService _applicableDiscountCodeService;
 
         public CatalogModelBuilder(
             IModelBuilder<SuccessAddProductToBasketViewModel> toastSuccessAddProductToBasket,
@@ -29,7 +31,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
             IStringLocalizer<InventoryResources> inventoryLocalizer,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IApplicableDiscountCodeService applicableDiscountCodeService)
         {
             _toastSuccessAddProductToBasket = toastSuccessAddProductToBasket;
             _globalLocalizer = globalLocalizer;
@@ -38,6 +41,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
             _basketService = basketService;
             _inventoryLocalizer = inventoryLocalizer;
             _options = options;
+            _applicableDiscountCodeService = applicableDiscountCodeService;
         }
 
         public T BuildModel(S componentModel)
@@ -78,9 +82,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 if (basket is not null)
                 {
                     viewModel.BasketItems = basket.Items;
-                    viewModel.DiscountCode = _options.Value.IsGrulaConfigured
-                        ? basket.DiscountCode
-                        : null;
+                    viewModel.DiscountCode = _applicableDiscountCodeService.GetApplicableAsync(componentModel.Token, basket.DiscountCode).Result;
                 }
             }
 

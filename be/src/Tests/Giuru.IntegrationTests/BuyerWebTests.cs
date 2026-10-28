@@ -147,12 +147,15 @@ namespace Giuru.IntegrationTests
             Assert.Null(persistedBasketItem.Price);
             Assert.Null(persistedBasketItem.Currency);
 
+            // Checkout is refused for any Client but the signed-in one, so order as the test user's own Client.
+            var client = await ClientHelper.GetOrCreateTestUsersClientAsync(_apiFixture);
+
             await _apiFixture.BuyerWebClient.PostAsync<CheckoutBasketRequestModel, BaseResponseModel>(
                 ApiEndpoints.OrderCheckoutApiEndpoint, 
                 new CheckoutBasketRequestModel
                 {
                     BasketId = basket.Id,
-                    ClientId = Clients.Id,
+                    ClientId = client.Id,
                     ClientName = Clients.Name
                 });
 

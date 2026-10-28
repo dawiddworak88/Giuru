@@ -1,3 +1,4 @@
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.Extensions.Exceptions;
 using Foundation.Pricing.Services;
 using NSubstitute;
@@ -18,6 +19,17 @@ namespace Giuru.UnitTests.Orders.Baskets
                 .Returns(call => Task.FromResult(call.ArgAt<string>(3)));
 
             return repository;
+        }
+
+        /// <summary>The buyer-side check, treating every requested code as valid for the signed-in Client.</summary>
+        public static IApplicableDiscountCodeService AcceptingForBuyer()
+        {
+            var service = Substitute.For<IApplicableDiscountCodeService>();
+
+            service.GetApplicableAsync(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(call => Task.FromResult(call.ArgAt<string>(1)));
+
+            return service;
         }
 
         /// <summary>
@@ -49,6 +61,17 @@ namespace Giuru.UnitTests.Orders.Baskets
         public static Func<string, Task<string>> Unreachable()
         {
             return _ => throw new CustomException("Client.Api is unreachable.", (int)HttpStatusCode.ServiceUnavailable);
+        }
+
+        /// <summary>The repository as it behaves when Client.Api cannot be reached: every check throws.</summary>
+        public static IDiscountCodeEligibilityRepository UnreachableRepository()
+        {
+            var repository = Substitute.For<IDiscountCodeEligibilityRepository>();
+
+            repository.GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>())
+                .Returns<Task<string>>(_ => throw new CustomException("Client.Api is unreachable.", (int)HttpStatusCode.ServiceUnavailable));
+
+            return repository;
         }
 
         private static string FindStoredSpelling(string[] storedSpellings, string requested)

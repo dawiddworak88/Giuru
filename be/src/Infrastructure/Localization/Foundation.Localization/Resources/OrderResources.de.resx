@@ -393,4 +393,10 @@
   <data name="DiscountCodeRemoved" xml:space="preserve">
     <value>Ihr Rabattcode ist nicht mehr gültig und wurde aus dem Warenkorb entfernt. Die Preise wurden aktualisiert.</value>
   </data>
+  <data name="CheckoutDiscountCodeNoLongerValid" xml:space="preserve">
+    <value>Ihr Rabattcode ist nicht mehr gültig. Speichern Sie den Warenkorb erneut, um die Preise zu aktualisieren, und geben Sie die Bestellung dann auf.</value>
+  </data>
+  <data name="CheckoutClientMismatch" xml:space="preserve">
+    <value>Diese Bestellung kann nicht für einen anderen Kunden aufgegeben werden.</value>
+  </data>
 </root>

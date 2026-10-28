@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Buyer.Web.Shared.Services.Prices;
+using Foundation.Pricing.Services;
+using Giuru.UnitTests.Orders.Baskets;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System;
@@ -80,7 +84,7 @@ namespace Giuru.UnitTests.Services.Prices
         {
             var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             httpContextAccessor.HttpContext.Returns((HttpContext)null);
-            var resolver = new ClaimsPriceClientResolver(httpContextAccessor);
+            var resolver = new ClaimsPriceClientResolver(httpContextAccessor, DiscountCodeEligibilityStubs.AcceptingForBuyer());
 
             var priceClient = await resolver.ResolveAsync(null, "SUMMER25", "token");
 
@@ -118,13 +122,45 @@ namespace Giuru.UnitTests.Services.Prices
                 () => resolver.ResolveAsync(Guid.NewGuid(), null, "token"));
         }
 
-        private static ClaimsPriceClientResolver CreateResolver(ClaimsPrincipal user)
+        [Fact]
+        public async Task ResolveAsync_WhenTheDiscountCodeIsNotValid_PricesWithoutItAndDoesNotFail()
+        {
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(BuyerClaimsEnrichmentConstants.ClientIdClaimType, Guid.NewGuid().ToString())
+            }, "test");
+            var discountCodeService = Substitute.For<IApplicableDiscountCodeService>();
+            discountCodeService.GetApplicableAsync("token", "STOLEN").Returns(Task.FromResult<string>(null));
+            var resolver = CreateResolver(new ClaimsPrincipal(identity), discountCodeService);
+
+            var priceClient = await resolver.ResolveAsync(null, "STOLEN", "token");
+
+            Assert.Null(priceClient.DiscountCode);
+        }
+
+        [Fact]
+        public async Task ResolveAsync_WhenTheDiscountCodeIsValid_SendsItsStoredSpelling()
+        {
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(BuyerClaimsEnrichmentConstants.ClientIdClaimType, Guid.NewGuid().ToString())
+            }, "test");
+            var discountCodeService = Substitute.For<IApplicableDiscountCodeService>();
+            discountCodeService.GetApplicableAsync("token", "summer25").Returns(Task.FromResult("SUMMER25"));
+            var resolver = CreateResolver(new ClaimsPrincipal(identity), discountCodeService);
+
+            var priceClient = await resolver.ResolveAsync(null, "summer25", "token");
+
+            Assert.Equal("SUMMER25", priceClient.DiscountCode);
+        }
+
+        private static ClaimsPriceClientResolver CreateResolver(ClaimsPrincipal user, IApplicableDiscountCodeService discountCodeService = null)
         {
             var httpContext = new DefaultHttpContext { User = user };
             var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             httpContextAccessor.HttpContext.Returns(httpContext);
 
-            return new ClaimsPriceClientResolver(httpContextAccessor);
+            return new ClaimsPriceClientResolver(httpContextAccessor, discountCodeService ?? DiscountCodeEligibilityStubs.AcceptingForBuyer());
         }
     }
 
@@ -294,19 +330,90 @@ namespace Giuru.UnitTests.Services.Prices
             Assert.Null(priceClient.CurrencyCode);
         }
 
+        [Fact]
+        public async Task ResolveAsync_WhenTheDiscountCodeIsNotValidForTheClient_PricesWithoutItAndDoesNotFail()
+        {
+            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
+            eligibility.GetValidDiscountCodeAsync("token", "en-US", ClientId, "STOLEN").Returns(Task.FromResult<string>(null));
+            var resolver = CreateResolverWithEmptyClient(eligibility, true);
+
+            var priceClient = await resolver.ResolveAsync(ClientId, "STOLEN", "token");
+
+            Assert.Null(priceClient.DiscountCode);
+        }
+
+        [Fact]
+        public async Task ResolveAsync_WhenTheDiscountCodeIsValidForTheClient_SendsItsStoredSpelling()
+        {
+            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
+            eligibility.GetValidDiscountCodeAsync("token", "en-US", ClientId, "summer25").Returns(Task.FromResult("SUMMER25"));
+            var resolver = CreateResolverWithEmptyClient(eligibility, true);
+
+            var priceClient = await resolver.ResolveAsync(ClientId, "summer25", "token");
+
+            Assert.Equal("SUMMER25", priceClient.DiscountCode);
+        }
+
+        [Fact]
+        public async Task ResolveAsync_WhenGrulaIsNotConfigured_DoesNotCheckOrSendTheDiscountCode()
+        {
+            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
+            var resolver = CreateResolverWithEmptyClient(eligibility, false);
+
+            var priceClient = await resolver.ResolveAsync(ClientId, "SUMMER25", "token");
+
+            Assert.Null(priceClient.DiscountCode);
+            await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task ResolveAsync_WhenClientApiIsUnavailable_PricesWithoutTheDiscountCodeAndDoesNotFail()
+        {
+            var resolver = CreateResolverWithEmptyClient(DiscountCodeEligibilityStubs.UnreachableRepository(), true);
+
+            var priceClient = await resolver.ResolveAsync(ClientId, "SUMMER25", "token");
+
+            Assert.Null(priceClient.DiscountCode);
+        }
+
+        private static ClientRepositoryPriceClientResolver CreateResolverWithEmptyClient(IDiscountCodeEligibilityRepository eligibility, bool grulaConfigured)
+        {
+            var resolver = CreateResolver(
+                out var clientLookupService,
+                out var countriesRepository,
+                out var clientFieldValuesRepository,
+                out _,
+                out _,
+                eligibility,
+                grulaConfigured);
+
+            clientLookupService.GetAsync("token", ClientId).Returns(Task.FromResult<SellerClient>(null));
+            countriesRepository.GetAsync("token", "en-US", Arg.Any<string>()).Returns(Task.FromResult<IEnumerable<SellerCountry>>(Array.Empty<SellerCountry>()));
+            clientFieldValuesRepository.GetAsync("token", "en-US", ClientId).Returns(Task.FromResult<IEnumerable<SellerClientFieldValue>>(null));
+
+            return resolver;
+        }
+
         private static ClientRepositoryPriceClientResolver CreateResolver(
             out IClientLookupService clientLookupService,
             out ICountriesRepository countriesRepository,
             out IClientFieldValuesRepository clientFieldValuesRepository,
             out IClientAddressesRepository clientAddressesRepository,
-            out ICurrenciesRepository currenciesRepository)
+            out ICurrenciesRepository currenciesRepository,
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository = null,
+            bool grulaConfigured = true)
         {
             clientLookupService = Substitute.For<IClientLookupService>();
             countriesRepository = Substitute.For<ICountriesRepository>();
             clientFieldValuesRepository = Substitute.For<IClientFieldValuesRepository>();
             clientAddressesRepository = Substitute.For<IClientAddressesRepository>();
             currenciesRepository = Substitute.For<ICurrenciesRepository>();
-            var options = Options.Create(new SellerAppSettings { DefaultCulture = "en-US" });
+            var options = Options.Create(new SellerAppSettings
+            {
+                DefaultCulture = "en-US",
+                GrulaAccessToken = grulaConfigured ? "test-token" : null,
+                GrulaEnvironmentId = grulaConfigured ? Guid.NewGuid().ToString() : null
+            });
 
             return new ClientRepositoryPriceClientResolver(
                 clientLookupService,
@@ -314,7 +421,9 @@ namespace Giuru.UnitTests.Services.Prices
                 clientFieldValuesRepository,
                 clientAddressesRepository,
                 currenciesRepository,
-                options);
+                options,
+                discountCodeEligibilityRepository ?? DiscountCodeEligibilityStubs.Accepting(),
+                Substitute.For<ILogger<ClientRepositoryPriceClientResolver>>());
         }
     }
 }

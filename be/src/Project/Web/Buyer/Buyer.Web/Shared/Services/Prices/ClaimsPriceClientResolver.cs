@@ -10,19 +10,22 @@ namespace Buyer.Web.Shared.Services.Prices
 {
     /// <summary>
     /// Buyers only ever price for themselves, so the client is taken from the authenticated
-    /// principal. <paramref name="token"/> is unused here for the same reason - nothing is
-    /// looked up over the API.
+    /// principal. <paramref name="token"/> is only used to check the discount code with Client.Api.
     /// </summary>
     public class ClaimsPriceClientResolver : IPriceClientResolver
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IApplicableDiscountCodeService _applicableDiscountCodeService;
 
-        public ClaimsPriceClientResolver(IHttpContextAccessor httpContextAccessor)
+        public ClaimsPriceClientResolver(
+            IHttpContextAccessor httpContextAccessor,
+            IApplicableDiscountCodeService applicableDiscountCodeService)
         {
             _httpContextAccessor = httpContextAccessor;
+            _applicableDiscountCodeService = applicableDiscountCodeService;
         }
 
-        public Task<PriceClient> ResolveAsync(Guid? clientId, string discountCode, string token)
+        public async Task<PriceClient> ResolveAsync(Guid? clientId, string discountCode, string token)
         {
             if (clientId.HasValue)
             {
@@ -35,7 +38,10 @@ namespace Buyer.Web.Shared.Services.Prices
 
             var user = _httpContextAccessor.HttpContext?.User;
 
-            return Task.FromResult(new PriceClient
+            // An invalid or unverifiable code is priced as no code at all - a price lookup never fails on it.
+            var validDiscountCode = await _applicableDiscountCodeService.GetApplicableAsync(token, discountCode);
+
+            return new PriceClient
             {
                 Id = user.GetClientId(),
                 Name = user?.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
@@ -44,8 +50,8 @@ namespace Buyer.Web.Shared.Services.Prices
                 PaletteLoading = user?.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
                 Country = user?.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
                 DeliveryZipCode = user?.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
-                DiscountCode = discountCode
-            });
+                DiscountCode = validDiscountCode
+            };
         }
     }
 }
