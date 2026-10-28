@@ -77,6 +77,18 @@ namespace Ordering.Api.Infrastructure
                     });
             });
 
+            // Computed prefix of ExternalReference to search order items by reference, as nvarchar(max) can't be an index key
+            builder.Entity<OrderItem>(entity =>
+            {
+                entity.Property(e => e.ExternalReferencePrefix)
+                    .HasMaxLength(450)
+                    .HasComputedColumnSql("CONVERT(nvarchar(450), LEFT([ExternalReference], 450))", stored: false);
+
+                entity.HasIndex(e => e.ExternalReferencePrefix)
+                    .IncludeProperties(e => new { e.OrderId, e.IsActive })
+                    .IsCreatedOnline();
+            });
+
             // Index for OrderStatusTranslations to optimize lookup by OrderStatusId, Language and IsActive
             builder.Entity<OrderStatusTranslation>(entity =>
             {

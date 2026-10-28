@@ -248,13 +248,7 @@ namespace Ordering.Api.Services
                 orders = orders.Where(x => x.SellerId == model.OrganisationId.Value);
             }
 
-            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
-            {
-                var searchTermLower = model.SearchTerm.ToLower();
-                orders = orders.Where(x => x.ClientName.ToLower().StartsWith(searchTermLower)
-                || x.OrderItems.Any(y => y.ExternalReference.ToLower().StartsWith(searchTermLower))
-                || x.Id.ToString().ToLower() == searchTermLower);
-            }
+            orders = orders.ApplySearch(_context, model.SearchTerm, model.IsSeller);
 
             if (model.CreatedDateGreaterThan.HasValue)
             {
@@ -573,13 +567,7 @@ namespace Ordering.Api.Services
                 orders = orders.Where(x => x.SellerId == model.OrganisationId.Value);
             }
 
-            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
-            {
-                var searchTermLower = model.SearchTerm.ToLower();
-                orders = orders.Where(x => x.ClientName.ToLower().StartsWith(searchTermLower)
-                || x.OrderItems.Any(y => y.ExternalReference.ToLower().StartsWith(searchTermLower))
-                || x.Id.ToString().ToLower() == searchTermLower);
-            }
+            orders = orders.ApplySearch(_context, model.SearchTerm, model.IsSeller);
 
             if (model.OrderStatusId.HasValue)
             {
