@@ -90,18 +90,50 @@ namespace Giuru.UnitTests.Extensions
         }
 
         [Fact]
-        public void ApplySort_WhenDuplicateCreatedDate_TieBreaksByIdAscending()
+        public void ApplySort_WhenDuplicateCreatedDate_TieBreaksByIdDescending()
         {
             var sameDate = new DateTime(2024, 1, 1);
             var source = new List<WithCreatedDate>
             {
-                new() { Id = Id(2), Name = "second", CreatedDate = sameDate },
-                new() { Id = Id(1), Name = "first", CreatedDate = sameDate },
+                new() { Id = Id(1), Name = "lower id", CreatedDate = sameDate },
+                new() { Id = Id(2), Name = "higher id", CreatedDate = sameDate },
             }.AsQueryable();
 
             var result = source.ApplySort(null).ToList();
 
-            Assert.Equal(new[] { "first", "second" }, result.Select(x => x.Name));
+            Assert.Equal(new[] { "higher id", "lower id" }, result.Select(x => x.Name));
+        }
+
+        [Fact]
+        public void ApplySort_WhenExplicitDescendingSortHasDuplicateKey_TieBreaksByIdDescending()
+        {
+            var source = new List<WithCreatedDate>
+            {
+                new() { Id = Id(1), Name = "dup", CreatedDate = new DateTime(2020, 1, 1) },
+                new() { Id = Id(3), Name = "aaa", CreatedDate = new DateTime(2020, 1, 1) },
+                new() { Id = Id(2), Name = "dup", CreatedDate = new DateTime(2020, 1, 1) },
+            }.AsQueryable();
+
+            var result = source.ApplySort($"{nameof(WithCreatedDate.Name)} desc").ToList();
+
+            Assert.Equal(new[] { Id(2), Id(1), Id(3) }, result.Select(x => x.Id));
+        }
+
+        [Fact]
+        public void ApplySort_WhenSortingByManyColumns_TieBreakerFollowsLastColumnDirection()
+        {
+            var sameDate = new DateTime(2024, 1, 1);
+            var source = new List<WithCreatedDate>
+            {
+                new() { Id = Id(1), Name = "same", CreatedDate = sameDate },
+                new() { Id = Id(2), Name = "same", CreatedDate = sameDate },
+            }.AsQueryable();
+
+            var result = source
+                .ApplySort($"{nameof(WithCreatedDate.Name)} asc, {nameof(WithCreatedDate.CreatedDate)} desc")
+                .ToList();
+
+            Assert.Equal(new[] { Id(2), Id(1) }, result.Select(x => x.Id));
         }
 
         [Fact]
