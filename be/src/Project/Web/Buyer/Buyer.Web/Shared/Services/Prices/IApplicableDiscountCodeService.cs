@@ -15,5 +15,12 @@ namespace Buyer.Web.Shared.Services.Prices
         /// null when Client.Api cannot answer, so browsing never breaks.
         /// </summary>
         Task<string> GetApplicableAsync(string token, string discountCode);
+
+        /// <summary>
+        /// Checks the code like <see cref="GetApplicableAsync"/>, but keeps a code that is not valid or
+        /// could not be checked, and tells the two apart - for the order form, which has to let the buyer
+        /// remove a code that checkout would refuse.
+        /// </summary>
+        Task<DiscountCodeCheck> CheckAsync(string token, string discountCode);
     }
 }

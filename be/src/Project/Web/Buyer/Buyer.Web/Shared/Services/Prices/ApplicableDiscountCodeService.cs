@@ -33,26 +33,37 @@ namespace Buyer.Web.Shared.Services.Prices
 
         public async Task<string> GetApplicableAsync(string token, string discountCode)
         {
+            var check = await CheckAsync(token, discountCode);
+
+            return check.IsValid ? check.DiscountCode : null;
+        }
+
+        public async Task<DiscountCodeCheck> CheckAsync(string token, string discountCode)
+        {
             if (_options.Value.IsGrulaConfigured is false || string.IsNullOrWhiteSpace(discountCode))
             {
-                return null;
+                return DiscountCodeCheck.None();
             }
 
             var clientId = _httpContextAccessor.HttpContext?.User.GetClientId();
 
             if (clientId.HasValue is false)
             {
-                return null;
+                return DiscountCodeCheck.None();
             }
 
             try
             {
-                return await _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, CultureInfo.CurrentUICulture.Name, clientId, discountCode);
+                var validDiscountCode = await _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, CultureInfo.CurrentUICulture.Name, clientId, discountCode);
+
+                return validDiscountCode is not null
+                    ? DiscountCodeCheck.Valid(validDiscountCode)
+                    : DiscountCodeCheck.NotValid(discountCode);
             }
             catch (Exception exception) when (exception is CustomException or HttpRequestException or TaskCanceledException)
             {
                 _logger.LogWarning(exception, "Couldn't check the Discount Code for Client {ClientId}; continuing without it.", clientId);
-                return null;
+                return DiscountCodeCheck.Unchecked(discountCode);
             }
         }
     }

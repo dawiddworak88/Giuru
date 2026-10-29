@@ -381,6 +381,9 @@
   <data name="RemoveDiscountCodeLabel" xml:space="preserve">
     <value>Rabattcode entfernen</value>
   </data>
+  <data name="DiscountCodeNotValidMessage" xml:space="preserve">
+    <value>Dieser Rabattcode ist nicht mehr gültig. Entfernen Sie ihn, um Ihre Bestellung aufzugeben.</value>
+  </data>
   <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
     <value>Fügen Sie mindestens ein Produkt zum Warenkorb hinzu, bevor Sie einen Rabattcode anwenden.</value>
   </data>
@@ -394,7 +397,7 @@
     <value>Ihr Rabattcode ist nicht mehr gültig und wurde aus dem Warenkorb entfernt. Die Preise wurden aktualisiert.</value>
   </data>
   <data name="CheckoutDiscountCodeNoLongerValid" xml:space="preserve">
-    <value>Ihr Rabattcode ist nicht mehr gültig. Speichern Sie den Warenkorb erneut, um die Preise zu aktualisieren, und geben Sie die Bestellung dann auf.</value>
+    <value>Ihr Rabattcode ist nicht mehr gültig. Entfernen Sie ihn und geben Sie die Bestellung dann auf.</value>
   </data>
   <data name="CheckoutClientMismatch" xml:space="preserve">
     <value>Diese Bestellung kann nicht für einen anderen Kunden aufgegeben werden.</value>

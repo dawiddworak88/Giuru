@@ -381,6 +381,9 @@
   <data name="RemoveDiscountCodeLabel" xml:space="preserve">
     <value>Remove discount code</value>
   </data>
+  <data name="DiscountCodeNotValidMessage" xml:space="preserve">
+    <value>This discount code is no longer valid. Remove it to place your order.</value>
+  </data>
   <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
     <value>Add at least one product to the basket before applying a discount code.</value>
   </data>
@@ -394,7 +397,7 @@
     <value>Your discount code is no longer valid and was removed from the basket. Prices have been updated.</value>
   </data>
   <data name="CheckoutDiscountCodeNoLongerValid" xml:space="preserve">
-    <value>Your discount code is no longer valid. Save your basket again to update the prices, then place the order.</value>
+    <value>Your discount code is no longer valid. Remove it, then place the order.</value>
   </data>
   <data name="CheckoutClientMismatch" xml:space="preserve">
     <value>This order cannot be placed for a different client.</value>

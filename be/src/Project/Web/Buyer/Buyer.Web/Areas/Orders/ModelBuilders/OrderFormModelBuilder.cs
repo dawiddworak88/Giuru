@@ -113,6 +113,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ApplyDiscountCodeLabel = _orderLocalizer.GetString("ApplyDiscountCodeLabel"),
                 DiscountCodeAppliedMessage = _orderLocalizer.GetString("DiscountCodeAppliedMessage"),
                 RemoveDiscountCodeLabel = _orderLocalizer.GetString("RemoveDiscountCodeLabel"),
+                DiscountCodeNotValidMessage = _orderLocalizer.GetString("DiscountCodeNotValidMessage"),
                 IsDiscountCodeEnabled = _options.Value.IsGrulaConfigured
             };
 
@@ -123,7 +124,12 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 if (basket is not null)
                 {
                     viewModel.BasketItems = basket.Items;
-                    viewModel.DiscountCode = await _applicableDiscountCodeService.GetApplicableAsync(componentModel.Token, basket.DiscountCode);
+                    // A code that stopped being valid stays on the form: checkout refuses the Basket
+                    // until it is removed, and the form only offers removal for a code it shows.
+                    var discountCodeCheck = await _applicableDiscountCodeService.CheckAsync(componentModel.Token, basket.DiscountCode);
+
+                    viewModel.DiscountCode = discountCodeCheck.DiscountCode;
+                    viewModel.IsDiscountCodeNotValid = discountCodeCheck.IsNotValid;
                 }
             }
 
