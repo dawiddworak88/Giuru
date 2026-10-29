@@ -806,7 +806,8 @@ namespace Ordering.Api.Services
 
                 await using var tx = await _context.Database.BeginTransactionAsync();
 
-                foreach (var item in syncBatchItem)
+                // The sync can send an order line many times in one request; the previous status is read from the database, so each line is handled once
+                foreach (var item in syncBatchItem.GroupBy(x => x.OrderLineIndex).Select(x => x.Last()))
                 {
                     var orderItem = await _context.OrderItems
                         .Where(x => x.OrderId == item.Id && x.IsActive)
