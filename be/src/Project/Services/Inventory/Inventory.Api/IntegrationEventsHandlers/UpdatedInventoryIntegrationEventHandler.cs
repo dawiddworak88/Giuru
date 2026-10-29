@@ -66,6 +66,28 @@ namespace Inventory.Api.IntegrationEventsHandlers
                 }
             }
 
+            var updatedProductSkus = inventoryUpdateResults
+                .Where(x => string.IsNullOrWhiteSpace(x.ProductSku) is false)
+                .Select(x => x.ProductSku)
+                .Distinct()
+                .ToArray();
+
+            if (updatedProductSkus.Length > 0)
+            {
+                try
+                {
+                    _eventBus.Publish(new UpsertedInventoryAvailabilityIntegrationEvent
+                    {
+                        ProductSkus = updatedProductSkus
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to publish UpsertedInventoryAvailabilityIntegrationEvent for products: {ProductSkus}",
+                        string.Join(",", updatedProductSkus));
+                }
+            }
+
             if (inventoryUpdateResults.Any(x => x.WentOutOfStock))
             {
                 var productsSoldOut = new ProductsSoldOutIntegrationEvent

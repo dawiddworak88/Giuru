@@ -1,7 +1,9 @@
 ﻿using Client.Api.Definitions;
 using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Fields;
+using Client.Api.IntegrationEvents;
 using Client.Api.ServicesModels.FieldValues;
+using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Definitions;
@@ -21,13 +23,16 @@ namespace Client.Api.Services.FieldValues
     {
         private readonly ClientContext _context;
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
+        private readonly IEventBus _eventBus;
 
         public ClientFieldValuesService(
             IStringLocalizer<ClientResources> clientLocalizer,
-            ClientContext context)
+            ClientContext context,
+            IEventBus eventBus)
         {
             _context = context;
             _clientLocalizer = clientLocalizer;
+            _eventBus = eventBus;
         }
 
         public async Task CreateAsync(CreateClientFieldValuesServiceModel model)
@@ -155,6 +160,13 @@ namespace Client.Api.Services.FieldValues
             }
 
             await _context.SaveChangesAsync();
+
+            var upsertedClientMessage = new UpsertedClientIntegrationEvent
+            {
+                ClientId = client.Id
+            };
+
+            _eventBus.Publish(upsertedClientMessage);
         }
 
         public PagedResults<IEnumerable<ClientFieldValueServiceModel>> Get(GetClientFieldValuesServiceModel model)
