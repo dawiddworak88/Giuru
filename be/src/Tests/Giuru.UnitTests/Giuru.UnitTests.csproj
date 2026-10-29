@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Search\Foundation.Search\Foundation.Search.csproj" />
+    <ProjectReference Include="..\..\Project\Services\Ordering\Ordering.Api\Ordering.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

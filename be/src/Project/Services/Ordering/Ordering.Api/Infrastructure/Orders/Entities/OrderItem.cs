@@ -34,6 +34,8 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string ExternalReference { get; set; }
 
+        public string ExternalReferencePrefix { get; set; }
+
         public string MoreInfo { get; set; }
 
         [Column(TypeName = "decimal(18,4)")]
