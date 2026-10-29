@@ -262,6 +262,12 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ExternalReference")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ExternalReferencePrefix")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)")
+                        .HasComputedColumnSql("CONVERT(nvarchar(450), LEFT([ExternalReference], 450))", false);
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -312,6 +318,11 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExternalReferencePrefix")
+                        .HasAnnotation("SqlServer:Online", true);
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("ExternalReferencePrefix"), new[] { "OrderId", "IsActive" });
 
                     b.HasIndex("OrderId")
                         .HasDatabaseName("IX_OrderItems_OrderId_Cover");
