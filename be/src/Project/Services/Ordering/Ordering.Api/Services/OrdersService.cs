@@ -810,10 +810,13 @@ namespace Ordering.Api.Services
 
                 await using var tx = await _context.Database.BeginTransactionAsync();
 
-                foreach (var item in syncBatchItem)
+                // The sync can send an order line many times in one request; the previous status is read from the database, so each line is handled once
+                foreach (var item in syncBatchItem.GroupBy(x => x.OrderLineIndex).Select(x => x.Last()))
                 {
+                    // Order line index is the position in the orders list response, which is ordered by Id
                     var orderItem = await _context.OrderItems
                         .Where(x => x.OrderId == item.Id && x.IsActive)
+                        .OrderBy(x => x.Id)
                         .Skip(item.OrderLineIndex - 1)
                         .FirstOrDefaultAsync();
 
@@ -984,9 +987,11 @@ namespace Ordering.Api.Services
                 .AsNoTracking()
                 .ToListAsync();
                 
+            // Ordered by Id, as the status sync finds an order item by its position in this list
             var orderItems = await _context.OrderItems
                 .AsNoTracking()
                 .Where(x => orderIdSet.Contains(x.OrderId) && x.IsActive)
+                .OrderBy(x => x.Id)
                 .ToListAsync();
             
             // Only the last status change of each order item, not its whole history
