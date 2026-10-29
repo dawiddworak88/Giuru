@@ -12,7 +12,10 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Pricing.DomainModels;
+using Buyer.Web.Shared.DomainModels.LeadTime;
 using Buyer.Web.Shared.Repositories.Inventory;
+using Buyer.Web.Shared.Repositories.LeadTime;
+using Buyer.Web.Shared.Services.DeliveryDates;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.Pricing.Services;
@@ -36,9 +39,14 @@ using System.Threading.Tasks;
 using SellerAppSettings = Seller.Web.Shared.Configurations.AppSettings;
 using SellerBasket = Seller.Web.Areas.Orders.DomainModels.Basket;
 using SellerBasketItem = Seller.Web.Areas.Orders.DomainModels.BasketItem;
+using SellerClient = Seller.Web.Areas.Clients.DomainModels.Client;
 using SellerIBasketRepository = Seller.Web.Areas.Orders.Repositories.Baskets.IBasketRepository;
+using SellerIClientLookupService = Seller.Web.Shared.Services.Clients.IClientLookupService;
+using SellerIExpectedDeliveryDateService = Seller.Web.Shared.Services.DeliveryDates.IExpectedDeliveryDateService;
 using SellerIInventoryRepository = Seller.Web.Shared.Repositories.Inventory.IInventoryRepository;
+using SellerILeadTimeRepository = Seller.Web.Shared.Repositories.LeadTime.ILeadTimeRepository;
 using SellerInventoryItem = Seller.Web.Shared.DomainModels.Inventory.InventoryItem;
+using SellerLeadTimeItem = Seller.Web.Shared.DomainModels.LeadTime.LeadTimeItem;
 using SellerIOrderFileService = Seller.Web.Areas.Orders.Services.OrderFiles.IOrderFileService;
 using SellerIOrdersRepository = Seller.Web.Areas.Orders.Repositories.Orders.IOrdersRepository;
 using SellerIMediaItemsRepository = Seller.Web.Areas.Shared.Repositories.Media.IMediaItemsRepository;
@@ -128,7 +136,9 @@ namespace Giuru.UnitTests.Orders.Baskets
                 productColorsService,
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<ILeadTimeRepository>(),
+                Substitute.For<IExpectedDeliveryDateService>())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -272,6 +282,88 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Equal("DiscountCodeRemoved", response.DiscountCodeRemovedMessage);
         }
 
+        [Fact]
+        public async Task Index_SetsTheExpectedLeadTimeOfTheImportedLines()
+        {
+            var basketId = Guid.NewGuid();
+            var expectedLeadTime = new DateOnly(2026, 11, 20);
+            IEnumerable<BasketItem> savedItems = null;
+            var orderFileService = Substitute.For<IOrderFileService>();
+            var basketRepository = Substitute.For<IBasketRepository>();
+            var productsRepository = Substitute.For<IProductsRepository>();
+            var inventoryRepository = Substitute.For<IInventoryRepository>();
+            var leadTimeRepository = Substitute.For<ILeadTimeRepository>();
+            var expectedDeliveryDateService = Substitute.For<IExpectedDeliveryDateService>();
+            var priceService = Substitute.For<IPriceService>();
+            var productsService = Substitute.For<IProductsService>();
+            var productColorsService = Substitute.For<IProductColorsService>();
+            var options = Options.Create(new AppSettings());
+
+            orderFileService.ImportOrderLines(Arg.Any<IFormFile>()).Returns(new[]
+            {
+                new OrderFileLine { Sku = "SKU", Quantity = 3 },
+                new OrderFileLine { Sku = "NO-LEAD-TIME", Quantity = 1 }
+            });
+            basketRepository.GetBasketById("token", Arg.Any<string>(), basketId).Returns(Task.FromResult<DomainBasket>(null));
+            productsRepository.GetProductsBySkusAsync("token", Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<Product>>(new[]
+                {
+                    new Product { Id = Guid.NewGuid(), Sku = "SKU" },
+                    new Product { Id = Guid.NewGuid(), Sku = "NO-LEAD-TIME" }
+                }));
+            inventoryRepository.GetStockAvailbleProductsByProductIdsAsync("token", Arg.Any<string>(), Arg.Any<IEnumerable<Guid>>())
+                .Returns(Task.FromResult<IEnumerable<Buyer.Web.Shared.DomainModels.Inventory.InventoryItem>>(Array.Empty<Buyer.Web.Shared.DomainModels.Inventory.InventoryItem>()));
+            leadTimeRepository.GetLeadTimesAsync("token", Arg.Any<string[]>())
+                .Returns(Task.FromResult<IEnumerable<LeadTimeItem>>(new[]
+                {
+                    new LeadTimeItem { Sku = "SKU", LeadTimeDays = 10 }
+                }));
+            expectedDeliveryDateService.CalculateExpectedDeliveryDate(10).Returns(expectedLeadTime);
+            basketRepository.SaveAsync("token", Arg.Any<string>(), basketId, Arg.Any<IEnumerable<BasketItem>>(), Arg.Any<string>())
+                .Returns(call =>
+                {
+                    savedItems = call.ArgAt<IEnumerable<BasketItem>>(3).ToList();
+                    return Task.FromResult(new DomainBasket { Id = basketId, Items = savedItems });
+                });
+
+            var httpContext = CreateHttpContext(basketId);
+
+            var controller = new OrderFileApiController(
+                orderFileService,
+                productsRepository,
+                basketRepository,
+                DiscountCodeEligibilityStubs.Accepting(),
+                Substitute.For<LinkGenerator>(),
+                options,
+                Substitute.For<IMediaService>(),
+                Substitute.For<IMediaItemsRepository>(),
+                Substitute.For<IOrdersRepository>(),
+                inventoryRepository,
+                Substitute.For<ILogger<OrderFileApiController>>(),
+                Substitute.For<IStringLocalizer<OrderResources>>(),
+                priceService,
+                productsService,
+                productColorsService,
+                new PriceProductFactory(productsService, productColorsService, options),
+                CreatePriceClientResolver(httpContext),
+                CreateBasketRepricingService(priceService),
+                leadTimeRepository,
+                expectedDeliveryDateService)
+            {
+                ControllerContext = new ControllerContext { HttpContext = httpContext }
+            };
+
+            var result = await controller.Index(new UploadMediaRequestModel { File = Substitute.For<IFormFile>() });
+
+            Assert.IsType<ObjectResult>(result);
+            await leadTimeRepository.Received(1).GetLeadTimesAsync(
+                "token",
+                Arg.Is<string[]>(x => x.OrderBy(sku => sku).SequenceEqual(new[] { "NO-LEAD-TIME", "SKU" })));
+            Assert.NotNull(savedItems);
+            Assert.Equal(expectedLeadTime, savedItems.Single(x => x.ProductSku == "SKU").ExpectedLeadTime);
+            Assert.Null(savedItems.Single(x => x.ProductSku == "NO-LEAD-TIME").ExpectedLeadTime);
+        }
+
         private static IStringLocalizer<OrderResources> CreateKeyLocalizer()
         {
             var localizer = Substitute.For<IStringLocalizer<OrderResources>>();
@@ -358,7 +450,9 @@ namespace Giuru.UnitTests.Orders.Baskets
                 productColorsService,
                 new PriceProductFactory(productsService, productColorsService, options),
                 CreatePriceClientResolver(httpContext),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<ILeadTimeRepository>(),
+                Substitute.For<IExpectedDeliveryDateService>())
             {
                 ControllerContext = new ControllerContext { HttpContext = httpContext }
             };
@@ -478,7 +572,10 @@ namespace Giuru.UnitTests.Orders.Baskets
                 options,
                 priceClientResolver,
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<SellerIClientLookupService>(),
+                Substitute.For<SellerILeadTimeRepository>(),
+                Substitute.For<SellerIExpectedDeliveryDateService>())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
             };
@@ -650,6 +747,92 @@ namespace Giuru.UnitTests.Orders.Baskets
             Assert.Null(otherClientSavedDiscountCode);
         }
 
+        [Fact]
+        public async Task Index_SetsTheExpectedLeadTimeOfTheImportedLinesForTheClientsOrganisation()
+        {
+            var basketId = Guid.NewGuid();
+            var clientId = Guid.NewGuid();
+            var organisationId = Guid.NewGuid();
+            IEnumerable<SellerBasketItem> savedItems = null;
+            var orderFileService = Substitute.For<SellerIOrderFileService>();
+            var basketRepository = Substitute.For<SellerIBasketRepository>();
+            var productsRepository = Substitute.For<SellerIProductsRepository>();
+            var inventoryRepository = Substitute.For<SellerIInventoryRepository>();
+            var clientLookupService = Substitute.For<SellerIClientLookupService>();
+            var leadTimeRepository = Substitute.For<SellerILeadTimeRepository>();
+            var expectedDeliveryDateService = Substitute.For<SellerIExpectedDeliveryDateService>();
+            var priceService = Substitute.For<IPriceService>();
+            var productsService = Substitute.For<SellerIProductsService>();
+            var productColorsService = Substitute.For<SellerIProductColorsService>();
+            var options = Options.Create(new SellerAppSettings());
+
+            orderFileService.ImportOrderLines(Arg.Any<IFormFile>()).Returns(new[]
+            {
+                new SellerOrderFileLine { Sku = "SKU", Quantity = 3 },
+                new SellerOrderFileLine { Sku = "NO-LEAD-TIME", Quantity = 1 }
+            });
+            basketRepository.GetBasketByIdAsync(Arg.Any<string>(), Arg.Any<string>(), basketId).Returns(Task.FromResult<SellerBasket>(null));
+            productsRepository.GetProductsBySkusAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<string>>())
+                .Returns(Task.FromResult<IEnumerable<SellerProduct>>(new[]
+                {
+                    new SellerProduct { Id = Guid.NewGuid(), Sku = "SKU" },
+                    new SellerProduct { Id = Guid.NewGuid(), Sku = "NO-LEAD-TIME" }
+                }));
+            inventoryRepository.GetAvailbleProductsByProductIdsAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IEnumerable<Guid>>())
+                .Returns(Task.FromResult<IEnumerable<SellerInventoryItem>>(Array.Empty<SellerInventoryItem>()));
+            clientLookupService.GetAsync("token", clientId)
+                .Returns(Task.FromResult(new SellerClient { Id = clientId, OrganisationId = organisationId }));
+            leadTimeRepository.GetLeadTimesAsync("token", organisationId, Arg.Any<string[]>())
+                .Returns(Task.FromResult<IEnumerable<SellerLeadTimeItem>>(new[]
+                {
+                    new SellerLeadTimeItem { Sku = "SKU", LeadTimeDays = 10 }
+                }));
+            expectedDeliveryDateService.CalculateExpectedDeliveryDate(10).Returns(new DateTime(2026, 11, 20));
+            basketRepository.SaveAsync(Arg.Any<string>(), Arg.Any<string>(), basketId, Arg.Any<IEnumerable<SellerBasketItem>>(), Arg.Any<string>())
+                .Returns(call =>
+                {
+                    savedItems = call.ArgAt<IEnumerable<SellerBasketItem>>(3).ToList();
+                    return Task.FromResult(new SellerBasket { Id = basketId, Items = savedItems });
+                });
+
+            var controller = new SellerOrderFileApiController(
+                orderFileService,
+                productsRepository,
+                basketRepository,
+                DiscountCodeEligibilityStubs.Accepting(),
+                Substitute.For<LinkGenerator>(),
+                Substitute.For<IMediaService>(),
+                Substitute.For<SellerIMediaItemsRepository>(),
+                Substitute.For<SellerIOrdersRepository>(),
+                inventoryRepository,
+                Substitute.For<ILogger<SellerOrderFileApiController>>(),
+                Substitute.For<IStringLocalizer<OrderResources>>(),
+                priceService,
+                productsService,
+                productColorsService,
+                options,
+                Substitute.For<IPriceClientResolver>(),
+                new SellerPriceProductFactory(productsService, productColorsService, options),
+                CreateBasketRepricingService(priceService),
+                clientLookupService,
+                leadTimeRepository,
+                expectedDeliveryDateService)
+            {
+                ControllerContext = new ControllerContext { HttpContext = CreateHttpContext() }
+            };
+
+            var result = await controller.Index(new SellerUploadMediaRequestModel { Id = basketId, ClientId = clientId, File = Substitute.For<IFormFile>() });
+
+            Assert.IsType<ObjectResult>(result);
+            await leadTimeRepository.Received(1).GetLeadTimesAsync(
+                "token",
+                organisationId,
+                Arg.Is<string[]>(x => x.OrderBy(sku => sku).SequenceEqual(new[] { "NO-LEAD-TIME", "SKU" })));
+            Assert.NotNull(savedItems);
+            Assert.Equal(new DateOnly(2026, 11, 20), savedItems.Single(x => x.ProductSku == "SKU").ExpectedLeadTime);
+            Assert.Null(savedItems.Single(x => x.ProductSku == "NO-LEAD-TIME").ExpectedLeadTime);
+        }
+
         private static IStringLocalizer<OrderResources> CreateKeyLocalizer()
         {
             var localizer = Substitute.For<IStringLocalizer<OrderResources>>();
@@ -740,7 +923,10 @@ namespace Giuru.UnitTests.Orders.Baskets
                 options,
                 priceClientResolver,
                 new SellerPriceProductFactory(productsService, productColorsService, options),
-                CreateBasketRepricingService(priceService))
+                CreateBasketRepricingService(priceService),
+                Substitute.For<SellerIClientLookupService>(),
+                Substitute.For<SellerILeadTimeRepository>(),
+                Substitute.For<SellerIExpectedDeliveryDateService>())
             {
                 ControllerContext = new ControllerContext { HttpContext = CreateHttpContext(formFields) }
             };
