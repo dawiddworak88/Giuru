@@ -301,16 +301,20 @@ namespace Ordering.Api.Services
                 .Where(x => x.OrderId == existingOrder.Id && x.IsActive)
                 .ToListAsync();
 
-            var orderItemIds = orderItems.Select(x => x.Id).ToList();
+            // Only the last status change of each order item, not its whole history
+            var lastOrderItemStatusChangeIds = orderItems
+                .Where(x => x.LastOrderItemStatusChangeId.HasValue)
+                .Select(x => x.LastOrderItemStatusChangeId.Value)
+                .ToList();
+
             var lastOrderItemStatusChanges = await _context.OrderItemStatusChanges
                 .AsNoTracking()
-                .Where(x => orderItemIds.Contains(x.OrderItemId) && x.IsActive)
+                .Where(x => lastOrderItemStatusChangeIds.Contains(x.Id) && x.IsActive)
                 .ToListAsync();
 
-            var statusChangeIds = lastOrderItemStatusChanges.Select(x => x.Id).ToList();
             var orderItemStatusChangesCommentTranslations = await _context.OrderItemStatusChangesCommentTranslations
                 .AsNoTracking()
-                .Where(x => statusChangeIds.Contains(x.OrderItemStatusChangeId) && x.IsActive)
+                .Where(x => lastOrderItemStatusChangeIds.Contains(x.OrderItemStatusChangeId) && x.IsActive)
                 .ToListAsync();
 
             var order = new OrderServiceModel
@@ -380,25 +384,25 @@ namespace Ordering.Api.Services
                 {
                     newOrderItem.OrderItemStatusId = lastOrderItemStatus.OrderItemStatusId;
                     newOrderItem.OrderItemStateId = lastOrderItemStatus.OrderItemStateId;
+
+                    var orderItemStatusTranslation = orderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
+
+                    if (orderItemStatusTranslation is null)
+                    {
+                        orderItemStatusTranslation = orderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.IsActive);
+                    }
+
+                    newOrderItem.OrderItemStatusName = orderItemStatusTranslation?.Name;
+
+                    var orderItemStatusChangeCommentTranslation = orderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.Language == model.Language && x.IsActive);
+
+                    if (orderItemStatusChangeCommentTranslation is null)
+                    {
+                        orderItemStatusChangeCommentTranslation = orderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.IsActive);
+                    }
+
+                    newOrderItem.OrderItemStatusChangeComment = orderItemStatusChangeCommentTranslation?.OrderItemStatusChangeComment;
                 }
-
-                var orderItemStatusTranslation = orderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.Language == model.Language && x.IsActive);
-
-                if (orderItemStatusTranslation is null)
-                {
-                    orderItemStatusTranslation = orderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == lastOrderItemStatus.OrderItemStatusId && x.IsActive);
-                }
-
-                newOrderItem.OrderItemStatusName = orderItemStatusTranslation?.Name;
-
-                var orderItemStatusChangeCommentTranslation = orderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.Language == model.Language && x.IsActive);
-
-                if (orderItemStatusChangeCommentTranslation is null)
-                {
-                    orderItemStatusChangeCommentTranslation = orderItemStatusChangesCommentTranslations.FirstOrDefault(x => x.OrderItemStatusChangeId == lastOrderItemStatus.Id && x.IsActive);
-                }
-
-                newOrderItem.OrderItemStatusChangeComment = orderItemStatusChangeCommentTranslation?.OrderItemStatusChangeComment;
 
                 orderItemsList.Add(newOrderItem);
             }
@@ -985,28 +989,21 @@ namespace Ordering.Api.Services
                 .Where(x => orderIdSet.Contains(x.OrderId) && x.IsActive)
                 .ToListAsync();
             
-            var orderItemIdSet = orderItems.Select(x => x.Id).ToHashSet();
-            
-            // Get the latest status change for each order item
+            // Only the last status change of each order item, not its whole history
+            var lastOrderItemStatusChangeIds = orderItems
+                .Where(x => x.LastOrderItemStatusChangeId.HasValue)
+                .Select(x => x.LastOrderItemStatusChangeId.Value)
+                .ToHashSet();
+
             var lastOrderItemStatusChanges = await _context.OrderItemStatusChanges
                 .AsNoTracking()
-                .Where(x => orderItemIdSet.Contains(x.OrderItemId) && x.IsActive)
-                .ToListAsync();
-                
-            // Process in memory to find the latest status change per order item
-            var latestStatusChanges = lastOrderItemStatusChanges
-                .GroupBy(x => x.OrderItemId)
-                .ToDictionary(
-                    g => g.Key,
-                    g => g.OrderByDescending(x => x.CreatedDate).First()
-                );
-                
-            var orderItemStatusChangeIds = latestStatusChanges.Values.Select(x => x.Id).ToHashSet();
-            
+                .Where(x => lastOrderItemStatusChangeIds.Contains(x.Id) && x.IsActive)
+                .ToDictionaryAsync(x => x.Id, x => x);
+
             // Get comment translations - sequential to avoid concurrency issues
             var orderItemStatusChangesCommentTranslations = await _context.OrderItemStatusChangesCommentTranslations
                 .AsNoTracking()
-                .Where(x => orderItemStatusChangeIds.Contains(x.OrderItemStatusChangeId) && x.IsActive)
+                .Where(x => lastOrderItemStatusChangeIds.Contains(x.OrderItemStatusChangeId) && x.IsActive)
                 .ToDictionaryAsync(x => x.OrderItemStatusChangeId, x => x);
 
             // Process the data in memory
@@ -1038,7 +1035,8 @@ namespace Ordering.Api.Services
                             CreatedDate = item.CreatedDate
                         };
 
-                        if (latestStatusChanges.TryGetValue(item.Id, out var statusChange))
+                        if (item.LastOrderItemStatusChangeId.HasValue &&
+                            lastOrderItemStatusChanges.TryGetValue(item.LastOrderItemStatusChangeId.Value, out var statusChange))
                         {
                             orderItemModel.OrderItemStateId = statusChange.OrderItemStateId;
                             orderItemModel.OrderItemStatusId = statusChange.OrderItemStatusId;
