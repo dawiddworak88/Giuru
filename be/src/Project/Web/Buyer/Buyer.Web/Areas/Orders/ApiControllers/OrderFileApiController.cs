@@ -13,13 +13,16 @@ using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Files;
+using Buyer.Web.Shared.DomainModels.LeadTime;
 using Buyer.Web.Shared.DomainModels.Media;
 using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Inventory;
+using Buyer.Web.Shared.Repositories.LeadTime;
 using Buyer.Web.Shared.Repositories.Media;
 using Foundation.Pricing.Baskets;
 using Foundation.Pricing.Services;
 using Buyer.Web.Shared.Services.Prices;
+using Buyer.Web.Shared.Services.DeliveryDates;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -66,6 +69,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IPriceClientResolver _priceClientResolver;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -85,7 +90,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IProductColorsService productColorsService,
             IPriceProductFactory priceProductFactory,
             IPriceClientResolver priceClientResolver,
-            IBasketRepricingService basketRepricingService)
+            IBasketRepricingService basketRepricingService,
+            ILeadTimeRepository leadTimeRepository,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -105,6 +112,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _priceProductFactory = priceProductFactory;
             _priceClientResolver = priceClientResolver;
             _basketRepricingService = basketRepricingService;
+            _leadTimeRepository = leadTimeRepository;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpPost]
@@ -177,6 +186,10 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             OrderBasketUploadHelper.DeductExistingStock(stockByProductId, existingBasket?.Items);
 
+            var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
+                accessToken: token,
+                skus: [.. importedSkus.Where(productLookup.ContainsKey)]);
+
             foreach (var orderLine in importedOrderLines)
             {
                 if (!productLookup.TryGetValue(orderLine.Sku, out var product))
@@ -209,7 +222,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     Quantity = quantity,
                     StockQuantity = stockQuantity,
                     ExternalReference = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.ExternalReference),
-                    MoreInfo = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.MoreInfo)
+                    MoreInfo = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.MoreInfo),
+                    ExpectedLeadTime = GetExpectedLeadTime(leadTimes, orderLine.Sku)
                 };
 
                 basketItems.Add(basketItem);
@@ -270,6 +284,15 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        private DateOnly? GetExpectedLeadTime(IEnumerable<LeadTimeItem> leadTimes, string sku)
+        {
+            var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == sku)?.LeadTimeDays ?? 0;
+
+            return leadTimeDays > 0
+                ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
+                : null;
         }
 
         private async Task RepriceMergedBasketAsync(

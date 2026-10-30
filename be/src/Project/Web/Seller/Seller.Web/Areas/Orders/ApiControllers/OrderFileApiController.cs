@@ -24,10 +24,14 @@ using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.DomainModels.LeadTime;
 using Seller.Web.Shared.DomainModels.Media;
 using Seller.Web.Shared.Repositories.Inventory;
+using Seller.Web.Shared.Repositories.LeadTime;
 using Foundation.Pricing.Baskets;
 using Foundation.Pricing.Services;
+using Seller.Web.Shared.Services.Clients;
+using Seller.Web.Shared.Services.DeliveryDates;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Services.Products;
@@ -61,6 +65,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IPriceClientResolver _priceClientResolver;
         private readonly IPriceProductFactory _priceProductFactory;
         private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IClientLookupService _clientLookupService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
@@ -80,7 +87,10 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IOptions<AppSettings> options,
             IPriceClientResolver priceClientResolver,
             IPriceProductFactory priceProductFactory,
-            IBasketRepricingService basketRepricingService)
+            IBasketRepricingService basketRepricingService,
+            IClientLookupService clientLookupService,
+            ILeadTimeRepository leadTimeRepository,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
@@ -100,6 +110,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _priceClientResolver = priceClientResolver;
             _priceProductFactory = priceProductFactory;
             _basketRepricingService = basketRepricingService;
+            _clientLookupService = clientLookupService;
+            _leadTimeRepository = leadTimeRepository;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpPost]
@@ -159,6 +172,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             OrderBasketUploadHelper.DeductExistingStock(stockByProductId, existingBasket?.Items);
 
+            var leadTimes = await GetLeadTimesAsync(token, model.ClientId, [.. importedSkus.Where(productLookup.ContainsKey)]);
+
             var basketItems = new List<BasketItem>();
 
             foreach (var orderLine in importedOrderLines)
@@ -193,7 +208,8 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     Quantity = quantity,
                     StockQuantity = stockQuantity,
                     ExternalReference = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.ExternalReference),
-                    MoreInfo = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.MoreInfo)
+                    MoreInfo = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.MoreInfo),
+                    ExpectedLeadTime = GetExpectedLeadTime(leadTimes, orderLine.Sku)
                 };
 
                 basketItems.Add(basketItem);
@@ -258,6 +274,36 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             }
 
             return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        private async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string token, Guid? clientId, string[] skus)
+        {
+            // Lead times are per customer; without a client there is no customer to ask for.
+            if (!clientId.HasValue)
+            {
+                return Array.Empty<LeadTimeItem>();
+            }
+
+            var client = await _clientLookupService.GetAsync(token, clientId);
+
+            if (client is null)
+            {
+                return Array.Empty<LeadTimeItem>();
+            }
+
+            return await _leadTimeRepository.GetLeadTimesAsync(
+                accessToken: token,
+                customerId: client.OrganisationId,
+                skus: skus);
+        }
+
+        private DateOnly? GetExpectedLeadTime(IEnumerable<LeadTimeItem> leadTimes, string sku)
+        {
+            var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == sku)?.LeadTimeDays ?? 0;
+
+            return leadTimeDays > 0
+                ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                : null;
         }
 
         private async Task RepriceMergedBasketAsync(
