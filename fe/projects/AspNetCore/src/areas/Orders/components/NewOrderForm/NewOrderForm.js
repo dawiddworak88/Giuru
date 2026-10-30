@@ -55,6 +55,7 @@ function NewOrderForm(props) {
 
     const discountCodeState = useDiscountCode({
         initialCode: props.discountCode,
+        initialCodeIsNotValid: props.isDiscountCodeNotValid,
         isEnabled: props.isDiscountCodeEnabled,
         onSave: saveDiscountCode
     });
@@ -523,6 +524,7 @@ function NewOrderForm(props) {
                         onApply={() => discountCodeState.apply(orderItems.length > 0)}
                         onRemove={discountCodeState.remove}
                         appliedCode={discountCodeState.appliedDiscountCode}
+                        errorMessage={discountCodeState.isAppliedDiscountCodeNotValid ? props.discountCodeNotValidMessage : null}
                         disabled={state.isLoading || isOrdered}
                         canApply={orderItems.length > 0}
                         discountCodeLabel={props.discountCodeLabel}
@@ -672,6 +674,8 @@ NewOrderForm.propTypes = {
     applyDiscountCodeLabel: PropTypes.string.isRequired,
     discountCodeAppliedMessage: PropTypes.string.isRequired,
     removeDiscountCodeLabel: PropTypes.string.isRequired,
+    isDiscountCodeNotValid: PropTypes.bool,
+    discountCodeNotValidMessage: PropTypes.string,
     isDiscountCodeEnabled: PropTypes.bool.isRequired,
 };
 

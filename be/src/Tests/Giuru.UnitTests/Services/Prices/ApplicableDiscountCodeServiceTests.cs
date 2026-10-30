@@ -80,6 +80,55 @@ namespace Giuru.UnitTests.Services.Prices
             Assert.Null(await service.GetApplicableAsync("token", "SUMMER25"));
         }
 
+        [Fact]
+        public async Task CheckAsync_WhenTheCodeIsValidForTheSignedInClient_ReturnsItsStoredSpellingAsValid()
+        {
+            var service = CreateService(DiscountCodeEligibilityStubs.KnowingFor(ClientId, "SUMMER25"), true, ClientId);
+
+            var check = await service.CheckAsync("token", "summer25");
+
+            Assert.True(check.IsValid);
+            Assert.False(check.IsNotValid);
+            Assert.Equal("SUMMER25", check.DiscountCode);
+        }
+
+        [Fact]
+        public async Task CheckAsync_WhenTheCodeIsNoLongerValid_KeepsTheCodeAndMarksItNotValid()
+        {
+            var service = CreateService(DiscountCodeEligibilityStubs.Knowing(), true, ClientId);
+
+            var check = await service.CheckAsync("token", "SUMMER25");
+
+            Assert.False(check.IsValid);
+            Assert.True(check.IsNotValid);
+            Assert.Equal("SUMMER25", check.DiscountCode);
+        }
+
+        [Fact]
+        public async Task CheckAsync_WhenClientApiCannotAnswer_KeepsTheCodeWithoutCallingItNotValid()
+        {
+            var service = CreateService(DiscountCodeEligibilityStubs.UnreachableRepository(), true, ClientId);
+
+            var check = await service.CheckAsync("token", "SUMMER25");
+
+            Assert.False(check.IsValid);
+            Assert.False(check.IsNotValid);
+            Assert.Equal("SUMMER25", check.DiscountCode);
+        }
+
+        [Fact]
+        public async Task CheckAsync_WhenGrulaIsNotConfigured_ReturnsNoCodeWithoutCallingClientApi()
+        {
+            var eligibility = Substitute.For<IDiscountCodeEligibilityRepository>();
+            var service = CreateService(eligibility, false, ClientId);
+
+            var check = await service.CheckAsync("token", "SUMMER25");
+
+            Assert.Null(check.DiscountCode);
+            Assert.False(check.IsNotValid);
+            await eligibility.DidNotReceive().GetValidDiscountCodeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Guid?>(), Arg.Any<string>());
+        }
+
         private static ApplicableDiscountCodeService CreateService(IDiscountCodeEligibilityRepository eligibility, bool grulaConfigured, Guid? clientId)
         {
             var claims = clientId.HasValue

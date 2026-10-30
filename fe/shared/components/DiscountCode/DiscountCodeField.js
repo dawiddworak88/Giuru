@@ -17,6 +17,8 @@ function DiscountCodeField(props) {
                         fullWidth={true}
                         value={props.value}
                         disabled={props.disabled}
+                        error={Boolean(props.errorMessage)}
+                        helperText={props.errorMessage}
                         onChange={(e) => props.onChange(e.target.value)}
                     />
                 </div>
@@ -55,6 +57,7 @@ DiscountCodeField.propTypes = {
     onApply: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
     appliedCode: PropTypes.string,
+    errorMessage: PropTypes.string,
     disabled: PropTypes.bool,
     canApply: PropTypes.bool,
     discountCodeLabel: PropTypes.string.isRequired,

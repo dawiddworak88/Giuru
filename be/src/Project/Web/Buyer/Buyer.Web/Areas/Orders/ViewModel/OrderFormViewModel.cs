@@ -73,6 +73,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string ApplyDiscountCodeLabel { get; set; }
         public string DiscountCodeAppliedMessage { get; set; }
         public string RemoveDiscountCodeLabel { get; set; }
+        public bool IsDiscountCodeNotValid { get; set; }
+        public string DiscountCodeNotValidMessage { get; set; }
         public bool IsDiscountCodeEnabled { get; set; }
     }
 }

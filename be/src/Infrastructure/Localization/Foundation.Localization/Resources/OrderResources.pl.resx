@@ -381,6 +381,9 @@
   <data name="RemoveDiscountCodeLabel" xml:space="preserve">
     <value>Usuń kod rabatowy</value>
   </data>
+  <data name="DiscountCodeNotValidMessage" xml:space="preserve">
+    <value>Ten kod rabatowy nie jest już ważny. Usuń go, aby złożyć zamówienie.</value>
+  </data>
   <data name="DiscountCodeRequiresBasketItems" xml:space="preserve">
     <value>Dodaj co najmniej jeden produkt do koszyka, zanim zastosujesz kod rabatowy.</value>
   </data>
@@ -394,7 +397,7 @@
     <value>Twój kod rabatowy nie jest już ważny i został usunięty z koszyka. Ceny zostały zaktualizowane.</value>
   </data>
   <data name="CheckoutDiscountCodeNoLongerValid" xml:space="preserve">
-    <value>Twój kod rabatowy nie jest już ważny. Zapisz koszyk ponownie, aby zaktualizować ceny, a następnie złóż zamówienie.</value>
+    <value>Twój kod rabatowy nie jest już ważny. Usuń go, a następnie złóż zamówienie.</value>
   </data>
   <data name="CheckoutClientMismatch" xml:space="preserve">
     <value>Tego zamówienia nie można złożyć dla innego klienta.</value>
