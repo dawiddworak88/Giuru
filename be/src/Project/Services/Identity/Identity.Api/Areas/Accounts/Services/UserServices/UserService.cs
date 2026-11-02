@@ -41,7 +41,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
             return _userManager.PasswordHasher.HashPassword(user, password);
         }
 
-        public async Task SignInAsync(string email, string password, string redirectUrl, string clientId)
+        public async Task SignInAsync(string email, string password, string clientId)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -72,7 +72,6 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
                     AllowRefresh = false,
                     ExpiresUtc = DateTimeOffset.UtcNow.AddDays(AccountConstants.TokenLifetimes.DefaultTokenLifetimeInDays),
                     IsPersistent = true,
-                    RedirectUri = redirectUrl,
                     IssuedUtc = DateTime.UtcNow
                 };
 
