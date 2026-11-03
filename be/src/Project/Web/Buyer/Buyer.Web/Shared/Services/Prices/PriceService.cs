@@ -1,6 +1,7 @@
 ﻿using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Prices;
 using Buyer.Web.Shared.DomainModels.Prices;
+using Foundation.Extensions.ExtensionMethods;
 using Grula.PricingIntelligencePlatform.Sdk;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -128,6 +129,7 @@ namespace Buyer.Web.Shared.Services.Prices
                     for (int i = 0; i < batch.Length && i < grulaPrices.Count; i++)
                     {
                         var grulaPrice = grulaPrices.ElementAtOrDefault(i);
+
                         if (grulaPrice?.Amount is not null)
                         {
                             result[batch[i].Index] = new Price
@@ -210,14 +212,12 @@ namespace Buyer.Web.Shared.Services.Prices
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(product.IsOutlet))
+            // Grula applies the client price adjustments only when the Outlet driver is present
+            priceDrivers.Add(new PriceDriver
             {
-                priceDrivers.Add(new PriceDriver
-                {
-                    Name = PriceDriversConstants.OutletDriver,
-                    Value = product.IsOutlet
-                });
-            }
+                Name = PriceDriversConstants.OutletDriver,
+                Value = string.IsNullOrWhiteSpace(product.IsOutlet) ? false.ToYesOrNo() : product.IsOutlet
+            });
 
             if (!string.IsNullOrWhiteSpace(product.Mirror))
             {
@@ -393,6 +393,7 @@ namespace Buyer.Web.Shared.Services.Prices
                 }
 
                 var currencyValue = MapCurrencyDriverValue(client.CurrencyCode ?? _options.Value.DefaultCurrency);
+
                 if (!string.IsNullOrWhiteSpace(currencyValue))
                 {
                     priceDrivers.Add(new PriceDriver
