@@ -299,6 +299,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
                     var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+
                     if (basketItems is not null)
                     {
                         viewModel.OrderItems = basketItems;
@@ -324,7 +325,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 PrimarySku = x.PrimaryProductSku,
                                 ProductVariantSku = x.Sku,
                                 FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                                ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys),
+                                ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
                                 SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
                                 PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
                                 Size = _productsService.GetSize(x.ProductAttributes),
