@@ -1,3 +1,4 @@
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Pricing.Configurations;
 using Foundation.Pricing.Definitions;
 using Foundation.Pricing.DomainModels;
@@ -125,6 +126,7 @@ namespace Foundation.Pricing.Services
                     for (int i = 0; i < batch.Length && i < grulaPrices.Count; i++)
                     {
                         var grulaPrice = grulaPrices.ElementAtOrDefault(i);
+
                         if (grulaPrice?.Amount is not null)
                         {
                             result[batch[i].Index] = new Price
@@ -277,14 +279,12 @@ namespace Foundation.Pricing.Services
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(product.IsOutlet))
+            // Grula applies the client price adjustments only when the Outlet driver is present
+            priceDrivers.Add(new PriceDriver
             {
-                priceDrivers.Add(new PriceDriver
-                {
-                    Name = PriceDriversConstants.OutletDriver,
-                    Value = product.IsOutlet
-                });
-            }
+                Name = PriceDriversConstants.OutletDriver,
+                Value = string.IsNullOrWhiteSpace(product.IsOutlet) ? false.ToYesOrNo() : product.IsOutlet
+            });
 
             if (!string.IsNullOrWhiteSpace(product.Mirror))
             {
@@ -469,6 +469,7 @@ namespace Foundation.Pricing.Services
                 }
 
                 var currencyValue = MapCurrencyDriverValue(client.CurrencyCode ?? _settings.DefaultCurrency);
+
                 if (!string.IsNullOrWhiteSpace(currencyValue))
                 {
                     priceDrivers.Add(new PriceDriver
