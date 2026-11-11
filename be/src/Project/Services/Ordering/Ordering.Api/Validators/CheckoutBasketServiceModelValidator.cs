@@ -12,6 +12,7 @@ namespace Ordering.Api.Validators
             this.RuleFor(x => x.BasketId).NotNull().NotEmpty();
             this.RuleFor(x => x.ClientId).NotNull().NotEmpty();
             this.RuleFor(x => x.SellerId).NotNull().NotEmpty();
+            this.RuleFor(x => x.DiscountCode).MaximumLength(64);
             this.RuleFor(x => x).Must(y =>
             {
                 foreach (var item in y.Items.OrEmptyIfNull())
@@ -31,8 +32,10 @@ namespace Ordering.Api.Validators
                         return false;
                     }
 
-                    var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
-                    if (totalQuantity <= 0)
+                    if (!CheckoutBasketItemQuantityValidator.IsValid(
+                        item.Quantity,
+                        item.StockQuantity,
+                        item.OutletQuantity))
                     {
                         return false;
                     }

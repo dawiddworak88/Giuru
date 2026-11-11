@@ -2,6 +2,12 @@
 
 .edit-order {
 
+    // Read-only labels, so they deliberately avoid .field to stay out of the
+    // is-modern-form field margins (2rem, and 2.5rem on the last one)
+    &__summary-row:not(:first-child) {
+        margin-top: 0.5rem;
+    }
+
     &__items {
         border: 1px grey solid;
         border-radius: 4px;

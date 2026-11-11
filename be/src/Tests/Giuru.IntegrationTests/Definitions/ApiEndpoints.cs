@@ -3,10 +3,15 @@
     public struct ApiEndpoints
     {
         public const string ClientsApiEndpoint = "Clients/ClientsApi";
+        public const string DiscountCodesApiEndpoint = "Clients/DiscountCodesApi";
+        public const string GetDiscountCodesApiEndpoint = "Clients/DiscountCodesApi/Get";
+        public const string GetDiscountCodeApiEndpoint = "Clients/DiscountCodesApi/GetById";
+        public const string DeleteDiscountCodeApiEndpoint = "Clients/DiscountCodesApi/Delete";
         public const string GetClientsApiEndpoint = "Clients/ClientsApi/Get";
         public const string ProductsApiEndpoint = "Products/ProductsApi";
         public const string GetProductsApiEndpoint = "Products/ProductsApi/Get";
         public const string BasketApiEndpoint = "Orders/BasketsApi";
+        public const string OrderFileApiEndpoint = "Orders/OrderFileApi";
         public const string OrderCheckoutApiEndpoint = "Orders/BasketCheckoutApi/Checkout";
         public const string GetOrdersApiEndpoint = "Orders/OrdersApi/Get";
         public const string InventoriesApiEndpoint = "Inventory/InventoriesApi";

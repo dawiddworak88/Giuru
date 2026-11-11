@@ -100,6 +100,7 @@ namespace Ordering.Api.Services
                 ShippingStreet = serviceModel.ShippingStreet,
                 ExternalReference = serviceModel.ExternalReference,
                 MoreInfo = serviceModel.MoreInfo,
+                DiscountCode = serviceModel.DiscountCode,
                 IpAddress = serviceModel.IpAddress,
                 CreatedBy = serviceModel.CreatedBy
             };
@@ -345,6 +346,7 @@ namespace Ordering.Api.Services
                 ShippingStreet = existingOrder.ShippingStreet,
                 ExternalReference = existingOrder.ExternalReference,
                 MoreInfo = existingOrder.MoreInfo,
+                DiscountCode = existingOrder.DiscountCode,
                 Reason = existingOrder.Reason,
                 OrderStateId = existingOrder.OrderStateId,
                 OrderStatusId = existingOrder.OrderStatusId,
@@ -1100,6 +1102,7 @@ namespace Ordering.Api.Services
                     ShippingStreet = order.ShippingStreet,
                     ExternalReference = order.ExternalReference,
                     MoreInfo = order.MoreInfo,
+                    DiscountCode = order.DiscountCode,
                     Reason = order.Reason,
                     OrderStateId = order.OrderStateId,
                     OrderStatusId = order.OrderStatusId,

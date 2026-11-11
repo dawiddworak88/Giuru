@@ -78,6 +78,11 @@
       <BuildType Solution="NoVariablesDefault|*" Project="Release" />
     </Project>
   </Folder>
+  <Folder Name="/Infrastructure/Pricing/">
+    <Project Path="Infrastructure/Pricing/Foundation.Pricing/Foundation.Pricing.csproj">
+      <BuildType Solution="NoVariablesDefault|*" Project="Release" />
+    </Project>
+  </Folder>
   <Folder Name="/Infrastructure/Search/">
     <Project Path="Infrastructure/Search/Foundation.Search/Foundation.Search.csproj">
       <BuildType Solution="NoVariablesDefault|*" Project="Release" />

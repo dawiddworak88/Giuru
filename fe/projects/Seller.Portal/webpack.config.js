@@ -1,4 +1,5 @@
 ﻿const path = require("path");
+const sharedBabelPresets = require("../../shared/build/babelPresets.cjs");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
@@ -35,6 +36,8 @@ module.exports = {
         outletspage: ["./src/areas/Inventory/pages/OutletsPage/index.js", "./src/areas/Inventory/pages/OutletsPage/OutletsPage.scss"],
         clientgrouppage: ["./src/areas/Clients/pages/ClientGroupPage/index.js", "./src/areas/Clients/pages/ClientGroupPage/ClientGroupPage.scss"],
         clientgroupspage: ["./src/areas/Clients/pages/ClientGroupsPage/index.js", "./src/areas/Clients/pages/ClientGroupsPage/ClientGroupsPage.scss"],
+        discountcodespage: ["./src/areas/Clients/pages/DiscountCodesPage/index.js", "./src/areas/Clients/pages/DiscountCodesPage/DiscountCodesPage.scss"],
+        discountcodepage: ["./src/areas/Clients/pages/DiscountCodePage/index.js", "./src/areas/Clients/pages/DiscountCodePage/DiscountCodePage.scss"],
         newsitempage: ["./src/areas/News/pages/NewsItemPage/index.js", "./src/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
         newspage: ["./src/areas/News/pages/NewsPage/index.js", "./src/areas/News/pages/NewsPage/NewsPage.scss"],
         newscategoriespage: ["./src/areas/News/pages/CategoriesPage/index.js", "./src/areas/News/pages/CategoriesPage/CategoriesPage.scss"],
@@ -71,16 +74,28 @@ module.exports = {
         filename: "[name].js"
     },
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx"],
+        modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
+                include: [
+                    path.resolve(__dirname, "src"),
+                    path.resolve(__dirname, "../../shared")
+                ],
                 exclude: /node_modules/,
                 use: [
-                    { 
-                        loader: "babel-loader"
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            // fe/shared sits outside this package, so a .babelrc here cannot reach
+                            // it - the presets are passed explicitly and shared with the SSR
+                            // bootstrap so the two builds cannot drift.
+                            babelrc: false,
+                            presets: sharedBabelPresets
+                        }
                     },
                 ]
             },

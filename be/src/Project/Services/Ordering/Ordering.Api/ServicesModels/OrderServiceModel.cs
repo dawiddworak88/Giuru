@@ -30,6 +30,7 @@ namespace Ordering.Api.ServicesModels
         public string ShippingPhoneNumber { get; set; }
         public Guid? ShippingCountryId { get; set; }
         public string MoreInfo { get; set; }
+        public string DiscountCode { get; set; }
         public Guid OrderStatusId { get; set; }
         public string OrderStatusName { get; set; }
         public Guid OrderStateId { get; set; }

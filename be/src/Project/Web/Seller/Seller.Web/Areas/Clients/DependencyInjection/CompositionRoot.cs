@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
+using Foundation.Pricing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ModelBuilders;
@@ -16,6 +17,7 @@ using Seller.Web.Areas.Clients.ComponentModels;
 using Seller.Web.Areas.Clients.Repositories.FieldValues;
 using Seller.Web.Areas.Clients.Repositories.Approvals;
 using Seller.Web.Areas.Clients.Repositories.ClientTeamMembers;
+using Seller.Web.Areas.Clients.Repositories.DiscountCodes;
 
 namespace Seller.Web.Areas.Clients.DependencyInjection
 {
@@ -34,6 +36,9 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IClientFieldOptionsRepository, ClientFieldOptionsRepository>();
             services.AddScoped<IClientFieldValuesRepository, ClientFieldValuesRepository>();
 
+            services.AddScoped<IDiscountCodesRepository, DiscountCodesRepository>();
+            services.AddScoped<IDiscountCodeEligibilityRepository, DiscountCodeEligibilityRepository>();
+
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientPageViewModel>, ClientPageModelBuilder>();
@@ -43,6 +48,11 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupsPageViewModel>, ClientGroupsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupPageViewModel>, ClientGroupPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupFormViewModel>, ClientGroupFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<DiscountCode>>, DiscountCodesPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DiscountCodesPageViewModel>, DiscountCodesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DiscountCodePageViewModel>, DiscountCodePageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DiscountCodeFormViewModel>, DiscountCodeFormModelBuilder>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientRole>>, ClientRolesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientRolesPageViewModel>, ClientRolesPageModelBuilder>();

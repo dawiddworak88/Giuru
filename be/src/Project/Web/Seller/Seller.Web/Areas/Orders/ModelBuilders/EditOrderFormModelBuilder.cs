@@ -83,7 +83,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 CurrencyLabel = _globalLocalizer.GetString("Currency"),
                 MaxAllowedOrderQuantity = _options.Value.MaxAllowedOrderQuantity,
                 MaxAllowedOrderQuantityErrorMessage = _globalLocalizer.GetString("MaxAllowedOrderQuantity"),
-                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime"),
+                DiscountCodeLabel = _orderLocalizer.GetString("DiscountCodeLabel")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -103,6 +104,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.ClientUrl = _linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                     viewModel.ClientName = order.ClientName;
+                    viewModel.DiscountCode = order.DiscountCode;
                     viewModel.UpdateOrderStatusUrl = _linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel

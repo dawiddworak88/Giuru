@@ -52,5 +52,10 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string OutletProductLabel { get; set; }
         public string ExpectedLeadTimeLabel { get; set; }
         public int DefaultItemsPerPage { get; set; }
+        public string DiscountCodeLabel { get; set; }
+        public string ApplyDiscountCodeLabel { get; set; }
+        public string DiscountCodeAppliedMessage { get; set; }
+        public string RemoveDiscountCodeLabel { get; set; }
+        public bool IsDiscountCodeEnabled { get; set; }
     }
 }

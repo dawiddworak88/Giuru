@@ -8,6 +8,7 @@ namespace Seller.Web.Areas.Media.ApiRequestModels
     {
         public IFormFile File { get; set; }
         public Guid ClientId { get; set; }
+        public string DiscountCode { get; set; }
     }
 }
  

@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+
+namespace Client.Api.ServicesModels.DiscountCodes
+{
+    public class DiscountCodeServiceModel
+    {
+        public Guid Id { get; set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
+        public bool IsDisabled { get; set; }
+        public int ClientsCount { get; set; }
+        public IEnumerable<Guid> ClientIds { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+    }
+}

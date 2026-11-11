@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Search.Extensions;
 using Nest;
 
@@ -34,6 +35,19 @@ namespace Giuru.UnitTests.Extensions
             var sorts = ((IPromise<IList<ISort>>)descriptor).Value;
 
             return sorts.Cast<FieldSort>().Select(s => (s.Field.Name, s.Order)).ToList();
+        }
+
+        [Theory]
+        [InlineData("Tak", "Yes")]
+        [InlineData(" TAK ", "Yes")]
+        [InlineData("Yes", "Yes")]
+        [InlineData("Ja", "Yes")]
+        [InlineData("Nie", "No")]
+        [InlineData("No", "No")]
+        [InlineData(null, "No")]
+        public void ToYesOrNo_ReturnsCanonicalBooleanValue(string value, string expected)
+        {
+            Assert.Equal(expected, value.ToYesOrNo());
         }
 
         [Fact]

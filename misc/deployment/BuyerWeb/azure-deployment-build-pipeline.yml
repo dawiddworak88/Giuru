@@ -19,7 +19,7 @@ variables:
 - name: b2bBuyerWebSsrDockerfile
   value: 'fe/projects/AspNetCore/Dockerfile-ssr'
 - name: dockerfileSsrBuildContext
-  value: 'fe/projects/AspNetCore'
+  value: 'fe'
 - name: chartPath
   value: 'misc/deployment/BuyerWeb/helm-chart'
 

@@ -6,6 +6,8 @@ namespace Buyer.Web.Areas.Orders.ApiResponseModels
     public class BasketResponseModel
     {
         public Guid? Id { get; set; }
+        public string DiscountCode { get; set; }
+        public string DiscountCodeRemovedMessage { get; set; }
         public IEnumerable<BasketItemResponseModel> Items { get; set; }
     }
 }

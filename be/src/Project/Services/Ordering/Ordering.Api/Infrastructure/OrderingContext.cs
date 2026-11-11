@@ -26,6 +26,8 @@ namespace Ordering.Api.Infrastructure
             // Index for Orders to optimize filtering by IsActive, SellerId and sorting by CreatedDate
             builder.Entity<Order>(entity =>
             {
+                entity.Property(e => e.DiscountCode).HasMaxLength(64);
+
                 entity.HasIndex(e => new { e.IsActive, e.SellerId, e.CreatedDate })
                 .IncludeProperties(e => new { e.ClientName, e.OrderStatusId, e.OrderStateId });
             });

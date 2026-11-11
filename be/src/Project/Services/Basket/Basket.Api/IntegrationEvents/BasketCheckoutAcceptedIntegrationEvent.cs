@@ -34,6 +34,7 @@ namespace Basket.Api.IntegrationEvents
         public Guid? ShippingCountryId { get; set; }
         public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
+        public string DiscountCode { get; set; }
         public BasketEventModel Basket { get; set; }
         public bool HasCustomOrder { get; set; }
         public bool HasApprovalToSendEmail { get; set; }

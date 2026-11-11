@@ -2,6 +2,7 @@
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.Services.Prices;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
@@ -26,6 +27,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly LinkGenerator _linkGenerator;
         private readonly IBasketService _basketService;
         private readonly IOptions<AppSettings> _options;
+        private readonly IApplicableDiscountCodeService _applicableDiscountCodeService;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -35,7 +37,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             IClientAddressesRepository clientAddressesRepository,
             IBasketService basketService,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options,
+            IApplicableDiscountCodeService applicableDiscountCodeService)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
@@ -45,6 +48,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
             _options = options;
+            _applicableDiscountCodeService = applicableDiscountCodeService;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -104,16 +108,28 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel"),
                 MinOrderQuantityErrorMessage = _globalLocalizer.GetString("MinOrderQuantity"),
-                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime"),
+                DiscountCodeLabel = _orderLocalizer.GetString("DiscountCodeLabel"),
+                ApplyDiscountCodeLabel = _orderLocalizer.GetString("ApplyDiscountCodeLabel"),
+                DiscountCodeAppliedMessage = _orderLocalizer.GetString("DiscountCodeAppliedMessage"),
+                RemoveDiscountCodeLabel = _orderLocalizer.GetString("RemoveDiscountCodeLabel"),
+                DiscountCodeNotValidMessage = _orderLocalizer.GetString("DiscountCodeNotValidMessage"),
+                IsDiscountCodeEnabled = _options.Value.IsGrulaConfigured
             };
 
             if (componentModel.BasketId.HasValue)
             {
-                var basketItems = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                var basket = await _basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
 
-                if (basketItems is not null)
+                if (basket is not null)
                 {
-                    viewModel.BasketItems = basketItems;
+                    viewModel.BasketItems = basket.Items;
+                    // A code that stopped being valid stays on the form: checkout refuses the Basket
+                    // until it is removed, and the form only offers removal for a code it shows.
+                    var discountCodeCheck = await _applicableDiscountCodeService.CheckAsync(componentModel.Token, basket.DiscountCode);
+
+                    viewModel.DiscountCode = discountCodeCheck.DiscountCode;
+                    viewModel.IsDiscountCodeNotValid = discountCodeCheck.IsNotValid;
                 }
             }
 

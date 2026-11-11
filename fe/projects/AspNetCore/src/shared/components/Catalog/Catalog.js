@@ -58,6 +58,10 @@ function Catalog(props) {
             }
         }
 
+        if (props.isDiscountCodeEnabled && props.discountCode) {
+            searchParameters.discountCode = props.discountCode;
+        }
+
         const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
@@ -111,7 +115,9 @@ function Catalog(props) {
         generalErrorMessage: props.generalErrorMessage,
         addProductToBasketMessage: props.toastSuccessAddProductToBasket,
         updateBasketUrl: props.updateBasketUrl,
-        getPriceUrl: props.getProductPriceUrl
+        getPriceUrl: props.getProductPriceUrl,
+        discountCode: props.discountCode,
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled
     });
 
     const handleAddOrderItemClick = (item) => {
@@ -262,6 +268,7 @@ function Catalog(props) {
                     setIsOpen={setIsSidebarOpen}
                     handleOrder={handleModal}
                     labels={props.sidebar}
+                    discountCode={props.isDiscountCodeEnabled ? props.discountCode : null}
                 />
             }
             {props.modal &&
@@ -316,7 +323,9 @@ Catalog.propTypes = {
     maxAllowedOrderQuantity: PropTypes.number,
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     getProductPriceUrl: PropTypes.string,
-    isDefaultOutletOrder: PropTypes.bool
+    isDefaultOutletOrder: PropTypes.bool,
+    discountCode: PropTypes.string,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired
 };
 
 export default Catalog;

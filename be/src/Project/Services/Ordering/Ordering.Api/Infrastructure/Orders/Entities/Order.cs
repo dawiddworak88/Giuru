@@ -57,6 +57,9 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string MoreInfo { get; set; }
 
+        [MaxLength(64)]
+        public string DiscountCode { get; set; }
+
         [Required]
         public Guid OrderStatusId { get; set; }
 

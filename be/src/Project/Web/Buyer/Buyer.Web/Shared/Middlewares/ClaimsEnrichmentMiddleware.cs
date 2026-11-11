@@ -14,6 +14,7 @@ using Foundation.Extensions.Services.Cache;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -34,6 +35,7 @@ namespace Buyer.Web.Shared.Middlewares
         private readonly IOptions<AppSettings> _options;
         private readonly IDistributedCache _cache;
         private readonly ICacheService _cacheService;
+        private readonly ILogger<ClaimsEnrichmentMiddleware> _logger;
 
         public ClaimsEnrichmentMiddleware(
             IClientsRepository clientsRepository,
@@ -42,7 +44,8 @@ namespace Buyer.Web.Shared.Middlewares
             IClientFieldValuesRepository clientFieldValuesRepository,
             IOptions<AppSettings> options,
             IDistributedCache cache,
-            ICacheService cacheService)
+            ICacheService cacheService,
+            ILogger<ClaimsEnrichmentMiddleware> logger)
         {
             _clientsRepository = clientsRepository;
             _clientAddressesRepository = clientAddressesRepository;
@@ -51,6 +54,7 @@ namespace Buyer.Web.Shared.Middlewares
             _options = options;
             _cache = cache;
             _cacheService = cacheService;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -91,7 +95,7 @@ namespace Buyer.Web.Shared.Middlewares
             }
 
             var token = await context.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var client = await GetClientAsync(token);
+            var client = await GetClientOrDefaultAsync(token);
 
             if (client is null)
             {
@@ -252,16 +256,17 @@ namespace Buyer.Web.Shared.Middlewares
             await next(context);
         }
 
-        private async Task<Client> GetClientAsync(string token)
+        private async Task<Client> GetClientOrDefaultAsync(string token)
         {
             try
             {
                 return await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture);
             }
-            catch (CustomException)
+            catch (CustomException exception)
             {
-                // Throwing outside MVC also fails the error handler; MVC handles the 401 redirect later
-                return default;
+                _logger.LogWarning(exception, "Couldn't resolve the Client for the signed-in user's organisation (status {StatusCode}); continuing without Client claims.", exception.StatusCode);
+
+                return null;
             }
         }
 

@@ -32,5 +32,11 @@ namespace Giuru.MockAuth.Controllers
         {
             return StatusCode((int)HttpStatusCode.NoContent);
         }
+
+        [HttpPost("status")]
+        public IActionResult UpdateStatus()
+        {
+            return StatusCode((int)HttpStatusCode.OK);
+        }
     }
 }

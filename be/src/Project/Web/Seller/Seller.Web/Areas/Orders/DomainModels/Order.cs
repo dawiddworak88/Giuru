@@ -32,6 +32,7 @@ namespace Seller.Web.Areas.Orders.DomainModels
         public string ShippingPhone { get; set; }
         public string ShippingCountryCode { get; set; }
         public string MoreInfo { get; set; }
+        public string DiscountCode { get; set; }
         public string OrderStatusName { get; set; }
         public Guid OrderStateId { get; set; }
         public string Reason { get; set; }

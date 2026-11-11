@@ -5,11 +5,9 @@ using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.ProductColors;
 using Buyer.Web.Areas.Products.Services.Products;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Files;
-using Buyer.Web.Shared.Definitions.Middlewares;
 using Buyer.Web.Shared.DomainModels.Media;
-using Buyer.Web.Shared.DomainModels.Prices;
+using Foundation.Pricing.Services;
 using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.Services.Prices;
 using Foundation.ApiExtensions.Controllers;
@@ -26,7 +24,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -49,11 +46,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IMediaItemsRepository _mediaRepository;
         private readonly IMediaService _mediaService;
         private readonly LinkGenerator _linkGenerator;
-        private readonly IOptions<AppSettings> _options;
-        private readonly IPriceService _priceService;
         private readonly IProductColorsService _productColorsService;
         private readonly ILeadTimeRepository _leadTimeRepository;
         private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
+        private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IPriceClientResolver _priceClientResolver;
+        private readonly IProductPricingService _productPricingService;
 
         public ProductsApiController(
             IProductsService productsService,
@@ -63,12 +61,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IMediaService mediaService,
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
-            IOptions<AppSettings> options,
-            IPriceService priceService,
             LinkGenerator linkGenerator,
             IProductColorsService productColorsService,
             ILeadTimeRepository leadTimeRepository,
-            IExpectedDeliveryDateService expectedDeliveryDateService)
+            IExpectedDeliveryDateService expectedDeliveryDateService,
+            IPriceProductFactory priceProductFactory,
+            IPriceClientResolver priceClientResolver,
+            IProductPricingService productPricingService)
         {
             _productsService = productsService;
             _productsRepository = productsRepository;
@@ -80,10 +79,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             _inventoryRepository = inventoryRepository;
             _outletRepository = outletRepository;
             _mediaRepository = mediaRepository;
-            _options = options;
-            _priceService = priceService;
             _productColorsService = productColorsService;
             _expectedDeliveryDateService = expectedDeliveryDateService;
+            _priceProductFactory = priceProductFactory;
+            _priceClientResolver = priceClientResolver;
+            _productPricingService = productPricingService;
         }
 
         [HttpGet]
@@ -122,7 +122,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductVariants(Guid? id)
+        public async Task<IActionResult> GetProductVariants(Guid? id, string discountCode = null)
         {
             var language = CultureInfo.CurrentUICulture.Name;
             var product = await _productsRepository.GetProductAsync(id, language, null);
@@ -155,48 +155,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
-                var prices = Enumerable.Empty<Price>();
-
-                if (_options.Value.IsGrulaConfigured)
-                {
-                    var priceProducts = productVariants.Data.Select(async x => new PriceProduct
-                    {
-                        PrimarySku = x.PrimaryProductSku,
-                        ProductVariantSku = x.Sku,
-                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                        SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                        Size = _productsService.GetSize(x.ProductAttributes),
-                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                        LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                        Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                        Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                        BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                        NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
-                    });
-
-                    prices = await _priceService.GetPrices(
-                        _options.Value.GrulaAccessToken,
-                        DateTime.UtcNow,
-                        await Task.WhenAll(priceProducts),
-                        new PriceClient
-                        {
-                            Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
-                            Name = User.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
-                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
-                        });
-                }
+                var prices = await _productPricingService.GetPricesAsync(
+                    () => _priceProductFactory.CreateAsync(productVariants.Data, isOutletPurchase: false),
+                    () => _priceClientResolver.ResolveAsync(null, discountCode, token));
 
                 var leadTimes = await _leadTimeRepository.GetLeadTimesAsync(
                     accessToken: token,
@@ -249,7 +210,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             };
                             variantImages.Add(imageVariantViewModel);
                         }
-
                         carouselItem.Images = variantImages;
                         carouselItem.ImageUrl = _mediaService.GetMediaUrl(variantImage, CarouselGridConstants.CarouselItemImageMaxWidth);
                     }
@@ -272,18 +232,15 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         carouselItem.OutletTitle = availableOutletProduct.Title;
                     }
 
-                    if (prices.Any())
-                    {
-                        var price = prices.ElementAtOrDefault(i);
+                    var price = prices.ElementAtOrDefault(i);
 
-                        if (price is not null)
+                    if (price is not null)
+                    {
+                        carouselItem.Price = new CarouselGridPriceViewModel
                         {
-                            carouselItem.Price = new CarouselGridPriceViewModel
-                            {
-                                Current = price.CurrentPrice,
-                                Currency = price.CurrencyCode
-                            };
-                        }
+                            Current = price.CurrentPrice,
+                            Currency = price.CurrencyCode
+                        };
                     }
 
                     var variantLeadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == productVariant.Sku)?.LeadTimeDays ?? 0;
@@ -354,7 +311,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductsQuantities(string searchTerm, int pageIndex, bool? hasPrimaryProduct, int itemsPerPage)
+        public async Task<IActionResult> GetProductsQuantities(string searchTerm, int pageIndex, bool? hasPrimaryProduct, int itemsPerPage, string discountCode = null)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
@@ -371,48 +328,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             if (products.Data.Any())
             {
-                var prices = Enumerable.Empty<Price>();
-
-                if (_options.Value.IsGrulaConfigured)
-                {
-                    var priceProducts = products.Data.Select(async x => new PriceProduct
-                    {
-                        PrimarySku = x.PrimaryProductSku,
-                        ProductVariantSku = x.Sku,
-                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                        SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                        Size = _productsService.GetSize(x.ProductAttributes),
-                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                        LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                        Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                        Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                        BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                        ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                        NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
-                    });
-
-                    prices = await _priceService.GetPrices(
-                        _options.Value.GrulaAccessToken,
-                        DateTime.UtcNow,
-                        await Task.WhenAll(priceProducts),
-                        new PriceClient
-                        {
-                            Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
-                            Name = User.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
-                            CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                            ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                            PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                            Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                            DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
-                        });
-                }
+                var prices = await _productPricingService.GetPricesAsync(
+                    () => _priceProductFactory.CreateAsync(products.Data, isOutletPurchase: false),
+                    () => _priceClientResolver.ResolveAsync(null, discountCode, token));
 
                 var inventories = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(
                     token,
@@ -454,15 +372,12 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         ? _expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays)
                         : null;
 
-                    if (prices.Any())
-                    {
-                        var price = prices.ElementAtOrDefault(i);
+                    var price = prices.ElementAtOrDefault(i);
 
-                        if (price is not null)
-                        {
-                            productQuantity.Price = price.CurrentPrice;
-                            productQuantity.Currency = price.CurrencyCode;
-                        }
+                    if (price is not null)
+                    {
+                        productQuantity.Price = price.CurrentPrice;
+                        productQuantity.Currency = price.CurrencyCode;
                     }
 
                     productsQuantities.Add(productQuantity);
@@ -475,69 +390,31 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPrice(string sku)
+        public async Task<IActionResult> GetPrice(string sku, string discountCode, bool isOutlet = false)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
             var product = await _productsRepository.GetProductAsync(sku, language, token);
 
-            if (_options.Value.IsGrulaConfigured)
+            try
             {
-                var outletItem = await _outletRepository.GetOutletProductBySkuAsync(token, language, sku);
+                var price = await _productPricingService.GetPriceAsync(
+                    () => _priceProductFactory.CreateAsync(product, isOutletPurchase: isOutlet),
+                    () => _priceClientResolver.ResolveAsync(null, discountCode, token));
 
-                try
+                if (price is not null)
                 {
-                    var price = await _priceService.GetPrice(
-                    _options.Value.GrulaAccessToken,
-                    DateTime.UtcNow,
-                    new PriceProduct
+                    return StatusCode((int)HttpStatusCode.OK, new PriceResponseModel
                     {
-                        PrimarySku = product.PrimaryProductSku,
-                        ProductVariantSku = product.Sku,
-                        FabricsGroup = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                        ExtraPacking = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                        SleepAreaSize = _productsService.GetSleepAreaSize(product.ProductAttributes),
-                        PaletteSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                        Size = _productsService.GetSize(product.ProductAttributes),
-                        PointsOfLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                        LampshadeType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                        LampshadeSize = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                        LinearLight = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                        Mirror = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                        Shape = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                        PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                        SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                        BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                        ShelfType = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                        NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                        Led = _productsService.GetFirstAvailableAttributeValue(product.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo(),
-                        IsOutlet = (outletItem?.AvailableQuantity > 0).ToYesOrNo()
-                    },
-                    new PriceClient
-                    {
-                        Id = string.IsNullOrWhiteSpace(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
-                        Name = User.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
-                        CurrencyCode = User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                        ExtraPacking = User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                        PaletteLoading = User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                        Country = User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                        DeliveryZipCode = User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value
+                        CurrencyCode = price.CurrencyCode,
+                        CurrentPrice = price.CurrentPrice
                     });
-
-                    if (price is not null)
-                    {
-                        return StatusCode((int)HttpStatusCode.OK, new PriceResponseModel
-                        {
-                            CurrencyCode = price.CurrencyCode,
-                            CurrentPrice = price.CurrentPrice
-                        });
-                    }
                 }
-                catch
-                {
-                    return StatusCode((int)HttpStatusCode.OK);
-                }
+            }
+            catch
+            {
+                return StatusCode((int)HttpStatusCode.OK);
             }
 
             return StatusCode((int)HttpStatusCode.OK);

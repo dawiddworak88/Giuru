@@ -3,7 +3,9 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.Repositories.UserApprovals;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions.Basket;
+using Buyer.Web.Shared.Extensions;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.Repositories.Identity;
 using Buyer.Web.Shared.Services.Baskets;
@@ -12,10 +14,12 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Helpers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
+using Foundation.Pricing.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -35,6 +39,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IStringLocalizer<OrderResources> _orderLocalizer;
         private readonly IUserApprovalsRepository _userApprovalsRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly IDiscountCodeEligibilityRepository _discountCodeEligibilityRepository;
+        private readonly IOptions<AppSettings> _options;
 
         public BasketCheckoutApiController(
             IBasketRepository basketRepository,
@@ -42,7 +48,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IClientAddressesRepository clientAddressesRepository,
             IStringLocalizer<OrderResources> orderLocalizer,
             IUserApprovalsRepository userApprovalsRepository,
-            IIdentityRepository identityRepository)
+            IIdentityRepository identityRepository,
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository,
+            IOptions<AppSettings> options)
         {
             _basketRepository = basketRepository;
             _basketService = basketService;
@@ -50,6 +58,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             _clientAddressesRepository = clientAddressesRepository;
             _userApprovalsRepository = userApprovalsRepository;
             _identityRepository = identityRepository;
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
+            _options = options;
         }
 
         [HttpPost]
@@ -58,6 +68,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var organisationId = GuidHelper.ParseNullable(User.FindFirstValue(AccountConstants.Claims.OrganisationIdClaim));
+
+            if (model.ClientId != User.GetClientId())
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("CheckoutClientMismatch").Value });
+            }
 
             var reqCookie = Request.Cookies[BasketConstants.BasketCookieName];
 
@@ -71,6 +86,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 };
 
                 Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+            }
+
+            if (_options.Value.IsGrulaConfigured)
+            {
+                var basket = await _basketRepository.GetBasketById(token, language, Guid.Parse(reqCookie));
+
+                // Checked against Client.Api directly, so an outage fails checkout instead of dropping the code.
+                if (string.IsNullOrWhiteSpace(basket?.DiscountCode) is false &&
+                    await _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, language, model.ClientId, basket.DiscountCode) is null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("CheckoutDiscountCodeNoLongerValid").Value });
+                }
             }
 
             await _basketService.ValidateStockOutletQuantitiesAsync(model.BasketId, token, language);

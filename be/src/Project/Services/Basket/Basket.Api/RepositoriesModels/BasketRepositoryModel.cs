@@ -6,6 +6,7 @@ namespace Basket.Api.RepositoriesModels
     public class BasketRepositoryModel
     {
         public Guid? Id { get; set; }
+        public string DiscountCode { get; set; }
         public IEnumerable<BasketItemRepositoryModel> Items { get; set; }
     }
 }

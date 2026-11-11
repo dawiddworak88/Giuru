@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Foundation.Pricing.Configurations;
+using System;
 
 namespace Buyer.Web.Shared.Configurations
 {
-    public class AppSettings
+    public class AppSettings : IPricingSettings, IPriceProductAttributeKeys
     {
         public string CatalogUrl { get; set; }
         public string DeliveryNoticesUrl { get; set; }

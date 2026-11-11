@@ -196,6 +196,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                     ShippingRegion = response.Data.ShippingRegion,
                     ShippingStreet = response.Data.ShippingStreet,
                     MoreInfo = response.Data.MoreInfo,
+                    DiscountCode = response.Data.DiscountCode,
                     Attachments = response.Data.Attachments,
                     CreatedBy = response.Data.CreatedBy,
                     LastModifiedDate = response.Data.LastModifiedDate,

@@ -73,6 +73,10 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DiscountCode")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.Property<string>("ExternalReference")
                         .HasColumnType("nvarchar(max)");
 

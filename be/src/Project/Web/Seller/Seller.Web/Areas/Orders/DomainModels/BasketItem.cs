@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Foundation.Pricing.Services;
+using System;
 
 namespace Seller.Web.Areas.Orders.DomainModels
 {
-    public class BasketItem
+    public class BasketItem : IPriceableBasketLine
     {
         public Guid? ProductId { get; set; }
         public string ProductSku { get; set; }

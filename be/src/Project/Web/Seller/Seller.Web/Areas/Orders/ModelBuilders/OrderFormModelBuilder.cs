@@ -4,8 +4,10 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Areas.Orders.ViewModel;
+using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Repositories.Clients;
 using System.Globalization;
 using System.Linq;
@@ -20,19 +22,22 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<ClientResources> _clientLocalizer;
         private readonly LinkGenerator _linkGenerator;
         private readonly IClientsRepository _clientsRepository;
+        private readonly IOptions<AppSettings> _options;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             LinkGenerator linkGenerator,
-            IClientsRepository clientsRepository)
+            IClientsRepository clientsRepository,
+            IOptions<AppSettings> options)
         {
             _globalLocalizer = globalLocalizer;
             _orderLocalizer = orderLocalizer;
             _linkGenerator = linkGenerator;
             _clientsRepository = clientsRepository;
             _clientLocalizer = clientLocalizer;
+            _options = options;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -82,7 +87,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 CurrencyLabel = _globalLocalizer.GetString("Currency"),
                 GetProductPriceUrl = _linkGenerator.GetPathByAction("GetPrice", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 OutletProductLabel = _orderLocalizer.GetString("OutletProductLabel"),
-                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime"),
+                DiscountCodeLabel = _orderLocalizer.GetString("DiscountCodeLabel"),
+                ApplyDiscountCodeLabel = _orderLocalizer.GetString("ApplyDiscountCodeLabel"),
+                DiscountCodeAppliedMessage = _orderLocalizer.GetString("DiscountCodeAppliedMessage"),
+                RemoveDiscountCodeLabel = _orderLocalizer.GetString("RemoveDiscountCodeLabel"),
+                IsDiscountCodeEnabled = _options.Value.IsGrulaConfigured
             };
 
             var clients = await _clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

@@ -1,6 +1,7 @@
 using Client.Api.Infrastructure;
 using Client.Api.Services.Applications;
 using Client.Api.Services.Clients;
+using Client.Api.Services.DiscountCodes;
 using Client.Api.Services.Groups;
 using Client.Api.Services.Roles;
 using Client.Api.Services.Managers;
@@ -28,6 +29,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IClientGroupsService, ClientGroupsService>();
             services.AddScoped<IClientRolesService, ClientRolesService>();
+            services.AddScoped<IDiscountCodesService, DiscountCodesService>();
             services.AddScoped<IClientsApplicationsService, ClientsApplicationsService>();
             services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
             services.AddScoped<IClientAddressesService, ClientAddressesService>();

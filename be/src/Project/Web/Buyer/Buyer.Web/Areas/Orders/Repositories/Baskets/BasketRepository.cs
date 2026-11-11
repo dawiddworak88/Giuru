@@ -31,11 +31,12 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             _settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null)
         {
             var requestModel = new SaveBasketApiRequestModel
             {
                 Id = id,
+                DiscountCode = discountCode,
                 Items = items.OrEmptyIfNull().Select(x => new BasketItemApiRequestModel
                 {
                     ProductId = x.ProductId,
@@ -69,6 +70,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 return new Basket
                 {
                     Id = response.Data.Id,
+                    DiscountCode = response.Data.DiscountCode,
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         Id = x.Id,
@@ -101,7 +103,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             Guid? basketId,
             ClientAddress billingAddress,
             ClientAddress shippingAddress,
-            string moreInfo, 
+            string moreInfo,
             bool hasCustomOrder,
             bool hasApprovalToSendEmail,
             IEnumerable<Guid> attachments,

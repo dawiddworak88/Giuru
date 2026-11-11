@@ -3,6 +3,7 @@ using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Catalog.Api.v1.Products.RequestModels;
 using Foundation.ApiExtensions.Models.Response;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.GenericRepository.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Giuru.IntegrationTests.Definitions;
@@ -54,9 +55,22 @@ namespace Giuru.IntegrationTests
         }
 
         [Fact] 
-        public async Task AddToBasket_WithNormalStockAndOutletProducts_CheckoutOrder_Returns_Orders()
+        public async Task AddToBasket_WhenConfiguredGrulaIsUnavailable_CheckoutOrder_ReturnsUnpricedOrder()
         {
             var warehouseId = await EnsureWarehouseExistsAsync(_apiFixture);
+
+            // A basket line whose SKU resolves to a catalog product must carry that product's id, or the
+            // save is refused with 422. Products.Lamica.Id exists nowhere and SellerWebTests creates LAM_01
+            // under another id, so this test prices a product of its own.
+            var pricedProductSku = $"GRULA-{Guid.NewGuid():N}"[..20];
+            var pricedProduct = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture,
+                    new ProductRequestModel
+                    {
+                        Sku = pricedProductSku,
+                        Name = $"Unpriced {pricedProductSku}",
+                        CategoryId = Products.Lamica.CategoryId,
+                        IsPublished = true
+                    });
 
             var stockProduct = await InventoryHelper.CreateProductAndAddToStockAsync(_apiFixture, 
                     new ProductRequestModel
@@ -90,10 +104,13 @@ namespace Giuru.IntegrationTests
                     {
                         new BasketItemRequestModel
                         {
-                            ProductId = Products.Lamica.Id,
-                            Sku = Products.Lamica.Sku,
-                            Name = Products.Lamica.Name,
+                            ProductId = pricedProduct,
+                            Sku = pricedProductSku,
+                            Name = $"Unpriced {pricedProductSku}",
                             Quantity = Inventories.Quantities.Quantity,
+                            UnitPrice = 0.01m,
+                            Price = 0.01m,
+                            Currency = "FAKE"
                         },
                         new BasketItemRequestModel
                         {
@@ -115,14 +132,30 @@ namespace Giuru.IntegrationTests
             Assert.NotNull(basket);
             Assert.NotEqual(Guid.Empty, basket.Id);
             Assert.NotNull(basket.Items);
-            Assert.Equal(Products.Lamica.Id, basket.Items.FirstOrDefault().ProductId);
+            Assert.Equal(pricedProduct, basket.Items.FirstOrDefault().ProductId);
+            var savedBasketItem = basket.Items.Single(x => x.ProductId == pricedProduct);
+            Assert.Null(savedBasketItem.UnitPrice);
+            Assert.Null(savedBasketItem.Price);
+            Assert.Null(savedBasketItem.Currency);
+
+            // Basket API is the trusted internal boundary used by the BFF. Verify the
+            // values were removed before that boundary rather than only hidden in the response.
+            var persistedBasket = await _apiFixture.BasketApiClient.GetAsync<BasketApiResponseModel>(
+                $"{ApiConstants.Baskets.BasketsApiEndpoint}/{basket.Id}");
+            var persistedBasketItem = persistedBasket.Items.Single(x => x.ProductId == pricedProduct);
+            Assert.Null(persistedBasketItem.UnitPrice);
+            Assert.Null(persistedBasketItem.Price);
+            Assert.Null(persistedBasketItem.Currency);
+
+            // Checkout is refused for any Client but the signed-in one, so order as the test user's own Client.
+            var client = await ClientHelper.GetOrCreateTestUsersClientAsync(_apiFixture);
 
             await _apiFixture.BuyerWebClient.PostAsync<CheckoutBasketRequestModel, BaseResponseModel>(
                 ApiEndpoints.OrderCheckoutApiEndpoint, 
                 new CheckoutBasketRequestModel
                 {
                     BasketId = basket.Id,
-                    ClientId = Clients.Id,
+                    ClientId = client.Id,
                     ClientName = Clients.Name
                 });
 
@@ -133,7 +166,11 @@ namespace Giuru.IntegrationTests
 
             var order = orders.Data.FirstOrDefault();
 
-            Assert.Equal(Products.Lamica.Id, order.OrderItems.FirstOrDefault().ProductId);
+            Assert.Equal(pricedProduct, order.OrderItems.FirstOrDefault().ProductId);
+            var orderItem = order.OrderItems.Single(x => x.ProductId == pricedProduct);
+            Assert.Null(orderItem.UnitPrice);
+            Assert.Null(orderItem.Price);
+            Assert.Null(orderItem.Currency);
 
             var stockOrderItem = order.OrderItems.FirstOrDefault(x => x.ProductId == stockProduct);
 

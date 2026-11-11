@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
 using Buyer.Web.Shared.Definitions.Basket;
 using Buyer.Web.Shared.Definitions.Middlewares;
@@ -39,13 +39,6 @@ namespace Buyer.Web.Areas.Products.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName]),
                 ContentPageKey = "categoryPage",
-                ClientId = string.IsNullOrWhiteSpace(this.User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value) ? null : Guid.Parse(this.User.FindFirst(ClaimsEnrichmentConstants.ClientIdClaimType)?.Value),
-                ClientName = this.User.FindFirst(ClaimsEnrichmentConstants.ClientNameClaimType)?.Value,
-                CurrencyCode = this.User.FindFirst(ClaimsEnrichmentConstants.CurrencyClaimType)?.Value,
-                ExtraPacking = this.User.FindFirst(ClaimsEnrichmentConstants.ExtraPackingClaimType)?.Value,
-                PaletteLoading = this.User.FindFirst(ClaimsEnrichmentConstants.PaletteLoadingClaimType)?.Value,
-                Country = this.User.FindFirst(ClaimsEnrichmentConstants.CountryClaimType)?.Value,
-                DeliveryZipCode = this.User.FindFirst(ClaimsEnrichmentConstants.ZipCodeClaimType)?.Value,
                 DeliveryType = this.User.FindFirst(ClaimsEnrichmentConstants.DeliveryTypeClaimType)?.Value
             };
 

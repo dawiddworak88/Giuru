@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, Fragment } from "react";
+import React, { useContext, useCallback, useRef, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
@@ -18,7 +18,11 @@ import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog
 import IconConstants from "../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../shared/helpers/globals/AuthenticationHelper";
 import ProductPricesHelper from "../../../../shared/helpers/prices/ProductPricesHelper";
-import OrderItemsGrouper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
+import OrderItemsGroupHelper from "../../../../shared/helpers/orders/OrderItemsGroupHelper"
+import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
+import { useDiscountCode } from "../../../../shared/hooks/useDiscountCode";
+import { useBasketDiscountCode } from "../../../../shared/hooks/useBasketDiscountCode";
+import DiscountCodeField from "../../../../shared/components/DiscountCode/DiscountCodeField";
 
 function OrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -40,6 +44,46 @@ function OrderForm(props) {
     const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [productFromOutlet, setProductFromOutlet] = useState(false);
 
+    // The two discount-code hooks are mutually dependent - useDiscountCode needs the save from
+    // useBasketDiscountCode, which needs the sync callback from useDiscountCode - so one of them
+    // has to be wired through a ref. Going via the ref rather than straight at the binding below
+    // also keeps this callback stable, which is what lets useDiscountCode memoise apply/remove.
+    const basketDiscountCodeRef = useRef(null);
+    const saveDiscountCode = useCallback(
+        (newDiscountCode, showSuccessMessage) =>
+            basketDiscountCodeRef.current?.save(newDiscountCode, showSuccessMessage), []);
+
+    // The seller's order form always opens on a brand-new basket (see basketId above), so
+    // there is never a stored code to seed this from. It is filled in at runtime from the
+    // basket responses of an apply, a removal or a file upload.
+    const discountCodeState = useDiscountCode({
+        initialCode: "",
+        isEnabled: props.isDiscountCodeEnabled,
+        onSave: saveDiscountCode
+    });
+
+    const setGroupedOrderItems = useCallback(
+        (items) => setOrderItems(OrderItemsGroupHelper.groupOrderItems(items)), []);
+
+    const basketDiscountCode = useBasketDiscountCode({
+        isEnabled: props.isDiscountCodeEnabled,
+        updateBasketUrl: props.updateBasketUrl,
+        generalErrorMessage: props.generalErrorMessage,
+        discountCodeAppliedMessage: props.discountCodeAppliedMessage,
+        dispatch,
+        buildBasket: (discountCode) => ({
+            id: basketId,
+            clientId: client.id,
+            items: orderItems,
+            discountCode
+        }),
+        setBasketId,
+        setGroupedOrderItems,
+        syncFromResponse: discountCodeState.syncFromResponse
+    });
+
+    basketDiscountCodeRef.current = basketDiscountCode;
+
     const onSuggestionsFetchRequested = (args) => {
 
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -51,6 +95,10 @@ function OrderForm(props) {
                 hasPrimaryProduct: true,
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
+
+            if (props.isDiscountCodeEnabled && discountCodeState.appliedDiscountCode) {
+                searchParameters.discountCode = discountCodeState.appliedDiscountCode;
+            }
 
             const requestOptions = {
                 method: "GET",
@@ -120,7 +168,15 @@ function OrderForm(props) {
             orderItem.stockQuantity = 0;
             orderItem.quantity = 0;
 
-            const outletPrice = await  ProductPricesHelper.getPriceByProductSku(props.getProductPriceUrl, client.id, product.sku);
+            const outletPrice = await ProductPricesHelper.getPriceByProductSku(
+                props.getProductPriceUrl,
+                {
+                    clientId: client.id,
+                    sku: product.sku,
+                    discountCode: props.isDiscountCodeEnabled ? discountCodeState.appliedDiscountCode : null,
+                    isOutlet: true,
+                    requiresClientId: true
+                });
 
             if (outletPrice) {
                 orderItem.unitPrice = outletPrice.price
@@ -147,7 +203,9 @@ function OrderForm(props) {
 
         const basket = {
             id: basketId,
-            items: [...orderItems, orderItem]
+            clientId: client.id,
+            items: [...orderItems, orderItem],
+            ...(props.isDiscountCodeEnabled && { discountCode: discountCodeState.appliedDiscountCode })
         };
 
         const requestOptions = {
@@ -160,32 +218,26 @@ function OrderForm(props) {
         };
 
         fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
+                if (response.ok && jsonResponse) {
+                    basketDiscountCode.applyBasketResponse(jsonResponse);
 
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setProduct(null);
-                            setSearchTerm("");
-                            setExternalReference("");
-                            setMoreInfo("");
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                            setQuantity(1);
-                            setProductFromOutlet(false);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
+                    if (jsonResponse.items?.length) {
+                        setProduct(null);
+                        setSearchTerm("");
+                        setExternalReference("");
+                        setMoreInfo("");
+                        setQuantity(1);
+                        setProductFromOutlet(false);
                     }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -216,7 +268,9 @@ function OrderForm(props) {
 
         const basket = {
             id: basketId,
-            items: orderItems.filter((orderItem) => orderItem !== entityToDelete)
+            clientId: client.id,
+            items: orderItems.filter((orderItem) => orderItem !== entityToDelete),
+            ...(props.isDiscountCodeEnabled && { discountCode: discountCodeState.appliedDiscountCode })
         };
 
         const requestOptions = {
@@ -226,31 +280,18 @@ function OrderForm(props) {
         };
 
         fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-
-                        setBasketId(jsonResponse.id);
-                        setOpenDeleteDialog(false);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-
-                            setOrderItems(OrderItemsGrouper.groupOrderItems(jsonResponse.items));
-                        }
-                        else {
-
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
+                if (response.ok && jsonResponse) {
+                    basketDiscountCode.applyBasketResponse(jsonResponse);
+                    setOpenDeleteDialog(false);
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -305,20 +346,18 @@ function OrderForm(props) {
         };
 
         fetch(props.placeOrderUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setDisableSaveButton(true);
-                    } else {
-                        toast.error(jsonResponse.message || props.generalErrorMessage);
-                    }
-                });
+                if (response.ok && jsonResponse) {
+                    toast.success(message);
+                    setDisableSaveButton(true);
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -326,8 +365,31 @@ function OrderForm(props) {
     };
 
     const handleChangeClient = (value) => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
+        const clientChanged = client?.id !== value?.id;
+
         setClient(value);
+        setClientAddresses([]);
+        setDeliveryAddress(null);
+        setBillingAddress(null);
+
+        if (clientChanged) {
+            setBasketId(null);
+            setOrderItems([]);
+            discountCodeState.reset();
+            setSearchTerm("");
+            setProduct(null);
+            setSuggestions([]);
+            setQuantity(1);
+            setExternalReference("");
+            setMoreInfo("");
+            setProductFromOutlet(false);
+        }
+
+        if (!value) {
+            return;
+        }
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const searchParameters = {
             clientId: value.id,
@@ -382,7 +444,15 @@ function OrderForm(props) {
             const formData = new FormData();
 
             formData.append("file", file);
-            formData.append("clientId", client.id)
+            formData.append("clientId", client.id);
+
+            if (basketId) {
+                formData.append("id", basketId);
+            }
+
+            if (props.isDiscountCodeEnabled && discountCodeState.appliedDiscountCode) {
+                formData.append("discountCode", discountCodeState.appliedDiscountCode);
+            }
 
             const requestOptions = {
                 method: "POST",
@@ -390,28 +460,26 @@ function OrderForm(props) {
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
-                .then(function (response) {
+                .then(async function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                    return response.json().then((jsonResponse) => {
+                    AuthenticationHelper.HandleResponse(response);
+                    const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                        if (response.ok) {
-
-                            dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                            setBasketId(jsonResponse.id);
-                            setOrderItems(OrderItemsGrouper.groupOrderItems([...orderItems, ...jsonResponse.items]));
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
+                    if (response.ok && jsonResponse) {
+                        basketDiscountCode.applyBasketResponse(jsonResponse);
+                    }
+                    else {
+                        toast.error(message);
+                    }
                 }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [client]);
+    }, [basketDiscountCode.applyBasketResponse, discountCodeState.appliedDiscountCode, basketId,
+        client, dispatch, props.generalErrorMessage, props.isDiscountCodeEnabled,
+        props.uploadOrderFileUrl]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -444,6 +512,7 @@ function OrderForm(props) {
                                 name="client"
                                 fullWidth={true}
                                 value={client}
+                                disabled={state.isLoading || disableSaveButton}
                                 onChange={(event, newValue) => {
                                     handleChangeClient(newValue);
                                 }}
@@ -680,6 +749,20 @@ function OrderForm(props) {
                         </div>
                     </Fragment>
                 }
+                {client && props.isDiscountCodeEnabled &&
+                    <DiscountCodeField
+                        value={discountCodeState.discountCode}
+                        onChange={discountCodeState.setDiscountCode}
+                        onApply={() => discountCodeState.apply(orderItems.length > 0)}
+                        onRemove={discountCodeState.remove}
+                        appliedCode={discountCodeState.appliedDiscountCode}
+                        disabled={state.isLoading || disableSaveButton}
+                        canApply={orderItems.length > 0}
+                        discountCodeLabel={props.discountCodeLabel}
+                        applyDiscountCodeLabel={props.applyDiscountCodeLabel}
+                        removeDiscountCodeLabel={props.removeDiscountCodeLabel}
+                    />
+                }
                 <div className="field">
                     <Button
                         type="button"
@@ -739,7 +822,12 @@ OrderForm.propTypes = {
     uploadOrderFileUrl: PropTypes.string.isRequired,
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired
+    dropFilesLabel: PropTypes.string.isRequired,
+    discountCodeLabel: PropTypes.string.isRequired,
+    applyDiscountCodeLabel: PropTypes.string.isRequired,
+    discountCodeAppliedMessage: PropTypes.string.isRequired,
+    removeDiscountCodeLabel: PropTypes.string.isRequired,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired
 };
 
 export default OrderForm;

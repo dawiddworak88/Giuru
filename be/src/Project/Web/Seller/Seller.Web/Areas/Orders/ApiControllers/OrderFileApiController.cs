@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -10,28 +11,30 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Clients.Repositories.DeliveryAddresses;
-using Seller.Web.Areas.Clients.Repositories.FieldValues;
-using Seller.Web.Areas.Global.Repositories;
 using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Repositories.Orders;
+using Seller.Web.Areas.Orders.Services.Basket;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.DomainModels.LeadTime;
 using Seller.Web.Shared.DomainModels.Media;
-using Seller.Web.Shared.DomainModels.Prices;
-using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Inventory;
+using Seller.Web.Shared.Repositories.LeadTime;
+using Foundation.Pricing.Baskets;
+using Foundation.Pricing.Services;
+using Seller.Web.Shared.Services.Clients;
+using Seller.Web.Shared.Services.DeliveryDates;
 using Seller.Web.Shared.Services.Prices;
 using Seller.Web.Shared.Services.ProductColors;
 using Seller.Web.Shared.Services.Products;
-using Seller.Web.Areas.Global.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -47,6 +50,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IOrderFileService _orderFileService;
         private readonly IProductsRepository _productsRepository;
         private readonly IBasketRepository _basketRepository;
+        private readonly IDiscountCodeEligibilityRepository _discountCodeEligibilityRepository;
         private readonly LinkGenerator _linkGenerator;
         private readonly IMediaService _mediaService;
         private readonly ILogger<OrderFileApiController> _logger;
@@ -58,16 +62,18 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IProductsService _productsService;
         private readonly IProductColorsService _productColorsService;
         private readonly IOptions<AppSettings> _options;
-        private readonly IClientsRepository _clientsRepository;
-        private readonly ICountriesRepository _countriesRepository;
-        private readonly IClientFieldValuesRepository _clientFieldValuesRepository;
-        private readonly IClientAddressesRepository _clientAddressesRepository;
-        private readonly ICurrenciesRepository _currenciesRepository;
+        private readonly IPriceClientResolver _priceClientResolver;
+        private readonly IPriceProductFactory _priceProductFactory;
+        private readonly IBasketRepricingService _basketRepricingService;
+        private readonly IClientLookupService _clientLookupService;
+        private readonly ILeadTimeRepository _leadTimeRepository;
+        private readonly IExpectedDeliveryDateService _expectedDeliveryDateService;
 
         public OrderFileApiController(
             IOrderFileService orderFileService,
             IProductsRepository productsRepository,
             IBasketRepository basketRepository,
+            IDiscountCodeEligibilityRepository discountCodeEligibilityRepository,
             LinkGenerator linkGenerator,
             IMediaService mediaService,
             IMediaItemsRepository mediaRepository,
@@ -79,15 +85,17 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IProductsService productsService,
             IProductColorsService productColorsService,
             IOptions<AppSettings> options,
-            IClientsRepository clientsRepository,
-            ICountriesRepository countriesRepository,
-            IClientFieldValuesRepository clientFieldValuesRepository,
-            IClientAddressesRepository clientAddressesRepository,
-            ICurrenciesRepository currenciesRepository)
+            IPriceClientResolver priceClientResolver,
+            IPriceProductFactory priceProductFactory,
+            IBasketRepricingService basketRepricingService,
+            IClientLookupService clientLookupService,
+            ILeadTimeRepository leadTimeRepository,
+            IExpectedDeliveryDateService expectedDeliveryDateService)
         {
             _orderFileService = orderFileService;
             _productsRepository = productsRepository;
             _basketRepository = basketRepository;
+            _discountCodeEligibilityRepository = discountCodeEligibilityRepository;
             _linkGenerator = linkGenerator;
             _mediaService = mediaService;
             _logger = logger;
@@ -99,35 +107,61 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             _productsService = productsService;
             _productColorsService = productColorsService;
             _options = options;
-            _clientsRepository = clientsRepository;
-            _countriesRepository = countriesRepository;
-            _clientFieldValuesRepository = clientFieldValuesRepository;
-            _clientAddressesRepository = clientAddressesRepository;
-            _currenciesRepository = currenciesRepository;
+            _priceClientResolver = priceClientResolver;
+            _priceProductFactory = priceProductFactory;
+            _basketRepricingService = basketRepricingService;
+            _clientLookupService = clientLookupService;
+            _leadTimeRepository = leadTimeRepository;
+            _expectedDeliveryDateService = expectedDeliveryDateService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UploadMediaRequestModel model)
         {
-            var importedOrderLines = _orderFileService.ImportOrderLines(model.File);
-
-            var skus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct();
+            var importedOrderLines = OrderBasketUploadHelper.GroupImportedLines(_orderFileService.ImportOrderLines(model.File));
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+            var existingBasket = model.Id.HasValue
+                ? await _basketRepository.GetBasketByIdAsync(token, language, model.Id)
+                : null;
+            var canSeePrices = _priceService.CanSeePrices(model.ClientId);
 
+            var importedSkus = importedOrderLines.OrEmptyIfNull().Select(x => x.Sku).Distinct().ToList();
+            var skus = importedSkus
+                .Concat(existingBasket?.Items.OrEmptyIfNull().Select(x => x.ProductSku) ?? Enumerable.Empty<string>())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct();
             var products = await _productsRepository.GetProductsBySkusAsync(token, language, skus);
 
-            if (products.OrEmptyIfNull().Any() is false)
+            if (products.OrEmptyIfNull().Any(x => importedSkus.Contains(x.Sku)) is false)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound") });
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = _orderLocalizer.GetString("ProductsNotFound").Value });
             }
 
-            var productLookup = products.ToDictionary(p => p.Sku);
+            var productLookup = OrderBasketUploadHelper.CreateProductLookup(products);
 
-            var orderedProducts = importedOrderLines
-                .Where(x => productLookup.ContainsKey(x.Sku))
-                .Select(x => productLookup[x.Sku]);
+            // One shared prologue with BasketsApiController: the same request must resolve to the same
+            // code whichever entry point writes the basket. Past the ProductsNotFound guard at least one
+            // imported line resolved to a product, so the merged basket always has lines - hasItems is
+            // an invariant here, not a test, which makes the rejection below unreachable from this
+            // entry point. It is kept rather than dropped so that weakening that guard cannot silently
+            // start persisting a discount code against a basket with no lines.
+            var discountOutcome = await BasketDiscountCodeCoordinator.ResolveAsync(
+                _options.Value.IsGrulaConfigured,
+                Request.Form.ContainsKey(nameof(UploadMediaRequestModel.DiscountCode)),
+                model.DiscountCode,
+                hasItems: true,
+                () => Task.FromResult(existingBasket?.DiscountCode),
+                code => _discountCodeEligibilityRepository.GetValidDiscountCodeAsync(token, language, model.ClientId, code),
+                _orderLocalizer);
+
+            if (discountOutcome.IsRejected)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { Message = discountOutcome.RejectionMessage });
+            }
+
+            var discountCode = discountOutcome.DiscountCode;
 
             var productIds = products.OrEmptyIfNull().Select(x => x.Id).Distinct().ToList();
             var stockAvailableProducts = await _inventoryRepository.GetAvailbleProductsByProductIdsAsync(token, language, productIds);
@@ -136,83 +170,11 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                .OrEmptyIfNull()
                .ToDictionary(g => g.ProductId, g => (double)g.AvailableQuantity);
 
+            OrderBasketUploadHelper.DeductExistingStock(stockByProductId, existingBasket?.Items);
+
+            var leadTimes = await GetLeadTimesAsync(token, model.ClientId, [.. importedSkus.Where(productLookup.ContainsKey)]);
+
             var basketItems = new List<BasketItem>();
-
-            var prices = Enumerable.Empty<Price>();
-
-            if (_options.Value.IsGrulaConfigured)
-            {
-                var countries = await _countriesRepository.GetAsync(token, _options.Value.DefaultCulture, $"{nameof(Country.CreatedDate)} desc");
-
-                var client = await _clientsRepository.GetClientAsync(token, _options.Value.DefaultCulture, model.ClientId);
-
-                string clientCountryName = null;
-
-                if (client.CountryId.HasValue)
-                {
-                    clientCountryName = countries.FirstOrDefault(c => c.Id == client.CountryId)?.Name;
-                }
-
-                string deliveryZipCode = null;
-
-                if (client.DefaultDeliveryAddressId.HasValue)
-                {
-                    var clientAddress = await _clientAddressesRepository.GetAsync(token, _options.Value.DefaultCulture, client.DefaultDeliveryAddressId);
-
-                    if (clientAddress is not null)
-                    {
-                        var deliveryCountry = countries.FirstOrDefault(c => c.Id == clientAddress.CountryId);
-
-                        if (deliveryCountry is not null)
-                        {
-                            deliveryZipCode = $"{clientAddress.PostCode} ({clientAddress.City}, {deliveryCountry.Name})";
-                        }
-                    }
-                }
-
-                var clientFieldValues = await _clientFieldValuesRepository.GetAsync(token, _options.Value.DefaultCulture, model.ClientId);
-
-                var currency = await _currenciesRepository.GetAsync(token, _options.Value.DefaultCulture, client?.PreferedCurrencyId);
-
-                var priceProducts = orderedProducts.Select(async x => new PriceProduct
-                {
-                    PrimarySku = x.PrimaryProductSku,
-                    ProductVariantSku = x.Sku,
-                    FabricsGroup = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePriceGroupAttributeKeys),
-                    ExtraPacking = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleExtraPackingAttributeKeys).ToYesOrNo(),
-                    SleepAreaSize = _productsService.GetSleepAreaSize(x.ProductAttributes),
-                    PaletteSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePaletteSizeAttributeKeys),
-                    Size = _productsService.GetSize(x.ProductAttributes),
-                    PointsOfLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePointsOfLightAttributeKeys),
-                    LampshadeType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeTypeAttributeKeys),
-                    LampshadeSize = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLampshadeSizeAttributeKeys),
-                    LinearLight = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLinearLightAttributeKeys).ToYesOrNo(),
-                    Mirror = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleMirrorAttributeKeys).ToYesOrNo(),
-                    Shape = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShapeAttributeKeys),
-                    PrimaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossiblePrimaryColorAttributeKeys)),
-                    SecondaryColor = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleSecondaryColorAttributeKeys)),
-                    BodyColour = await _productColorsService.ToEnglishAsync(_productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleBodyColorAttributeKeys)),
-                    ShelfType = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleShelfTypeAttributeKeys),
-                    NumberOfMirrors = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleNumberOfMirrorsAttributeKeys),
-                    Led = _productsService.GetFirstAvailableAttributeValue(x.ProductAttributes, _options.Value.PossibleLedAttributeKeys).ToYesOrNo()
-                });
-
-                prices = await _priceService.GetPrices(
-                    DateTime.UtcNow,
-                    await Task.WhenAll(priceProducts),
-                    new PriceClient
-                    {
-                        Id = client?.Id,
-                        Name = client?.Name,
-                        CurrencyCode = currency?.CurrencyCode,
-                        ExtraPacking = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.ExtraPackingClientFieldName)?.FieldValue.ToYesOrNo(),
-                        PaletteLoading = clientFieldValues.FirstOrDefault(x => x.FieldName == ClaimsEnrichmentConstants.PaletteLoadingClientFieldName)?.FieldValue.ToYesOrNo(),
-                        Country = clientCountryName,
-                        DeliveryZipCode = deliveryZipCode
-                    });
-            }
-
-            var priceIndex = 0;
 
             foreach (var orderLine in importedOrderLines)
             {
@@ -245,35 +207,48 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     PictureUrl = pictureUrl,
                     Quantity = quantity,
                     StockQuantity = stockQuantity,
-                    ExternalReference = orderLine.ExternalReference,
-                    MoreInfo = orderLine.MoreInfo
+                    ExternalReference = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.ExternalReference),
+                    MoreInfo = OrderBasketUploadHelper.NormalizeKeyPart(orderLine.MoreInfo),
+                    ExpectedLeadTime = GetExpectedLeadTime(leadTimes, orderLine.Sku)
                 };
 
-                if (prices.Any())
-                {
-                    var price = prices.ElementAtOrDefault(priceIndex);
-
-                    if (price is not null)
-                    {
-                        basketItem.UnitPrice = price.CurrentPrice;
-                        basketItem.Price = price.CurrentPrice * (decimal)orderLine.Quantity;
-                        basketItem.Currency = price.CurrencyCode;
-                    }
-                }
-
                 basketItems.Add(basketItem);
-                priceIndex++;
+            }
+
+            var completeBasketItems = OrderBasketUploadHelper.Merge(existingBasket?.Items, basketItems).ToList();
+
+            if (!_options.Value.IsGrulaConfigured)
+            {
+                BasketPriceApplier.ClearUntrustedPrices(completeBasketItems);
+            }
+            else
+            {
+                await RepriceMergedBasketAsync(token, language, model.ClientId, completeBasketItems, productLookup, discountCode);
+            }
+
+            if (!canSeePrices)
+            {
+                // Defence in depth: price visibility must also be enforced immediately before saving.
+                foreach (var item in completeBasketItems.OrEmptyIfNull())
+                {
+                    item.UnitPrice = null;
+                    item.Price = null;
+                    item.Currency = null;
+                }
             }
 
             var basket = await _basketRepository.SaveAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
+                token,
+                language,
                 model.Id,
-                basketItems);
+                completeBasketItems,
+                discountCode);
 
             var basketResponseModel = new BasketResponseModel
             {
-                Id = basket.Id
+                Id = basket.Id,
+                DiscountCode = basket.DiscountCode,
+                DiscountCodeRemovedMessage = discountOutcome.RemovedMessage
             };
 
             if (basket.Items.OrEmptyIfNull().Any())
@@ -291,13 +266,74 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,
                     MoreInfo = x.MoreInfo,
-                    UnitPrice = x.UnitPrice,
-                    Price = x.Price,
-                    Currency = x.Currency
+                    UnitPrice = canSeePrices ? x.UnitPrice : null,
+                    Price = canSeePrices ? x.Price : null,
+                    Currency = canSeePrices ? x.Currency : null,
+                    ExpectedLeadTime = x.ExpectedLeadTime
                 });
             }
 
             return StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        private async Task<IEnumerable<LeadTimeItem>> GetLeadTimesAsync(string token, Guid? clientId, string[] skus)
+        {
+            // Lead times are per customer; without a client there is no customer to ask for.
+            if (!clientId.HasValue)
+            {
+                return Array.Empty<LeadTimeItem>();
+            }
+
+            var client = await _clientLookupService.GetAsync(token, clientId);
+
+            if (client is null)
+            {
+                return Array.Empty<LeadTimeItem>();
+            }
+
+            return await _leadTimeRepository.GetLeadTimesAsync(
+                accessToken: token,
+                customerId: client.OrganisationId,
+                skus: skus);
+        }
+
+        private DateOnly? GetExpectedLeadTime(IEnumerable<LeadTimeItem> leadTimes, string sku)
+        {
+            var leadTimeDays = leadTimes?.FirstOrDefault(x => x.Sku == sku)?.LeadTimeDays ?? 0;
+
+            return leadTimeDays > 0
+                ? DateOnly.FromDateTime(_expectedDeliveryDateService.CalculateExpectedDeliveryDate(leadTimeDays))
+                : null;
+        }
+
+        private async Task RepriceMergedBasketAsync(
+            string token,
+            string language,
+            Guid? clientId,
+            IList<BasketItem> basketItems,
+            IReadOnlyDictionary<string, Product> productLookup,
+            string discountCode)
+        {
+            foreach (var item in basketItems.Where(x => string.IsNullOrWhiteSpace(x.ProductSku) || !productLookup.ContainsKey(x.ProductSku)))
+            {
+                _logger.LogWarning("Basket line SKU {Sku} could not be resolved to a product for language {Language}.", item.ProductSku, language);
+            }
+
+            var priceClient = await _priceClientResolver.ResolveAsync(clientId, discountCode, token);
+
+            var outcome = await _basketRepricingService.RepriceAsync(
+                basketItems,
+                x => x.ProductSku,
+                x => x.OutletQuantity > 0,
+                productLookup,
+                (product, isOutletPurchase) => _priceProductFactory.CreateAsync(product, isOutletPurchase),
+                priceClient,
+                DateTime.UtcNow);
+
+            if (!outcome.Succeeded)
+            {
+                throw new CustomException(_orderLocalizer.GetString("BasketPricesCouldNotBeVerified").Value, (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         [HttpGet]

@@ -76,7 +76,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 UnitPriceLabel = _globalLocalizer.GetString("UnitPrice"),
                 PriceLabel = _globalLocalizer.GetString("Price"),
                 CurrencyLabel = _globalLocalizer.GetString("Currency"),
-                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime")
+                ExpectedLeadTimeLabel = _orderLocalizer.GetString("ExpectedLeadTime"),
+                DiscountCodeLabel = _orderLocalizer.GetString("DiscountCodeLabel")
             };
 
             var orderStatuses = await _ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -95,6 +96,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     viewModel.Id = order.Id;
                     viewModel.OrderStatusId = order.OrderStatusId;
                     viewModel.CustomOrder = order.MoreInfo;
+                    viewModel.DiscountCode = order.DiscountCode;
                     viewModel.EditUrl = _linkGenerator.GetPathByAction("Edit", "OrderItem", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
                     viewModel.CanCancelOrder = order.OrderItems.All(x => x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.NewId) || x.OrderItemStatusId.Equals(OrdersConstants.OrderStatuses.CancelId)) && order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId);
                     viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel

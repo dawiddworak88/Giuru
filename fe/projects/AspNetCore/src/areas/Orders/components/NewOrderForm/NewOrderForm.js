@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, Fragment } from "react";
+import React, { useContext, useCallback, useRef, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
@@ -19,6 +19,10 @@ import AuthenticationHelper from "../../../../shared/helpers/globals/Authenticat
 import MediaCloud from "../../../../shared/components/MediaCloud/MediaCloud";
 import { useOrderManagement } from "../../../../shared/hooks/useOrderManagement";
 import QuantityCalculatorService from "../../../../shared/services/QuantityCalculatorService";
+import ResponseMessageHelper from "../../../../shared/helpers/responses/ResponseMessageHelper";
+import { useDiscountCode } from "../../../../shared/hooks/useDiscountCode";
+import { useBasketDiscountCode } from "../../../../shared/hooks/useBasketDiscountCode";
+import DiscountCodeField from "../../../../shared/components/DiscountCode/DiscountCodeField";
 import moment from "moment";
 
 function NewOrderForm(props) {
@@ -39,6 +43,23 @@ function NewOrderForm(props) {
     const [deliveryAddressId, setDeliveryAddressId] = useState(props.defaultDeliveryAddressId ? props.defaultDeliveryAddressId : null);
     const [billingAddressId, setBillingAddressId] = useState(props.defaultBillingAddressId ? props.defaultBillingAddressId : null);
 
+    // The two discount-code hooks are mutually dependent - useDiscountCode needs the save from
+    // useBasketDiscountCode, which cannot run until useOrderManagement below supplies its setters
+    // - so one of them has to be wired through a ref. Going via the ref rather than straight at
+    // the binding below also keeps this callback stable, which is what lets useDiscountCode
+    // memoise apply/remove.
+    const basketDiscountCodeRef = useRef(null);
+    const saveDiscountCode = useCallback(
+        (newDiscountCode, showSuccessMessage) =>
+            basketDiscountCodeRef.current?.save(newDiscountCode, showSuccessMessage), []);
+
+    const discountCodeState = useDiscountCode({
+        initialCode: props.discountCode,
+        initialCodeIsNotValid: props.isDiscountCodeNotValid,
+        isEnabled: props.isDiscountCodeEnabled,
+        onSave: saveDiscountCode
+    });
+
     const {
         basketId,
         orderItems,
@@ -56,8 +77,25 @@ function NewOrderForm(props) {
         generalErrorMessage: props.generalErrorMessage,
         updateBasketUrl: props.updateBasketUrl,
         getPriceUrl: props.getProductPriceUrl,
-        clearBasketUrl: props.clearBasketUrl
+        clearBasketUrl: props.clearBasketUrl,
+        discountCode: discountCodeState.appliedDiscountCode,
+        isDiscountCodeEnabled: props.isDiscountCodeEnabled,
+        onDiscountCodeChanged: discountCodeState.syncFromDiscountCode
     })
+
+    const basketDiscountCode = useBasketDiscountCode({
+        isEnabled: props.isDiscountCodeEnabled,
+        updateBasketUrl: props.updateBasketUrl,
+        generalErrorMessage: props.generalErrorMessage,
+        discountCodeAppliedMessage: props.discountCodeAppliedMessage,
+        dispatch,
+        buildBasket: (discountCode) => ({ id: basketId, items: orderItems, discountCode }),
+        setBasketId,
+        setGroupedOrderItems,
+        syncFromResponse: discountCodeState.syncFromResponse
+    });
+
+    basketDiscountCodeRef.current = basketDiscountCode;
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -67,6 +105,10 @@ function NewOrderForm(props) {
                 hasPrimaryProduct: true,
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
+
+            if (props.isDiscountCodeEnabled && discountCodeState.appliedDiscountCode) {
+                searchParameters.discountCode = discountCodeState.appliedDiscountCode;
+            }
 
             const requestOptions = {
                 method: "GET",
@@ -172,20 +214,19 @@ function NewOrderForm(props) {
         };
 
         fetch(props.placeOrderUrl, requestOptions)
-            .then(function (response) {
+            .then(async function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 dispatch({ type: "SET_TOTAL_BASKET", payload: null })
 
                 AuthenticationHelper.HandleResponse(response);
+                const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        toast.success(jsonResponse.message);
-                        setIsOrdered(true);
-                    } else {
-                        toast.error(jsonResponse.message);
-                    }
-                });
+                if (response.ok && jsonResponse) {
+                    toast.success(message);
+                    setIsOrdered(true);
+                } else {
+                    toast.error(message);
+                }
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -199,7 +240,10 @@ function NewOrderForm(props) {
             const formData = new FormData();
 
             formData.append("file", file);
-            formData.append("basketId", basketId)
+
+            if (props.isDiscountCodeEnabled && discountCodeState.appliedDiscountCode) {
+                formData.append("discountCode", discountCodeState.appliedDiscountCode);
+            }
 
             const requestOptions = {
                 method: "POST",
@@ -210,27 +254,25 @@ function NewOrderForm(props) {
             };
 
             fetch(props.uploadOrderFileUrl, requestOptions)
-                .then(function (response) {
+                .then(async function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     AuthenticationHelper.HandleResponse(response);
+                    const { jsonResponse, message } = await ResponseMessageHelper.read(response, props.generalErrorMessage);
 
-                    return response.json().then((jsonResponse) => {
-                        if (response.ok) {
-                            setBasketId(jsonResponse.id);
-                            setGroupedOrderItems([...orderItems, ...jsonResponse.items]);
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
+                    if (response.ok && jsonResponse) {
+                        basketDiscountCode.applyBasketResponse(jsonResponse);
+                    }
+                    else {
+                        toast.error(message);
+                    }
                 }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [basketDiscountCode.applyBasketResponse, discountCodeState.appliedDiscountCode, dispatch,
+        props.generalErrorMessage, props.isDiscountCodeEnabled, props.uploadOrderFileUrl]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -475,6 +517,21 @@ function NewOrderForm(props) {
                         )}
                     </div>
                 </Fragment>
+                {props.isDiscountCodeEnabled &&
+                    <DiscountCodeField
+                        value={discountCodeState.discountCode}
+                        onChange={discountCodeState.setDiscountCode}
+                        onApply={() => discountCodeState.apply(orderItems.length > 0)}
+                        onRemove={discountCodeState.remove}
+                        appliedCode={discountCodeState.appliedDiscountCode}
+                        errorMessage={discountCodeState.isAppliedDiscountCodeNotValid ? props.discountCodeNotValidMessage : null}
+                        disabled={state.isLoading || isOrdered}
+                        canApply={orderItems.length > 0}
+                        discountCodeLabel={props.discountCodeLabel}
+                        applyDiscountCodeLabel={props.applyDiscountCodeLabel}
+                        removeDiscountCodeLabel={props.removeDiscountCodeLabel}
+                    />
+                }
                 <div className="field">
                     <NoSsr>
                         <FormControlLabel
@@ -612,6 +669,14 @@ NewOrderForm.propTypes = {
     maxAllowedOrderQuantityErrorMessage: PropTypes.string,
     getProductPriceUrl: PropTypes.string.isRequired,
     outletProductLabel: PropTypes.string.isRequired,
+    discountCode: PropTypes.string,
+    discountCodeLabel: PropTypes.string.isRequired,
+    applyDiscountCodeLabel: PropTypes.string.isRequired,
+    discountCodeAppliedMessage: PropTypes.string.isRequired,
+    removeDiscountCodeLabel: PropTypes.string.isRequired,
+    isDiscountCodeNotValid: PropTypes.bool,
+    discountCodeNotValidMessage: PropTypes.string,
+    isDiscountCodeEnabled: PropTypes.bool.isRequired,
 };
 
 export default NewOrderForm;

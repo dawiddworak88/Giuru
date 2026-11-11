@@ -7,11 +7,13 @@ on:
       - 'be/src/Infrastructure/**'
       - 'be/src/Project/Web/Seller/Seller.Web/**'
       - 'fe/projects/Seller.Portal/**'
+      - 'fe/shared/**'
   pull_request:
     paths:
       - 'be/src/Infrastructure/**'
       - 'be/src/Project/Web/Seller/Seller.Web/**'
       - 'fe/projects/Seller.Portal/**'
+      - 'fe/shared/**'
 
 jobs:
   Build-and-Test-Solutions:

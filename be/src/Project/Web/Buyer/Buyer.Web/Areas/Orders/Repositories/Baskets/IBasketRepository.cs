@@ -10,7 +10,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
     {
         Task<Basket> GetBasketById(string token, string language, Guid? id);
         Task DeleteAsync(string token, string language, Guid? id);
-        Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items);
+        Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items, string discountCode = null);
         Task CheckoutBasketAsync(
             string token, 
             string language, 
@@ -20,7 +20,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             Guid? basketId,
             ClientAddress billingAddress,
             ClientAddress shippingAddress,
-            string moreInfo, bool hasCustomOrder,
+            string moreInfo,
+            bool hasCustomOrder,
             bool hasApprovalToSendEmail,
             IEnumerable<Guid> attachments,
             Guid? SellerId);
