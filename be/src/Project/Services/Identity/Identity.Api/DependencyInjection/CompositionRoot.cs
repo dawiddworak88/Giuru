@@ -11,6 +11,7 @@ using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Repositories.AppSecrets;
 using Identity.Api.Repositories.GraphQl;
+using Identity.Api.Repositories.PersistedGrants;
 using Identity.Api.Services.Approvals;
 using Identity.Api.Services.ClientTeamMembers;
 using Identity.Api.Services.Organisations;
@@ -24,6 +25,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -58,6 +60,17 @@ namespace Identity.Api.DependencyInjection
 
             builder.Services.AddScoped<IProfileService, ProfileService>();
 
+            services.AddSingleton<IConnectionMultiplexer>(_ =>
+            {
+                var redisConfiguration = ConfigurationOptions.Parse(configuration["RedisUrl"], true);
+
+                redisConfiguration.ResolveDns = true;
+
+                return ConnectionMultiplexer.Connect(redisConfiguration);
+            });
+
+            builder.AddPersistedGrantStore<RedisPersistedGrantStore>();
+
             if (isProduction)
             {
                 var keyVaultUrl = configuration.GetValue<string>("AzureKeyVaultUrl");
@@ -68,11 +81,17 @@ namespace Identity.Api.DependencyInjection
                 var certificatePassword = configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4CertificatePassword");
 
                 var missing = new List<string>();
+
                 if (string.IsNullOrWhiteSpace(keyVaultUrl)) missing.Add("AzureKeyVaultUrl");
+
                 if (string.IsNullOrWhiteSpace(tenantId)) missing.Add("AzureKeyVaultTenantId");
+
                 if (string.IsNullOrWhiteSpace(clientId)) missing.Add("AzureKeyVaultClientId");
+
                 if (string.IsNullOrWhiteSpace(clientSecret)) missing.Add("AzureKeyVaultClientSecret");
+
                 if (string.IsNullOrWhiteSpace(certificateSecretIdentifier)) missing.Add("AzureKeyVaultGiuruIdentityServer4Certificate");
+
                 if (certificatePassword is null) missing.Add("AzureKeyVaultGiuruIdentityServer4CertificatePassword");
 
                 if (missing.Count > 0)
@@ -95,6 +114,7 @@ namespace Identity.Api.DependencyInjection
                 }
 
                 KeyVaultSecretIdentifier secretId;
+
                 try
                 {
                     secretId = new KeyVaultSecretIdentifier(certificateSecretUri);
