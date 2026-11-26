@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Identity.Api.Repositories.PersistedGrants
 {
-    // Keeps authorization codes and refresh tokens in Redis, so they survive restarts and deployments of Identity.Api
     public class RedisPersistedGrantStore : IPersistedGrantStore
     {
         private const string GrantKeyPrefix = "Identity-PersistedGrant-";
@@ -48,7 +47,6 @@ namespace Identity.Api.Repositories.PersistedGrants
 
             var subjectGrantsKey = GetSubjectGrantsKey(grant.SubjectId);
 
-            // Grants are indexed by subject for filtering, and the index lives as long as its longest-living grant
             await this.database.SetAddAsync(subjectGrantsKey, grant.Key);
             var subjectGrantsExpiry = await this.database.KeyTimeToLiveAsync(subjectGrantsKey);
 
@@ -91,7 +89,6 @@ namespace Identity.Api.Repositories.PersistedGrants
 
                 if (grant is null)
                 {
-                    // The grant has expired, so its key no longer belongs in the index
                     await this.database.SetRemoveAsync(subjectGrantsKey, key);
 
                     continue;

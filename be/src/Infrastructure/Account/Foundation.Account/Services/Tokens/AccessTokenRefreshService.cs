@@ -94,7 +94,6 @@ namespace Foundation.Account.Services.Tokens
             }
             catch (Exception exception) when (exception is not OperationCanceledException)
             {
-                // Signing out must not fail because Identity is unreachable, the refresh token expires on its own
                 this.logger.LogWarning(exception, "Revoking the refresh token failed");
             }
         }

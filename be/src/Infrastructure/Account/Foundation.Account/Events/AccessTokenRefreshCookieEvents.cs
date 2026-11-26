@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Foundation.Account.Events
 {
-    // Refreshes the access token kept in the cookie shortly before it expires, so active users aren't signed out
     public class AccessTokenRefreshCookieEvents : CookieAuthenticationEvents
     {
         private readonly IAccessTokenRefreshService accessTokenRefreshService;
@@ -28,7 +27,7 @@ namespace Foundation.Account.Events
         {
             var refreshToken = context.Properties.GetTokenValue(OpenIdConnectParameterNames.RefreshToken);
 
-            // Sessions started before refresh tokens were enabled don't have one and end with their access token
+            // Sessions from before refresh tokens were enabled
             if (string.IsNullOrWhiteSpace(refreshToken))
             {
                 return;
@@ -45,7 +44,6 @@ namespace Foundation.Account.Events
 
             if (tokens.IsRefreshTokenRejected)
             {
-                // The refresh token expired or was revoked, or the user was deactivated, so the session is over
                 context.RejectPrincipal();
 
                 await context.HttpContext.SignOutAsync(context.Scheme.Name);
@@ -53,7 +51,7 @@ namespace Foundation.Account.Events
                 return;
             }
 
-            // Identity couldn't be reached, so keep the current tokens and try again on the next request
+            // Identity unreachable, retry on the next request
             if (tokens.Succeeded is false)
             {
                 return;

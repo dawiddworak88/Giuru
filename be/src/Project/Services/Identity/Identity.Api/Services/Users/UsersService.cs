@@ -210,11 +210,9 @@ namespace Identity.Api.Services.Users
 
             existingUser.EmailConfirmed = true;
             existingUser.PasswordHash = _userService.GeneratePasswordHash(existingUser, serviceModel.Password);
-
-            // A new password ends the user's sessions everywhere, and the new stamp stops their Identity sign-in cookie from silently signing them in again
             existingUser.SecurityStamp = Guid.NewGuid().ToString();
 
-            // Revoking the refresh tokens before saving lets the user simply retry if the revocation fails
+            // Revoke before saving, so a failure can be retried
             await _persistedGrantService.RemoveAllGrantsAsync(existingUser.Id);
             await _identityContext.SaveChangesAsync();
 

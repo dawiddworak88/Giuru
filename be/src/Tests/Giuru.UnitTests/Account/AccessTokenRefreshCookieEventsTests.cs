@@ -15,8 +15,6 @@ using System.Threading.Tasks;
 
 namespace Giuru.UnitTests.Account
 {
-    // The web apps keep the access token in the auth cookie. These tests pin that it gets refreshed shortly before
-    // it expires, so an active user isn't signed out, and that a rejected refresh token ends the session.
     public class AccessTokenRefreshCookieEventsTests
     {
         private const string CookiesScheme = "Cookies";
