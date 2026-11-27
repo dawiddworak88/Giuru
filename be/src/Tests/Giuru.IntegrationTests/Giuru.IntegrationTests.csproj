@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Project\Services\Catalog\Catalog.Api\Catalog.Api.csproj" />
     <ProjectReference Include="..\..\Project\Services\Client\Client.Api\Client.Api.csproj" />
+    <ProjectReference Include="..\..\Project\Services\Identity\Identity.Api\Identity.Api.csproj" />
     <ProjectReference Include="..\..\Project\Services\Inventory\Inventory.Api\Inventory.Api.csproj" />
     <ProjectReference Include="..\..\Project\Web\Seller\Seller.Web\Seller.Web.csproj" />
     <ProjectReference Include="..\..\Project\Web\Buyer\Buyer.Web\Buyer.Web.csproj" />

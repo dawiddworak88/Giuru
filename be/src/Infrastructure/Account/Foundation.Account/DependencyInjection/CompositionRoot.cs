@@ -1,5 +1,7 @@
 ﻿using Foundation.Account.Definitions;
+using Foundation.Account.Events;
 using Foundation.Account.Services;
+using Foundation.Account.Services.Tokens;
 using Foundation.Extensions.Definitions;
 using IdentityModel;
 using IdentityServer4;
@@ -10,6 +12,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -51,13 +55,20 @@ namespace Foundation.Account.DependencyInjection
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            services.TryAddSingleton(TimeProvider.System);
+            services.AddSingleton<IAccessTokenRefreshService, AccessTokenRefreshService>();
+            services.AddScoped<AccessTokenRefreshCookieEvents>();
+
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
+                options.DefaultScheme = AccountConstants.AuthenticationSchemes.Cookies;
+                options.DefaultChallengeScheme = AccountConstants.AuthenticationSchemes.OpenIdConnect;
             })
-            .AddCookie("Cookies")
-            .AddOpenIdConnect("oidc", options =>
+            .AddCookie(AccountConstants.AuthenticationSchemes.Cookies, options =>
+            {
+                options.EventsType = typeof(AccessTokenRefreshCookieEvents);
+            })
+            .AddOpenIdConnect(AccountConstants.AuthenticationSchemes.OpenIdConnect, options =>
             {
                 if (environment.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
                 {
@@ -67,7 +78,7 @@ namespace Foundation.Account.DependencyInjection
                     options.NonceCookie.SecurePolicy = CookieSecurePolicy.None;
                 }
 
-                options.SignInScheme = "Cookies";
+                options.SignInScheme = AccountConstants.AuthenticationSchemes.Cookies;
                 options.Authority = configuration["IdentityUrl"];
                 options.RequireHttpsMetadata = false;
 
@@ -80,6 +91,7 @@ namespace Foundation.Account.DependencyInjection
                     NameClaimType = ClaimTypes.Name,
                     RoleClaimType = JwtClaimTypes.Role
                 };
+
                 options.SaveTokens = true;
 
                 options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
@@ -88,7 +100,27 @@ namespace Foundation.Account.DependencyInjection
                 options.Scope.Add(AccountConstants.Scopes.All);
                 options.Scope.Add(AccountConstants.Scopes.Roles);
 
+                // Enable only after Identity.Api allows offline_access, otherwise sign-in fails
+                if (configuration.GetValue<bool>("RefreshTokensEnabled"))
+                {
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.OfflineAccess);
+                }
+
                 options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
+
+                options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
+                {
+                    var refreshToken = await context.HttpContext.GetTokenAsync(
+                        AccountConstants.AuthenticationSchemes.Cookies,
+                        OpenIdConnectParameterNames.RefreshToken);
+
+                    if (string.IsNullOrWhiteSpace(refreshToken) is false)
+                    {
+                        var accessTokenRefreshService = context.HttpContext.RequestServices.GetRequiredService<IAccessTokenRefreshService>();
+
+                        await accessTokenRefreshService.RevokeAsync(refreshToken, context.HttpContext.RequestAborted);
+                    }
+                };
 
                 options.Events.OnRedirectToIdentityProvider = context =>
                 {

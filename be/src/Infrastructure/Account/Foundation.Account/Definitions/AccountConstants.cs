@@ -1,4 +1,6 @@
-﻿namespace Foundation.Account.Definitions
+﻿using System;
+
+namespace Foundation.Account.Definitions
 {
     public static class AccountConstants
     {
@@ -32,6 +34,21 @@
         {
             public static readonly int DefaultTokenLifetimeInDays = 1;
             public static readonly int DefaultTokenLifetimeInSeconds = 1 * 24 * 60 * 60;
+            public static readonly int AccessTokenLifetimeInSeconds = 60 * 60;
+            public static readonly int SlidingRefreshTokenLifetimeInSeconds = 7 * 24 * 60 * 60;
+            public static readonly int AbsoluteRefreshTokenLifetimeInSeconds = 30 * 24 * 60 * 60;
+            public static readonly TimeSpan RefreshAccessTokenBeforeExpiration = TimeSpan.FromMinutes(5);
+        }
+
+        public struct Tokens
+        {
+            public static readonly string ExpiresAt = "expires_at";
+        }
+
+        public struct AuthenticationSchemes
+        {
+            public static readonly string Cookies = "Cookies";
+            public static readonly string OpenIdConnect = "oidc";
         }
 
         public struct IdentityResources

@@ -78,7 +78,14 @@ namespace Identity.Api.Areas.Accounts.Configurations
                             AccountConstants.Scopes.Roles,
                             AccountConstants.Scopes.All
                         },
-                        AllowOfflineAccess = false,
+                        AccessTokenLifetime = AccountConstants.TokenLifetimes.AccessTokenLifetimeInSeconds,
+                        AllowOfflineAccess = true,
+                        // Parallel requests may refresh with the same token
+                        RefreshTokenUsage = TokenUsage.ReUse,
+                        RefreshTokenExpiration = TokenExpiration.Sliding,
+                        SlidingRefreshTokenLifetime = AccountConstants.TokenLifetimes.SlidingRefreshTokenLifetimeInSeconds,
+                        AbsoluteRefreshTokenLifetime = AccountConstants.TokenLifetimes.AbsoluteRefreshTokenLifetimeInSeconds,
+                        UpdateAccessTokenClaimsOnRefresh = true,
                         AlwaysIncludeUserClaimsInIdToken = true
                     };
 

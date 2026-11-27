@@ -1,4 +1,5 @@
 ﻿using Foundation.Account.Definitions;
+using Identity.Api.Configurations;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using IdentityModel;
@@ -7,6 +8,8 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,13 +20,16 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IdentityContext context;
+        private readonly IOptions<AppSettings> options;
 
         public ProfileService(
             UserManager<ApplicationUser> userManager,
-            IdentityContext context)
+            IdentityContext context,
+            IOptions<AppSettings> options)
         {
             this.userManager = userManager;
             this.context = context;
+            this.options = options;
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -80,7 +86,18 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
 
                 var isOrganisationDisabled = await this.context.Organisations.AnyAsync(x => x.Id == user.OrganisationId && x.IsDisabled && x.IsActive);
 
-                context.IsActive = isOrganisationDisabled is false;
+                if (isOrganisationDisabled)
+                {
+                    context.IsActive = false;
+
+                    return;
+                }
+
+                // Same rule as the Seller.Web sign-in, so refresh can't outlive the seller status
+                if (Guid.TryParse(context.Client?.ClientId, out var clientId) && clientId == this.options.Value.SellerClientId)
+                {
+                    context.IsActive = await this.context.Organisations.AnyAsync(x => x.Id == user.OrganisationId && x.IsSeller && x.IsActive);
+                }
             }
         }
     }

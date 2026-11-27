@@ -9,6 +9,7 @@ using Identity.Api.Definitions;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.ServicesModels.Users;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ namespace Identity.Api.Services.Users
         private readonly IStringLocalizer<AccountResources> _accountLocalizer;
         private readonly IUserService _userService;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IPersistedGrantService _persistedGrantService;
 
         public UsersService(
             IdentityContext identityContext,
@@ -40,7 +42,8 @@ namespace Identity.Api.Services.Users
             IMailingService mailingService,
             IStringLocalizer<AccountResources> accountLocalizer,
             IUserService userService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IPersistedGrantService persistedGrantService)
         {
             _identityContext = identityContext;
             _mailingOptions = mailingOptions;
@@ -49,6 +52,7 @@ namespace Identity.Api.Services.Users
             _accountLocalizer = accountLocalizer;
             _userService = userService;
             _linkGenerator = linkGenerator;
+            _persistedGrantService = persistedGrantService;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
@@ -116,6 +120,7 @@ namespace Identity.Api.Services.Users
             };
 
             _identityContext.Accounts.Add(userAccount);
+
             await _identityContext.SaveChangesAsync();
             await _mailingService.SendTemplateAsync(new TemplateEmail
             {
@@ -205,7 +210,10 @@ namespace Identity.Api.Services.Users
 
             existingUser.EmailConfirmed = true;
             existingUser.PasswordHash = _userService.GeneratePasswordHash(existingUser, serviceModel.Password);
+            existingUser.SecurityStamp = Guid.NewGuid().ToString();
 
+            // Revoke before saving, so a failure can be retried
+            await _persistedGrantService.RemoveAllGrantsAsync(existingUser.Id);
             await _identityContext.SaveChangesAsync();
 
             return await GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });

@@ -1,5 +1,6 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Services.UserServices;
@@ -79,6 +80,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         {
             var validator = new ResetPasswordModelValidator();
             var result = await validator.ValidateAsync(model);
+
             if (result.IsValid)
             {
                 var serviceModel = new ResetUserPasswordServiceModel {
@@ -135,7 +137,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                         return StatusCode((int)HttpStatusCode.OK, new { Url = _options.Value.BuyerUrl });
                     }
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is NotFoundException or ConflictException or BadRequestException or UnauthorizedException)
                 {
                     _logger.LogError(ex, "An error occurred while saving the new password.");
 
