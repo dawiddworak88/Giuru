@@ -68,6 +68,17 @@ namespace Giuru.IntegrationTests.PersistedGrants
         }
 
         [Fact]
+        public async Task StoreAsync_GrantWithoutSubject_StoresItWithoutSubjectIndex()
+        {
+            var grant = CreateGrant(null, AuthorizationCodeType, TimeSpan.FromMinutes(5));
+
+            await _store.StoreAsync(grant);
+
+            Assert.NotNull(await _store.GetAsync(grant.Key));
+            Assert.False(await _redisFixture.Redis.GetDatabase().KeyExistsAsync(GetSubjectGrantsKey(null)));
+        }
+
+        [Fact]
         public async Task GetAllAsync_FilterByType_ReturnsOnlyThatType()
         {
             var subjectId = Guid.NewGuid().ToString();

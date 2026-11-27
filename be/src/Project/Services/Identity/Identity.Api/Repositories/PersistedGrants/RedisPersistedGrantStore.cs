@@ -42,17 +42,23 @@ namespace Identity.Api.Repositories.PersistedGrants
                 return;
             }
 
-            await this.database.StringSetAsync(GetGrantKey(grant.Key), JsonSerializer.Serialize(grant), expiry);
-
-            if (string.IsNullOrWhiteSpace(grant.SubjectId))
+            // One MULTI/EXEC, so a dropped connection can't leave a grant unindexed
+            var transaction = this.database.CreateTransaction();
+            var commands = new List<Task>
             {
-                return;
+                transaction.StringSetAsync(GetGrantKey(grant.Key), JsonSerializer.Serialize(grant), expiry)
+            };
+
+            if (string.IsNullOrWhiteSpace(grant.SubjectId) is false)
+            {
+                var subjectGrantsKey = GetSubjectGrantsKey(grant.SubjectId);
+
+                commands.Add(transaction.SetAddAsync(subjectGrantsKey, grant.Key));
+                commands.Add(transaction.KeyExpireAsync(subjectGrantsKey, expiry > SubjectGrantsExpiry ? expiry : SubjectGrantsExpiry));
             }
 
-            var subjectGrantsKey = GetSubjectGrantsKey(grant.SubjectId);
-
-            await this.database.SetAddAsync(subjectGrantsKey, grant.Key);
-            await this.database.KeyExpireAsync(subjectGrantsKey, expiry > SubjectGrantsExpiry ? expiry : SubjectGrantsExpiry);
+            await transaction.ExecuteAsync();
+            await Task.WhenAll(commands);
         }
 
         public async Task<PersistedGrant> GetAsync(string key)
