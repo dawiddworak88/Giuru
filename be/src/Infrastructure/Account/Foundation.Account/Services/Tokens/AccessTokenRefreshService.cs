@@ -13,6 +13,8 @@ namespace Foundation.Account.Services.Tokens
 {
     public class AccessTokenRefreshService : IAccessTokenRefreshService
     {
+        private static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(5);
+
         private readonly IOptionsMonitor<OpenIdConnectOptions> openIdConnectOptions;
         private readonly ILogger<AccessTokenRefreshService> logger;
 
@@ -26,18 +28,20 @@ namespace Foundation.Account.Services.Tokens
 
         public async Task<RefreshedTokensServiceModel> RefreshAsync(string refreshToken, CancellationToken cancellationToken)
         {
+            using var timeout = CreateTimeout(cancellationToken);
+
             try
             {
                 var options = this.openIdConnectOptions.Get(AccountConstants.AuthenticationSchemes.OpenIdConnect);
 
-                var configuration = await options.ConfigurationManager.GetConfigurationAsync(cancellationToken);
+                var configuration = await options.ConfigurationManager.GetConfigurationAsync(timeout.Token);
                 var response = await options.Backchannel.RequestRefreshTokenAsync(new RefreshTokenRequest
                 {
                     Address = configuration.TokenEndpoint,
                     ClientId = options.ClientId,
                     ClientSecret = options.ClientSecret,
                     RefreshToken = refreshToken
-                }, cancellationToken);
+                }, timeout.Token);
 
                 if (response.IsError is false)
                 {
@@ -63,7 +67,7 @@ namespace Foundation.Account.Services.Tokens
 
                 this.logger.LogWarning("Refreshing the access token failed: {ErrorType} {Error}", response.ErrorType, response.Error);
             }
-            catch (Exception exception) when (exception is not OperationCanceledException)
+            catch (Exception exception) when (cancellationToken.IsCancellationRequested is false)
             {
                 this.logger.LogWarning(exception, "Refreshing the access token failed");
             }
@@ -73,11 +77,13 @@ namespace Foundation.Account.Services.Tokens
 
         public async Task RevokeAsync(string refreshToken, CancellationToken cancellationToken)
         {
+            using var timeout = CreateTimeout(cancellationToken);
+
             try
             {
                 var options = this.openIdConnectOptions.Get(AccountConstants.AuthenticationSchemes.OpenIdConnect);
 
-                var configuration = await options.ConfigurationManager.GetConfigurationAsync(cancellationToken);
+                var configuration = await options.ConfigurationManager.GetConfigurationAsync(timeout.Token);
                 var response = await options.Backchannel.RevokeTokenAsync(new TokenRevocationRequest
                 {
                     Address = configuration.RevocationEndpoint,
@@ -85,17 +91,26 @@ namespace Foundation.Account.Services.Tokens
                     ClientSecret = options.ClientSecret,
                     Token = refreshToken,
                     TokenTypeHint = OidcConstants.TokenTypes.RefreshToken
-                }, cancellationToken);
+                }, timeout.Token);
 
                 if (response.IsError)
                 {
                     this.logger.LogWarning("Revoking the refresh token failed: {ErrorType} {Error}", response.ErrorType, response.Error);
                 }
             }
-            catch (Exception exception) when (exception is not OperationCanceledException)
+            catch (Exception exception) when (cancellationToken.IsCancellationRequested is false)
             {
                 this.logger.LogWarning(exception, "Revoking the refresh token failed");
             }
+        }
+
+        private static CancellationTokenSource CreateTimeout(CancellationToken cancellationToken)
+        {
+            var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+            timeout.CancelAfter(RequestTimeout);
+
+            return timeout;
         }
     }
 }

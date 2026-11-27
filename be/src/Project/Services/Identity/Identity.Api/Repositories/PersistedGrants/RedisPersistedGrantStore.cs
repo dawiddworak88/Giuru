@@ -1,3 +1,4 @@
+using Foundation.Account.Definitions;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
@@ -14,6 +15,9 @@ namespace Identity.Api.Repositories.PersistedGrants
     {
         private const string GrantKeyPrefix = "Identity-PersistedGrant-";
         private const string SubjectGrantsKeyPrefix = "Identity-PersistedGrants-Subject-";
+
+        // Outlives every grant, so concurrent stores can't shorten it
+        private static readonly TimeSpan SubjectGrantsExpiry = TimeSpan.FromSeconds(AccountConstants.TokenLifetimes.AbsoluteRefreshTokenLifetimeInSeconds);
 
         private readonly IDatabase database;
 
@@ -48,12 +52,7 @@ namespace Identity.Api.Repositories.PersistedGrants
             var subjectGrantsKey = GetSubjectGrantsKey(grant.SubjectId);
 
             await this.database.SetAddAsync(subjectGrantsKey, grant.Key);
-            var subjectGrantsExpiry = await this.database.KeyTimeToLiveAsync(subjectGrantsKey);
-
-            if (subjectGrantsExpiry is null || subjectGrantsExpiry < expiry)
-            {
-                await this.database.KeyExpireAsync(subjectGrantsKey, expiry);
-            }
+            await this.database.KeyExpireAsync(subjectGrantsKey, expiry > SubjectGrantsExpiry ? expiry : SubjectGrantsExpiry);
         }
 
         public async Task<PersistedGrant> GetAsync(string key)

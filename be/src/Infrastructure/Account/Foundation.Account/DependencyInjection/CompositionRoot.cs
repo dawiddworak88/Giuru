@@ -99,7 +99,12 @@ namespace Foundation.Account.DependencyInjection
                 options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
                 options.Scope.Add(AccountConstants.Scopes.All);
                 options.Scope.Add(AccountConstants.Scopes.Roles);
-                options.Scope.Add(IdentityServerConstants.StandardScopes.OfflineAccess);
+
+                // Enable only after Identity.Api allows offline_access, otherwise sign-in fails
+                if (configuration.GetValue<bool>("RefreshTokensEnabled"))
+                {
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.OfflineAccess);
+                }
 
                 options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
 

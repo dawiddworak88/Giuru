@@ -25,7 +25,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -59,15 +58,6 @@ namespace Identity.Api.DependencyInjection
             .AddAspNetIdentity<ApplicationUser>();
 
             builder.Services.AddScoped<IProfileService, ProfileService>();
-
-            services.AddSingleton<IConnectionMultiplexer>(_ =>
-            {
-                var redisConfiguration = ConfigurationOptions.Parse(configuration["RedisUrl"], true);
-
-                redisConfiguration.ResolveDns = true;
-
-                return ConnectionMultiplexer.Connect(redisConfiguration);
-            });
 
             builder.AddPersistedGrantStore<RedisPersistedGrantStore>();
 

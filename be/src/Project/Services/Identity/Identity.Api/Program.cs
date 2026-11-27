@@ -88,12 +88,16 @@ if (!builder.Environment.IsDevelopment())
         true);
 }
 
+var redis = ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]);
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
+
 builder.Services.AddDataProtection().UseCryptographicAlgorithms(
     new AuthenticatedEncryptorConfiguration
     {
         EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
         ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-    }).PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["RedisUrl"]), $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
+    }).PersistKeysToStackExchangeRedis(redis, $"{Assembly.GetExecutingAssembly().GetName().Name}-DataProtection-Keys");
 
 builder.Services.AddRazorPages();
 
